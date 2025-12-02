@@ -105,57 +105,61 @@ app.use((err: any, req: Request, res: Response, next: any) => {
 });
 
 // ============================================================================
-// START SERVER
+// START SERVER (for local development only)
 // ============================================================================
 
-const server = app.listen(PORT, async () => {
-  console.log('');
-  console.log('╔═══════════════════════════════════════════════════════════╗');
-  console.log('║                                                           ║');
-  console.log('║       🚀 Spatial Collective API Server Started           ║');
-  console.log('║                                                           ║');
-  console.log('╠═══════════════════════════════════════════════════════════╣');
-  console.log(`║  Port:        ${PORT.toString().padEnd(44)}║`);
-  console.log(`║  Environment: ${(process.env.NODE_ENV || 'development').padEnd(44)}║`);
-  console.log(`║  API URL:     http://localhost:${PORT.toString().padEnd(32)}║`);
-  console.log('╠═══════════════════════════════════════════════════════════╣');
-  console.log('║  Available Endpoints:                                     ║');
-  console.log('║  • GET  /health                                           ║');
-  console.log('║  • POST /api/youth/auth/authenticate                      ║');
-  console.log('║  • POST /api/staff/auth/authenticate                      ║');
-  console.log('║  • GET  /api/contracts/template                           ║');
-  console.log('║  • POST /api/contracts/sign                               ║');
-  console.log('║  • GET  /api/contracts/signed                             ║');
-  console.log('╚═══════════════════════════════════════════════════════════╝');
-  console.log('');
+// Only start server if not running in Vercel serverless environment
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  const server = app.listen(PORT, async () => {
+    console.log('');
+    console.log('╔═══════════════════════════════════════════════════════════╗');
+    console.log('║                                                           ║');
+    console.log('║       🚀 Spatial Collective API Server Started           ║');
+    console.log('║                                                           ║');
+    console.log('╠═══════════════════════════════════════════════════════════╣');
+    console.log(`║  Port:        ${PORT.toString().padEnd(44)}║`);
+    console.log(`║  Environment: ${(process.env.NODE_ENV || 'development').padEnd(44)}║`);
+    console.log(`║  API URL:     http://localhost:${PORT.toString().padEnd(32)}║`);
+    console.log('╠═══════════════════════════════════════════════════════════╣');
+    console.log('║  Available Endpoints:                                     ║');
+    console.log('║  • GET  /health                                           ║');
+    console.log('║  • POST /api/youth/auth/authenticate                      ║');
+    console.log('║  • POST /api/staff/auth/authenticate                      ║');
+    console.log('║  • GET  /api/contracts/template                           ║');
+    console.log('║  • POST /api/contracts/sign                               ║');
+    console.log('║  • GET  /api/contracts/signed                             ║');
+    console.log('╚═══════════════════════════════════════════════════════════╝');
+    console.log('');
 
-  // Test database connection
-  try {
-    await Database.query('SELECT NOW()');
-    console.log('✅ Database connection successful\n');
-  } catch (error) {
-    console.error('❌ Database connection failed:', error);
-    console.error('Please check your database configuration in .env file\n');
-  }
-});
-
-// Graceful shutdown
-process.on('SIGTERM', async () => {
-  console.log('SIGTERM received, shutting down gracefully...');
-  server.close(async () => {
-    await Database.close();
-    console.log('Process terminated');
-    process.exit(0);
+    // Test database connection
+    try {
+      await Database.query('SELECT NOW()');
+      console.log('✅ Database connection successful\n');
+    } catch (error) {
+      console.error('❌ Database connection failed:', error);
+      console.error('Please check your database configuration in .env file\n');
+    }
   });
-});
 
-process.on('SIGINT', async () => {
-  console.log('\nSIGINT received, shutting down gracefully...');
-  server.close(async () => {
-    await Database.close();
-    console.log('Process terminated');
-    process.exit(0);
+  // Graceful shutdown
+  process.on('SIGTERM', async () => {
+    console.log('SIGTERM received, shutting down gracefully...');
+    server.close(async () => {
+      await Database.close();
+      console.log('Process terminated');
+      process.exit(0);
+    });
   });
-});
 
-export default app;
+  process.on('SIGINT', async () => {
+    console.log('\nSIGINT received, shutting down gracefully...');
+    server.close(async () => {
+      await Database.close();
+      console.log('Process terminated');
+      process.exit(0);
+    });
+  });
+}
+
+// Export app for Vercel serverless
+export { app };
