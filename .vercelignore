@@ -1,0 +1,7 @@
+api/src
+api/database
+api/node_modules
+api/scripts
+api/tsconfig.json
+api/package.json
+api/package-lock.json
