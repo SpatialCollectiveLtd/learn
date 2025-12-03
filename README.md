@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SC Training Hub
 
-## Getting Started
+**Spatial Collective Learning Platform**
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Overview
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+SC Training Hub is a comprehensive digital training platform developed by **Spatial Collective Limited** for youth training programs in digital mapping, mobile data collection, and geospatial technologies.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Platform Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Multi-role Authentication System**: Secure access for youth participants and staff members
+- **Digital Contract Management**: Electronic contract signing and storage
+- **Structured Training Modules**:
+  - Digital Mapping & Validation
+  - Mobile Mapping
+  - Household Survey
+  - Microtasking
+- **Progress Tracking**: Real-time monitoring of participant progress and achievements
+- **Interactive Learning**: Step-by-step tutorials with practical exercises
+- **Staff-only Validator Training**: Advanced validation techniques and quality assurance workflows
 
-## Learn More
+### Technology Stack
 
-To learn more about Next.js, take a look at the following resources:
+- **Frontend**: Next.js 16, React 19, TypeScript
+- **Backend**: Express.js REST API
+- **Database**: PostgreSQL (Neon)
+- **Authentication**: JWT-based secure authentication
+- **UI Components**: Custom design system with Tailwind CSS
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### User Roles
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Youth Participants**: Access training materials, sign contracts, track progress
+2. **Staff Members**: Access validator training, manage quality assurance workflows
+3. **Administrators**: Full platform access and user management
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Security & Compliance
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This platform implements industry-standard security practices including:
+- Encrypted data transmission
+- Secure authentication with JWT tokens
+- Database-level access controls
+- Audit logging for all authentication events
+- Regular security updates and patches
+
+---
+
+## Copyright & Ownership
+
+© 2025 **Spatial Collective Limited**. All rights reserved.
+
+This software is proprietary and confidential. Unauthorized copying, distribution, or use of this software, via any medium, is strictly prohibited.
+
+---
+
+## Contact
+
+For support or inquiries, please contact:
+**Spatial Collective Limited**
+
+---
+
+*This README is for informational purposes only and does not grant any rights to use, modify, or distribute the software.*
