@@ -4,11 +4,10 @@ exports.AuthLogModel = void 0;
 const database_1 = require("../config/database");
 class AuthLogModel {
     static async log(data) {
-        await database_1.Database.query(`INSERT INTO auth_logs (user_id, user_type, action, success, ip_address, user_agent, error_message)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)`, [
+        await database_1.Database.query(`INSERT INTO auth_logs (user_identifier, user_type, success, ip_address, user_agent, failure_reason)
+       VALUES ($1, $2, $3, $4, $5, $6)`, [
             data.userId,
             data.userType,
-            data.action,
             data.success,
             data.ipAddress || null,
             data.userAgent || null,
@@ -17,7 +16,7 @@ class AuthLogModel {
     }
     static async getUserLogs(userId, limit = 50) {
         const result = await database_1.Database.query(`SELECT * FROM auth_logs 
-       WHERE user_id = $1 
+       WHERE user_identifier = $1 
        ORDER BY created_at DESC 
        LIMIT $2`, [userId, limit]);
         return result.rows;

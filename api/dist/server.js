@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.app = void 0;
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
@@ -17,6 +18,7 @@ const staffAuth_1 = __importDefault(require("./routes/staffAuth"));
 const contracts_1 = __importDefault(require("./routes/contracts"));
 const database_1 = require("./config/database");
 const app = (0, express_1.default)();
+exports.app = app;
 const PORT = process.env.PORT || 3001;
 app.use((0, helmet_1.default)());
 app.use((0, cors_1.default)({
@@ -68,50 +70,51 @@ app.use((err, req, res, next) => {
         ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
     });
 });
-const server = app.listen(PORT, async () => {
-    console.log('');
-    console.log('╔═══════════════════════════════════════════════════════════╗');
-    console.log('║                                                           ║');
-    console.log('║       🚀 Spatial Collective API Server Started           ║');
-    console.log('║                                                           ║');
-    console.log('╠═══════════════════════════════════════════════════════════╣');
-    console.log(`║  Port:        ${PORT.toString().padEnd(44)}║`);
-    console.log(`║  Environment: ${(process.env.NODE_ENV || 'development').padEnd(44)}║`);
-    console.log(`║  API URL:     http://localhost:${PORT.toString().padEnd(32)}║`);
-    console.log('╠═══════════════════════════════════════════════════════════╣');
-    console.log('║  Available Endpoints:                                     ║');
-    console.log('║  • GET  /health                                           ║');
-    console.log('║  • POST /api/youth/auth/authenticate                      ║');
-    console.log('║  • POST /api/staff/auth/authenticate                      ║');
-    console.log('║  • GET  /api/contracts/template                           ║');
-    console.log('║  • POST /api/contracts/sign                               ║');
-    console.log('║  • GET  /api/contracts/signed                             ║');
-    console.log('╚═══════════════════════════════════════════════════════════╝');
-    console.log('');
-    try {
-        await database_1.Database.query('SELECT NOW()');
-        console.log('✅ Database connection successful\n');
-    }
-    catch (error) {
-        console.error('❌ Database connection failed:', error);
-        console.error('Please check your database configuration in .env file\n');
-    }
-});
-process.on('SIGTERM', async () => {
-    console.log('SIGTERM received, shutting down gracefully...');
-    server.close(async () => {
-        await database_1.Database.close();
-        console.log('Process terminated');
-        process.exit(0);
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+    const server = app.listen(PORT, async () => {
+        console.log('');
+        console.log('╔═══════════════════════════════════════════════════════════╗');
+        console.log('║                                                           ║');
+        console.log('║       🚀 Spatial Collective API Server Started           ║');
+        console.log('║                                                           ║');
+        console.log('╠═══════════════════════════════════════════════════════════╣');
+        console.log(`║  Port:        ${PORT.toString().padEnd(44)}║`);
+        console.log(`║  Environment: ${(process.env.NODE_ENV || 'development').padEnd(44)}║`);
+        console.log(`║  API URL:     http://localhost:${PORT.toString().padEnd(32)}║`);
+        console.log('╠═══════════════════════════════════════════════════════════╣');
+        console.log('║  Available Endpoints:                                     ║');
+        console.log('║  • GET  /health                                           ║');
+        console.log('║  • POST /api/youth/auth/authenticate                      ║');
+        console.log('║  • POST /api/staff/auth/authenticate                      ║');
+        console.log('║  • GET  /api/contracts/template                           ║');
+        console.log('║  • POST /api/contracts/sign                               ║');
+        console.log('║  • GET  /api/contracts/signed                             ║');
+        console.log('╚═══════════════════════════════════════════════════════════╝');
+        console.log('');
+        try {
+            await database_1.Database.query('SELECT NOW()');
+            console.log('✅ Database connection successful\n');
+        }
+        catch (error) {
+            console.error('❌ Database connection failed:', error);
+            console.error('Please check your database configuration in .env file\n');
+        }
     });
-});
-process.on('SIGINT', async () => {
-    console.log('\nSIGINT received, shutting down gracefully...');
-    server.close(async () => {
-        await database_1.Database.close();
-        console.log('Process terminated');
-        process.exit(0);
+    process.on('SIGTERM', async () => {
+        console.log('SIGTERM received, shutting down gracefully...');
+        server.close(async () => {
+            await database_1.Database.close();
+            console.log('Process terminated');
+            process.exit(0);
+        });
     });
-});
-exports.default = app;
+    process.on('SIGINT', async () => {
+        console.log('\nSIGINT received, shutting down gracefully...');
+        server.close(async () => {
+            await database_1.Database.close();
+            console.log('Process terminated');
+            process.exit(0);
+        });
+    });
+}
 //# sourceMappingURL=server.js.map

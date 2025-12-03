@@ -1,28 +1,32 @@
-import mysql from 'mysql2/promise';
+import { Pool, PoolClient, QueryResult } from 'pg';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Database configuration
-const pool = mysql.createPool({
-  host: process.env.DATABASE_HOST,
-  port: parseInt(process.env.DATABASE_PORT || '3306'),
-  user: process.env.DATABASE_USER,
-  password: process.env.DATABASE_PASSWORD,
-  database: process.env.DATABASE_NAME,
-  waitForConnections: true,
-  connectionLimit: parseInt(process.env.DB_POOL_MAX || '10'),
-  queueLimit: 0,
+// Create PostgreSQL connection pool for Neon
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false, // Required for Neon
+  },
+  max: parseInt(process.env.DB_POOL_MAX || '10'),
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 10000,
+});
+
+// Handle pool errors
+pool.on('error', (err) => {
+  console.error('Unexpected error on idle PostgreSQL client', err);
+  process.exit(-1);
 });
 
 // Test database connection
-pool.getConnection()
-  .then((connection) => {
-    console.log('✅ Database connected successfully');
-    connection.release();
+pool.query('SELECT NOW()')
+  .then((result) => {
+    console.log('✅ PostgreSQL (Neon) connected successfully at:', result.rows[0].now);
   })
   .catch((err) => {
-    console.error('❌ Database connection error:', err);
+    console.error('❌ PostgreSQL connection error:', err);
     process.exit(-1);
   });
 
@@ -34,21 +38,11 @@ export class Database {
   static async query<T = any>(text: string, params?: any[]): Promise<{ rows: T[] }> {
     const start = Date.now();
     try {
-      // Convert PostgreSQL $1, $2 placeholders to MySQL ? placeholders
-      let mysqlQuery = text;
-      if (params && params.length > 0) {
-        // Replace $n with ? in reverse order to avoid replacing $10 before $1
-        for (let i = params.length; i >= 1; i--) {
-          mysqlQuery = mysqlQuery.replace(new RegExp(`\\$${i}\\b`, 'g'), '?');
-        }
-      }
-      
-      const [rows, fields] = await pool.query(mysqlQuery, params || []);
+      const result = await pool.query(text, params || []);
       const duration = Date.now() - start;
-      console.log('Executed query', { text: mysqlQuery.substring(0, 100), duration, rows: (rows as any[]).length || 0 });
-      
-      // Return in PostgreSQL format { rows: [] } for compatibility
-      return { rows: rows as T[] };
+      console.log('Executed query', { text: text.substring(0, 100), duration, rows: result.rows.length });
+
+      return { rows: result.rows as T[] };
     } catch (error) {
       console.error('Database query error:', error);
       throw error;
@@ -58,27 +52,27 @@ export class Database {
   /**
    * Get a connection from the pool for transactions
    */
-  static async getConnection(): Promise<mysql.PoolConnection> {
-    return await pool.getConnection();
+  static async getConnection(): Promise<PoolClient> {
+    return await pool.connect();
   }
 
   /**
    * Execute a transaction
    */
   static async transaction<T>(
-    callback: (connection: mysql.PoolConnection) => Promise<T>
+    callback: (client: PoolClient) => Promise<T>
   ): Promise<T> {
-    const connection = await pool.getConnection();
+    const client = await pool.connect();
     try {
-      await connection.beginTransaction();
-      const result = await callback(connection);
-      await connection.commit();
+      await client.query('BEGIN');
+      const result = await callback(client);
+      await client.query('COMMIT');
       return result;
     } catch (error) {
-      await connection.rollback();
+      await client.query('ROLLBACK');
       throw error;
     } finally {
-      connection.release();
+      client.release();
     }
   }
 
@@ -87,7 +81,7 @@ export class Database {
    */
   static async close(): Promise<void> {
     await pool.end();
-    console.log('Database pool closed');
+    console.log('PostgreSQL pool closed');
   }
 }
 

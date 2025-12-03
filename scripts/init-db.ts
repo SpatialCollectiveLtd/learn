@@ -4,71 +4,101 @@ import { resolve } from 'path';
 // Load .env.local file
 config({ path: resolve(__dirname, '../.env.local') });
 
-import { testConnection, execute } from '../src/lib/db';
+import { testConnection, execute, getClient } from '../src/lib/db';
 import * as fs from 'fs';
 import * as path from 'path';
 
 async function initializeDatabase() {
   console.log('📝 Environment check:');
-  console.log('   DATABASE_HOST:', process.env.DATABASE_HOST);
-  console.log('   DATABASE_USER:', process.env.DATABASE_USER);
-  console.log('   DATABASE_NAME:', process.env.DATABASE_NAME);
+  console.log('   DATABASE_URL:', process.env.DATABASE_URL ? 'Set (Neon PostgreSQL)' : 'NOT SET');
   console.log('');
-  console.log('🚀 Starting database initialization...\n');
+  console.log('🚀 Starting PostgreSQL database initialization...\n');
 
   // Test connection
   console.log('1️⃣  Testing database connection...');
   const connected = await testConnection();
-  
+
   if (!connected) {
     console.error('❌ Failed to connect to database. Please check your credentials.');
     process.exit(1);
   }
 
-  // Run schema
-  console.log('\n2️⃣  Running database schema...');
-  const schemaPath = path.join(__dirname, '../database/schema.sql');
+  // Run PostgreSQL schema
+  console.log('\n2️⃣  Running PostgreSQL database schema...');
+  const schemaPath = path.join(__dirname, '../database/schema-postgresql.sql');
+
+  if (!fs.existsSync(schemaPath)) {
+    console.error(`❌ Schema file not found: ${schemaPath}`);
+    process.exit(1);
+  }
+
   const schema = fs.readFileSync(schemaPath, 'utf8');
-  
-  // Remove comments and split by semicolons properly
-  const statements = schema
-    .split('\n')
-    .filter(line => !line.trim().startsWith('--')) // Remove comment lines
-    .join('\n')
-    .split(';')
-    .map(s => s.trim())
-    .filter(s => s.length > 10); // Filter empty or very short statements
 
-  console.log(`   Executing ${statements.length} SQL statements...`);
-
-  for (let i = 0; i < statements.length; i++) {
-    const statement = statements[i];
-    try {
-      await execute(statement);
-      const preview = statement.substring(0, 50).replace(/\s+/g, ' ');
-      console.log(`   ✅ ${i + 1}/${statements.length}: ${preview}...`);
-    } catch (error: any) {
-      const preview = statement.substring(0, 50).replace(/\s+/g, ' ');
-      console.error(`   ❌ ${i + 1}/${statements.length}: ${preview}... - ${error.message}`);
-    }
-  }
-  
-  console.log('✅ Schema execution completed');
-
-  // Seed mapper content
-  console.log('\n3️⃣  Seeding mapper training content...');
-  const seedPath = path.join(__dirname, '../database/seed_mapper_content.sql');
-  const seedSql = fs.readFileSync(seedPath, 'utf8');
-  
-  // Execute entire seed file as multi-statement query
   try {
-    await execute(seedSql);
-    console.log('✅ Mapper content seeded successfully');
+    // Execute entire schema file
+    const client = await getClient();
+    try {
+      await client.query(schema);
+      console.log('✅ PostgreSQL schema executed successfully');
+    } finally {
+      client.release();
+    }
   } catch (error: any) {
-    console.error('❌ Error seeding content:', error.message);
+    console.error('❌ Error executing schema:', error.message);
+    process.exit(1);
   }
 
-  console.log('\n🎉 Database initialization complete!\n');
+  // Verify tables were created
+  console.log('\n3️⃣  Verifying database tables...');
+  try {
+    const client = await getClient();
+    try {
+      const result = await client.query(`
+        SELECT table_name
+        FROM information_schema.tables
+        WHERE table_schema = 'public'
+        ORDER BY table_name;
+      `);
+
+      console.log(`✅ ${result.rows.length} tables created:`);
+      result.rows.forEach((row: any) => {
+        console.log(`   - ${row.table_name}`);
+      });
+    } finally {
+      client.release();
+    }
+  } catch (error: any) {
+    console.error('❌ Error verifying tables:', error.message);
+  }
+
+  // Check seed data
+  console.log('\n4️⃣  Verifying seed data...');
+  try {
+    const client = await getClient();
+    try {
+      const modulesResult = await client.query('SELECT COUNT(*) as count FROM modules');
+      const staffResult = await client.query('SELECT COUNT(*) as count FROM staff_members');
+      const youthResult = await client.query('SELECT COUNT(*) as count FROM youth_participants');
+      const templatesResult = await client.query('SELECT COUNT(*) as count FROM contract_templates');
+
+      console.log(`✅ Seed data loaded:`);
+      console.log(`   - Modules: ${modulesResult.rows[0].count}`);
+      console.log(`   - Staff members: ${staffResult.rows[0].count}`);
+      console.log(`   - Youth participants: ${youthResult.rows[0].count}`);
+      console.log(`   - Contract templates: ${templatesResult.rows[0].count}`);
+    } finally {
+      client.release();
+    }
+  } catch (error: any) {
+    console.error('❌ Error checking seed data:', error.message);
+  }
+
+  console.log('\n🎉 PostgreSQL database initialization complete!\n');
+  console.log('📊 Next steps:');
+  console.log('   1. Run: npm run dev (to start Next.js frontend)');
+  console.log('   2. Run: cd api && npm run dev (to start Express API)');
+  console.log('   3. Visit: http://localhost:3000\n');
+
   process.exit(0);
 }
 

@@ -1,142 +1,207 @@
-import { BackgroundBeams } from "@/components/ui/background-beams";
-import { CometCard } from "@/components/ui/comet-card";
-import { FloatingHeader } from "@/components/ui/floating-header";
-import Link from "next/link";
-import { IconMap, IconDeviceMobile, IconHome, IconChecklist } from "@tabler/icons-react";
+"use client";
 
-export default function Home() {
-  const modules = [
-    {
-      title: "Digitization",
-      description: "Learn digital mapping, satellite image interpretation, and working with global mapping communities using JOSM and HOT Tasking Manager.",
-      link: "/digitization",
-      icon: <IconMap className="w-16 h-16" />,
-      image: "https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?q=80&w=1287&auto=format&fit=crop",
-      code: "DIG1",
-    },
-    {
-      title: "Mobile Mapping",
-      description: "Master field data collection techniques using mobile devices for real-time mapping and survey applications.",
-      link: "/mobile-mapping",
-      icon: <IconDeviceMobile className="w-16 h-16" />,
-      image: "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?q=80&w=1287&auto=format&fit=crop",
-      code: "MOB2",
-    },
-    {
-      title: "Household Survey",
-      description: "Conduct comprehensive household surveys with professional data collection methodologies and best practices.",
-      link: "/household-survey",
-      icon: <IconHome className="w-16 h-16" />,
-      image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1287&auto=format&fit=crop",
-      code: "HSV3",
-    },
-    {
-      title: "Microtasking",
-      description: "Complete and validate small mapping tasks efficiently with quality assurance and validation workflows.",
-      link: "/microtasking",
-      icon: <IconChecklist className="w-16 h-16" />,
-      image: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?q=80&w=1287&auto=format&fit=crop",
-      code: "MCR4",
-    },
-  ];
+import { useState } from "react";
+import { BackgroundBeams } from "@/components/ui/background-beams";
+import { Shield, Users } from "lucide-react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+
+export default function LoginPage() {
+  const router = useRouter();
+  const [loginType, setLoginType] = useState<'youth' | 'staff'>('youth');
+  const [userId, setUserId] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleYouthLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setIsLoading(true);
+
+    try {
+      const response = await axios.post(`${API_URL}/api/youth/auth/authenticate`, {
+        youthId: userId,
+      });
+
+      if (response.data.success) {
+        const { token, youth } = response.data.data;
+
+        // Store authentication data
+        localStorage.setItem('youthToken', token);
+        localStorage.setItem('youthData', JSON.stringify(youth));
+        localStorage.setItem('userType', 'youth');
+
+        // Check if contract has been signed
+        const agreementAccepted = localStorage.getItem(`agreement-accepted-${youth.youthId}`);
+
+        if (!agreementAccepted) {
+          // First time login - redirect to contract signing
+          router.push('/contract');
+        } else {
+          // Returning user - redirect to dashboard
+          router.push('/dashboard/youth');
+        }
+      }
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Authentication failed. Please check your Youth ID.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleStaffLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setIsLoading(true);
+
+    try {
+      const response = await axios.post(`${API_URL}/api/staff/auth/authenticate`, {
+        staffId: userId,
+      });
+
+      if (response.data.success) {
+        const { token, staff } = response.data.data;
+
+        // Store staff authentication
+        sessionStorage.setItem('staffToken', token);
+        sessionStorage.setItem('staffId', staff.staffId);
+        sessionStorage.setItem('staffName', staff.fullName);
+        sessionStorage.setItem('staffRole', staff.role);
+        localStorage.setItem('userType', 'staff');
+
+        // Redirect to staff dashboard
+        router.push('/dashboard/staff');
+      }
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Authentication failed. Please check your Staff ID.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSubmit = loginType === 'youth' ? handleYouthLogin : handleStaffLogin;
 
   return (
-    <main className="min-h-screen bg-black relative overflow-hidden">
-      {/* Background Effects */}
+    <main className="min-h-screen bg-black relative overflow-hidden flex items-center justify-center">
       <BackgroundBeams className="opacity-40" />
-      
-      {/* Floating Header */}
-      <FloatingHeader />
-      
-      {/* Content */}
-      <div className="relative z-10 pt-20">
-        {/* Hero Section */}
-        <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">\n          <div className="text-center max-w-5xl mx-auto mb-12 sm:mb-16">
-            <h2 className="text-3xl sm:text-4xl lg:text-6xl font-heading font-bold text-white mb-4 sm:mb-6 leading-tight">
-              Welcome to Your
-              <span className="text-[#dc2626]"> Training Hub</span>
-            </h2>
-            <p className="text-base sm:text-lg lg:text-xl text-[#e5e5e5] max-w-3xl mx-auto leading-relaxed">
-              Master essential skills in digital mapping, field data collection, and survey methodologies. 
-              Follow along with your trainer through interactive, step-by-step modules.
-            </p>
+
+      <div className="relative z-10 w-full max-w-md px-4">
+        {/* Logo/Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-heading font-bold text-white mb-2">
+            <span className="text-[#dc2626]">SC</span> Training Hub
+          </h1>
+          <p className="text-[#a3a3a3]">Spatial Collective Learning Platform</p>
+        </div>
+
+        {/* Login Card */}
+        <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-2xl shadow-2xl overflow-hidden">
+          {/* Tab Switcher */}
+          <div className="grid grid-cols-2 border-b border-[#2a2a2a]">
+            <button
+              onClick={() => {
+                setLoginType('youth');
+                setUserId('');
+                setError('');
+              }}
+              className={`py-4 px-6 font-semibold transition-all ${
+                loginType === 'youth'
+                  ? 'bg-[#dc2626] text-white'
+                  : 'bg-transparent text-[#a3a3a3] hover:text-white'
+              }`}
+            >
+              <div className="flex items-center justify-center gap-2">
+                <Users className="w-5 h-5" />
+                <span>Youth</span>
+              </div>
+            </button>
+            <button
+              onClick={() => {
+                setLoginType('staff');
+                setUserId('');
+                setError('');
+              }}
+              className={`py-4 px-6 font-semibold transition-all ${
+                loginType === 'staff'
+                  ? 'bg-[#dc2626] text-white'
+                  : 'bg-transparent text-[#a3a3a3] hover:text-white'
+              }`}
+            >
+              <div className="flex items-center justify-center gap-2">
+                <Shield className="w-5 h-5" />
+                <span>Staff</span>
+              </div>
+            </button>
           </div>
 
-          {/* Training Modules */}
-          <div className="max-w-3xl mx-auto px-4">
-            <h3 className="text-2xl sm:text-3xl font-subheading font-bold text-white mb-8 text-center">
-              Select Your Training Module
-            </h3>
-            <div className="grid grid-cols-2 gap-4 md:gap-6">
-              {modules.map((module, index) => (
-                <CometCard key={index} rotateDepth={15} translateDepth={25}>
-                  <Link href={module.link}>
-                    <button
-                      type="button"
-                      className="flex w-full cursor-pointer flex-col items-stretch rounded-xl border-0 bg-[#1F2121] p-1.5 transition-all hover:bg-[#252727] md:p-2.5"
-                      aria-label={`View ${module.title} training`}
-                      style={{
-                        transformStyle: "preserve-3d",
-                      }}
-                    >
-                      <div className="mx-1 flex-1">
-                        <div className="relative mt-1 aspect-[5/6] w-full overflow-hidden rounded-xl bg-black">
-                          <img
-                            loading="lazy"
-                            className="absolute inset-0 h-full w-full object-cover contrast-75 saturate-50"
-                            alt={`${module.title} background`}
-                            src={module.image}
-                            style={{
-                              boxShadow: "rgba(0, 0, 0, 0.3) 0px 10px 30px 0px",
-                              transform: "translateZ(50px)",
-                            }}
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                          <div className="absolute bottom-2 left-2 right-2 md:bottom-3 md:left-3 md:right-3" style={{ transform: "translateZ(75px)" }}>
-                            <div className="flex items-center gap-1.5 mb-1.5">
-                              <div className="text-[#dc2626] scale-75 md:scale-100">{module.icon}</div>
-                            </div>
-                            <h4 className="text-white font-heading font-bold text-sm md:text-base mb-0.5 md:mb-1">
-                              {module.title}
-                            </h4>
-                            <p className="text-gray-300 text-[10px] md:text-xs line-clamp-2">
-                              {module.description}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="mt-1 flex flex-shrink-0 items-center justify-between px-2 py-1.5 md:px-3 md:py-2 font-mono text-white">
-                        <div className="text-[9px] md:text-[10px] font-semibold">SC Training</div>
-                        <div className="text-[9px] md:text-[10px] text-[#dc2626] opacity-70">#{module.code}</div>
-                      </div>
-                    </button>
-                  </Link>
-                </CometCard>
-              ))}
+          {/* Login Form */}
+          <div className="p-8">
+            <div className="mb-6">
+              <h2 className="text-2xl font-heading font-bold text-white mb-2">
+                {loginType === 'youth' ? 'Youth Login' : 'Staff Login'}
+              </h2>
+              <p className="text-[#a3a3a3] text-sm">
+                {loginType === 'youth'
+                  ? 'Enter your Youth ID to access your training'
+                  : 'Enter your Staff ID to access the platform'
+                }
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div>
+                <label
+                  htmlFor="userId"
+                  className="block text-sm font-medium text-[#e5e5e5] mb-2"
+                >
+                  {loginType === 'youth' ? 'Youth ID' : 'Staff ID'}
+                </label>
+                <input
+                  type="text"
+                  id="userId"
+                  value={userId}
+                  onChange={(e) => setUserId(e.target.value)}
+                  className="w-full px-4 py-3 bg-black border border-[#2a2a2a] rounded-lg text-white placeholder-[#737373] focus:outline-none focus:ring-2 focus:ring-[#dc2626] focus:border-transparent transition-all"
+                  placeholder={loginType === 'youth' ? 'e.g., YT001' : 'e.g., SC001'}
+                  required
+                  autoFocus
+                />
+              </div>
+
+              {error && (
+                <div className="p-3 bg-[#dc2626]/10 border border-[#dc2626]/20 rounded-lg">
+                  <p className="text-sm text-[#dc2626]">{error}</p>
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-[#dc2626] hover:bg-[#b91c1c] text-white font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isLoading ? 'Signing in...' : 'Sign In'}
+              </button>
+            </form>
+
+            <div className="mt-6 pt-6 border-t border-[#2a2a2a]">
+              <p className="text-xs text-[#737373] text-center">
+                {loginType === 'youth'
+                  ? 'First time logging in? You\'ll be guided through the contract signing process.'
+                  : 'Only authorized Spatial Collective staff members can access this platform.'
+                }
+              </p>
             </div>
           </div>
-        </section>
+        </div>
 
         {/* Footer */}
-        <footer className="border-t border-[#262626] mt-32">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              <p className="text-[#a3a3a3] text-sm">
-                © {new Date().getFullYear()} Spatial Collective. All rights reserved.
-              </p>
-              <div className="flex items-center gap-6">
-                <a 
-                  href="https://spatialcollective.co.ke" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-[#a3a3a3] hover:text-[#dc2626] transition-colors text-sm"
-                >
-                  Visit Our Website
-                </a>
-              </div>
-            </div>
-          </div>
-        </footer>
+        <div className="text-center mt-8">
+          <p className="text-[#737373] text-sm">
+            © {new Date().getFullYear()} Spatial Collective. All rights reserved.
+          </p>
+        </div>
       </div>
     </main>
   );

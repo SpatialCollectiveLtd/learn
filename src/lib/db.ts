@@ -1,32 +1,33 @@
-import mysql from 'mysql2/promise';
+import { Pool, PoolClient } from 'pg';
 
 // Lazy-loaded pool
-let pool: mysql.Pool | null = null;
+let pool: Pool | null = null;
 
 // Function to get or create pool
 function getPool() {
   if (!pool) {
-    const config = {
-      host: process.env.DATABASE_HOST || 'localhost',
-      port: parseInt(process.env.DATABASE_PORT || '3306', 10),
-      user: process.env.DATABASE_USER,
-      password: process.env.DATABASE_PASSWORD,
-      database: process.env.DATABASE_NAME,
-      waitForConnections: true,
-      connectionLimit: 10,
-      queueLimit: 0,
-      connectTimeout: 30000,
-      multipleStatements: true, // Enable multi-statement queries
-    };
-    
-    console.log('🔧 Creating pool with config:', {
-      host: config.host,
-      port: config.port,
-      user: config.user,
-      database: config.database
+    const connectionString = process.env.DATABASE_URL;
+
+    if (!connectionString) {
+      throw new Error('DATABASE_URL environment variable is not set');
+    }
+
+    console.log('🔧 Creating PostgreSQL pool for Neon database');
+
+    pool = new Pool({
+      connectionString,
+      ssl: {
+        rejectUnauthorized: false, // Required for Neon
+      },
+      max: 10, // Maximum pool size
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 10000,
     });
-    
-    pool = mysql.createPool(config);
+
+    // Handle pool errors
+    pool.on('error', (err) => {
+      console.error('Unexpected error on idle client', err);
+    });
   }
   return pool;
 }
@@ -34,17 +35,13 @@ function getPool() {
 // Test connection function
 export async function testConnection() {
   try {
-    console.log('🔍 Testing connection with:', {
-      host: process.env.DATABASE_HOST,
-      port: process.env.DATABASE_PORT,
-      user: process.env.DATABASE_USER,
-      database: process.env.DATABASE_NAME
-    });
-    
+    console.log('🔍 Testing PostgreSQL connection to Neon...');
+
     const currentPool = getPool();
-    const connection = await currentPool.getConnection();
-    console.log('✅ Database connected successfully');
-    connection.release();
+    const client = await currentPool.connect();
+    const result = await client.query('SELECT NOW()');
+    console.log('✅ Database connected successfully at:', result.rows[0].now);
+    client.release();
     return true;
   } catch (error) {
     console.error('❌ Database connection failed:', error);
@@ -56,8 +53,8 @@ export async function testConnection() {
 export async function query<T = any>(sql: string, params?: any[]): Promise<T[]> {
   try {
     const currentPool = getPool();
-    const [rows] = await currentPool.execute(sql, params);
-    return rows as T[];
+    const result = await currentPool.query(sql, params);
+    return result.rows as T[];
   } catch (error) {
     console.error('Database query error:', error);
     throw error;
@@ -68,7 +65,7 @@ export async function query<T = any>(sql: string, params?: any[]): Promise<T[]> 
 export async function execute(sql: string, params?: any[]) {
   try {
     const currentPool = getPool();
-    const [result] = await currentPool.execute(sql, params);
+    const result = await currentPool.query(sql, params);
     return result;
   } catch (error) {
     console.error('Database execution error:', error);
@@ -76,5 +73,20 @@ export async function execute(sql: string, params?: any[]) {
   }
 }
 
+// Get a client for transactions
+export async function getClient(): Promise<PoolClient> {
+  const currentPool = getPool();
+  return await currentPool.connect();
+}
+
+// Close pool
+export async function closePool() {
+  if (pool) {
+    await pool.end();
+    pool = null;
+    console.log('Database pool closed');
+  }
+}
+
 // Export getPool for default export (lazy evaluation)
-export default { getPool };
+export default { getPool, closePool };

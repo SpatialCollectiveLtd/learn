@@ -875,6 +875,7 @@ const registeredStaffIds: Map<string, StaffCredentials> = new Map([
  * Validates a Staff ID
  * @param staffId - The staff ID to validate
  * @returns Authentication result with success status and message
+ * @deprecated This function is no longer used. Authentication now happens via the database API.
  */
 export function authenticateStaffId(staffId: string): AuthenticationResult {
   // Trim and convert to uppercase for consistency
@@ -889,21 +890,12 @@ export function authenticateStaffId(staffId: string): AuthenticationResult {
     };
   }
 
-  // Check if staff ID is registered
-  const credentials = registeredStaffIds.get(cleanStaffId);
-  if (!credentials) {
-    return {
-      success: false,
-      message: 'Staff ID not recognized. Please contact your administrator to register your Staff ID.',
-    };
-  }
-
-  // Authentication successful
+  // Note: Authentication is now handled by the database API
+  // This function is kept for backward compatibility
   return {
     success: true,
     staffId: cleanStaffId,
-    message: 'Authentication successful. Welcome to Validator Training.',
-    credentials,
+    message: 'Please use the database authentication system.',
   };
 }
 
@@ -1003,8 +995,19 @@ export function unregisterStaffId(staffId: string): { success: boolean; message:
  * @returns Boolean indicating access permission
  */
 export function hasValidatorTrainingAccess(staffId: string): boolean {
-  const cleanStaffId = staffId.trim().toUpperCase();
-  return registeredStaffIds.has(cleanStaffId);
+  // For now, allow all authenticated staff members to access validator training
+  // In production, you would check staff role from database
+  // Staff with role 'admin' or 'validator' should have access
+
+  // Check if staff role is stored in session
+  const staffRole = sessionStorage.getItem('staffRole');
+
+  if (staffRole === 'admin' || staffRole === 'validator') {
+    return true;
+  }
+
+  // Fallback: Allow any authenticated staff (since they're logged in through database)
+  return staffId && staffId.trim().length > 0;
 }
 
 /**

@@ -1,10 +1,27 @@
+"use client";
+
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import { CometCard } from "@/components/ui/comet-card";
 import { FloatingHeader } from "@/components/ui/floating-header";
 import Link from "next/link";
 import { IconPencil, IconCircleCheck, IconMap } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
 
 export default function DigitizationPage() {
+  const [backHref, setBackHref] = useState("/");
+
+  useEffect(() => {
+    // Determine back button destination based on user type
+    const userType = localStorage.getItem('userType');
+    if (userType === 'youth') {
+      setBackHref('/dashboard/youth');
+    } else if (userType === 'staff') {
+      setBackHref('/dashboard/staff');
+    } else {
+      setBackHref('/');
+    }
+  }, []);
+
   const roles = [
     {
       title: "Mapper",
@@ -27,10 +44,10 @@ export default function DigitizationPage() {
   return (
     <main className="min-h-screen bg-black relative overflow-hidden">
       <BackgroundBeams className="opacity-30" />
-      
+
       {/* Floating Header */}
-      <FloatingHeader showBackButton backHref="/" />
-      
+      <FloatingHeader showBackButton backHref={backHref} />
+
       <div className="relative z-10 pt-20">
         {/* Content */}
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
@@ -42,7 +59,7 @@ export default function DigitizationPage() {
               Digitization Training
             </h2>
             <p className="text-lg text-[#e5e5e5] max-w-2xl mx-auto">
-              Master digital mapping and satellite image interpretation. Learn to use JOSM, HOT Tasking Manager, 
+              Master digital mapping and satellite image interpretation. Learn to use JOSM, HOT Tasking Manager,
               and contribute to global mapping communities.
             </p>
           </div>

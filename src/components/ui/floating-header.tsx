@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 
 interface FloatingHeaderProps {
   showBackButton?: boolean;
@@ -13,7 +14,21 @@ interface FloatingHeaderProps {
 
 export function FloatingHeader({ showBackButton = false, backHref = "/", className }: FloatingHeaderProps) {
   const pathname = usePathname();
-  
+  const router = useRouter();
+  const [homeHref, setHomeHref] = useState("/");
+
+  useEffect(() => {
+    // Determine the appropriate home link based on user type
+    const userType = localStorage.getItem('userType');
+    if (userType === 'youth') {
+      setHomeHref('/dashboard/youth');
+    } else if (userType === 'staff') {
+      setHomeHref('/dashboard/staff');
+    } else {
+      setHomeHref('/');
+    }
+  }, []);
+
   return (
     <header className={cn(
       "fixed top-4 left-1/2 -translate-x-1/2 z-50",
@@ -24,7 +39,7 @@ export function FloatingHeader({ showBackButton = false, backHref = "/", classNa
         <div className="px-4 py-2.5 flex items-center justify-between">
           {/* Left - Back Button or Logo */}
           {showBackButton ? (
-            <Link 
+            <Link
               href={backHref}
               className="flex items-center gap-1.5 text-[#a3a3a3] hover:text-[#dc2626] transition-colors group"
             >
@@ -36,15 +51,15 @@ export function FloatingHeader({ showBackButton = false, backHref = "/", classNa
               <span className="text-xs">Back</span>
             </div>
           )}
-          
+
           {/* Center - Logo */}
-          <Link href="/" className="flex items-center gap-2">
+          <Link href={homeHref} className="flex items-center gap-2">
             <div className="text-[#dc2626] text-xl font-bold font-heading">SC</div>
             <div className="hidden sm:block">
               <span className="text-sm font-heading font-bold text-white">Spatial Collective</span>
             </div>
           </Link>
-          
+
           {/* Right - Spacer for balance */}
           <div className="w-12"></div>
         </div>
