@@ -998,19 +998,17 @@ export function hasValidatorTrainingAccess(staffId: string): boolean {
   // For now, allow all authenticated staff members to access validator training
   // In production, you would check staff role from database
   // Staff with role 'admin' or 'validator' should have access
-
+  
   // Check if staff role is stored in session
   const staffRole = sessionStorage.getItem('staffRole');
-
+  
   if (staffRole === 'admin' || staffRole === 'validator') {
     return true;
   }
-
+  
   // Fallback: Allow any authenticated staff (since they're logged in through database)
-  return staffId && staffId.trim().length > 0;
-}
-
-/**
+  return Boolean(staffId && staffId.trim().length > 0);
+}/**
  * Gets validator training step (with authentication check)
  * @param id - Step ID
  * @param staffId - Staff ID for authentication

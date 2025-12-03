@@ -262,10 +262,8 @@ export class ContractController {
       try {
         const base64Data = signatureData.replace(/^data:image\/\w+;base64,/, '');
         const buffer = Buffer.from(base64Data, 'base64');
-        // @ts-ignore - pdfkit types issue with align property
         doc.image(buffer, {
           fit: [200, 100],
-          align: 'left',
         });
       } catch (err) {
         console.error('Error adding signature to PDF:', err);
