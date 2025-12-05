@@ -123,12 +123,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       message: 'Authentication successful',
-      token,
-      user: {
-        staffId: staff.staff_id,
-        fullName: staff.full_name,
-        email: staff.email,
-        role: staff.role,
+      data: {
+        token,
+        staff: {
+          staffId: staff.staff_id,
+          fullName: staff.full_name,
+          email: staff.email,
+          role: staff.role,
+        },
       },
     });
 

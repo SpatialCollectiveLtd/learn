@@ -126,14 +126,16 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       message: 'Authentication successful',
-      token,
-      user: {
-        youthId: youth.youth_id,
-        fullName: youth.full_name,
-        email: youth.email,
-        phone: youth.phone_number,
-        programType: youth.program_type,
-        hasSignedContract,
+      data: {
+        token,
+        youth: {
+          youthId: youth.youth_id,
+          fullName: youth.full_name,
+          email: youth.email,
+          phone: youth.phone_number,
+          programType: youth.program_type,
+          hasSignedContract,
+        },
       },
     });
 
