@@ -50,11 +50,11 @@ export class YouthModel {
    * Check if youth has signed contract
    */
   static async hasSignedContract(youthId: string): Promise<boolean> {
-    const result = await Database.query<{ has_signed_contract: boolean }>(
-      'SELECT has_signed_contract FROM youth_participants WHERE youth_id = $1',
+    const result = await Database.query<{ count: number }>(
+      'SELECT COUNT(*) as count FROM signed_contracts WHERE youth_id = $1 AND is_valid = true',
       [youthId]
     );
-    return result.rows[0]?.has_signed_contract || false;
+    return result.rows[0]?.count > 0;
   }
 
   /**

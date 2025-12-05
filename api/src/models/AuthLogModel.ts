@@ -14,11 +14,12 @@ export class AuthLogModel {
     errorMessage?: string;
   }): Promise<void> {
     await Database.query(
-      `INSERT INTO auth_logs (user_identifier, user_type, success, ip_address, user_agent, failure_reason)
-       VALUES ($1, $2, $3, $4, $5, $6)`,
+      `INSERT INTO auth_logs (user_id, user_type, action, success, ip_address, user_agent, error_message)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
       [
         data.userId,
         data.userType,
+        data.action,
         data.success,
         data.ipAddress || null,
         data.userAgent || null,
@@ -33,7 +34,7 @@ export class AuthLogModel {
   static async getUserLogs(userId: string, limit: number = 50): Promise<any[]> {
     const result = await Database.query(
       `SELECT * FROM auth_logs
-       WHERE user_identifier = $1
+       WHERE user_id = $1
        ORDER BY created_at DESC
        LIMIT $2`,
       [userId, limit]
