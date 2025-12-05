@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { YouthModel } from '@/api/models/YouthModel';
-import { AuthLogModel } from '@/api/models/AuthLogModel';
+import { YouthModel } from '../../../_lib/YouthModel';
+import { AuthLogModel } from '../../../_lib/AuthLogModel';
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
@@ -19,11 +19,14 @@ export async function OPTIONS(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  console.log('[AUTH] POST request received');
   try {
     const body = await request.json();
+    console.log('[AUTH] Body parsed:', body);
     const { youthId } = body;
 
     if (!youthId) {
+      console.log('[AUTH] No youthId provided');
       return NextResponse.json(
         { success: false, message: 'Youth ID is required' },
         { status: 400 }
@@ -33,6 +36,7 @@ export async function POST(request: NextRequest) {
     // Validate format (YT followed by 3+ digits)
     const youthIdPattern = /^YT\d{3,}$/i;
     if (!youthIdPattern.test(youthId.toUpperCase())) {
+      console.log('[AUTH] Invalid format:', youthId);
       const clientIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
       await AuthLogModel.log({
         userId: youthId,
@@ -54,7 +58,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Find youth in database
+    console.log('[AUTH] Looking up youth:', youthId.toUpperCase());
     const youth = await YouthModel.findById(youthId.toUpperCase());
+    console.log('[AUTH] Youth found:', youth ? 'yes' : 'no');
 
     if (!youth) {
       const clientIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
@@ -140,9 +146,10 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Youth authentication error:', error);
+    console.error('[AUTH] Youth authentication error:', error);
+    console.error('[AUTH] Error stack:', error instanceof Error ? error.stack : 'No stack');
     return NextResponse.json(
-      { success: false, message: 'An error occurred during authentication' },
+      { success: false, message: 'An error occurred during authentication', error: String(error) },
       { status: 500 }
     );
   }

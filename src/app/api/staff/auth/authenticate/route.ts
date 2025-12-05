@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { StaffModel } from '@/api/models/StaffModel';
-import { AuthLogModel } from '@/api/models/AuthLogModel';
+import { StaffModel } from '../../../_lib/StaffModel';
+import { AuthLogModel } from '../../../_lib/AuthLogModel';
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
