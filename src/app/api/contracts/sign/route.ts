@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ContractModel } from '../../_lib/ContractModel';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+const JWT_SECRET = process.env.learn_STACK_SECRET_SERVER_KEY || process.env.JWT_SECRET || 'your-secret-key';
 
 // Handle CORS preflight requests
 export async function OPTIONS(request: NextRequest) {

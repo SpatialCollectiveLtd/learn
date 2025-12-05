@@ -3,7 +3,7 @@ import { StaffModel } from '../../../_lib/StaffModel';
 import { AuthLogModel } from '../../../_lib/AuthLogModel';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+const JWT_SECRET = process.env.learn_STACK_SECRET_SERVER_KEY || process.env.JWT_SECRET || 'your-secret-key';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h';
 
 // Handle CORS preflight requests
