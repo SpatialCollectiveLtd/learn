@@ -8,7 +8,7 @@ import SignatureCanvas from "react-signature-canvas";
 import { ErrorModal } from "@/components/ui/error-modal";
 import axios from "axios";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 export default function ContractPage() {
   const router = useRouter();
