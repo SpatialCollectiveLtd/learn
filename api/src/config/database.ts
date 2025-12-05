@@ -3,32 +3,28 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Create PostgreSQL connection pool for Neon
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false, // Required for Neon
-  },
-  max: parseInt(process.env.DB_POOL_MAX || '10'),
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 10000,
-});
+// Create PostgreSQL connection pool for Neon (lazy initialization)
+let pool: Pool | null = null;
 
-// Handle pool errors
-pool.on('error', (err) => {
-  console.error('Unexpected error on idle PostgreSQL client', err);
-  process.exit(-1);
-});
+function getPool(): Pool {
+  if (!pool) {
+    pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: {
+        rejectUnauthorized: false, // Required for Neon
+      },
+      max: parseInt(process.env.DB_POOL_MAX || '10'),
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 10000,
+    });
 
-// Test database connection
-pool.query('SELECT NOW()')
-  .then((result) => {
-    console.log('✅ PostgreSQL (Neon) connected successfully at:', result.rows[0].now);
-  })
-  .catch((err) => {
-    console.error('❌ PostgreSQL connection error:', err);
-    process.exit(-1);
-  });
+    // Handle pool errors
+    pool.on('error', (err) => {
+      console.error('Unexpected error on idle PostgreSQL client', err);
+    });
+  }
+  return pool;
+}
 
 // Database helper functions
 export class Database {
@@ -38,7 +34,7 @@ export class Database {
   static async query<T = any>(text: string, params?: any[]): Promise<{ rows: T[] }> {
     const start = Date.now();
     try {
-      const result = await pool.query(text, params || []);
+      const result = await getPool().query(text, params || []);
       const duration = Date.now() - start;
       console.log('Executed query', { text: text.substring(0, 100), duration, rows: result.rows.length });
 
@@ -53,7 +49,7 @@ export class Database {
    * Get a connection from the pool for transactions
    */
   static async getConnection(): Promise<PoolClient> {
-    return await pool.connect();
+    return await getPool().connect();
   }
 
   /**
@@ -62,7 +58,7 @@ export class Database {
   static async transaction<T>(
     callback: (client: PoolClient) => Promise<T>
   ): Promise<T> {
-    const client = await pool.connect();
+    const client = await getPool().connect();
     try {
       await client.query('BEGIN');
       const result = await callback(client);
@@ -80,8 +76,10 @@ export class Database {
    * Close all database connections
    */
   static async close(): Promise<void> {
-    await pool.end();
-    console.log('PostgreSQL pool closed');
+    if (pool) {
+      await pool.end();
+      console.log('PostgreSQL pool closed');
+    }
   }
 }
 
