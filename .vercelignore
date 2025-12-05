@@ -1,5 +1,13 @@
-api
-api/**
+# Only exclude the old standalone API directory, NOT the Next.js app/api routes
+/api
+/api/**
+
+# Exclude local environment files
 .env.local
 .env
 *.log
+
+# Exclude test and temp files
+test-*.js
+verify-*.js
+run-migration.js
