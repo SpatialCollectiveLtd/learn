@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import StaffAuthentication from './StaffAuthentication';
-import { hasValidatorTrainingAccess } from '../data/validator-training';
 
 interface ValidatorTrainingWrapperProps {
   children: React.ReactNode;
@@ -12,34 +11,47 @@ export const ValidatorTrainingWrapper: React.FC<ValidatorTrainingWrapperProps> =
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [staffId, setStaffId] = useState<string | null>(null);
   const [staffName, setStaffName] = useState<string | null>(null);
+  const [staffRole, setStaffRole] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check if user is already authenticated in session
+  // Check if user is already authenticated via JWT token
   useEffect(() => {
-    const storedStaffId = sessionStorage.getItem('validatorStaffId');
-    const storedStaffName = sessionStorage.getItem('validatorStaffName');
+    const storedToken = localStorage.getItem('staffToken');
+    const storedStaffId = localStorage.getItem('staffId');
+    const storedStaffName = localStorage.getItem('staffName');
+    const storedStaffRole = localStorage.getItem('staffRole');
 
-    if (storedStaffId && hasValidatorTrainingAccess(storedStaffId)) {
+    if (storedToken && storedStaffId) {
       setStaffId(storedStaffId);
       setStaffName(storedStaffName);
+      setStaffRole(storedStaffRole);
       setIsAuthenticated(true);
     }
 
     setIsLoading(false);
   }, []);
 
-  const handleAuthenticated = (authenticatedStaffId: string) => {
-    setStaffId(authenticatedStaffId);
-    const storedName = sessionStorage.getItem('validatorStaffName');
-    setStaffName(storedName);
+  const handleAuthenticated = (data: { token: string; staff: { staffId: string; fullName: string; role: string } }) => {
+    // Store JWT and staff info in localStorage
+    localStorage.setItem('staffToken', data.token);
+    localStorage.setItem('staffId', data.staff.staffId);
+    localStorage.setItem('staffName', data.staff.fullName);
+    localStorage.setItem('staffRole', data.staff.role);
+
+    setStaffId(data.staff.staffId);
+    setStaffName(data.staff.fullName);
+    setStaffRole(data.staff.role);
     setIsAuthenticated(true);
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem('validatorStaffId');
-    sessionStorage.removeItem('validatorStaffName');
+    localStorage.removeItem('staffToken');
+    localStorage.removeItem('staffId');
+    localStorage.removeItem('staffName');
+    localStorage.removeItem('staffRole');
     setStaffId(null);
     setStaffName(null);
+    setStaffRole(null);
     setIsAuthenticated(false);
   };
 

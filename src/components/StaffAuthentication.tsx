@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
-import {
-  authenticateStaffId,
-  type AuthenticationResult,
-} from '../data/validator-training';
+import axios from 'axios';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 interface StaffAuthenticationProps {
-  onAuthenticated: (staffId: string) => void;
+  onAuthenticated: (data: {
+    token: string;
+    staff: {
+      staffId: string;
+      fullName: string;
+      role: string;
+    };
+  }) => void;
 }
 
 export const StaffAuthentication: React.FC<StaffAuthenticationProps> = ({
@@ -15,28 +21,27 @@ export const StaffAuthentication: React.FC<StaffAuthenticationProps> = ({
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
 
-    // Simulate slight delay for better UX
-    setTimeout(() => {
-      const result: AuthenticationResult = authenticateStaffId(staffId);
+    try {
+      const response = await axios.post(`${API_URL}/api/staff/auth/authenticate`, {
+        staffId,
+      });
 
-      if (result.success && result.staffId) {
-        // Store authentication in session storage
-        sessionStorage.setItem('validatorStaffId', result.staffId);
-        if (result.credentials?.name) {
-          sessionStorage.setItem('validatorStaffName', result.credentials.name);
-        }
-        onAuthenticated(result.staffId);
-      } else {
-        setError(result.message);
+      if (response.data.success) {
+        // Store token in localStorage
+        localStorage.setItem('staffToken', response.data.data.token);
+        localStorage.setItem('staffData', JSON.stringify(response.data.data.staff));
+        onAuthenticated(response.data.data);
       }
-
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Authentication failed. Please try again.');
+    } finally {
       setIsLoading(false);
-    }, 500);
+    }
   };
 
   return (

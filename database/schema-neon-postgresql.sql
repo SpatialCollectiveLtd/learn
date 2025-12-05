@@ -85,6 +85,7 @@ CREATE TABLE IF NOT EXISTS signed_contracts (
   is_valid BOOLEAN DEFAULT TRUE,
   invalidated_at TIMESTAMP WITH TIME ZONE,
   invalidated_by VARCHAR(50),
+  invalidation_reason TEXT,
   FOREIGN KEY (youth_id) REFERENCES youth_participants(youth_id) ON DELETE CASCADE,
   FOREIGN KEY (template_id) REFERENCES contract_templates(template_id) ON DELETE CASCADE,
   FOREIGN KEY (invalidated_by) REFERENCES staff_members(staff_id) ON DELETE SET NULL
