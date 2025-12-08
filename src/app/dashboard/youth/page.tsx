@@ -24,11 +24,13 @@ export default function YouthDashboard() {
       return;
     }
 
-    if (!agreementAccepted) {
-      // Contract not signed - redirect to contract page
-      router.push('/contract');
-      return;
-    }
+    // TEMPORARILY DISABLED: Contract requirement while awaiting module-specific content
+    // TODO: Re-enable with module-specific contracts (Digitization, Mobile Mapping, Household Survey, Microtasking)
+    // if (!agreementAccepted) {
+    //   // Contract not signed - redirect to contract page
+    //   router.push('/contract');
+    //   return;
+    // }
 
     try {
       const parsed = JSON.parse(storedYouthData);
@@ -170,24 +172,20 @@ export default function YouthDashboard() {
                 </div>
               </div>
 
-              {/* Contract Status */}
-              <div className="bg-[#dc2626]/10 border border-[#dc2626]/30 rounded-xl p-6">
+              {/* Contract Status - TEMPORARILY DISABLED */}
+              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-6">
                 <div className="flex items-start gap-3">
-                  <CheckCircle2 className="w-6 h-6 text-[#dc2626] flex-shrink-0 mt-1" />
+                  <FileText className="w-6 h-6 text-yellow-500 flex-shrink-0 mt-1" />
                   <div className="flex-1">
                     <h3 className="text-lg font-semibold text-white mb-1">
-                      Training Agreement Accepted
+                      Module-Specific Training Agreements Coming Soon
                     </h3>
-                    <p className="text-[#e5e5e5] text-sm mb-3">
-                      You have successfully signed your training agreement. You can now access your assigned training materials.
+                    <p className="text-[#e5e5e5] text-sm mb-2">
+                      We're preparing specialized training agreements for each module (Digitization, Mobile Mapping, Household Survey, Microtasking). You can access training materials now, and will be asked to sign a module-specific agreement when available.
                     </p>
-                    <Link
-                      href="/contract/review"
-                      className="inline-flex items-center gap-2 text-sm text-[#dc2626] hover:text-[#b91c1c] transition-colors"
-                    >
-                      <FileText className="w-4 h-4" />
-                      View Signed Contract
-                    </Link>
+                    <p className="text-yellow-400 text-xs">
+                      ⓘ Contract signing temporarily disabled while we finalize module-specific content
+                    </p>
                   </div>
                 </div>
               </div>
@@ -260,7 +258,8 @@ export default function YouthDashboard() {
               Resources & Support
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-xl p-6">
+              {/* TEMPORARILY REMOVED: Contract link while contracts are being updated */}
+              {/* <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-xl p-6">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-lg bg-[#2a2a2a] flex items-center justify-center">
                     <FileText className="w-6 h-6 text-[#e5e5e5]" />
@@ -278,7 +277,7 @@ export default function YouthDashboard() {
                     </Link>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-xl p-6">
                 <h4 className="text-white font-semibold mb-2">Need Help?</h4>
