@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { 
           success: false, 
-          message: 'Invalid Youth ID format. Youth ID should start with KAY, KAR, or MJI followed by your unique identifier (e.g., KAY1278MK, KAR001, MJI123)' 
+          message: 'Invalid Youth ID. Please check your ID and try again.' 
         },
         { status: 400 }
       );

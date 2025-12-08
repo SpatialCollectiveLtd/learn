@@ -137,14 +137,14 @@ export const YouthAuthentication: React.FC<YouthAuthenticationProps> = ({
               id="youthId"
               value={youthId}
               onChange={(e) => setYouthId(e.target.value)}
-              placeholder="KAY1278MK"
+              placeholder="Enter your Youth ID"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
               required
               disabled={isLoading}
               maxLength={20}
             />
             <p className="mt-2 text-sm text-gray-500">
-              Enter your Youth ID (e.g., KAY1278MK, KAR001, MJI123)
+              Enter your assigned Youth ID
             </p>
           </div>
 
