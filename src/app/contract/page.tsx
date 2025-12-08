@@ -159,14 +159,14 @@ export default function ContractPage() {
       <div className="relative z-10 py-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
           {/* Header */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-[#dc2626]/10 border border-[#dc2626]/30 rounded-full mb-4">
-              <FileText className="w-8 h-8 text-[#dc2626]" />
+          <div className="text-center mb-6 sm:mb-8">
+            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-[#dc2626]/10 border border-[#dc2626]/30 rounded-full mb-3 sm:mb-4">
+              <FileText className="w-6 h-6 sm:w-8 sm:h-8 text-[#dc2626]" />
             </div>
-            <h1 className="text-3xl sm:text-4xl font-heading font-bold text-white mb-2">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-heading font-bold text-white mb-2">
               Employment Contract Agreement
             </h1>
-            <p className="text-[#a3a3a3]">
+            <p className="text-sm sm:text-base text-[#a3a3a3]">
               Please review and sign the contract below
             </p>
           </div>
@@ -174,30 +174,30 @@ export default function ContractPage() {
           {/* Contract Document */}
           <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-xl shadow-2xl overflow-hidden mb-8">
             {/* Contract Header */}
-            <div className="bg-[#dc2626] text-white p-6">
-              <h2 className="text-2xl font-heading font-bold mb-2">
+            <div className="bg-[#dc2626] text-white p-4 sm:p-6">
+              <h2 className="text-xl sm:text-2xl font-heading font-bold mb-1 sm:mb-2">
                 SPATIAL COLLECTIVE LIMITED
               </h2>
-              <p className="text-red-100">Youth Training Program - Employment Contract</p>
+              <p className="text-sm sm:text-base text-red-100">Youth Training Program - Employment Contract</p>
             </div>
 
             {/* Contract Content */}
-            <div className="p-8 space-y-6 max-h-[500px] overflow-y-auto">
+            <div className="p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6 max-h-[500px] overflow-y-auto">
               {/* Participant Info */}
-              <div className="bg-black/40 border border-[#2a2a2a] rounded-lg p-5">
-                <h3 className="text-lg font-semibold text-white mb-3">Participant Information</h3>
+              <div className="bg-black/40 border border-[#2a2a2a] rounded-lg p-4 sm:p-5">
+                <h3 className="text-base sm:text-lg font-semibold text-white mb-3">Participant Information</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                   <div>
                     <p className="text-[#737373]">Full Name:</p>
-                    <p className="text-white font-semibold">{youthData?.fullName}</p>
+                    <p className="text-white font-semibold break-words">{youthData?.fullName}</p>
                   </div>
                   <div>
                     <p className="text-[#737373]">Youth ID:</p>
-                    <p className="text-white font-mono">{youthData?.youthId}</p>
+                    <p className="text-white font-mono break-all">{youthData?.youthId}</p>
                   </div>
                   <div>
                     <p className="text-[#737373]">Program Type:</p>
-                    <p className="text-white capitalize">{youthData?.programType?.replace('_', ' ')}</p>
+                    <p className="text-white capitalize break-words">{youthData?.programType?.replace('_', ' ')}</p>
                   </div>
                   <div>
                     <p className="text-[#737373]">Contract Date:</p>
@@ -207,75 +207,75 @@ export default function ContractPage() {
               </div>
 
               {/* Contract Terms */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-white">Terms and Conditions</h3>
+              <div className="space-y-3 sm:space-y-4">
+                <h3 className="text-base sm:text-lg font-semibold text-white">Terms and Conditions</h3>
 
                 <div>
-                  <h4 className="text-white font-semibold mb-2 flex items-center">
-                    <CheckCircle className="w-4 h-4 text-[#dc2626] mr-2" />
-                    1. Training Commitment
+                  <h4 className="text-sm sm:text-base text-white font-semibold mb-2 flex items-start sm:items-center">
+                    <CheckCircle className="w-4 h-4 text-[#dc2626] mr-2 flex-shrink-0 mt-0.5 sm:mt-0" />
+                    <span>1. Training Commitment</span>
                   </h4>
-                  <p className="text-[#a3a3a3] text-sm pl-6">
+                  <p className="text-[#a3a3a3] text-xs sm:text-sm pl-6 break-words">
                     The participant agrees to actively participate in all assigned training modules, complete assignments within the specified timeframes, and maintain professional conduct throughout the program duration.
                   </p>
                 </div>
 
                 <div>
-                  <h4 className="text-white font-semibold mb-2 flex items-center">
-                    <CheckCircle className="w-4 h-4 text-[#dc2626] mr-2" />
-                    2. Confidentiality
+                  <h4 className="text-sm sm:text-base text-white font-semibold mb-2 flex items-start sm:items-center">
+                    <CheckCircle className="w-4 h-4 text-[#dc2626] mr-2 flex-shrink-0 mt-0.5 sm:mt-0" />
+                    <span>2. Confidentiality</span>
                   </h4>
-                  <p className="text-[#a3a3a3] text-sm pl-6">
+                  <p className="text-[#a3a3a3] text-xs sm:text-sm pl-6 break-words">
                     Any proprietary information, training materials, data, or intellectual property accessed during the program must be kept strictly confidential and used solely for training purposes. Unauthorized disclosure or distribution is prohibited.
                   </p>
                 </div>
 
                 <div>
-                  <h4 className="text-white font-semibold mb-2 flex items-center">
-                    <CheckCircle className="w-4 h-4 text-[#dc2626] mr-2" />
-                    3. Code of Conduct
+                  <h4 className="text-sm sm:text-base text-white font-semibold mb-2 flex items-start sm:items-center">
+                    <CheckCircle className="w-4 h-4 text-[#dc2626] mr-2 flex-shrink-0 mt-0.5 sm:mt-0" />
+                    <span>3. Code of Conduct</span>
                   </h4>
-                  <p className="text-[#a3a3a3] text-sm pl-6">
+                  <p className="text-[#a3a3a3] text-xs sm:text-sm pl-6 break-words">
                     The participant commits to upholding the highest standards of integrity, treating all program participants and staff with respect, and adhering to all guidelines and policies established by Spatial Collective Limited.
                   </p>
                 </div>
 
                 <div>
-                  <h4 className="text-white font-semibold mb-2 flex items-center">
-                    <CheckCircle className="w-4 h-4 text-[#dc2626] mr-2" />
-                    4. Equipment and Resources
+                  <h4 className="text-sm sm:text-base text-white font-semibold mb-2 flex items-start sm:items-center">
+                    <CheckCircle className="w-4 h-4 text-[#dc2626] mr-2 flex-shrink-0 mt-0.5 sm:mt-0" />
+                    <span>4. Equipment and Resources</span>
                   </h4>
-                  <p className="text-[#a3a3a3] text-sm pl-6">
+                  <p className="text-[#a3a3a3] text-xs sm:text-sm pl-6 break-words">
                     Any equipment, software, or resources provided by Spatial Collective must be used responsibly and returned in good condition upon program completion. Participants are responsible for any damage caused by negligence or misuse.
                   </p>
                 </div>
 
                 <div>
-                  <h4 className="text-white font-semibold mb-2 flex items-center">
-                    <CheckCircle className="w-4 h-4 text-[#dc2626] mr-2" />
-                    5. Data Protection and Privacy
+                  <h4 className="text-sm sm:text-base text-white font-semibold mb-2 flex items-start sm:items-center">
+                    <CheckCircle className="w-4 h-4 text-[#dc2626] mr-2 flex-shrink-0 mt-0.5 sm:mt-0" />
+                    <span>5. Data Protection and Privacy</span>
                   </h4>
-                  <p className="text-[#a3a3a3] text-sm pl-6">
+                  <p className="text-[#a3a3a3] text-xs sm:text-sm pl-6 break-words">
                     Participant progress, performance data, and personal information will be collected and stored in accordance with applicable data protection laws. This information will be used for program improvement, reporting, and certification purposes only.
                   </p>
                 </div>
 
                 <div>
-                  <h4 className="text-white font-semibold mb-2 flex items-center">
-                    <CheckCircle className="w-4 h-4 text-[#dc2626] mr-2" />
-                    6. Certification and Completion
+                  <h4 className="text-sm sm:text-base text-white font-semibold mb-2 flex items-start sm:items-center">
+                    <CheckCircle className="w-4 h-4 text-[#dc2626] mr-2 flex-shrink-0 mt-0.5 sm:mt-0" />
+                    <span>6. Certification and Completion</span>
                   </h4>
-                  <p className="text-[#a3a3a3] text-sm pl-6">
+                  <p className="text-[#a3a3a3] text-xs sm:text-sm pl-6 break-words">
                     Upon successful completion of all required modules, assessments, and practical exercises, the participant will receive an official certificate of completion from Spatial Collective Limited.
                   </p>
                 </div>
 
                 <div>
-                  <h4 className="text-white font-semibold mb-2 flex items-center">
-                    <CheckCircle className="w-4 h-4 text-[#dc2626] mr-2" />
-                    7. Termination
+                  <h4 className="text-sm sm:text-base text-white font-semibold mb-2 flex items-start sm:items-center">
+                    <CheckCircle className="w-4 h-4 text-[#dc2626] mr-2 flex-shrink-0 mt-0.5 sm:mt-0" />
+                    <span>7. Termination</span>
                   </h4>
-                  <p className="text-[#a3a3a3] text-sm pl-6">
+                  <p className="text-[#a3a3a3] text-xs sm:text-sm pl-6 break-words">
                     Spatial Collective reserves the right to terminate this agreement if the participant fails to comply with program requirements, violates the code of conduct, or engages in any form of misconduct.
                   </p>
                 </div>
@@ -283,15 +283,15 @@ export default function ContractPage() {
             </div>
 
             {/* Agreement Checkbox */}
-            <div className="px-8 pb-6">
-              <label className="flex items-start gap-3 cursor-pointer">
+            <div className="px-4 sm:px-6 lg:px-8 pb-6">
+              <label className="flex items-start gap-2 sm:gap-3 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={hasAgreed}
                   onChange={(e) => setHasAgreed(e.target.checked)}
-                  className="mt-1 w-5 h-5 rounded border-[#2a2a2a] bg-black text-[#dc2626] focus:ring-2 focus:ring-[#dc2626] focus:ring-offset-0"
+                  className="mt-1 w-4 h-4 sm:w-5 sm:h-5 rounded border-[#2a2a2a] bg-black text-[#dc2626] focus:ring-2 focus:ring-[#dc2626] focus:ring-offset-0 flex-shrink-0"
                 />
-                <span className="text-[#e5e5e5] text-sm">
+                <span className="text-[#e5e5e5] text-xs sm:text-sm break-words">
                   I have read, understood, and agree to all the terms and conditions outlined in this employment contract. I acknowledge that this is a legally binding agreement.
                 </span>
               </label>
