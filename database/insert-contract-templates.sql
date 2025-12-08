@@ -13,7 +13,7 @@ INSERT INTO contract_templates (
   created_by
 ) VALUES (
   'digitization',
-  'v2.0',
+  'v3.0',
   'Digitization Training and Service Agreement',
   '<!DOCTYPE html>
 <html>
@@ -295,23 +295,53 @@ INSERT INTO contract_templates (
     <li>Workflow optimization and productivity enhancement techniques</li>
     <li>Professional ethics in data handling and confidentiality</li>
     <li>Health and safety protocols for extended computer work</li>
+    <li>Project management basics and task prioritization</li>
+    <li>Communication skills and professional workplace etiquette</li>
+    <li>Understanding spatial analysis and data interpretation</li>
+    <li>File management, backup procedures, and data security</li>
   </ul>
   
-  <div class="subsection-title">3.3 Performance Standards</div>
+  <div class="subsection-title">3.3 Equipment and Tools</div>
   
   <div class="clause">
-    <span class="clause-number">3.3.1</span>
+    The Company shall provide all necessary equipment and software including:
+  </div>
+  
+  <ul>
+    <li>Desktop computer or workstation with required specifications</li>
+    <li>Licensed GIS software (QGIS, ArcGIS, or equivalent)</li>
+    <li>High-resolution monitor for detailed digitization work</li>
+    <li>Mouse, keyboard, and ergonomic accessories</li>
+    <li>Internet connectivity for cloud-based platforms</li>
+    <li>Access to reference materials and documentation</li>
+    <li>Personal protective equipment where necessary</li>
+  </ul>
+  
+  <div class="subsection-title">3.4 Performance Standards</div>
+  
+  <div class="clause">
+    <span class="clause-number">3.4.1</span>
     The Participant is expected to maintain a minimum accuracy rate of 95% in all digitization tasks, as measured by quality control assessments.
   </div>
   
   <div class="clause">
-    <span class="clause-number">3.3.2</span>
+    <span class="clause-number">3.4.2</span>
     Daily productivity targets shall be communicated by the supervisor and may vary based on task complexity and data source quality.
   </div>
   
   <div class="clause">
-    <span class="clause-number">3.3.3</span>
+    <span class="clause-number">3.4.3</span>
     The Participant must demonstrate continuous improvement in speed and accuracy throughout the training period.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">3.4.4</span>
+    Regular performance reviews shall be conducted weekly during training and monthly thereafter.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">3.4.5</span>
+    Feedback and constructive criticism shall be provided to support professional development and skill enhancement.
   </div>
 </div>
 
@@ -337,6 +367,26 @@ INSERT INTO contract_templates (
   <div class="clause">
     <span class="clause-number">4.4</span>
     <strong>Probation Period:</strong> The first 30 days of engagement shall constitute a probationary period during which either party may terminate this agreement with 7 days'' written notice.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">4.5</span>
+    <strong>Leave Entitlement:</strong> After successful completion of probation, the Participant shall be entitled to annual leave as per Kenyan Employment Act provisions, pro-rated based on contract duration.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">4.6</span>
+    <strong>Sick Leave:</strong> Participants are entitled to sick leave upon production of a valid medical certificate. Excessive absenteeism may result in contract review.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">4.7</span>
+    <strong>Public Holidays:</strong> All Kenyan public holidays shall be observed. Work on public holidays shall be compensated at premium rates.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">4.8</span>
+    <strong>Remote Work:</strong> Remote work arrangements may be considered based on project requirements and demonstrated performance, subject to management approval.
   </div>
 </div>
 
@@ -375,7 +425,20 @@ INSERT INTO contract_templates (
     <li>Access to company learning resources and materials</li>
     <li>Tea/coffee breaks during working hours</li>
     <li>Performance-based bonuses for exceeding quality targets</li>
+    <li>Professional development opportunities and skill upgrading</li>
+    <li>Mentorship from experienced GIS professionals</li>
+    <li>Networking opportunities within the geospatial industry</li>
   </ul>
+  
+  <div class="clause">
+    <span class="clause-number">5.6</span>
+    <strong>Payment Transparency:</strong> Participants shall receive detailed payment statements showing hours worked, production units, bonuses, deductions, and net payment.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">5.7</span>
+    <strong>Advancement Opportunities:</strong> Exceptional performers may be considered for advanced roles including Quality Control Officer, Team Leader, or Trainer positions.
+  </div>
 </div>
 
 <!-- CONFIDENTIALITY -->
@@ -408,6 +471,21 @@ INSERT INTO contract_templates (
   <div class="clause">
     <span class="clause-number">6.4</span>
     Breach of confidentiality shall constitute grounds for immediate termination and may result in legal action for damages.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">6.5</span>
+    <strong>Data Protection Compliance:</strong> The Participant shall comply with the Kenya Data Protection Act, 2019, and handle all personal data in accordance with data protection principles.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">6.6</span>
+    <strong>Non-Disclosure Agreement:</strong> This confidentiality obligation shall survive termination of employment and remain in effect indefinitely for trade secrets and for a period of 3 years for other confidential information.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">6.7</span>
+    <strong>Security Protocols:</strong> Participants must use strong passwords, lock workstations when away, report security breaches immediately, and comply with all IT security policies.
   </div>
 </div>
 
@@ -468,6 +546,21 @@ INSERT INTO contract_templates (
     <span class="clause-number">8.5</span>
     <strong>Social Media:</strong> The Participant shall not post company-related content, project information, or client details on social media platforms without express written permission.
   </div>
+  
+  <div class="clause">
+    <span class="clause-number">8.6</span>
+    <strong>Conflict of Interest:</strong> Participants must disclose any potential conflicts of interest and shall not engage in competing business activities during employment.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">8.7</span>
+    <strong>Grievance Procedure:</strong> Any workplace concerns should be raised first with immediate supervisor, then HR, following the company's grievance resolution process.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">8.8</span>
+    <strong>Equal Opportunity:</strong> Spatial Collective is an equal opportunity employer. All participants shall be treated fairly regardless of gender, age, religion, ethnicity, or disability.
+  </div>
 </div>
 
 <!-- HEALTH AND SAFETY -->
@@ -495,6 +588,68 @@ INSERT INTO contract_templates (
   <div class="clause">
     <span class="clause-number">9.3</span>
     The Company shall not be liable for any illness or injury sustained outside of working hours or due to the Participant''s negligence.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">9.4</span>
+    <strong>Workplace Wellness:</strong> The Company encourages regular eye tests, stretch breaks every hour, and proper hydration throughout the workday.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">9.5</span>
+    <strong>Emergency Procedures:</strong> Participants shall familiarize themselves with fire exits, assembly points, first aid facilities, and emergency contact numbers.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">9.6</span>
+    <strong>Mental Health Support:</strong> The Company recognizes the importance of mental wellbeing. Participants experiencing stress or burnout should speak confidentially with management.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">9.7</span>
+    <strong>Work-Life Balance:</strong> While dedication is valued, the Company encourages healthy work-life balance and discourages excessive overtime.
+  </div>
+</div>
+
+<!-- TRAINING AND DEVELOPMENT -->
+<div class="section">
+  <div class="section-title">9A. TRAINING, CERTIFICATION AND CAREER DEVELOPMENT</div>
+  
+  <div class="clause">
+    <span class="clause-number">9A.1</span>
+    <strong>Structured Training Program:</strong> The Participant shall undergo a comprehensive 2-week intensive training covering GIS fundamentals, software proficiency, quality assurance, and professional workplace skills.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">9A.2</span>
+    <strong>Assessment and Evaluation:</strong> Progress shall be assessed through practical tests, accuracy checks, and supervisor evaluations at the end of each training week.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">9A.3</span>
+    <strong>Certification Requirements:</strong> Upon successful completion of training and achieving minimum 90% pass rate in assessments, participants shall receive:
+  </div>
+  
+  <ul>
+    <li>Spatial Collective Digitization Training Certificate</li>
+    <li>Digital badge for LinkedIn and professional profiles</li>
+    <li>Detailed skills assessment report</li>
+    <li>Letter of recommendation (upon request after 3 months)</li>
+  </ul>
+  
+  <div class="clause">
+    <span class="clause-number">9A.4</span>
+    <strong>Continuous Learning:</strong> The Company shall provide ongoing training opportunities, lunch-and-learn sessions, and access to online resources for skill enhancement.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">9A.5</span>
+    <strong>Industry Exposure:</strong> High-performing participants may be selected for client site visits, industry conferences, or professional networking events.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">9A.6</span>
+    <strong>Knowledge Sharing:</strong> Experienced participants may be requested to mentor new trainees, contributing to the program's sustainability.
   </div>
 </div>
 
@@ -560,6 +715,56 @@ INSERT INTO contract_templates (
     <span class="clause-number">11.4</span>
     The courts of Kenya shall have exclusive jurisdiction over any disputes that cannot be resolved through mediation.
   </div>
+  
+  <div class="clause">
+    <span class="clause-number">11.5</span>
+    <strong>Arbitration Costs:</strong> Each party shall bear their own costs unless the arbitrator determines otherwise based on the merits of the case.
+  </div>
+</div>
+
+<!-- PARTICIPANT RIGHTS -->
+<div class="section">
+  <div class="section-title">11A. PARTICIPANT RIGHTS AND PROTECTIONS</div>
+  
+  <div class="clause">
+    <span class="clause-number">11A.1</span>
+    <strong>Right to Fair Treatment:</strong> All participants have the right to be treated with dignity, respect, and fairness in all aspects of employment.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">11A.2</span>
+    <strong>Right to Safe Working Environment:</strong> Participants have the right to work in conditions that meet health and safety standards without risk to wellbeing.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">11A.3</span>
+    <strong>Right to Training:</strong> All participants shall receive adequate training, supervision, and support to perform their duties effectively.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">11A.4</span>
+    <strong>Right to Timely Payment:</strong> Participants have the right to receive agreed compensation on time and in full, with clear payment documentation.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">11A.5</span>
+    <strong>Right to Privacy:</strong> Personal information shall be handled confidentially and in compliance with data protection laws.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">11A.6</span>
+    <strong>Freedom from Discrimination:</strong> Participants shall not face discrimination based on gender, age, religion, ethnicity, disability, or any other protected characteristic.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">11A.7</span>
+    <strong>Right to Raise Concerns:</strong> Participants may raise workplace concerns, report misconduct, or file grievances without fear of retaliation.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">11A.8</span>
+    <strong>Contract Modification Rights:</strong> Participants may request contract reviews or modifications through formal channels. Requests shall be considered in good faith by management.
+  </div>
 </div>
 
 <!-- GENERAL PROVISIONS -->
@@ -594,6 +799,31 @@ INSERT INTO contract_templates (
   <div class="clause">
     <span class="clause-number">12.6</span>
     <strong>Force Majeure:</strong> Neither party shall be liable for failure to perform due to circumstances beyond reasonable control including natural disasters, pandemics, government actions, or civil unrest.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">12.7</span>
+    <strong>Assignment:</strong> This agreement is personal to the Participant and may not be assigned or transferred without written consent of the Company.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">12.8</span>
+    <strong>Language:</strong> This agreement is executed in English. In case of translation, the English version shall prevail in case of discrepancies.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">12.9</span>
+    <strong>Electronic Execution:</strong> This agreement may be executed electronically, and electronic signatures shall have the same legal effect as handwritten signatures.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">12.10</span>
+    <strong>Record Retention:</strong> Both parties shall maintain copies of this agreement and related documentation for a minimum period of 7 years.
+  </div>
+  
+  <div class="clause">
+    <span class="clause-number">12.11</span>
+    <strong>Compliance with Laws:</strong> Both parties agree to comply with all applicable Kenyan laws including Employment Act 2007, Occupational Safety and Health Act 2007, and Data Protection Act 2019.
   </div>
 </div>
 
