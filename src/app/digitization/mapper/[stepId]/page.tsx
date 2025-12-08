@@ -6,6 +6,7 @@ import { BackgroundBeams } from "@/components/ui/background-beams";
 import { FloatingHeader } from "@/components/ui/floating-header";
 import { MovingBorderButton } from "@/components/ui/moving-border-button";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 import { 
   ChevronLeft, 
   ChevronRight,
@@ -13,9 +14,37 @@ import {
   AlertTriangle,
   Lightbulb,
   Clock,
-  BookOpen
+  BookOpen,
+  User,
+  ExternalLink
 } from "lucide-react";
 import { mapperTrainingSteps, getStepById, getNextStep, getPreviousStep } from "@/data/mapper-training";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
+
+// Function to make URLs clickable
+function renderTextWithLinks(text: string) {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const parts = text.split(urlRegex);
+  
+  return parts.map((part, index) => {
+    if (part.match(urlRegex)) {
+      return (
+        <a
+          key={index}
+          href={part}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-400 hover:text-blue-300 underline inline-flex items-center gap-1"
+        >
+          {part}
+          <ExternalLink className="w-3 h-3" />
+        </a>
+      );
+    }
+    return part;
+  });
+}
 
 export default function MapperTrainingStepPage({
   params,
@@ -25,21 +54,99 @@ export default function MapperTrainingStepPage({
   const { stepId } = use(params);
   const router = useRouter();
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
+  const [osmUsername, setOsmUsername] = useState('');
+  const [savedOsmUsername, setSavedOsmUsername] = useState('');
+  const [isSavingOsm, setIsSavingOsm] = useState(false);
+  const [osmError, setOsmError] = useState('');
+  const [osmSuccess, setOsmSuccess] = useState('');
   
   const currentStepId = parseInt(stepId);
   const currentStep = getStepById(currentStepId);
   const nextStep = getNextStep(currentStepId);
   const previousStep = getPreviousStep(currentStepId);
 
-  // Load completed steps from localStorage
+  // Load completed steps and OSM username from localStorage/server
   useEffect(() => {
     const saved = localStorage.getItem('mapper-completed-steps');
     if (saved) {
       setCompletedSteps(new Set(JSON.parse(saved)));
     }
+
+    // Fetch youth data to check for OSM username
+    const fetchOsmUsername = async () => {
+      const token = localStorage.getItem('youthToken');
+      const youthData = localStorage.getItem('youthData');
+      
+      if (token && youthData) {
+        try {
+          const youth = JSON.parse(youthData);
+          const response = await axios.get(`${API_URL}/api/youth/profile`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          
+          if (response.data.success && response.data.data.osm_username) {
+            setSavedOsmUsername(response.data.data.osm_username);
+            setOsmUsername(response.data.data.osm_username);
+          }
+        } catch (error) {
+          console.error('Error fetching OSM username:', error);
+        }
+      }
+    };
+
+    fetchOsmUsername();
   }, []);
 
+  const saveOsmUsername = async () => {
+    if (!osmUsername.trim()) {
+      setOsmError('Please enter your OSM username');
+      return;
+    }
+
+    setIsSavingOsm(true);
+    setOsmError('');
+    setOsmSuccess('');
+
+    try {
+      const token = localStorage.getItem('youthToken');
+      if (!token) {
+        setOsmError('Authentication required. Please login again.');
+        return;
+      }
+
+      const response = await axios.put(
+        `${API_URL}/api/youth/update-osm-username`,
+        { osmUsername: osmUsername.trim() },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (response.data.success) {
+        setSavedOsmUsername(osmUsername.trim());
+        setOsmSuccess('OSM username saved successfully! You can now proceed to the next step.');
+        
+        // Update local storage
+        const youthData = localStorage.getItem('youthData');
+        if (youthData) {
+          const youth = JSON.parse(youthData);
+          youth.osmUsername = osmUsername.trim();
+          localStorage.setItem('youthData', JSON.stringify(youth));
+        }
+      }
+    } catch (error: any) {
+      setOsmError(error.response?.data?.message || 'Failed to save OSM username. Please try again.');
+    } finally {
+      setIsSavingOsm(false);
+    }
+  };
+
   const markStepComplete = () => {
+    // For step 2, require OSM username before proceeding
+    if (currentStepId === 2 && !savedOsmUsername) {
+      setOsmError('You must save your OSM username before proceeding to the next step.');
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      return;
+    }
+
     const newCompleted = new Set(completedSteps);
     newCompleted.add(currentStepId);
     setCompletedSteps(newCompleted);
@@ -108,7 +215,7 @@ export default function MapperTrainingStepPage({
                         {block.title}
                       </h3>
                     )}
-                    <p className="text-[#e5e5e5] leading-relaxed">{block.content as string}</p>
+                    <p className="text-[#e5e5e5] leading-relaxed">{renderTextWithLinks(block.content as string)}</p>
                   </div>
                 )}
 
@@ -123,7 +230,7 @@ export default function MapperTrainingStepPage({
                       {(block.content as string[]).map((item, i) => (
                         <li key={i} className="flex items-start gap-3 text-[#e5e5e5]">
                           <Check className="w-5 h-5 text-[#dc2626] flex-shrink-0 mt-0.5" />
-                          <span>{item}</span>
+                          <span>{renderTextWithLinks(item)}</span>
                         </li>
                       ))}
                     </ul>
@@ -134,7 +241,7 @@ export default function MapperTrainingStepPage({
                   <div className="bg-[#dc2626]/10 border border-[#dc2626]/30 rounded-xl p-6">
                     <div className="flex items-start gap-4">
                       <AlertTriangle className="w-6 h-6 text-[#dc2626] flex-shrink-0" />
-                      <p className="text-[#e5e5e5] leading-relaxed">{block.content as string}</p>
+                      <p className="text-[#e5e5e5] leading-relaxed">{renderTextWithLinks(block.content as string)}</p>
                     </div>
                   </div>
                 )}
@@ -143,7 +250,7 @@ export default function MapperTrainingStepPage({
                   <div className="bg-[#3b82f6]/10 border border-[#3b82f6]/30 rounded-xl p-6">
                     <div className="flex items-start gap-4">
                       <Lightbulb className="w-6 h-6 text-[#3b82f6] flex-shrink-0" />
-                      <p className="text-[#e5e5e5] leading-relaxed">{block.content as string}</p>
+                      <p className="text-[#e5e5e5] leading-relaxed">{renderTextWithLinks(block.content as string)}</p>
                     </div>
                   </div>
                 )}
@@ -163,6 +270,62 @@ export default function MapperTrainingStepPage({
               </div>
             ))}
           </div>
+
+          {/* OSM Username Form - Only show on Step 2 */}
+          {currentStepId === 2 && (
+            <div className="bg-gradient-to-r from-[#3b82f6]/10 to-[#3b82f6]/5 border border-[#3b82f6]/30 rounded-xl p-6 mb-12">
+              <div className="flex items-start gap-4 mb-4">
+                <User className="w-6 h-6 text-[#3b82f6] flex-shrink-0" />
+                <div className="flex-1">
+                  <h3 className="text-xl font-subheading font-bold text-white mb-2">
+                    Submit Your OSM Username
+                  </h3>
+                  <p className="text-[#e5e5e5] text-sm mb-4">
+                    {savedOsmUsername 
+                      ? `Your saved OSM username: ${savedOsmUsername}` 
+                      : 'Enter the OSM username you created above. This is required to continue to the next training step.'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label htmlFor="osmUsername" className="block text-sm font-medium text-[#e5e5e5] mb-2">
+                    OpenStreetMap Username
+                  </label>
+                  <input
+                    type="text"
+                    id="osmUsername"
+                    value={osmUsername}
+                    onChange={(e) => setOsmUsername(e.target.value)}
+                    placeholder="Enter your OSM display name"
+                    className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#262626] rounded-lg text-white placeholder-[#a3a3a3] focus:ring-2 focus:ring-[#3b82f6] focus:border-transparent"
+                    disabled={isSavingOsm}
+                  />
+                </div>
+
+                {osmError && (
+                  <div className="bg-[#dc2626]/10 border border-[#dc2626]/30 rounded-lg p-3">
+                    <p className="text-sm text-red-400">{osmError}</p>
+                  </div>
+                )}
+
+                {osmSuccess && (
+                  <div className="bg-[#22c55e]/10 border border-[#22c55e]/30 rounded-lg p-3">
+                    <p className="text-sm text-green-400">{osmSuccess}</p>
+                  </div>
+                )}
+
+                <button
+                  onClick={saveOsmUsername}
+                  disabled={isSavingOsm || !osmUsername.trim()}
+                  className="w-full px-6 py-3 bg-[#3b82f6] hover:bg-[#2563eb] disabled:bg-[#262626] disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors"
+                >
+                  {isSavingOsm ? 'Saving...' : savedOsmUsername ? 'Update OSM Username' : 'Save OSM Username'}
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Key Takeaways */}
           {currentStep.content.keyTakeaways && (

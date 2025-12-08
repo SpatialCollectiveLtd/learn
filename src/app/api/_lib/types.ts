@@ -17,6 +17,7 @@ export interface YouthParticipant {
   email: string | null;
   phone_number: string | null;
   program_type: 'digitization' | 'mobile_mapping' | 'household_survey' | 'microtasking';
+  osm_username: string | null;
   is_active: boolean;
   created_at: Date;
   updated_at: Date;

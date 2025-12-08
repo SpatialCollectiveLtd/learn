@@ -127,6 +127,10 @@ export const mapperTrainingSteps: TrainingStep[] = [
           content: "Critical: Your OSM display name will be permanently associated with all your mapping contributions. Choose a professional name you'll be comfortable with long-term. It cannot be easily changed later."
         },
         {
+          type: 'warning',
+          content: "IMPORTANT: After creating your OSM account, you MUST submit your OSM username below. You cannot proceed to the next training steps without providing your OSM username. This is required for tracking your mapping contributions and compensation."
+        },
+        {
           type: 'text',
           title: "Step 3: HOT Tasking Manager Authorization",
           content: "The Humanitarian OpenStreetMap Team (HOT) Tasking Manager coordinates organized mapping projects. It divides large mapping areas into manageable tasks and tracks progress across teams."
@@ -148,6 +152,23 @@ export const mapperTrainingSteps: TrainingStep[] = [
         {
           type: 'tip',
           content: "Set your Tasking Manager skill level to 'Beginner' initially. This helps project managers assign appropriate tasks and ensures you receive tasks suitable for your experience level."
+        },
+        {
+          type: 'text',
+          title: "Your Training Project",
+          content: "For this training program, you will be working on a specific HOT Tasking Manager project. This project has been selected for its appropriate difficulty level and clear mapping requirements."
+        },
+        {
+          type: 'list',
+          title: "Access Your Training Project",
+          content: [
+            "Visit the project page: https://tasks.hotosm.org/projects/37527/",
+            "Click the link above to open the project in a new tab",
+            "Review the project instructions carefully",
+            "Familiarize yourself with the mapping area",
+            "Note the specific features you'll be mapping (buildings, roads, etc.)",
+            "Bookmark this project page for easy access during your mapping sessions"
+          ]
         }
       ],
       keyTakeaways: [

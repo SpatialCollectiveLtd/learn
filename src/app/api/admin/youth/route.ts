@@ -48,6 +48,7 @@ export async function GET(request: NextRequest) {
         yp.email,
         yp.phone_number,
         yp.program_type,
+        yp.osm_username,
         yp.is_active,
         yp.registered_at,
         sc.contract_id,

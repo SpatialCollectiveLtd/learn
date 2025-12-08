@@ -68,6 +68,16 @@ export class YouthModel {
   }
 
   /**
+   * Update OSM username
+   */
+  static async updateOsmUsername(youthId: string, osmUsername: string): Promise<void> {
+    await Database.query(
+      'UPDATE youth_participants SET osm_username = $1, updated_at = CURRENT_TIMESTAMP WHERE youth_id = $2',
+      [osmUsername, youthId]
+    );
+  }
+
+  /**
    * Create new youth participant
    */
   static async create(data: {
