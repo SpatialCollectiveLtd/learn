@@ -14,28 +14,23 @@ export default function StaffDashboard() {
 
   useEffect(() => {
     // Check if user is authenticated as staff
-    const userType = localStorage.getItem('userType');
-    const staffId = sessionStorage.getItem('staffId');
-    const staffName = sessionStorage.getItem('staffName');
-    const staffRole = sessionStorage.getItem('staffRole');
+    const token = localStorage.getItem('staffToken');
+    const staff = localStorage.getItem('staffData');
 
-    if (userType !== 'staff' || !staffId) {
-      // Not authenticated or not a staff user
+    if (!token || !staff) {
+      // Not authenticated
       router.push('/');
       return;
     }
 
-    setStaffData({
-      staffId,
-      name: staffName,
-      role: staffRole,
-    });
+    const staffInfo = JSON.parse(staff);
+    setStaffData(staffInfo);
     setIsLoading(false);
   }, [router]);
 
   const handleLogout = () => {
-    sessionStorage.clear();
-    localStorage.removeItem('userType');
+    localStorage.removeItem('staffToken');
+    localStorage.removeItem('staffData');
     router.push('/');
   };
 
@@ -137,7 +132,7 @@ export default function StaffDashboard() {
                 </div>
                 <div className="flex-1">
                   <h2 className="text-2xl font-heading font-bold text-white mb-2">
-                    Welcome, {staffData?.name || 'Staff Member'}!
+                    Welcome, {staffData?.fullName || 'Staff Member'}!
                   </h2>
                   <p className="text-[#a3a3a3] mb-4">
                     Staff ID: <span className="font-mono font-semibold text-[#e5e5e5]">{staffData?.staffId}</span>
