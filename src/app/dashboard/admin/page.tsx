@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import Image from 'next/image';
 import { Users, CheckCircle, AlertTriangle, Search, Printer, Eye, Shield, LogOut } from 'lucide-react';
 
