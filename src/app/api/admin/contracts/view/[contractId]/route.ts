@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import pool from '../../../../_lib/database';
+import { Database } from '../../../../_lib/database';
 
 export async function GET(
   request: NextRequest,
@@ -8,12 +8,8 @@ export async function GET(
   try {
     const { contractId } = await params;
 
-    if (!pool) {
-      throw new Error('Database connection not available');
-    }
-
     // Fetch the specific contract
-    const result = await pool.query(`
+    const result = await Database.query(`
       SELECT 
         sc.contract_id,
         sc.youth_id,

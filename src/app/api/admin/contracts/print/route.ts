@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
-import pool from '../../../_lib/database';
+import { Database } from '../../../_lib/database';
 
 const JWT_SECRET = process.env.learn_STACK_SECRET_SERVER_KEY || process.env.JWT_SECRET || 'your-secret-key';
 
@@ -18,12 +18,8 @@ export async function GET(request: NextRequest) {
 
     const idsArray = youthIds.split(',');
 
-    if (!pool) {
-      throw new Error('Database connection not available');
-    }
-
     // Fetch contracts for the specified youth IDs
-    const result = await pool.query(`
+    const result = await Database.query(`
       SELECT 
         sc.contract_id,
         sc.youth_id,
