@@ -64,12 +64,9 @@ export default function LoginPage() {
       if (response.data.success) {
         const { token, staff } = response.data.data;
 
-        // Store staff authentication
-        sessionStorage.setItem('staffToken', token);
-        sessionStorage.setItem('staffId', staff.staffId);
-        sessionStorage.setItem('staffName', staff.fullName);
-        sessionStorage.setItem('staffRole', staff.role);
-        localStorage.setItem('userType', 'staff');
+        // Store staff authentication in localStorage
+        localStorage.setItem('staffToken', token);
+        localStorage.setItem('staffData', JSON.stringify(staff));
 
         // Redirect to staff dashboard
         router.push('/dashboard/staff');
