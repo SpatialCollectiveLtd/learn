@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+// Use relative URL for same-domain API calls (works in both dev and prod)
+const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
 interface YouthAuthenticationProps {
   onAuthenticated: (data: {
