@@ -1,5 +1,18 @@
 # Staff Credentials - Spatial Collective Learning Platform
 
+## Latest Update (Dec 8, 2025 - Evening)
+**Critical Fix Deployed** - Commit: 6541fbc
+- **Issue**: `/api/admin/youth` returning 500 errors, preventing admin dashboard from loading youth data
+- **Root Cause**: Routes importing `pool` directly (null) instead of using `Database` class
+- **Solution**: Replaced all direct pool imports with `Database.query()` for proper connection initialization
+- **Fixed Routes**:
+  - `/api/admin/youth` - Youth participants list
+  - `/api/admin/contracts/print` - Print contracts  
+  - `/api/admin/contracts/view/[contractId]` - View individual contracts
+- **Status**: ✅ Build successful, deployed to production
+
+---
+
 ## Staff ID Format
 **Format:** `S[Type]EA[EmployeeCode][Role]`
 
