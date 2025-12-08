@@ -42,8 +42,9 @@ export default function AdminStaffManagement() {
 
     const staffInfo = JSON.parse(staff);
     
-    if (staffInfo.role !== 'admin') {
-      router.push('/dashboard/admin');
+    // Allow both admin and superadmin to access this page
+    if (staffInfo.role !== 'admin' && staffInfo.role !== 'superadmin') {
+      router.push('/dashboard/staff');
       return;
     }
 
