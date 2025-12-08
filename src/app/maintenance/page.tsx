@@ -1,7 +1,9 @@
+'use client';
+
 import React from 'react';
 import Image from 'next/image';
 
-export default function Maintenance() {
+export default function MaintenancePage() {
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4">
       <div className="max-w-2xl w-full text-center">
