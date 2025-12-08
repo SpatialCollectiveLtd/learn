@@ -21,15 +21,19 @@ CREATE TABLE IF NOT EXISTS staff_members (
   staff_id VARCHAR(50) PRIMARY KEY,
   full_name VARCHAR(255) NOT NULL,
   email VARCHAR(255),
-  role VARCHAR(20) NOT NULL CHECK (role IN ('validator', 'admin')),
+  phone_number VARCHAR(50),
+  role VARCHAR(20) NOT NULL CHECK (role IN ('trainer', 'admin', 'superadmin')),
+  created_by VARCHAR(50), -- Staff ID of the person who created this account
   is_active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  last_login TIMESTAMP WITH TIME ZONE
+  last_login TIMESTAMP WITH TIME ZONE,
+  FOREIGN KEY (created_by) REFERENCES staff_members(staff_id) ON DELETE SET NULL
 );
 
 CREATE INDEX IF NOT EXISTS idx_staff_email ON staff_members(email);
 CREATE INDEX IF NOT EXISTS idx_staff_active ON staff_members(is_active);
+CREATE INDEX IF NOT EXISTS idx_staff_role ON staff_members(role);
 
 -- ============================================
 -- YOUTH PARTICIPANTS TABLE
