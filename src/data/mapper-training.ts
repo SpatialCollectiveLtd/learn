@@ -88,7 +88,7 @@ export const mapperTrainingSteps: TrainingStep[] = [
           type: 'list',
           title: "Gmail Setup Process",
           content: [
-            "Navigate to gmail.com in your web browser",
+            "Navigate to https://gmail.com in your web browser",
             "Click 'Create account' and select 'For myself'",
             "Fill in your first and last name",
             "Choose a unique email address (this will be your username)",
@@ -108,10 +108,16 @@ export const mapperTrainingSteps: TrainingStep[] = [
           content: "OpenStreetMap is the collaborative project that creates free editable maps of the world. All your mapping work will be contributed to and stored in the OSM database. Your OSM account is your mapping identity."
         },
         {
+          type: 'image',
+          content: '/images/training/osm-signup-page.png',
+          imageAlt: 'OpenStreetMap Sign Up Page',
+          title: 'OpenStreetMap Homepage'
+        },
+        {
           type: 'list',
           title: "OSM Registration Steps",
           content: [
-            "Visit openstreetmap.org in your browser",
+            "Visit https://www.openstreetmap.org in your browser",
             "Click the 'Sign Up' button in the top-right corner",
             "Enter your email address (use your Gmail from Step 1)",
             "Create a display name (this will be publicly visible on all your edits)",
@@ -121,6 +127,18 @@ export const mapperTrainingSteps: TrainingStep[] = [
             "Click the confirmation link to activate your account",
             "Log in to verify your account is active"
           ]
+        },
+        {
+          type: 'image',
+          content: '/images/training/osm-email-verification.png',
+          imageAlt: 'Email Verification Link',
+          title: 'Check Your Email for Verification'
+        },
+        {
+          type: 'image',
+          content: '/images/training/osm-verification-page.png',
+          imageAlt: 'OSM Account Verification',
+          title: 'Click the Link to Verify Your Account'
         },
         {
           type: 'warning',
@@ -136,10 +154,16 @@ export const mapperTrainingSteps: TrainingStep[] = [
           content: "The Humanitarian OpenStreetMap Team (HOT) Tasking Manager coordinates organized mapping projects. It divides large mapping areas into manageable tasks and tracks progress across teams."
         },
         {
+          type: 'image',
+          content: '/images/training/hot-home-page.png',
+          imageAlt: 'HOT Tasking Manager Homepage',
+          title: 'HOT Tasking Manager'
+        },
+        {
           type: 'list',
           title: "Tasking Manager Setup",
           content: [
-            "Navigate to tasks.hotosm.org",
+            "Navigate to https://tasks.hotosm.org",
             "Click 'Log in' in the top-right corner",
             "Select 'Log in with OpenStreetMap'",
             "You'll be redirected to OpenStreetMap to authorize the connection",
@@ -148,6 +172,18 @@ export const mapperTrainingSteps: TrainingStep[] = [
             "You'll be redirected back to the Tasking Manager",
             "Complete your Tasking Manager profile (skill level, languages, experience)"
           ]
+        },
+        {
+          type: 'image',
+          content: '/images/training/hot-authorization.png',
+          imageAlt: 'Authorize HOT Tasking Manager',
+          title: 'Grant Access to HOT Tasking Manager'
+        },
+        {
+          type: 'image',
+          content: '/images/training/hot-profile.png',
+          imageAlt: 'HOT Profile Setup',
+          title: 'Complete Your Profile'
         },
         {
           type: 'tip',
@@ -200,13 +236,25 @@ export const mapperTrainingSteps: TrainingStep[] = [
           type: 'list',
           title: "Installing Java",
           content: [
-            "Visit java.com/download in your browser",
+            "Visit https://www.java.com/download in your browser",
             "Click the 'Download Java' button for your operating system",
             "Run the downloaded installer file",
             "Follow the installation wizard (accept default settings)",
             "Wait for installation to complete",
             "Restart your computer to ensure Java is properly registered"
           ]
+        },
+        {
+          type: 'image',
+          content: '/images/training/java-setup-install.png',
+          imageAlt: 'Java Setup Installer',
+          title: 'Java Installation Wizard'
+        },
+        {
+          type: 'image',
+          content: '/images/training/java-installation-success.png',
+          imageAlt: 'Java Installation Complete',
+          title: 'Successful Java Installation'
         },
         {
           type: 'text',
@@ -217,7 +265,7 @@ export const mapperTrainingSteps: TrainingStep[] = [
           type: 'list',
           title: "Downloading and Installing JOSM",
           content: [
-            "Navigate to josm.openstreetmap.de",
+            "Navigate to https://josm.openstreetmap.de",
             "Click 'Download' in the main navigation",
             "For Windows: Download 'Windows Installer'",
             "For Mac: Download the .dmg package",
@@ -226,6 +274,18 @@ export const mapperTrainingSteps: TrainingStep[] = [
             "Launch JOSM to verify successful installation",
             "You should see the JOSM welcome screen"
           ]
+        },
+        {
+          type: 'image',
+          content: '/images/training/josm-install-files.png',
+          imageAlt: 'JOSM Installation Files',
+          title: 'JOSM Download Options'
+        },
+        {
+          type: 'image',
+          content: '/images/training/josm-startup.png',
+          imageAlt: 'JOSM First Launch',
+          title: 'JOSM Welcome Screen'
         },
         {
           type: 'warning',
@@ -253,6 +313,18 @@ export const mapperTrainingSteps: TrainingStep[] = [
           ]
         },
         {
+          type: 'image',
+          content: '/images/training/josm-edit-preferences.png',
+          imageAlt: 'JOSM Preferences',
+          title: 'Open JOSM Preferences (F12)'
+        },
+        {
+          type: 'image',
+          content: '/images/training/josm-utilsplugin2.png',
+          imageAlt: 'Install utilsplugin2',
+          title: 'Essential Plugins to Install'
+        },
+        {
           type: 'text',
           title: "Part 4: Initial Configuration",
           content: "Proper JOSM configuration improves performance and makes mapping more efficient."
@@ -268,6 +340,18 @@ export const mapperTrainingSteps: TrainingStep[] = [
             "In Display Settings, adjust interface size if needed for your screen",
             "Enable 'Draw boundaries of downloaded data' to see your work area"
           ]
+        },
+        {
+          type: 'image',
+          content: '/images/training/josm-basic-auth.png',
+          imageAlt: 'JOSM OSM Authentication',
+          title: 'Configure Your OSM Credentials'
+        },
+        {
+          type: 'image',
+          content: '/images/training/josm-remote-control.png',
+          imageAlt: 'JOSM Remote Control Settings',
+          title: 'Enable Remote Control for HOT Integration'
         },
         {
           type: 'tip',
@@ -361,6 +445,12 @@ export const mapperTrainingSteps: TrainingStep[] = [
           content: "Follow this precise workflow for every task you map. Consistency is critical for team coordination."
         },
         {
+          type: 'image',
+          content: '/images/training/hot-explore-project.png',
+          imageAlt: 'HOT Project Explorer',
+          title: 'Browse and Select Projects'
+        },
+        {
           type: 'list',
           title: "Standard Mapping Process",
           content: [
@@ -375,6 +465,18 @@ export const mapperTrainingSteps: TrainingStep[] = [
             "9. Add Comment: Describe what you mapped, any issues encountered",
             "10. Unlock Task: Submit to move task to 'Ready for Validation'"
           ]
+        },
+        {
+          type: 'image',
+          content: '/images/training/josm-remote-control-from-hot.png',
+          imageAlt: 'Load Task into JOSM from HOT',
+          title: 'Click "Edit with JOSM" to Load Task Data'
+        },
+        {
+          type: 'image',
+          content: '/images/training/hot-task-submission.png',
+          imageAlt: 'Submit Completed Task',
+          title: 'Mark Task Complete and Add Comments'
         },
         {
           type: 'warning',
@@ -476,6 +578,24 @@ export const mapperTrainingSteps: TrainingStep[] = [
             "Outdoor sports courts",
             "Construction sites (incomplete buildings)"
           ]
+        },
+        {
+          type: 'image',
+          content: '/images/training/mapping-building-correct.png',
+          imageAlt: 'Correct Building Mapping Example',
+          title: 'DO: Map Complete Buildings Like This'
+        },
+        {
+          type: 'image',
+          content: '/images/training/mapping-building-incorrect.png',
+          imageAlt: 'Incorrect Building Mapping Example',
+          title: 'DO NOT: Avoid Mapping Shadows or Incomplete Structures'
+        },
+        {
+          type: 'image',
+          content: '/images/training/mapping-error-overlapping.png',
+          imageAlt: 'Common Error - Overlapping Buildings',
+          title: 'Common Error: Overlapping Buildings (Avoid This)'
         },
         {
           type: 'tip',

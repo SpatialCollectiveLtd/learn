@@ -256,15 +256,23 @@ export default function MapperTrainingStepPage({
                 )}
 
                 {block.type === 'image' && (
-                  <div className="bg-[#0a0a0a] border border-[#262626] rounded-xl p-6">
+                  <div className="bg-[#0a0a0a] border border-[#262626] rounded-xl p-4 overflow-hidden">
                     {block.title && (
-                      <h3 className="text-xl font-subheading font-bold text-white mb-4">
+                      <h3 className="text-lg font-subheading font-semibold text-white mb-3 px-2">
                         {block.title}
                       </h3>
                     )}
-                    <div className="aspect-video bg-[#262626] rounded-lg flex items-center justify-center">
-                      <p className="text-[#a3a3a3] text-sm">Screenshot: {block.imageAlt}</p>
+                    <div className="relative w-full rounded-lg overflow-hidden border border-[#262626]">
+                      <img 
+                        src={block.content as string}
+                        alt={block.imageAlt || 'Training screenshot'}
+                        className="w-full h-auto object-contain bg-[#000000]"
+                        loading="lazy"
+                      />
                     </div>
+                    {block.imageAlt && (
+                      <p className="text-sm text-[#737373] mt-2 px-2 italic">{block.imageAlt}</p>
+                    )}
                   </div>
                 )}
               </div>
