@@ -152,9 +152,6 @@ ON CONFLICT (staff_id) DO NOTHING;
 -- SEED DATA: YOUTH PARTICIPANTS
 -- ============================================
 INSERT INTO youth_participants (youth_id, full_name, email, phone_number, program_type) VALUES
-  ('YT001', 'Test Youth One', 'youth1@example.com', '+1234567890', 'digitization'),
-  ('YT002', 'Test Youth Two', 'youth2@example.com', '+1234567891', 'digitization'),
-  ('YT003', 'Test Youth Three', 'youth3@example.com', '+1234567892', 'mobile_mapping'),
   ('KAYTEST001ES', 'Test Youth Kayole', 'kaytest@example.com', '+254700000000', 'digitization')
 ON CONFLICT (youth_id) DO NOTHING;
 
