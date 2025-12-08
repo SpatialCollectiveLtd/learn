@@ -49,7 +49,7 @@ export default function YouthDashboard() {
     router.push('/');
   };
 
-  const modules = [
+  const allModules = [
     {
       title: "Digitization - Mapper Training",
       description: "Learn digital mapping, JOSM, and HOT Tasking Manager workflows.",
@@ -58,6 +58,7 @@ export default function YouthDashboard() {
       code: "DIG1-M",
       available: true,
       restricted: false,
+      programType: "digitization",
     },
     {
       title: "Digitization - Validator Training",
@@ -67,6 +68,7 @@ export default function YouthDashboard() {
       code: "DIG1-V",
       available: false,
       restricted: true,
+      programType: "digitization",
     },
     {
       title: "Mobile Mapping",
@@ -76,6 +78,7 @@ export default function YouthDashboard() {
       code: "MOB2",
       available: true,
       restricted: false,
+      programType: "mobile_mapping",
     },
     {
       title: "Household Survey",
@@ -85,6 +88,7 @@ export default function YouthDashboard() {
       code: "HSV3",
       available: true,
       restricted: false,
+      programType: "household_survey",
     },
     {
       title: "Microtasking",
@@ -94,8 +98,14 @@ export default function YouthDashboard() {
       code: "MCR4",
       available: true,
       restricted: false,
+      programType: "microtasking",
     },
   ];
+
+  // Filter modules based on user's program type
+  const modules = allModules.filter(module => 
+    module.programType === youthData?.programType
+  );
 
   if (isLoading) {
     return (
