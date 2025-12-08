@@ -155,14 +155,14 @@ export const StaffAuthentication: React.FC<StaffAuthenticationProps> = ({
               id="staffId"
               value={staffId}
               onChange={(e) => setStaffId(e.target.value.toUpperCase())}
-              placeholder="SC001"
+              placeholder="STEA8103SA"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
               required
               disabled={isLoading}
-              maxLength={10}
+              maxLength={12}
             />
             <p className="mt-2 text-sm text-gray-500">
-              Format: SC### (e.g., SC001, SC123)
+              Format: S[T/F/M]EA####[SA/T/A] (e.g., STEA8103SA, SFEA0119T)
             </p>
           </div>
 

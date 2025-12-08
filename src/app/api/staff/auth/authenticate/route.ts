@@ -30,8 +30,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate format (SC followed by 3+ digits)
-    const staffIdPattern = /^SC\d{3,}$/i;
+    // Validate format (S + T/F/M + EA + 4 digits + role)
+    // Examples: STEA8103SA (SuperAdmin), SFEA0119T (Trainer), SMEA4441A (Admin)
+    const staffIdPattern = /^S[TFM]EA\d{4}(SA|T|A)$/i;
     if (!staffIdPattern.test(staffId.toUpperCase())) {
       const clientIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
       await AuthLogModel.log({
@@ -47,7 +48,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { 
           success: false, 
-          message: 'Invalid Staff ID format. Staff ID should be in format: SC### (e.g., SC001)' 
+          message: 'Invalid Staff ID format. Use format: S[T/F/M]EA####[SA/T/A] (e.g., STEA8103SA, SFEA0119T)' 
         },
         { status: 400 }
       );

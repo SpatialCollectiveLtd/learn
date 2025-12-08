@@ -300,13 +300,11 @@ export const StaffAdminPanel: React.FC = () => {
           ℹ️ Important Information
         </h3>
         <ul className="text-sm text-blue-700 space-y-1">
-          <li>• Staff IDs must follow the format: SC### (e.g., SC001, SC123)</li>
-          <li>• Only registered staff can access Validator Training content</li>
-          <li>• Staff members are authenticated via sessionStorage (session-based)</li>
-          <li>
-            • TODO: This data is currently stored in memory. Integrate with a backend
-            database for production use.
-          </li>
+          <li>• Staff IDs: S[Type]EA[Code][Role] - STEA8103SA (SuperAdmin), SFEA0119T (Trainer), SMEA4441A (Admin)</li>
+          <li>• Type: T=Technical, F=Field, M=Management</li>
+          <li>• Role: SA=SuperAdmin, T=Trainer, A=Admin</li>
+          <li>• Only registered staff can access training content</li>
+          <li>• Staff members are authenticated via database</li>
         </ul>
       </div>
     </div>

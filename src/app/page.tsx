@@ -68,8 +68,15 @@ export default function LoginPage() {
         localStorage.setItem('staffToken', token);
         localStorage.setItem('staffData', JSON.stringify(staff));
 
-        // Redirect to staff dashboard
-        router.push('/dashboard/staff');
+        // Route based on staff role
+        if (staff.role === 'trainer') {
+          router.push('/dashboard/trainer');
+        } else if (staff.role === 'admin') {
+          router.push('/dashboard/admin');
+        } else {
+          // superadmin
+          router.push('/dashboard/staff');
+        }
       }
     } catch (err: any) {
       setError(err.response?.data?.message || 'Authentication failed. Please check your Staff ID.');
@@ -161,7 +168,7 @@ export default function LoginPage() {
                   value={userId}
                   onChange={(e) => setUserId(e.target.value)}
                   className="w-full px-4 py-3 bg-black border border-[#2a2a2a] rounded-lg text-white placeholder-[#737373] focus:outline-none focus:ring-2 focus:ring-[#dc2626] focus:border-transparent transition-all"
-                  placeholder={loginType === 'youth' ? 'e.g., YT001' : 'e.g., SC001'}
+                  placeholder={loginType === 'youth' ? 'e.g., YT001' : 'e.g., STEA8103SA'}
                   required
                   autoFocus
                 />

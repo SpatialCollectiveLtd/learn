@@ -881,12 +881,12 @@ export function authenticateStaffId(staffId: string): AuthenticationResult {
   // Trim and convert to uppercase for consistency
   const cleanStaffId = staffId.trim().toUpperCase();
 
-  // Validate format (example: SC followed by 3+ digits)
-  const staffIdPattern = /^SC\d{3,}$/;
+  // Validate format (S + T/F/M + EA + 4 digits + role)
+  const staffIdPattern = /^S[TFM]EA\d{4}(SA|T|A)$/;
   if (!staffIdPattern.test(cleanStaffId)) {
     return {
       success: false,
-      message: 'Invalid Staff ID format. Staff ID should be in format: SC### (e.g., SC001)',
+      message: 'Invalid Staff ID format. Use format: S[T/F/M]EA####[SA/T/A] (e.g., STEA8103SA)',
     };
   }
 
@@ -914,11 +914,11 @@ export function registerStaffId(
   const cleanStaffId = staffId.trim().toUpperCase();
 
   // Validate format
-  const staffIdPattern = /^SC\d{3,}$/;
+  const staffIdPattern = /^S[TFM]EA\d{4}(SA|T|A)$/;
   if (!staffIdPattern.test(cleanStaffId)) {
     return {
       success: false,
-      message: 'Invalid Staff ID format. Use format: SC### (e.g., SC001)',
+      message: 'Invalid Staff ID format. Use format: S[T/F/M]EA####[SA/T/A] (e.g., STEA8103SA)',
     };
   }
 

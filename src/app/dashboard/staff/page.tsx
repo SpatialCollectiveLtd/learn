@@ -24,6 +24,20 @@ export default function StaffDashboard() {
     }
 
     const staffInfo = JSON.parse(staff);
+    
+    // Only superadmin can access this page
+    if (staffInfo.role !== 'superadmin') {
+      // Redirect to appropriate dashboard
+      if (staffInfo.role === 'trainer') {
+        router.push('/dashboard/trainer');
+      } else if (staffInfo.role === 'admin') {
+        router.push('/dashboard/admin');
+      } else {
+        router.push('/');
+      }
+      return;
+    }
+
     setStaffData(staffInfo);
     setIsLoading(false);
   }, [router]);
@@ -93,9 +107,9 @@ export default function StaffDashboard() {
                 <div className="text-[#dc2626] text-2xl font-bold">SC</div>
                 <div>
                   <h1 className="text-lg font-heading font-bold text-white">
-                    Staff Portal
+                    Super Admin Portal
                   </h1>
-                  <p className="text-xs text-[#a3a3a3]">Full Access - All Modules</p>
+                  <p className="text-xs text-[#a3a3a3]">Full System Access</p>
                 </div>
               </div>
 
