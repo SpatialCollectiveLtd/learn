@@ -44,9 +44,9 @@ export async function GET(request: NextRequest) {
         yp.email,
         yp.phone_number,
         yp.program_type,
-        yp.osm_username,
         yp.is_active,
-        yp.registered_at,
+        yp.created_at,
+        yp.last_login,
         sc.contract_id,
         sc.signed_at,
         CASE 
@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
         END AS has_signed_contract
       FROM youth_participants yp
       LEFT JOIN signed_contracts sc ON yp.youth_id = sc.youth_id AND sc.is_valid = TRUE
-      ORDER BY yp.registered_at DESC
+      ORDER BY yp.created_at DESC
     `);
 
     return NextResponse.json({
