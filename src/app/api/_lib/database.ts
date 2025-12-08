@@ -8,8 +8,19 @@ let pool: Pool | null = null;
 
 function getPool(): Pool {
   if (!pool) {
+    const connectionString = process.env.learn_DATABASE_URL || process.env.DATABASE_URL;
+    
+    if (!connectionString) {
+      console.error('ERROR: No database connection string found!');
+      console.error('Available env vars:', Object.keys(process.env).filter(k => k.includes('DATABASE')));
+      throw new Error('DATABASE_URL environment variable is not set');
+    }
+
+    console.log('Initializing database pool with connection string:', 
+      connectionString.substring(0, 30) + '...');
+
     pool = new Pool({
-      connectionString: process.env.learn_DATABASE_URL || process.env.DATABASE_URL,
+      connectionString,
       ssl: {
         rejectUnauthorized: false, // Required for Neon
       },

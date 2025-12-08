@@ -63,10 +63,20 @@ export async function GET(request: NextRequest) {
       data: result.rows,
     });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Fetch youth error:', error);
+    console.error('Error details:', {
+      message: error?.message,
+      code: error?.code,
+      detail: error?.detail,
+      stack: error?.stack?.substring(0, 500)
+    });
     return NextResponse.json(
-      { success: false, message: 'An error occurred while fetching participants' },
+      { 
+        success: false, 
+        message: 'An error occurred while fetching participants',
+        error: process.env.NODE_ENV === 'development' ? error?.message : undefined
+      },
       { status: 500 }
     );
   }
