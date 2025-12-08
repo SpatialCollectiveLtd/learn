@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 // Use relative URL for same-domain API calls (works in both dev and prod)
 const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
@@ -19,18 +20,44 @@ interface YouthAuthenticationProps {
 export const YouthAuthentication: React.FC<YouthAuthenticationProps> = ({
   onAuthenticated,
 }) => {
+  const router = useRouter();
   const [youthId, setYouthId] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isOnline, setIsOnline] = useState(true);
+
+  // Check network status
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    setIsOnline(navigator.onLine);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    // Check internet connection first
+    if (!navigator.onLine) {
+      router.push('/offline');
+      return;
+    }
+
     setIsLoading(true);
 
     try {
       const response = await axios.post(`${API_URL}/api/youth/auth/authenticate`, {
         youthId,
+      }, {
+        timeout: 15000, // 15 second timeout
       });
 
       if (response.data.success) {
@@ -40,7 +67,16 @@ export const YouthAuthentication: React.FC<YouthAuthenticationProps> = ({
         onAuthenticated(response.data.data);
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Authentication failed. Please try again.');
+      // Handle different types of errors
+      if (err.code === 'ERR_NETWORK' || err.code === 'ECONNABORTED' || !navigator.onLine) {
+        router.push('/offline');
+      } else if (err.response?.status === 503) {
+        router.push('/maintenance');
+      } else if (err.response?.status === 404) {
+        setError('Service not found. Please contact support.');
+      } else {
+        setError(err.response?.data?.message || 'Authentication failed. Please check your Youth ID and try again.');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -48,6 +84,16 @@ export const YouthAuthentication: React.FC<YouthAuthenticationProps> = ({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-100 flex items-center justify-center p-4">
+      {/* Network Status Indicator */}
+      {!isOnline && (
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-2">
+          <svg className="w-5 h-5 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+          </svg>
+          <span className="font-semibold">No Internet Connection</span>
+        </div>
+      )}
+      
       <div className="max-w-md w-full bg-white rounded-lg shadow-xl p-8">
         {/* Header */}
         <div className="text-center mb-8">
