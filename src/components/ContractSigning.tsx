@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import SignatureCanvas from 'react-signature-canvas';
+import { useRouter } from 'next/navigation';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
@@ -19,29 +20,62 @@ export const ContractSigning: React.FC<ContractSigningProps> = ({
   token,
   onContractSigned,
 }) => {
+  const router = useRouter();
   const [contract, setContract] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [hasAgreed, setHasAgreed] = useState(false);
   const [isSigning, setIsSigning] = useState(false);
+  const [isOnline, setIsOnline] = useState(true);
   const signatureRef = useRef<any>(null);
+
+  // Network status detection
+  useEffect(() => {
+    const updateOnlineStatus = () => setIsOnline(navigator.onLine);
+    
+    setIsOnline(navigator.onLine);
+
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+
+    return () => {
+      window.removeEventListener('online', updateOnlineStatus);
+      window.removeEventListener('offline', updateOnlineStatus);
+    };
+  }, []);
 
   useEffect(() => {
     fetchContract();
   }, []);
 
   const fetchContract = async () => {
+    if (!navigator.onLine) {
+      router.push('/offline');
+      return;
+    }
+
     try {
       const response = await axios.get(`${API_URL}/api/contracts/template`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        timeout: 15000,
       });
 
       if (response.data.success) {
         setContract(response.data.data);
       }
     } catch (err: any) {
+      if (err.code === 'ERR_NETWORK' || err.code === 'ECONNABORTED') {
+        router.push('/offline');
+        return;
+      }
+
+      if (err.response?.status === 503) {
+        router.push('/maintenance');
+        return;
+      }
+
       setError(err.response?.data?.message || 'Failed to load contract');
     } finally {
       setLoading(false);
@@ -63,6 +97,11 @@ export const ContractSigning: React.FC<ContractSigningProps> = ({
       return;
     }
 
+    if (!navigator.onLine) {
+      router.push('/offline');
+      return;
+    }
+
     setIsSigning(true);
     setError('');
 
@@ -79,6 +118,7 @@ export const ContractSigning: React.FC<ContractSigningProps> = ({
           headers: {
             Authorization: `Bearer ${token}`,
           },
+          timeout: 15000,
         }
       );
 
@@ -86,6 +126,16 @@ export const ContractSigning: React.FC<ContractSigningProps> = ({
         onContractSigned();
       }
     } catch (err: any) {
+      if (err.code === 'ERR_NETWORK' || err.code === 'ECONNABORTED') {
+        router.push('/offline');
+        return;
+      }
+
+      if (err.response?.status === 503) {
+        router.push('/maintenance');
+        return;
+      }
+
       setError(err.response?.data?.message || 'Failed to sign contract');
     } finally {
       setIsSigning(false);
@@ -133,8 +183,31 @@ export const ContractSigning: React.FC<ContractSigningProps> = ({
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Network Status Indicator */}
+      {!isOnline && (
+        <div className="fixed top-0 left-0 right-0 bg-red-600 text-white py-2 px-4 text-center text-sm font-medium z-50 shadow-md">
+          <div className="flex items-center justify-center">
+            <svg
+              className="w-4 h-4 mr-2 animate-pulse"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3m8.293 8.293l1.414 1.414"
+              />
+            </svg>
+            No Internet Connection
+          </div>
+        </div>
+      )}
+
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
+      <div className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm"
+           style={{ marginTop: !isOnline ? '36px' : '0' }}>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div>
