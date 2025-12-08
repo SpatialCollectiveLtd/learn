@@ -136,15 +136,15 @@ export const YouthAuthentication: React.FC<YouthAuthenticationProps> = ({
               type="text"
               id="youthId"
               value={youthId}
-              onChange={(e) => setYouthId(e.target.value.toUpperCase())}
-              placeholder="YT001"
+              onChange={(e) => setYouthId(e.target.value)}
+              placeholder="KAY1278MK"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
               required
               disabled={isLoading}
-              maxLength={10}
+              maxLength={20}
             />
             <p className="mt-2 text-sm text-gray-500">
-              Format: YT### (e.g., YT001, YT123)
+              Enter your Youth ID (e.g., KAY1278MK, KAR001, MJI123)
             </p>
           </div>
 

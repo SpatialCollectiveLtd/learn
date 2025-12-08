@@ -33,13 +33,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate format (YT followed by 3+ digits)
-    const youthIdPattern = /^YT\d{3,}$/i;
-    if (!youthIdPattern.test(youthId.toUpperCase())) {
+    // Normalize youth ID to uppercase for case-insensitive matching
+    const normalizedYouthId = youthId.toUpperCase().trim();
+
+    // Validate format: KAY, KAR, or MJI followed by alphanumeric characters
+    // Supports formats like: KAY1278MK, KAR001, MJI123
+    const youthIdPattern = /^(KAY|KAR|MJI)[A-Z0-9]+$/i;
+    if (!youthIdPattern.test(normalizedYouthId)) {
       console.log('[AUTH] Invalid format:', youthId);
       const clientIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
       await AuthLogModel.log({
-        userId: youthId,
+        userId: normalizedYouthId,
         userType: 'youth',
         action: 'login',
         success: false,
@@ -51,21 +55,45 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { 
           success: false, 
-          message: 'Invalid Youth ID format. Youth ID should be in format: YT### (e.g., YT001)' 
+          message: 'Invalid Youth ID format. Youth ID should start with KAY, KAR, or MJI followed by your unique identifier (e.g., KAY1278MK, KAR001, MJI123)' 
         },
         { status: 400 }
       );
     }
 
+    // Check for too many failed login attempts (max 5 in 15 minutes)
+    const failedAttempts = await AuthLogModel.getFailedAttempts(normalizedYouthId, 15);
+    if (failedAttempts >= 5) {
+      console.log('[AUTH] Too many failed attempts:', normalizedYouthId);
+      const clientIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+      await AuthLogModel.log({
+        userId: normalizedYouthId,
+        userType: 'youth',
+        action: 'login',
+        success: false,
+        ipAddress: clientIp,
+        userAgent: request.headers.get('user-agent') || undefined,
+        errorMessage: 'Too many failed login attempts',
+      });
+
+      return NextResponse.json(
+        { 
+          success: false, 
+          message: 'Too many failed login attempts. Please try again in 15 minutes or contact support.' 
+        },
+        { status: 429 }
+      );
+    }
+
     // Find youth in database
-    console.log('[AUTH] Looking up youth:', youthId.toUpperCase());
-    const youth = await YouthModel.findById(youthId.toUpperCase());
+    console.log('[AUTH] Looking up youth:', normalizedYouthId);
+    const youth = await YouthModel.findById(normalizedYouthId);
     console.log('[AUTH] Youth found:', youth ? 'yes' : 'no');
 
     if (!youth) {
       const clientIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
       await AuthLogModel.log({
-        userId: youthId.toUpperCase(),
+        userId: normalizedYouthId,
         userType: 'youth',
         action: 'login',
         success: false,
@@ -75,7 +103,7 @@ export async function POST(request: NextRequest) {
       });
 
       return NextResponse.json(
-        { success: false, message: 'Invalid Youth ID' },
+        { success: false, message: 'Invalid Youth ID. Please check your ID and try again.' },
         { status: 401 }
       );
     }
