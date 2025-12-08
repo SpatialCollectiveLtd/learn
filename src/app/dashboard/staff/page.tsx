@@ -104,13 +104,24 @@ export default function StaffDashboard() {
                 </div>
               </div>
 
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-2 text-[#e5e5e5] hover:text-white transition-colors text-sm"
-              >
-                <LogOut className="w-4 h-4" />
-                <span>Logout</span>
-              </button>
+              <div className="flex items-center gap-3">
+                {(staffData?.role === 'admin' || staffData?.role === 'superadmin') && (
+                  <Link
+                    href="/dashboard/admin"
+                    className="flex items-center gap-2 bg-[#dc2626] hover:bg-[#b91c1c] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                  >
+                    <Shield className="w-4 h-4" />
+                    <span>Admin Dashboard</span>
+                  </Link>
+                )}
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 text-[#e5e5e5] hover:text-white transition-colors text-sm"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>Logout</span>
+                </button>
+              </div>
             </div>
           </div>
         </header>
