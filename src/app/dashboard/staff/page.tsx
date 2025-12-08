@@ -211,9 +211,21 @@ export default function StaffDashboard() {
           {/* Admin Resources */}
           <div className="max-w-5xl mx-auto mt-12">
             <h3 className="text-xl font-heading font-bold text-white mb-6">
-              Staff Resources
+              Admin Resources
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Link href="/dashboard/staff/manage">
+                <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-xl p-6 hover:border-[#dc2626]/50 transition-all cursor-pointer">
+                  <h4 className="text-white font-semibold mb-2">Staff Management</h4>
+                  <p className="text-[#a3a3a3] text-sm mb-3">
+                    Add and manage trainers and admins.
+                  </p>
+                  <span className="text-[#dc2626] text-sm font-semibold">
+                    Manage Staff →
+                  </span>
+                </div>
+              </Link>
+
               <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-xl p-6">
                 <h4 className="text-white font-semibold mb-2">Youth Progress Tracking</h4>
                 <p className="text-[#a3a3a3] text-sm mb-3">

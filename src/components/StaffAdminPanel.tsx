@@ -136,11 +136,11 @@ export const StaffAdminPanel: React.FC = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, staffId: e.target.value.toUpperCase() })
                   }
-                  placeholder="SC001"
+                  placeholder="Staff ID"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   required
                 />
-                <p className="mt-1 text-xs text-gray-500">Format: SC### (e.g., SC001)</p>
+                <p className="mt-1 text-xs text-gray-500">Format: S[Type]EA[Code][Role]</p>
               </div>
 
               <div>

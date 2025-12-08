@@ -41,13 +41,22 @@ export class StaffModel {
     staffId: string;
     fullName: string;
     email?: string;
-    role: 'validator' | 'admin';
+    phoneNumber?: string | null;
+    role: 'trainer' | 'admin' | 'superadmin';
+    createdBy?: string;
   }): Promise<StaffMember> {
     const result = await Database.query<StaffMember>(
-      `INSERT INTO staff_members (staff_id, full_name, email, role)
-       VALUES ($1, $2, $3, $4)
+      `INSERT INTO staff_members (staff_id, full_name, email, phone_number, role, created_by)
+       VALUES ($1, $2, $3, $4, $5, $6)
        RETURNING *`,
-      [data.staffId, data.fullName, data.email || null, data.role]
+      [
+        data.staffId, 
+        data.fullName, 
+        data.email || null, 
+        data.phoneNumber || null, 
+        data.role,
+        data.createdBy || null
+      ]
     );
     return result.rows[0];
   }
@@ -60,6 +69,16 @@ export class StaffModel {
       'SELECT * FROM staff_members WHERE is_active = TRUE ORDER BY full_name'
     );
     return result.rows;
+  }
+
+  /**
+   * Delete staff member permanently
+   */
+  static async delete(staffId: string): Promise<void> {
+    await Database.query(
+      'DELETE FROM staff_members WHERE staff_id = $1',
+      [staffId]
+    );
   }
 
   /**

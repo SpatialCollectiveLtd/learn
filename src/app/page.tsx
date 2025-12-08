@@ -168,7 +168,7 @@ export default function LoginPage() {
                   value={userId}
                   onChange={(e) => setUserId(e.target.value)}
                   className="w-full px-4 py-3 bg-black border border-[#2a2a2a] rounded-lg text-white placeholder-[#737373] focus:outline-none focus:ring-2 focus:ring-[#dc2626] focus:border-transparent transition-all"
-                  placeholder={loginType === 'youth' ? 'e.g., YT001' : 'e.g., STEA8103SA'}
+                  placeholder={loginType === 'youth' ? 'Enter your Youth ID' : 'Enter your Staff ID'}
                   required
                   autoFocus
                 />

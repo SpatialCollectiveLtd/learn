@@ -4,7 +4,9 @@ export interface StaffMember {
   staff_id: string;
   full_name: string;
   email: string | null;
-  role: 'validator' | 'admin';
+  phone_number?: string | null;
+  role: 'trainer' | 'admin' | 'superadmin';
+  created_by?: string | null;
   is_active: boolean;
   created_at: Date;
   updated_at: Date;

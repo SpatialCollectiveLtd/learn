@@ -250,6 +250,13 @@ export default function AdminDashboard() {
               </div>
             </div>
             <div className="flex items-center space-x-4">
+              <Link
+                href="/dashboard/admin/staff"
+                className="flex items-center gap-2 bg-[#2a2a2a] hover:bg-[#3a3a3a] text-white px-4 py-2 rounded-lg text-sm transition-colors"
+              >
+                <Shield className="w-4 h-4" />
+                <span>Manage Staff</span>
+              </Link>
               <div className="text-right">
                 <p className="text-sm font-medium text-white">{staffData?.fullName}</p>
                 <p className="text-xs text-[#a3a3a3] capitalize">{staffData?.role}</p>
