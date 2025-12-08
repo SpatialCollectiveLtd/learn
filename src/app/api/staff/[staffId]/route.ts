@@ -26,7 +26,7 @@ function verifyStaffToken(request: NextRequest): { staffId: string; role: string
 // DELETE: Remove staff member
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { staffId: string } }
+  { params }: { params: Promise<{ staffId: string }> }
 ) {
   try {
     const auth = verifyStaffToken(request);
@@ -38,7 +38,7 @@ export async function DELETE(
       );
     }
 
-    const { staffId } = params;
+    const { staffId } = await params;
 
     // Cannot delete superadmin accounts
     const staffToDelete = await StaffModel.findById(staffId);
