@@ -113,14 +113,14 @@ export default function TrainerDashboard() {
       description: "Monitor trainee progress across all modules",
       link: "/dashboard/trainer/progress",
       icon: <BarChart3 className="w-12 h-12" />,
-      available: true,
+      available: false,
     },
     {
       title: "Review Submissions",
       description: "Check and approve youth mapping submissions",
       link: "/dashboard/trainer/reviews",
       icon: <CheckCircle2 className="w-12 h-12" />,
-      available: true,
+      available: false,
     },
     {
       title: "Training Materials",
@@ -134,7 +134,7 @@ export default function TrainerDashboard() {
       description: "View and manage trainee information",
       link: "/dashboard/trainer/youth",
       icon: <Users className="w-12 h-12" />,
-      available: true,
+      available: false,
     },
   ];
 
@@ -254,37 +254,6 @@ export default function TrainerDashboard() {
                 </CometCard>
               ))}
             </div>
-          </div>
-
-          {/* Recent Activity */}
-          <div className="bg-[#1F2121]/50 backdrop-blur-sm border border-[#2a2a2a] rounded-lg p-6">
-            <h3 className="text-xl font-heading font-bold text-white mb-4">
-              Recent Activity
-            </h3>
-            {activities.length > 0 ? (
-              <div className="space-y-3">
-                {activities.map((activity, index) => {
-                  const IconComponent = getActivityIcon(activity.icon);
-                  const colorClass = getActivityColor(activity.type);
-                  return (
-                    <div 
-                      key={index} 
-                      className={`flex items-center justify-between py-3 ${index < activities.length - 1 ? 'border-b border-[#2a2a2a]' : ''}`}
-                    >
-                      <div className="flex items-center space-x-3">
-                        <IconComponent className={`w-5 h-5 ${colorClass}`} />
-                        <div>
-                          <p className="text-white text-sm">{activity.title}</p>
-                          <p className="text-[#737373] text-xs">{activity.subtitle}</p>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <p className="text-[#737373] text-sm">No recent activity</p>
-            )}
           </div>
         </div>
       </div>
