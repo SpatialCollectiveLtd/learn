@@ -106,6 +106,8 @@ export default function TrainingMaterialsPage() {
                 </h2>
                 <Link
                   href="/digitization/mapper"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-sm text-[#3b82f6] hover:text-[#2563eb] font-medium inline-flex items-center gap-1"
                 >
                   View Module <ExternalLink className="w-4 h-4" />
@@ -131,6 +133,8 @@ export default function TrainingMaterialsPage() {
                 <Link
                   key={step.id}
                   href={`/digitization/mapper/${step.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="bg-[#1F2121]/50 backdrop-blur-sm border border-[#2a2a2a] hover:border-[#3b82f6]/50 rounded-lg p-5 transition-all group"
                 >
                   <div className="flex items-start justify-between mb-3">
@@ -167,6 +171,8 @@ export default function TrainingMaterialsPage() {
                 </h2>
                 <Link
                   href="/digitization/validator"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-sm text-[#22c55e] hover:text-[#16a34a] font-medium inline-flex items-center gap-1"
                 >
                   View Module <ExternalLink className="w-4 h-4" />
@@ -192,6 +198,8 @@ export default function TrainingMaterialsPage() {
                 <Link
                   key={step.id}
                   href={`/digitization/validator/${step.id.replace('validator-', '')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="bg-[#1F2121]/50 backdrop-blur-sm border border-[#2a2a2a] hover:border-[#22c55e]/50 rounded-lg p-5 transition-all group"
                 >
                   <div className="flex items-start justify-between mb-3">

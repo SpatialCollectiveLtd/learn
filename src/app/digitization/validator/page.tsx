@@ -20,25 +20,33 @@ export default function ValidatorOverviewPage() {
 
   // Check authentication status - Staff only
   useEffect(() => {
-    const userType = localStorage.getItem('userType');
-    const storedStaffId = sessionStorage.getItem('staffId');
-    const storedStaffName = sessionStorage.getItem('staffName');
+    const staffToken = localStorage.getItem('staffToken');
+    const staffDataStr = localStorage.getItem('staffData');
 
     // Check if user is staff
-    if (userType !== 'staff' || !storedStaffId) {
+    if (!staffToken || !staffDataStr) {
       // Not staff - redirect to login
       router.push('/');
       return;
     }
 
-    // Check if staff has validator training access
-    if (hasValidatorTrainingAccess(storedStaffId)) {
-      setStaffId(storedStaffId);
-      setStaffName(storedStaffName);
-      setIsAuthenticated(true);
-    } else {
-      // Staff doesn't have validator access
-      router.push('/dashboard/staff');
+    try {
+      const staffData = JSON.parse(staffDataStr);
+      const storedStaffId = staffData.staffId;
+      const storedStaffName = staffData.fullName;
+
+      // Check if staff has validator training access (trainers and validators)
+      if (hasValidatorTrainingAccess(storedStaffId)) {
+        setStaffId(storedStaffId);
+        setStaffName(storedStaffName);
+        setIsAuthenticated(true);
+      } else {
+        // Staff doesn't have validator access
+        router.push('/dashboard/staff');
+        return;
+      }
+    } catch (error) {
+      router.push('/');
       return;
     }
 

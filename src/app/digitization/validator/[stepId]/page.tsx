@@ -45,23 +45,32 @@ export default function ValidatorStepPage({ params }: PageProps) {
 
   // Check authentication - Staff only
   useEffect(() => {
-    const userType = localStorage.getItem('userType');
-    const storedStaffId = sessionStorage.getItem('staffId');
+    const staffToken = localStorage.getItem('staffToken');
+    const staffDataStr = localStorage.getItem('staffData');
 
     // Check if user is staff
-    if (userType !== 'staff' || !storedStaffId) {
+    if (!staffToken || !staffDataStr) {
       router.push('/');
       return;
     }
 
-    // Check if staff has validator training access
-    if (hasValidatorTrainingAccess(storedStaffId)) {
-      setStaffId(storedStaffId);
-      setIsAuthenticated(true);
-    } else {
-      router.push('/dashboard/staff');
+    try {
+      const staffData = JSON.parse(staffDataStr);
+      const storedStaffId = staffData.staffId;
+
+      // Check if staff has validator training access (trainers and validators)
+      if (hasValidatorTrainingAccess(storedStaffId)) {
+        setStaffId(storedStaffId);
+        setIsAuthenticated(true);
+      } else {
+        router.push('/dashboard/staff');
+        return;
+      }
+    } catch (error) {
+      router.push('/');
       return;
     }
+
     setIsLoading(false);
   }, [router]);
 
