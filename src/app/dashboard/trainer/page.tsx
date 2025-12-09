@@ -5,6 +5,7 @@ import { BackgroundBeams } from "@/components/ui/background-beams";
 import { CometCard } from "@/components/ui/comet-card";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 import { 
   GraduationCap, 
   LogOut, 
@@ -16,31 +17,62 @@ import {
   TrendingUp
 } from "lucide-react";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+
 export default function TrainerDashboard() {
   const router = useRouter();
   const [staffData, setStaffData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [activities, setActivities] = useState<any[]>([]);
+  const [youthCount, setYouthCount] = useState(0);
 
   useEffect(() => {
-    // Check if user is authenticated as trainer
-    const token = localStorage.getItem('staffToken');
-    const staff = localStorage.getItem('staffData');
+    const fetchData = async () => {
+      // Check if user is authenticated as trainer
+      const token = localStorage.getItem('staffToken');
+      const staff = localStorage.getItem('staffData');
 
-    if (!token || !staff) {
-      router.push('/');
-      return;
-    }
+      if (!token || !staff) {
+        router.push('/');
+        return;
+      }
 
-    const staffInfo = JSON.parse(staff);
-    
-    // Only trainers can access this page
-    if (staffInfo.role !== 'trainer') {
-      router.push('/dashboard/staff');
-      return;
-    }
+      const staffInfo = JSON.parse(staff);
+      
+      // Only trainers can access this page
+      if (staffInfo.role !== 'trainer') {
+        router.push('/dashboard/staff');
+        return;
+      }
 
-    setStaffData(staffInfo);
-    setIsLoading(false);
+      setStaffData(staffInfo);
+
+      try {
+        // Fetch recent activity
+        const activityResponse = await axios.get(`${API_URL}/api/trainer/activity`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        if (activityResponse.data.success) {
+          setActivities(activityResponse.data.data.activities);
+        }
+
+        // Fetch youth count
+        const youthResponse = await axios.get(`${API_URL}/api/trainer/youth`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        if (youthResponse.data.success) {
+          setYouthCount(youthResponse.data.data.activeCount);
+        }
+      } catch (error) {
+        console.error('Error fetching trainer data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
   }, [router]);
 
   const handleLogout = () => {
@@ -51,11 +83,29 @@ export default function TrainerDashboard() {
 
   // Quick stats for trainers
   const stats = [
-    { label: "Active Trainees", value: "28", icon: Users, color: "text-blue-500" },
+    { label: "Active Trainees", value: youthCount.toString(), icon: Users, color: "text-blue-500" },
     { label: "Modules", value: "4", icon: BookOpen, color: "text-green-500" },
-    { label: "Completion Rate", value: "72%", icon: TrendingUp, color: "text-purple-500" },
-    { label: "Pending Reviews", value: "5", icon: Clock, color: "text-orange-500" },
+    { label: "Completion Rate", value: "N/A", icon: TrendingUp, color: "text-purple-500" },
+    { label: "Pending Reviews", value: "N/A", icon: Clock, color: "text-orange-500" },
   ];
+
+  const getActivityIcon = (iconName: string) => {
+    switch (iconName) {
+      case 'CheckCircle2': return CheckCircle2;
+      case 'Clock': return Clock;
+      case 'Users': return Users;
+      default: return CheckCircle2;
+    }
+  };
+
+  const getActivityColor = (type: string) => {
+    switch (type) {
+      case 'completion': return 'text-green-500';
+      case 'review': return 'text-orange-500';
+      case 'registration': return 'text-blue-500';
+      default: return 'text-gray-500';
+    }
+  };
 
   const quickActions = [
     {
@@ -211,35 +261,30 @@ export default function TrainerDashboard() {
             <h3 className="text-xl font-heading font-bold text-white mb-4">
               Recent Activity
             </h3>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between py-3 border-b border-[#2a2a2a]">
-                <div className="flex items-center space-x-3">
-                  <CheckCircle2 className="w-5 h-5 text-green-500" />
-                  <div>
-                    <p className="text-white text-sm">Youth completed Step 3</p>
-                    <p className="text-[#737373] text-xs">KAYTEST001ES - 2 hours ago</p>
-                  </div>
-                </div>
+            {activities.length > 0 ? (
+              <div className="space-y-3">
+                {activities.map((activity, index) => {
+                  const IconComponent = getActivityIcon(activity.icon);
+                  const colorClass = getActivityColor(activity.type);
+                  return (
+                    <div 
+                      key={index} 
+                      className={`flex items-center justify-between py-3 ${index < activities.length - 1 ? 'border-b border-[#2a2a2a]' : ''}`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <IconComponent className={`w-5 h-5 ${colorClass}`} />
+                        <div>
+                          <p className="text-white text-sm">{activity.title}</p>
+                          <p className="text-[#737373] text-xs">{activity.subtitle}</p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-              <div className="flex items-center justify-between py-3 border-b border-[#2a2a2a]">
-                <div className="flex items-center space-x-3">
-                  <Clock className="w-5 h-5 text-orange-500" />
-                  <div>
-                    <p className="text-white text-sm">Pending review submission</p>
-                    <p className="text-[#737373] text-xs">Building mapping task - 4 hours ago</p>
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center justify-between py-3">
-                <div className="flex items-center space-x-3">
-                  <Users className="w-5 h-5 text-blue-500" />
-                  <div>
-                    <p className="text-white text-sm">New youth registered</p>
-                    <p className="text-[#737373] text-xs">5 new trainees - Today</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            ) : (
+              <p className="text-[#737373] text-sm">No recent activity</p>
+            )}
           </div>
         </div>
       </div>

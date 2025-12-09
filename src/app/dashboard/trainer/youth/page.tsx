@@ -4,74 +4,60 @@ import { useState, useEffect } from "react";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 import { ArrowLeft, Users, Search, Filter, UserCheck, MapPin } from "lucide-react";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 export default function YouthManagementPage() {
   const router = useRouter();
   const [staffData, setStaffData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [youthData, setYouthData] = useState<any[]>([]);
 
   useEffect(() => {
-    const token = localStorage.getItem('staffToken');
-    const staff = localStorage.getItem('staffData');
+    const fetchData = async () => {
+      const token = localStorage.getItem('staffToken');
+      const staff = localStorage.getItem('staffData');
 
-    if (!token || !staff) {
-      router.push('/');
-      return;
-    }
+      if (!token || !staff) {
+        router.push('/');
+        return;
+      }
 
-    const staffInfo = JSON.parse(staff);
-    if (staffInfo.role !== 'trainer') {
-      router.push('/dashboard/staff');
-      return;
-    }
+      const staffInfo = JSON.parse(staff);
+      if (staffInfo.role !== 'trainer') {
+        router.push('/dashboard/staff');
+        return;
+      }
 
-    setStaffData(staffInfo);
-    setIsLoading(false);
+      setStaffData(staffInfo);
+
+      try {
+        const response = await axios.get(`${API_URL}/api/trainer/youth`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        if (response.data.success) {
+          setYouthData(response.data.data.youth);
+        }
+      } catch (error) {
+        console.error('Error fetching youth data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
   }, [router]);
 
-  // Mock data - replace with API call
-  const youthData = [
-    {
-      youthId: "KAYTEST001ES",
-      fullName: "John Doe",
-      email: "john.doe@example.com",
-      phone: "+254712345678",
-      location: "Nairobi",
-      enrollmentDate: "2024-01-15",
-      status: "Active",
-      completedModules: 2,
-      totalModules: 4,
-    },
-    {
-      youthId: "KAYTEST002ES",
-      fullName: "Jane Smith",
-      email: "jane.smith@example.com",
-      phone: "+254723456789",
-      location: "Kisumu",
-      enrollmentDate: "2024-01-20",
-      status: "Active",
-      completedModules: 3,
-      totalModules: 4,
-    },
-    {
-      youthId: "KAYTEST003ES",
-      fullName: "Mike Johnson",
-      email: "mike.j@example.com",
-      phone: "+254734567890",
-      location: "Mombasa",
-      enrollmentDate: "2024-02-01",
-      status: "Active",
-      completedModules: 1,
-      totalModules: 4,
-    },
-  ];
-
   const filteredYouth = youthData.filter(youth => 
-    youth.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    youth.youthId.toLowerCase().includes(searchTerm.toLowerCase())
+    youth.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    youth.youth_id?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const activeCount = youthData.filter(y => y.is_active).length;
 
   if (isLoading) {
     return (
@@ -119,17 +105,17 @@ export default function YouthManagementPage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
             <div className="bg-[#1F2121]/50 backdrop-blur-sm border border-[#2a2a2a] rounded-lg p-6">
               <Users className="w-8 h-8 text-blue-500 mb-2" />
-              <p className="text-3xl font-bold text-white mb-1">28</p>
+              <p className="text-3xl font-bold text-white mb-1">{youthData.length}</p>
               <p className="text-sm text-[#a3a3a3]">Total Trainees</p>
             </div>
             <div className="bg-[#1F2121]/50 backdrop-blur-sm border border-[#2a2a2a] rounded-lg p-6">
               <UserCheck className="w-8 h-8 text-green-500 mb-2" />
-              <p className="text-3xl font-bold text-white mb-1">25</p>
+              <p className="text-3xl font-bold text-white mb-1">{activeCount}</p>
               <p className="text-sm text-[#a3a3a3]">Active Trainees</p>
             </div>
             <div className="bg-[#1F2121]/50 backdrop-blur-sm border border-[#2a2a2a] rounded-lg p-6">
               <MapPin className="w-8 h-8 text-purple-500 mb-2" />
-              <p className="text-3xl font-bold text-white mb-1">5</p>
+              <p className="text-3xl font-bold text-white mb-1">N/A</p>
               <p className="text-sm text-[#a3a3a3]">Locations</p>
             </div>
           </div>
@@ -180,46 +166,45 @@ export default function YouthManagementPage() {
                 </thead>
                 <tbody className="divide-y divide-[#2a2a2a]">
                   {filteredYouth.map((youth) => (
-                    <tr key={youth.youthId} className="hover:bg-[#262626]/50 transition-colors">
+                    <tr key={youth.youth_id} className="hover:bg-[#262626]/50 transition-colors">
                       <td className="px-6 py-4">
                         <div className="flex items-center">
                           <div className="w-10 h-10 rounded-full bg-[#dc2626] flex items-center justify-center text-white font-bold mr-3">
-                            {youth.fullName.charAt(0)}
+                            {youth.full_name?.charAt(0) || 'Y'}
                           </div>
                           <div>
-                            <div className="text-sm font-medium text-white">{youth.fullName}</div>
-                            <div className="text-xs text-[#737373]">{youth.youthId}</div>
+                            <div className="text-sm font-medium text-white">{youth.full_name || 'N/A'}</div>
+                            <div className="text-xs text-[#737373]">{youth.youth_id}</div>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-white">{youth.email}</div>
-                        <div className="text-xs text-[#737373]">{youth.phone}</div>
+                        <div className="text-sm text-white">{youth.email || 'N/A'}</div>
+                        <div className="text-xs text-[#737373]">{youth.phone_number || 'N/A'}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center text-sm text-white">
                           <MapPin className="w-4 h-4 mr-1 text-[#737373]" />
-                          {youth.location}
+                          N/A
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-white">
-                          {youth.completedModules}/{youth.totalModules} modules
+                          0/4 modules
                         </div>
                         <div className="w-full bg-[#262626] rounded-full h-2 mt-1">
-                          <div 
-                            className="bg-[#dc2626] h-2 rounded-full" 
-                            style={{ width: `${(youth.completedModules / youth.totalModules) * 100}%` }}
-                          ></div>
+                          <div className="bg-[#dc2626] h-2 rounded-full" style={{ width: '0%' }}></div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-500/10 text-green-400">
-                          {youth.status}
+                        <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                          youth.is_active ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'
+                        }`}>
+                          {youth.is_active ? 'Active' : 'Inactive'}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-[#a3a3a3]">
-                        {new Date(youth.enrollmentDate).toLocaleDateString()}
+                        {youth.created_at ? new Date(youth.created_at).toLocaleDateString() : 'N/A'}
                       </td>
                     </tr>
                   ))}
