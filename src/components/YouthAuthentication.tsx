@@ -119,7 +119,7 @@ export const YouthAuthentication: React.FC<YouthAuthenticationProps> = ({
             Spatial Collective Ltd
           </p>
           <p className="text-sm text-gray-500 mt-2">
-            Sign your contract agreement to begin
+            Enter your Youth ID to access training
           </p>
         </div>
 
@@ -198,7 +198,7 @@ export const YouthAuthentication: React.FC<YouthAuthenticationProps> = ({
                 Authenticating...
               </span>
             ) : (
-              'Continue to Contract'
+              'Access Training'
             )}
           </button>
         </form>
@@ -219,7 +219,7 @@ export const YouthAuthentication: React.FC<YouthAuthenticationProps> = ({
         {/* Info Note */}
         <div className="mt-4 text-center">
           <p className="text-xs text-gray-500">
-            🔒 You must sign the contract agreement before accessing training materials
+            🔒 Secure access to your training modules
           </p>
         </div>
       </div>

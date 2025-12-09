@@ -33,16 +33,17 @@ export default function LoginPage() {
         localStorage.setItem('youthData', JSON.stringify(youth));
         localStorage.setItem('userType', 'youth');
 
-        // Check if contract has been signed
-        const agreementAccepted = localStorage.getItem(`agreement-accepted-${youth.youthId}`);
-
-        if (!agreementAccepted) {
-          // First time login - redirect to contract signing
-          router.push('/contract');
-        } else {
-          // Returning user - redirect to dashboard
-          router.push('/dashboard/youth');
-        }
+        // CONTRACTS TEMPORARILY DISABLED - Always go to dashboard
+        // TODO: Re-enable contract check when module-specific contracts are ready
+        // const agreementAccepted = localStorage.getItem(`agreement-accepted-${youth.youthId}`);
+        // if (!agreementAccepted) {
+        //   router.push('/contract');
+        // } else {
+        //   router.push('/dashboard/youth');
+        // }
+        
+        // Direct to dashboard (contracts disabled)
+        router.push('/dashboard/youth');
       }
     } catch (err: any) {
       setError(err.response?.data?.message || 'Authentication failed. Please check your Youth ID.');
