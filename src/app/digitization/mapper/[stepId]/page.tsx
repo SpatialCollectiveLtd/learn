@@ -56,9 +56,12 @@ export default function MapperTrainingStepPage({
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
   const [osmUsername, setOsmUsername] = useState('');
   const [savedOsmUsername, setSavedOsmUsername] = useState('');
+  const [isEditingOsm, setIsEditingOsm] = useState(false);
   const [isSavingOsm, setIsSavingOsm] = useState(false);
+  const [isVerifyingOsm, setIsVerifyingOsm] = useState(false);
   const [osmError, setOsmError] = useState('');
   const [osmSuccess, setOsmSuccess] = useState('');
+  const [osmVerificationStatus, setOsmVerificationStatus] = useState<'none' | 'verified' | 'not-found' | 'error'>('none');
   
   const currentStepId = parseInt(stepId);
   const currentStep = getStepById(currentStepId);
@@ -97,6 +100,32 @@ export default function MapperTrainingStepPage({
     fetchOsmUsername();
   }, []);
 
+  const verifyOsmUsername = async (username: string) => {
+    if (!username.trim()) return;
+
+    setIsVerifyingOsm(true);
+    setOsmVerificationStatus('none');
+
+    try {
+      const response = await axios.get(`${API_URL}/api/osm/verify-username?username=${encodeURIComponent(username.trim())}`);
+      
+      if (response.data.success) {
+        if (response.data.exists === true) {
+          setOsmVerificationStatus('verified');
+        } else if (response.data.exists === false) {
+          setOsmVerificationStatus('not-found');
+        } else {
+          setOsmVerificationStatus('error');
+        }
+      }
+    } catch (error) {
+      console.error('Error verifying OSM username:', error);
+      setOsmVerificationStatus('error');
+    } finally {
+      setIsVerifyingOsm(false);
+    }
+  };
+
   const saveOsmUsername = async () => {
     if (!osmUsername.trim()) {
       setOsmError('Please enter your OSM username');
@@ -122,6 +151,7 @@ export default function MapperTrainingStepPage({
 
       if (response.data.success) {
         setSavedOsmUsername(osmUsername.trim());
+        setIsEditingOsm(false);
         setOsmSuccess('OSM username saved successfully! You can now proceed to the next step.');
         
         // Update local storage
@@ -286,52 +316,153 @@ export default function MapperTrainingStepPage({
                 <User className="w-6 h-6 text-[#3b82f6] flex-shrink-0" />
                 <div className="flex-1">
                   <h3 className="text-xl font-subheading font-bold text-white mb-2">
-                    Submit Your OSM Username
+                    OpenStreetMap Username
                   </h3>
-                  <p className="text-[#e5e5e5] text-sm mb-4">
-                    {savedOsmUsername 
-                      ? `Your saved OSM username: ${savedOsmUsername}` 
+                  <p className="text-[#e5e5e5] text-sm">
+                    {savedOsmUsername && !isEditingOsm
+                      ? 'Your OSM username has been saved. You can change it if needed.'
                       : 'Enter the OSM username you created above. This is required to continue to the next training step.'}
                   </p>
                 </div>
               </div>
 
-              <div className="space-y-4">
-                <div>
-                  <label htmlFor="osmUsername" className="block text-sm font-medium text-[#e5e5e5] mb-2">
-                    OpenStreetMap Username
-                  </label>
-                  <input
-                    type="text"
-                    id="osmUsername"
-                    value={osmUsername}
-                    onChange={(e) => setOsmUsername(e.target.value)}
-                    placeholder="Enter your OSM display name"
-                    className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#262626] rounded-lg text-white placeholder-[#a3a3a3] focus:ring-2 focus:ring-[#3b82f6] focus:border-transparent"
-                    disabled={isSavingOsm}
-                  />
+              {savedOsmUsername && !isEditingOsm ? (
+                // Show saved username with edit option
+                <div className="space-y-4">
+                  <div className="bg-[#22c55e]/10 border border-[#22c55e]/30 rounded-lg p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-[#22c55e]/20 flex items-center justify-center">
+                          <Check className="w-5 h-5 text-[#22c55e]" />
+                        </div>
+                        <div>
+                          <p className="text-sm text-[#a3a3a3] mb-1">Saved OSM Username</p>
+                          <p className="text-lg font-semibold text-white">{savedOsmUsername}</p>
+                          <a 
+                            href={`https://www.openstreetmap.org/user/${encodeURIComponent(savedOsmUsername)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-[#3b82f6] hover:text-[#2563eb] inline-flex items-center gap-1 mt-1"
+                          >
+                            View OSM Profile →
+                          </a>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => {
+                          setIsEditingOsm(true);
+                          setOsmError('');
+                          setOsmSuccess('');
+                        }}
+                        className="px-4 py-2 bg-[#262626] hover:bg-[#404040] text-white rounded-lg text-sm font-medium transition-colors"
+                      >
+                        Change Username
+                      </button>
+                    </div>
+                  </div>
                 </div>
-
-                {osmError && (
-                  <div className="bg-[#dc2626]/10 border border-[#dc2626]/30 rounded-lg p-3">
-                    <p className="text-sm text-red-400">{osmError}</p>
+              ) : (
+                // Show input form
+                <div className="space-y-4">
+                  <div>
+                    <label htmlFor="osmUsername" className="block text-sm font-medium text-[#e5e5e5] mb-2">
+                      OpenStreetMap Username
+                    </label>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        id="osmUsername"
+                        value={osmUsername}
+                        onChange={(e) => {
+                          setOsmUsername(e.target.value);
+                          setOsmVerificationStatus('none');
+                        }}
+                        onBlur={() => verifyOsmUsername(osmUsername)}
+                        placeholder="Enter your OSM display name"
+                        className="flex-1 px-4 py-3 bg-[#0a0a0a] border border-[#262626] rounded-lg text-white placeholder-[#a3a3a3] focus:ring-2 focus:ring-[#3b82f6] focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled={isSavingOsm || isVerifyingOsm}
+                      />
+                      <button
+                        onClick={() => verifyOsmUsername(osmUsername)}
+                        disabled={!osmUsername.trim() || isVerifyingOsm || isSavingOsm}
+                        className="px-4 py-3 bg-[#262626] hover:bg-[#404040] disabled:bg-[#1a1a1a] disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors"
+                      >
+                        {isVerifyingOsm ? 'Checking...' : 'Verify'}
+                      </button>
+                    </div>
+                    <p className="mt-2 text-xs text-[#a3a3a3]">
+                      We'll verify if this username exists on OpenStreetMap
+                    </p>
                   </div>
-                )}
 
-                {osmSuccess && (
-                  <div className="bg-[#22c55e]/10 border border-[#22c55e]/30 rounded-lg p-3">
-                    <p className="text-sm text-green-400">{osmSuccess}</p>
+                  {/* Verification Status */}
+                  {osmVerificationStatus === 'verified' && (
+                    <div className="bg-[#22c55e]/10 border border-[#22c55e]/30 rounded-lg p-3">
+                      <div className="flex items-center gap-2">
+                        <Check className="w-5 h-5 text-[#22c55e]" />
+                        <p className="text-sm text-green-400">✓ OSM account verified! This username exists on OpenStreetMap.</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {osmVerificationStatus === 'not-found' && (
+                    <div className="bg-[#dc2626]/10 border border-[#dc2626]/30 rounded-lg p-3">
+                      <div className="flex items-start gap-2">
+                        <AlertTriangle className="w-5 h-5 text-[#dc2626] flex-shrink-0 mt-0.5" />
+                        <div>
+                          <p className="text-sm text-red-400 mb-1">⚠ Username not found on OpenStreetMap</p>
+                          <p className="text-xs text-[#a3a3a3]">Please check the spelling or create an account at openstreetmap.org</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {osmVerificationStatus === 'error' && (
+                    <div className="bg-[#fbbf24]/10 border border-[#fbbf24]/30 rounded-lg p-3">
+                      <p className="text-sm text-yellow-400">⚠ Unable to verify at this time. You can still save your username.</p>
+                    </div>
+                  )}
+
+                  {osmError && (
+                    <div className="bg-[#dc2626]/10 border border-[#dc2626]/30 rounded-lg p-3">
+                      <p className="text-sm text-red-400">{osmError}</p>
+                    </div>
+                  )}
+
+                  {osmSuccess && (
+                    <div className="bg-[#22c55e]/10 border border-[#22c55e]/30 rounded-lg p-3">
+                      <div className="flex items-center gap-2">
+                        <Check className="w-5 h-5 text-[#22c55e]" />
+                        <p className="text-sm text-green-400">{osmSuccess}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex gap-3">
+                    <button
+                      onClick={saveOsmUsername}
+                      disabled={isSavingOsm || !osmUsername.trim()}
+                      className="flex-1 px-6 py-3 bg-[#3b82f6] hover:bg-[#2563eb] disabled:bg-[#262626] disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors"
+                    >
+                      {isSavingOsm ? 'Saving...' : savedOsmUsername ? 'Update OSM Username' : 'Save OSM Username'}
+                    </button>
+                    
+                    {savedOsmUsername && isEditingOsm && (
+                      <button
+                        onClick={() => {
+                          setIsEditingOsm(false);
+                          setOsmUsername(savedOsmUsername);
+                          setOsmError('');
+                          setOsmSuccess('');
+                        }}
+                        className="px-6 py-3 bg-[#262626] hover:bg-[#404040] text-white rounded-lg font-medium transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    )}
                   </div>
-                )}
-
-                <button
-                  onClick={saveOsmUsername}
-                  disabled={isSavingOsm || !osmUsername.trim()}
-                  className="w-full px-6 py-3 bg-[#3b82f6] hover:bg-[#2563eb] disabled:bg-[#262626] disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors"
-                >
-                  {isSavingOsm ? 'Saving...' : savedOsmUsername ? 'Update OSM Username' : 'Save OSM Username'}
-                </button>
-              </div>
+                </div>
+              )}
             </div>
           )}
 
