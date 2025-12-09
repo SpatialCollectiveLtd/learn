@@ -47,6 +47,7 @@ export async function GET(request: NextRequest) {
         yp.is_active,
         yp.created_at,
         yp.last_login,
+        yp.osm_username,
         sc.contract_id,
         sc.signed_at,
         CASE 
