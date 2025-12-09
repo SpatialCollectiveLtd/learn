@@ -368,28 +368,18 @@ export default function MapperTrainingStepPage({
                     <label htmlFor="osmUsername" className="block text-sm font-medium text-[#e5e5e5] mb-2">
                       OpenStreetMap Username
                     </label>
-                    <div className="flex gap-2">
-                      <input
-                        type="text"
-                        id="osmUsername"
-                        value={osmUsername}
-                        onChange={(e) => {
-                          setOsmUsername(e.target.value);
-                          setOsmVerificationStatus('none');
-                        }}
-                        onBlur={() => verifyOsmUsername(osmUsername)}
-                        placeholder="Enter your OSM display name"
-                        className="flex-1 px-4 py-3 bg-[#0a0a0a] border border-[#262626] rounded-lg text-white placeholder-[#a3a3a3] focus:ring-2 focus:ring-[#3b82f6] focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
-                        disabled={isSavingOsm || isVerifyingOsm}
-                      />
-                      <button
-                        onClick={() => verifyOsmUsername(osmUsername)}
-                        disabled={!osmUsername.trim() || isVerifyingOsm || isSavingOsm}
-                        className="px-4 py-3 bg-[#262626] hover:bg-[#404040] disabled:bg-[#1a1a1a] disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors"
-                      >
-                        {isVerifyingOsm ? 'Checking...' : 'Verify'}
-                      </button>
-                    </div>
+                    <input
+                      type="text"
+                      id="osmUsername"
+                      value={osmUsername}
+                      onChange={(e) => {
+                        setOsmUsername(e.target.value);
+                        setOsmVerificationStatus('none');
+                      }}
+                      placeholder="Enter your OSM display name"
+                      className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#262626] rounded-lg text-white placeholder-[#a3a3a3] focus:ring-2 focus:ring-[#3b82f6] focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                      disabled={isSavingOsm || isVerifyingOsm}
+                    />
                     <p className="mt-2 text-xs text-[#a3a3a3]">
                       We'll verify if this username exists on OpenStreetMap
                     </p>
@@ -440,11 +430,17 @@ export default function MapperTrainingStepPage({
 
                   <div className="flex gap-3">
                     <button
-                      onClick={saveOsmUsername}
-                      disabled={isSavingOsm || !osmUsername.trim()}
+                      onClick={async () => {
+                        await verifyOsmUsername(osmUsername);
+                        // Only save if verification succeeded or errored (allow saving on error)
+                        if (osmUsername.trim()) {
+                          await saveOsmUsername();
+                        }
+                      }}
+                      disabled={isSavingOsm || isVerifyingOsm || !osmUsername.trim()}
                       className="flex-1 px-6 py-3 bg-[#3b82f6] hover:bg-[#2563eb] disabled:bg-[#262626] disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors"
                     >
-                      {isSavingOsm ? 'Saving...' : savedOsmUsername ? 'Update OSM Username' : 'Save OSM Username'}
+                      {isSavingOsm || isVerifyingOsm ? 'Processing...' : savedOsmUsername ? 'Verify & Update' : 'Verify & Submit'}
                     </button>
                     
                     {savedOsmUsername && isEditingOsm && (
@@ -454,6 +450,7 @@ export default function MapperTrainingStepPage({
                           setOsmUsername(savedOsmUsername);
                           setOsmError('');
                           setOsmSuccess('');
+                          setOsmVerificationStatus('none');
                         }}
                         className="px-6 py-3 bg-[#262626] hover:bg-[#404040] text-white rounded-lg font-medium transition-colors"
                       >

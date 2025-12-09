@@ -70,12 +70,10 @@ export default function LoginPage() {
         localStorage.setItem('staffData', JSON.stringify(staff));
 
         // Route based on staff role
-        if (staff.role === 'trainer') {
-          router.push('/dashboard/trainer');
-        } else if (staff.role === 'admin') {
+        if (staff.role === 'admin') {
           router.push('/dashboard/admin');
         } else {
-          // superadmin
+          // trainer and superadmin go to /dashboard/staff
           router.push('/dashboard/staff');
         }
       }
