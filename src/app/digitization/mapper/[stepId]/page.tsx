@@ -54,6 +54,8 @@ export default function MapperTrainingStepPage({
   const { stepId } = use(params);
   const router = useRouter();
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
+  const [isStepLocked, setIsStepLocked] = useState(false);
+  const [isLoadingProgress, setIsLoadingProgress] = useState(true);
   const [osmUsername, setOsmUsername] = useState('');
   const [savedOsmUsername, setSavedOsmUsername] = useState('');
   const [isEditingOsm, setIsEditingOsm] = useState(false);
@@ -68,14 +70,50 @@ export default function MapperTrainingStepPage({
   const nextStep = getNextStep(currentStepId);
   const previousStep = getPreviousStep(currentStepId);
 
-  // Load completed steps and OSM username from localStorage/server
+  // Load completed steps from server and check if current step is locked
   useEffect(() => {
-    const saved = localStorage.getItem('mapper-completed-steps');
-    if (saved) {
-      setCompletedSteps(new Set(JSON.parse(saved)));
-    }
+    const fetchProgress = async () => {
+      const token = localStorage.getItem('youthToken');
+      if (!token) {
+        setIsLoadingProgress(false);
+        return;
+      }
 
-    // Fetch youth data to check for OSM username
+      try {
+        const response = await axios.get(`${API_URL}/api/youth/training-progress?module=mapper`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (response.data.success) {
+          const completed = new Set<number>(response.data.data.progress.mapper);
+          setCompletedSteps(completed);
+
+          // Check if this step is locked (previous step not completed)
+          if (currentStepId > 1 && !completed.has(currentStepId - 1)) {
+            setIsStepLocked(true);
+            // Auto-redirect to the last completed step + 1 or step 1
+            const lastCompleted = Math.max(...Array.from(completed), 0);
+            const nextAvailable = lastCompleted + 1;
+            
+            if (nextAvailable < currentStepId) {
+              setTimeout(() => {
+                router.push(`/digitization/mapper/${nextAvailable}`);
+              }, 2000);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching progress:', error);
+      } finally {
+        setIsLoadingProgress(false);
+      }
+    };
+
+    fetchProgress();
+  }, [currentStepId, router]);
+
+  // Fetch OSM username
+  useEffect(() => {
     const fetchOsmUsername = async () => {
       const token = localStorage.getItem('youthToken');
       const youthData = localStorage.getItem('youthData');
@@ -132,6 +170,12 @@ export default function MapperTrainingStepPage({
       return;
     }
 
+    // CRITICAL: Block saving if OSM username was not verified
+    if (osmVerificationStatus !== 'verified') {
+      setOsmError('You must verify your OSM username before saving. Please click the verify button.');
+      return;
+    }
+
     setIsSavingOsm(true);
     setOsmError('');
     setOsmSuccess('');
@@ -152,7 +196,7 @@ export default function MapperTrainingStepPage({
       if (response.data.success) {
         setSavedOsmUsername(osmUsername.trim());
         setIsEditingOsm(false);
-        setOsmSuccess('OSM username saved successfully! You can now proceed to the next step.');
+        setOsmSuccess('✓ OSM username saved successfully! You can now proceed to the next step.');
         
         // Update local storage
         const youthData = localStorage.getItem('youthData');
@@ -169,29 +213,115 @@ export default function MapperTrainingStepPage({
     }
   };
 
-  const markStepComplete = () => {
+  const markStepComplete = async () => {
     // For step 2, require OSM username before proceeding
     if (currentStepId === 2 && !savedOsmUsername) {
-      setOsmError('You must save your OSM username before proceeding to the next step.');
+      setOsmError('⚠ You must save your verified OSM username before completing this step.');
       window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
       return;
     }
 
-    const newCompleted = new Set(completedSteps);
-    newCompleted.add(currentStepId);
-    setCompletedSteps(newCompleted);
-    localStorage.setItem('mapper-completed-steps', JSON.stringify(Array.from(newCompleted)));
-    
-    // Auto-navigate to next step
-    if (nextStep) {
-      setTimeout(() => {
-        router.push(`/digitization/mapper/${nextStep.id}`);
-      }, 500);
+    try {
+      const token = localStorage.getItem('youthToken');
+      if (!token) {
+        alert('Authentication required. Please login again.');
+        router.push('/');
+        return;
+      }
+
+      // Mark step complete in database
+      const response = await axios.post(
+        `${API_URL}/api/youth/training-progress`,
+        { moduleType: 'mapper', stepId: currentStepId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (response.data.success) {
+        const newCompleted = new Set(completedSteps);
+        newCompleted.add(currentStepId);
+        setCompletedSteps(newCompleted);
+        
+        // Auto-navigate to next step
+        if (nextStep) {
+          setTimeout(() => {
+            router.push(`/digitization/mapper/${nextStep.id}`);
+          }, 500);
+        } else {
+          // All steps completed
+          setTimeout(() => {
+            router.push('/digitization');
+          }, 1000);
+        }
+      }
+    } catch (error: any) {
+      if (error.response?.status === 403) {
+        alert(error.response.data.message || 'You must complete previous steps first.');
+        if (error.response.data.missingStep) {
+          router.push(`/digitization/mapper/${error.response.data.missingStep}`);
+        }
+      } else {
+        console.error('Error marking step complete:', error);
+        alert('Failed to save progress. Please try again.');
+      }
     }
   };
 
   if (!currentStep) {
     return <div className="min-h-screen bg-black flex items-center justify-center text-white">Step not found</div>;
+  }
+
+  // Show locked state if step is not accessible
+  if (isLoadingProgress) {
+    return (
+      <main className="min-h-screen bg-black relative overflow-hidden">
+        <BackgroundBeams className="opacity-30" />
+        <FloatingHeader showBackButton backHref="/digitization" />
+        <div className="relative z-10 flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#dc2626] mx-auto mb-4"></div>
+            <p className="text-[#e5e5e5]">Loading training progress...</p>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  if (isStepLocked) {
+    const lastCompleted = Math.max(...Array.from(completedSteps), 0);
+    const requiredStep = currentStepId - 1;
+
+    return (
+      <main className="min-h-screen bg-black relative overflow-hidden">
+        <BackgroundBeams className="opacity-30" />
+        <FloatingHeader showBackButton backHref="/digitization" />
+        <div className="relative z-10 flex items-center justify-center min-h-screen px-4">
+          <div className="max-w-md w-full bg-[#0a0a0a] border border-[#dc2626]/30 rounded-xl p-8 text-center">
+            <div className="w-16 h-16 rounded-full bg-[#dc2626]/10 flex items-center justify-center mx-auto mb-4">
+              <AlertTriangle className="w-8 h-8 text-[#dc2626]" />
+            </div>
+            <h2 className="text-2xl font-heading font-bold text-white mb-3">Step Locked</h2>
+            <p className="text-[#e5e5e5] mb-6">
+              You must complete <span className="text-[#dc2626] font-semibold">Step {requiredStep}</span> before accessing this step. 
+              Training steps must be completed in order to ensure proper learning.
+            </p>
+            <div className="space-y-3">
+              <MovingBorderButton
+                onClick={() => router.push(`/digitization/mapper/${lastCompleted + 1}`)}
+                className="w-full"
+              >
+                Go to Next Available Step
+              </MovingBorderButton>
+              <button
+                onClick={() => router.push('/digitization')}
+                className="w-full px-4 py-3 bg-[#262626] hover:bg-[#404040] text-white rounded-lg transition-colors"
+              >
+                Back to Training Overview
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+    );
   }
 
   const progress = (currentStepId / mapperTrainingSteps.length) * 100;
@@ -431,16 +561,21 @@ export default function MapperTrainingStepPage({
                   <div className="flex gap-3">
                     <button
                       onClick={async () => {
+                        // First verify the username
                         await verifyOsmUsername(osmUsername);
-                        // Only save if verification succeeded or errored (allow saving on error)
-                        if (osmUsername.trim()) {
-                          await saveOsmUsername();
-                        }
                       }}
-                      disabled={isSavingOsm || isVerifyingOsm || !osmUsername.trim()}
+                      disabled={isVerifyingOsm || !osmUsername.trim()}
+                      className="flex-1 px-6 py-3 bg-[#fbbf24] hover:bg-[#f59e0b] disabled:bg-[#262626] disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors"
+                    >
+                      {isVerifyingOsm ? 'Verifying...' : 'Verify Username'}
+                    </button>
+                    
+                    <button
+                      onClick={saveOsmUsername}
+                      disabled={isSavingOsm || osmVerificationStatus !== 'verified'}
                       className="flex-1 px-6 py-3 bg-[#3b82f6] hover:bg-[#2563eb] disabled:bg-[#262626] disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors"
                     >
-                      {isSavingOsm || isVerifyingOsm ? 'Processing...' : savedOsmUsername ? 'Verify & Update' : 'Verify & Submit'}
+                      {isSavingOsm ? 'Saving...' : savedOsmUsername ? 'Update Username' : 'Save Username'}
                     </button>
                     
                     {savedOsmUsername && isEditingOsm && (
@@ -496,9 +631,12 @@ export default function MapperTrainingStepPage({
 
             <button
               onClick={markStepComplete}
+              disabled={currentStepId === 2 && !savedOsmUsername}
               className={`px-4 sm:px-6 py-3 rounded-lg font-medium transition-all text-sm sm:text-base whitespace-nowrap ${
                 completedSteps.has(currentStepId)
                   ? 'bg-[#22c55e] text-white'
+                  : (currentStepId === 2 && !savedOsmUsername)
+                  ? 'bg-[#262626] text-[#737373] cursor-not-allowed'
                   : 'bg-[#dc2626] text-white hover:bg-[#ef4444]'
               }`}
             >
@@ -513,21 +651,43 @@ export default function MapperTrainingStepPage({
             </button>
 
             {nextStep ? (
-              <MovingBorderButton
-                onClick={() => router.push(`/digitization/mapper/${nextStep.id}`)}
-                className="w-full sm:flex-1 sm:max-w-[180px]"
+              <button
+                onClick={() => {
+                  if (completedSteps.has(currentStepId)) {
+                    router.push(`/digitization/mapper/${nextStep.id}`);
+                  } else {
+                    alert('Please complete this step before proceeding to the next one.');
+                  }
+                }}
+                disabled={!completedSteps.has(currentStepId)}
+                className={`w-full sm:flex-1 sm:max-w-[180px] px-4 py-3 rounded-lg font-medium transition-all ${
+                  completedSteps.has(currentStepId)
+                    ? 'bg-gradient-to-r from-[#dc2626] to-[#ef4444] text-white hover:opacity-90'
+                    : 'bg-[#262626] text-[#737373] cursor-not-allowed'
+                } flex items-center justify-center gap-2`}
               >
                 <span>Next</span>
                 <ChevronRight className="w-4 h-4" />
-              </MovingBorderButton>
+              </button>
             ) : (
-              <MovingBorderButton
-                onClick={() => router.push('/digitization')}
-                className="w-full sm:flex-1 sm:max-w-[180px]"
+              <button
+                onClick={() => {
+                  if (completedSteps.has(currentStepId)) {
+                    router.push('/digitization');
+                  } else {
+                    alert('Please complete this step to finish the mapper training.');
+                  }
+                }}
+                disabled={!completedSteps.has(currentStepId)}
+                className={`w-full sm:flex-1 sm:max-w-[180px] px-4 py-3 rounded-lg font-medium transition-all ${
+                  completedSteps.has(currentStepId)
+                    ? 'bg-gradient-to-r from-[#dc2626] to-[#ef4444] text-white hover:opacity-90'
+                    : 'bg-[#262626] text-[#737373] cursor-not-allowed'
+                } flex items-center justify-center gap-2`}
               >
                 <span>Finish</span>
                 <Check className="w-4 h-4" />
-              </MovingBorderButton>
+              </button>
             )}
           </div>
         </div>

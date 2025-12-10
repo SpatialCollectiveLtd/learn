@@ -6,15 +6,42 @@ import { FloatingHeader } from "@/components/ui/floating-header";
 import Link from "next/link";
 import { IconPencil, IconCircleCheck, IconMap } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { CheckCircle2, Circle, Lock } from "lucide-react";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
 export default function DigitizationPage() {
   const [backHref, setBackHref] = useState("/");
+  const [mapperProgress, setMapperProgress] = useState<number[]>([]);
+  const [isYouth, setIsYouth] = useState(false);
 
   useEffect(() => {
     // Determine back button destination based on user type
     const userType = localStorage.getItem('userType');
     if (userType === 'youth') {
       setBackHref('/dashboard/youth');
+      setIsYouth(true);
+      
+      // Fetch training progress for youth
+      const fetchProgress = async () => {
+        const token = localStorage.getItem('youthToken');
+        if (!token) return;
+
+        try {
+          const response = await axios.get(`${API_URL}/api/youth/training-progress?module=mapper`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          if (response.data.success) {
+            setMapperProgress(response.data.data.progress.mapper);
+          }
+        } catch (error) {
+          console.error('Error fetching progress:', error);
+        }
+      };
+
+      fetchProgress();
     } else if (userType === 'staff') {
       setBackHref('/dashboard/staff');
     } else {
@@ -30,6 +57,8 @@ export default function DigitizationPage() {
       icon: <IconPencil className="w-16 h-16" />,
       image: "https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1287&auto=format&fit=crop",
       code: "MAP1",
+      totalSteps: 7,
+      completedSteps: isYouth ? mapperProgress.length : 0,
     },
     {
       title: "Validator",
@@ -38,6 +67,8 @@ export default function DigitizationPage() {
       icon: <IconCircleCheck className="w-16 h-16" />,
       image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1287&auto=format&fit=crop",
       code: "VAL2",
+      totalSteps: 7,
+      completedSteps: 0, // Validator is staff-only
     },
   ];
 
@@ -93,6 +124,17 @@ export default function DigitizationPage() {
                             }}
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                          
+                          {/* Progress Badge */}
+                          {isYouth && role.completedSteps > 0 && (
+                            <div className="absolute top-2 right-2 bg-[#22c55e]/90 backdrop-blur-sm px-2 py-1 rounded-md flex items-center gap-1" style={{ transform: "translateZ(100px)" }}>
+                              <CheckCircle2 className="w-3 h-3 text-white" />
+                              <span className="text-[10px] font-semibold text-white">
+                                {role.completedSteps}/{role.totalSteps}
+                              </span>
+                            </div>
+                          )}
+                          
                           <div className="absolute bottom-2 left-2 right-2 md:bottom-3 md:left-3 md:right-3" style={{ transform: "translateZ(75px)" }}>
                             <div className="flex items-center gap-1.5 mb-1.5">
                               <div className="text-[#dc2626] scale-75 md:scale-100">{role.icon}</div>
@@ -103,6 +145,16 @@ export default function DigitizationPage() {
                             <p className="text-gray-300 text-[10px] md:text-xs line-clamp-2">
                               {role.description}
                             </p>
+                            
+                            {/* Progress Bar */}
+                            {isYouth && role.completedSteps > 0 && (
+                              <div className="mt-2 w-full bg-[#262626] rounded-full h-1.5 overflow-hidden">
+                                <div 
+                                  className="bg-[#22c55e] h-full transition-all duration-500"
+                                  style={{ width: `${(role.completedSteps / role.totalSteps) * 100}%` }}
+                                />
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
