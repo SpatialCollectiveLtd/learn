@@ -3,6 +3,7 @@
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import { CometCard } from "@/components/ui/comet-card";
 import { FloatingHeader } from "@/components/ui/floating-header";
+import { OsmUsernameNotification } from "@/components/notifications/OsmUsernameNotification";
 import Link from "next/link";
 import { IconPencil, IconCircleCheck, IconMap } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
@@ -170,6 +171,9 @@ export default function DigitizationPage() {
           </div>
         </section>
       </div>
+
+      {/* OSM Username Notification */}
+      <OsmUsernameNotification />
     </main>
   );
 }

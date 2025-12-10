@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import { CometCard } from "@/components/ui/comet-card";
+import { OsmUsernameNotification } from "@/components/notifications/OsmUsernameNotification";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { User, LogOut, CheckCircle2, FileText, Map, Smartphone, Home, CheckSquare, Lock } from "lucide-react";
@@ -298,6 +299,9 @@ export default function YouthDashboard() {
           </div>
         </footer>
       </div>
+
+      {/* OSM Username Notification */}
+      <OsmUsernameNotification />
     </main>
   );
 }
