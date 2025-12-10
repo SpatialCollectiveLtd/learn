@@ -164,39 +164,63 @@ export default function MapperTrainingStepPage({
     }
   };
 
-  const saveOsmUsername = async () => {
+  const verifyAndSaveOsmUsername = async () => {
     if (!osmUsername.trim()) {
       setOsmError('Please enter your OSM username');
       return;
     }
 
-    // CRITICAL: Block saving if OSM username was not verified
-    if (osmVerificationStatus !== 'verified') {
-      setOsmError('You must verify your OSM username before saving. Please click the verify button.');
-      return;
-    }
-
     setIsSavingOsm(true);
+    setIsVerifyingOsm(true);
     setOsmError('');
     setOsmSuccess('');
+    setOsmVerificationStatus('none');
 
     try {
+      // Step 1: Verify the username exists on OSM
+      const verifyResponse = await axios.get(`${API_URL}/api/osm/verify-username?username=${encodeURIComponent(osmUsername.trim())}`);
+      
+      if (verifyResponse.data.success) {
+        if (verifyResponse.data.exists === false) {
+          // Username not found on OSM
+          setOsmVerificationStatus('not-found');
+          setOsmError('⚠ This username was not found on OpenStreetMap. Please check the spelling or create an account at openstreetmap.org first.');
+          setIsSavingOsm(false);
+          setIsVerifyingOsm(false);
+          return;
+        } else if (verifyResponse.data.exists === null) {
+          // Couldn't verify (network issue)
+          setOsmVerificationStatus('error');
+          setOsmError('⚠ Unable to verify your username at this time. Please check your internet connection and try again.');
+          setIsSavingOsm(false);
+          setIsVerifyingOsm(false);
+          return;
+        }
+        
+        // Username verified! Proceed to save
+        setOsmVerificationStatus('verified');
+      }
+
+      setIsVerifyingOsm(false);
+
+      // Step 2: Save the verified username
       const token = localStorage.getItem('youthToken');
       if (!token) {
         setOsmError('Authentication required. Please login again.');
+        setIsSavingOsm(false);
         return;
       }
 
-      const response = await axios.put(
+      const saveResponse = await axios.put(
         `${API_URL}/api/youth/update-osm-username`,
         { osmUsername: osmUsername.trim() },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      if (response.data.success) {
+      if (saveResponse.data.success) {
         setSavedOsmUsername(osmUsername.trim());
         setIsEditingOsm(false);
-        setOsmSuccess('✓ OSM username saved successfully! You can now proceed to the next step.');
+        setOsmSuccess('✓ OSM username verified and saved successfully! You can now proceed to the next step.');
         
         // Update local storage
         const youthData = localStorage.getItem('youthData');
@@ -208,8 +232,10 @@ export default function MapperTrainingStepPage({
       }
     } catch (error: any) {
       setOsmError(error.response?.data?.message || 'Failed to save OSM username. Please try again.');
+      setOsmVerificationStatus('error');
     } finally {
       setIsSavingOsm(false);
+      setIsVerifyingOsm(false);
     }
   };
 
@@ -498,6 +524,21 @@ export default function MapperTrainingStepPage({
                     <label htmlFor="osmUsername" className="block text-sm font-medium text-[#e5e5e5] mb-2">
                       OpenStreetMap Username
                     </label>
+                    
+                    {/* Instructions on how to find OSM username */}
+                    <div className="mb-3 bg-[#3b82f6]/10 border border-[#3b82f6]/30 rounded-lg p-3">
+                      <p className="text-xs text-[#e5e5e5] mb-2">
+                        <strong>How to find your OSM username:</strong>
+                      </p>
+                      <ol className="text-xs text-[#a3a3a3] space-y-1 list-decimal list-inside">
+                        <li>Go to <a href="https://www.openstreetmap.org" target="_blank" rel="noopener noreferrer" className="text-[#3b82f6] hover:underline">openstreetmap.org</a> and login</li>
+                        <li>Click on your profile icon (top right corner)</li>
+                        <li>Click "My Profile"</li>
+                        <li>Your username is the <strong className="text-white">last part of the URL</strong> in your browser</li>
+                        <li>Example: openstreetmap.org/user/<strong className="text-[#22c55e]">YourUsername</strong></li>
+                      </ol>
+                    </div>
+                    
                     <input
                       type="text"
                       id="osmUsername"
@@ -505,13 +546,15 @@ export default function MapperTrainingStepPage({
                       onChange={(e) => {
                         setOsmUsername(e.target.value);
                         setOsmVerificationStatus('none');
+                        setOsmError('');
+                        setOsmSuccess('');
                       }}
-                      placeholder="Enter your OSM display name"
+                      placeholder="Enter your OSM username exactly as shown in the URL"
                       className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#262626] rounded-lg text-white placeholder-[#a3a3a3] focus:ring-2 focus:ring-[#3b82f6] focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                       disabled={isSavingOsm || isVerifyingOsm}
                     />
                     <p className="mt-2 text-xs text-[#a3a3a3]">
-                      We'll verify if this username exists on OpenStreetMap
+                      We'll verify this username exists on OpenStreetMap before saving
                     </p>
                   </div>
 
@@ -539,7 +582,7 @@ export default function MapperTrainingStepPage({
 
                   {osmVerificationStatus === 'error' && (
                     <div className="bg-[#fbbf24]/10 border border-[#fbbf24]/30 rounded-lg p-3">
-                      <p className="text-sm text-yellow-400">⚠ Unable to verify at this time. You can still save your username.</p>
+                      <p className="text-sm text-yellow-400">⚠ Unable to verify at this time. Please check your connection and try again.</p>
                     </div>
                   )}
 
@@ -560,22 +603,18 @@ export default function MapperTrainingStepPage({
 
                   <div className="flex gap-3">
                     <button
-                      onClick={async () => {
-                        // First verify the username
-                        await verifyOsmUsername(osmUsername);
-                      }}
-                      disabled={isVerifyingOsm || !osmUsername.trim()}
-                      className="flex-1 px-6 py-3 bg-[#fbbf24] hover:bg-[#f59e0b] disabled:bg-[#262626] disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors"
-                    >
-                      {isVerifyingOsm ? 'Verifying...' : 'Verify Username'}
-                    </button>
-                    
-                    <button
-                      onClick={saveOsmUsername}
-                      disabled={isSavingOsm || osmVerificationStatus !== 'verified'}
+                      onClick={verifyAndSaveOsmUsername}
+                      disabled={isSavingOsm || isVerifyingOsm || !osmUsername.trim()}
                       className="flex-1 px-6 py-3 bg-[#3b82f6] hover:bg-[#2563eb] disabled:bg-[#262626] disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors"
                     >
-                      {isSavingOsm ? 'Saving...' : savedOsmUsername ? 'Update Username' : 'Save Username'}
+                      {isSavingOsm || isVerifyingOsm ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          {isVerifyingOsm && !isSavingOsm ? 'Verifying...' : 'Saving...'}
+                        </span>
+                      ) : (
+                        savedOsmUsername ? 'Verify & Update' : 'Verify & Submit'
+                      )}
                     </button>
                     
                     {savedOsmUsername && isEditingOsm && (
