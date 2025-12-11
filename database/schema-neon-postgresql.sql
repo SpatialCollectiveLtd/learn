@@ -44,6 +44,8 @@ CREATE TABLE IF NOT EXISTS youth_participants (
   email VARCHAR(255),
   phone_number VARCHAR(50),
   program_type VARCHAR(50) NOT NULL CHECK (program_type IN ('digitization', 'mobile_mapping', 'household_survey', 'microtasking')),
+  settlement VARCHAR(100),
+  osm_username VARCHAR(255),
   is_active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -53,6 +55,8 @@ CREATE TABLE IF NOT EXISTS youth_participants (
 CREATE INDEX IF NOT EXISTS idx_youth_email ON youth_participants(email);
 CREATE INDEX IF NOT EXISTS idx_youth_program ON youth_participants(program_type);
 CREATE INDEX IF NOT EXISTS idx_youth_active ON youth_participants(is_active);
+CREATE INDEX IF NOT EXISTS idx_youth_settlement ON youth_participants(settlement);
+CREATE INDEX IF NOT EXISTS idx_youth_osm_username ON youth_participants(osm_username);
 
 -- ============================================
 -- CONTRACT TEMPLATES TABLE
