@@ -12,8 +12,9 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 interface YouthParticipant {
   youth_id: string;
   full_name: string;
-  email: string;
+  email: string | null;
   program_type: string;
+  settlement?: string | null;
   osm_username?: string | null;
   is_active: boolean;
   has_signed_contract: boolean;
@@ -198,7 +199,9 @@ export default function AdminDashboard() {
       filtered = filtered.filter(y =>
         y.full_name.toLowerCase().includes(query) ||
         y.youth_id.toLowerCase().includes(query) ||
-        y.email.toLowerCase().includes(query)
+        (y.email && y.email.toLowerCase().includes(query)) ||
+        (y.osm_username && y.osm_username.toLowerCase().includes(query)) ||
+        (y.settlement && y.settlement.toLowerCase().includes(query))
       );
     }
 
@@ -421,6 +424,9 @@ export default function AdminDashboard() {
                     Email
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-[#a3a3a3] uppercase tracking-wider">
+                    Settlement
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-[#a3a3a3] uppercase tracking-wider">
                     Program
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-[#a3a3a3] uppercase tracking-wider">
@@ -437,7 +443,7 @@ export default function AdminDashboard() {
               <tbody className="divide-y divide-[#2a2a2a]">
                 {currentItems.length === 0 ? (
                   <tr>
-                    <td colSpan={8} className="px-6 py-12 text-center text-[#a3a3a3]">
+                    <td colSpan={9} className="px-6 py-12 text-center text-[#a3a3a3]">
                       {searchQuery ? 'No participants match your search' : 'No participants found'}
                     </td>
                   </tr>
@@ -460,7 +466,10 @@ export default function AdminDashboard() {
                         {participant.full_name}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-[#a3a3a3]">
-                        {participant.email}
+                        {participant.email || <span className="italic">Not set</span>}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-[#e5e5e5]">
+                        {participant.settlement || <span className="text-[#a3a3a3] italic">Not set</span>}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-600 bg-opacity-20 text-blue-400">

@@ -44,6 +44,7 @@ export async function GET(request: NextRequest) {
         yp.email,
         yp.phone_number,
         yp.program_type,
+        yp.settlement,
         yp.is_active,
         yp.created_at,
         yp.last_login,
