@@ -218,17 +218,33 @@ export default function MapperTrainingStepPage({
       );
 
       if (saveResponse.data.success) {
-        setSavedOsmUsername(osmUsername.trim());
+        const savedUsername = osmUsername.trim();
+        setSavedOsmUsername(savedUsername);
+        setOsmUsername(savedUsername);
         setIsEditingOsm(false);
+        setOsmVerificationStatus('verified');
         setOsmSuccess('✓ OSM username verified and saved successfully! You can now proceed to the next step.');
         
         // Update local storage
         const youthData = localStorage.getItem('youthData');
         if (youthData) {
           const youth = JSON.parse(youthData);
-          youth.osmUsername = osmUsername.trim();
+          youth.osmUsername = savedUsername;
           localStorage.setItem('youthData', JSON.stringify(youth));
         }
+        
+        // Scroll to success message
+        setTimeout(() => {
+          const successElement = document.querySelector('.bg-gradient-to-r');
+          if (successElement) {
+            successElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }, 100);
+
+        // Auto-dismiss success banner after 10 seconds
+        setTimeout(() => {
+          setOsmSuccess('');
+        }, 10000);
       }
     } catch (error: any) {
       setOsmError(error.response?.data?.message || 'Failed to save OSM username. Please try again.');
@@ -473,10 +489,16 @@ export default function MapperTrainingStepPage({
                 <div className="flex-1">
                   <h3 className="text-xl font-subheading font-bold text-white mb-2">
                     OpenStreetMap Username
+                    {savedOsmUsername && !isEditingOsm && (
+                      <span className="ml-2 inline-flex items-center gap-1 px-2 py-0.5 bg-[#22c55e]/20 text-[#22c55e] text-xs rounded-full">
+                        <Check className="w-3 h-3" />
+                        Saved
+                      </span>
+                    )}
                   </h3>
                   <p className="text-[#e5e5e5] text-sm">
                     {savedOsmUsername && !isEditingOsm
-                      ? 'Your OSM username has been saved. You can change it if needed.'
+                      ? '✓ Your OSM username has been verified and saved. You can now proceed to complete this step.'
                       : 'Enter the OSM username you created above. This is required to continue to the next training step.'}
                   </p>
                 </div>
@@ -492,7 +514,7 @@ export default function MapperTrainingStepPage({
                           <Check className="w-5 h-5 text-[#22c55e]" />
                         </div>
                         <div>
-                          <p className="text-sm text-[#a3a3a3] mb-1">Saved OSM Username</p>
+                          <p className="text-sm text-[#a3a3a3] mb-1">✓ Saved OSM Username</p>
                           <p className="text-lg font-semibold text-white">{savedOsmUsername}</p>
                           <a 
                             href={`https://www.openstreetmap.org/user/${encodeURIComponent(savedOsmUsername)}`}
@@ -515,6 +537,13 @@ export default function MapperTrainingStepPage({
                         Change Username
                       </button>
                     </div>
+                  </div>
+                  
+                  {/* Helpful reminder */}
+                  <div className="bg-[#3b82f6]/10 border border-[#3b82f6]/30 rounded-lg p-3">
+                    <p className="text-sm text-[#e5e5e5]">
+                      <strong>Ready to continue?</strong> Scroll down and click <strong className="text-[#22c55e]">"Mark as Complete"</strong> to proceed to the next step.
+                    </p>
                   </div>
                 </div>
               ) : (
