@@ -554,6 +554,19 @@ export default function MapperTrainingStepPage({
                       OpenStreetMap Username
                     </label>
                     
+                    {/* Important notice about usernames */}
+                    <div className="mb-3 bg-[#f59e0b]/10 border border-[#f59e0b]/30 rounded-lg p-3">
+                      <p className="text-sm font-semibold text-[#f59e0b] mb-2">⚠️ Important: No Spaces Allowed</p>
+                      <p className="text-xs text-[#e5e5e5] mb-2">
+                        OSM usernames <strong>cannot contain spaces</strong>. If your username has spaces (e.g., "John Doe"), you need to fix it first:
+                      </p>
+                      <ol className="text-xs text-[#a3a3a3] space-y-1 list-decimal list-inside mb-2">
+                        <li>Go to your OSM profile settings</li>
+                        <li>Change your username to remove spaces (e.g., "JohnDoe" or "John_Doe")</li>
+                        <li>Then copy your new username and paste it here</li>
+                      </ol>
+                    </div>
+                    
                     {/* Instructions on how to find OSM username */}
                     <div className="mb-3 bg-[#3b82f6]/10 border border-[#3b82f6]/30 rounded-lg p-3">
                       <p className="text-xs text-[#e5e5e5] mb-2">
