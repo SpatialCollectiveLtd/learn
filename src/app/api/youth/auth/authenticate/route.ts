@@ -36,9 +36,9 @@ export async function POST(request: NextRequest) {
     // Normalize youth ID to uppercase for case-insensitive matching
     const normalizedYouthId = youthId.toUpperCase().trim();
 
-    // Validate format: KAY, KAR, or MJI followed by alphanumeric characters
-    // Supports formats like: KAY1278MK, KAR001, MJI123
-    const youthIdPattern = /^(KAY|KAR|MJI)[A-Z0-9]+$/i;
+    // Validate format: KAY (Kayole), KAR (Kariobangi), HUR (Mji wa Huruma) followed by alphanumeric characters
+    // Supports formats like: KAY1278MK, KAR119BN, HUR728CM
+    const youthIdPattern = /^(KAY|KAR|HUR)[A-Z0-9]+$/i;
     if (!youthIdPattern.test(normalizedYouthId)) {
       console.log('[AUTH] Invalid format:', youthId);
       const clientIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
