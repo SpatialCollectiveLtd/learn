@@ -16,6 +16,10 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // Normalize username - trim whitespace
+    // OSM allows usernames with spaces, which appear as %20 in URLs
+    const normalizedUsername = username.trim();
+
     // Call OSM API to verify user exists
     // OSM API endpoint: https://api.openstreetmap.org/api/0.6/user/{username}
     // Note: This requires the username to be the display name or ID
@@ -37,8 +41,9 @@ export async function GET(request: NextRequest) {
       );
 
       // Alternative: Check if user profile page exists
+      // encodeURIComponent handles spaces correctly (converts to %20)
       const profileCheck = await fetch(
-        `https://www.openstreetmap.org/user/${encodeURIComponent(username)}`,
+        `https://www.openstreetmap.org/user/${encodeURIComponent(normalizedUsername)}`,
         {
           method: 'HEAD',
           headers: {
@@ -52,8 +57,8 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({
           success: true,
           exists: true,
-          username: username,
-          profileUrl: `https://www.openstreetmap.org/user/${encodeURIComponent(username)}`,
+          username: normalizedUsername,
+          profileUrl: `https://www.openstreetmap.org/user/${encodeURIComponent(normalizedUsername)}`,
           message: 'OSM account verified successfully',
         });
       } else if (profileCheck.status === 404) {
@@ -61,7 +66,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({
           success: true,
           exists: false,
-          username: username,
+          username: normalizedUsername,
           message: 'OSM username not found. Please check the spelling or create an account at openstreetmap.org',
         });
       } else {
@@ -69,7 +74,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({
           success: true,
           exists: null,
-          username: username,
+          username: normalizedUsername,
           message: 'Unable to verify OSM account at this time. You can still save your username.',
         });
       }
@@ -79,7 +84,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({
         success: true,
         exists: null,
-        username: username,
+        username: normalizedUsername,
         message: 'Unable to verify OSM account at this time. You can still save your username.',
       });
     }
