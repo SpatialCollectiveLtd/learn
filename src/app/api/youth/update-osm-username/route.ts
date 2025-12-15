@@ -39,11 +39,12 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Validate OSM username format (alphanumeric, underscores, hyphens)
-    const osmUsernamePattern = /^[a-zA-Z0-9_-]+$/;
+    // Validate OSM username format (alphanumeric, underscores, hyphens, and spaces)
+    // OSM allows usernames with spaces, which appear as %20 in URLs
+    const osmUsernamePattern = /^[a-zA-Z0-9_\- ]+$/;
     if (!osmUsernamePattern.test(osmUsername.trim())) {
       return NextResponse.json(
-        { success: false, message: 'Invalid OSM username format. Use only letters, numbers, underscores, and hyphens.' },
+        { success: false, message: 'Invalid OSM username format. Use only letters, numbers, underscores, hyphens, and spaces.' },
         { status: 400 }
       );
     }
