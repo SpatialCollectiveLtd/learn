@@ -112,22 +112,36 @@ export default function MapperTrainingStepPage({
     fetchProgress();
   }, [currentStepId, router]);
 
-  // Fetch OSM username
+  // Fetch OSM username on component mount
   useEffect(() => {
     const fetchOsmUsername = async () => {
       const token = localStorage.getItem('youthToken');
       const youthData = localStorage.getItem('youthData');
       
-      if (token && youthData) {
+      if (token) {
         try {
-          const youth = JSON.parse(youthData);
           const response = await axios.get(`${API_URL}/api/youth/profile`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           
-          if (response.data.success && response.data.data.osm_username) {
-            setSavedOsmUsername(response.data.data.osm_username);
-            setOsmUsername(response.data.data.osm_username);
+          // Check for osmUsername (API returns camelCase)
+          if (response.data.success && response.data.data.osmUsername) {
+            const username = response.data.data.osmUsername;
+            setSavedOsmUsername(username);
+            setOsmUsername(username);
+            setOsmVerificationStatus('verified');
+            setIsEditingOsm(false); // Ensure we're not in edit mode
+            
+            // Update localStorage with OSM username
+            if (youthData) {
+              const youth = JSON.parse(youthData);
+              youth.osmUsername = username;
+              localStorage.setItem('youthData', JSON.stringify(youth));
+            }
+            
+            console.log('✓ Loaded saved OSM username:', username);
+          } else {
+            console.log('No saved OSM username found');
           }
         } catch (error) {
           console.error('Error fetching OSM username:', error);
