@@ -191,18 +191,22 @@ export default function MapperTrainingStepPage({
     setOsmVerificationStatus('none');
 
     try {
-      // Normalize username: trim and replace spaces with underscores for better UX
+      // Normalize username: trim whitespace
       // OSM displays usernames with spaces as %20 in URLs, but we'll store them with spaces
       const normalizedUsername = osmUsername.trim();
       
+      console.log('Verifying OSM username:', normalizedUsername);
+      
       // Step 1: Verify the username exists on OSM
       const verifyResponse = await axios.get(`${API_URL}/api/osm/verify-username?username=${encodeURIComponent(normalizedUsername)}`);
+      
+      console.log('Verification response:', verifyResponse.data);
       
       if (verifyResponse.data.success) {
         if (verifyResponse.data.exists === false) {
           // Username not found on OSM
           setOsmVerificationStatus('not-found');
-          setOsmError('⚠ This username was not found on OpenStreetMap. Please check the spelling or create an account at openstreetmap.org first.');
+          setOsmError(`⚠ This username was not found on OpenStreetMap. Please check the spelling (including capital letters) or create an account at openstreetmap.org first. Tried: "${normalizedUsername}"`);
           setIsSavingOsm(false);
           setIsVerifyingOsm(false);
           return;
@@ -574,13 +578,18 @@ export default function MapperTrainingStepPage({
                     
                     {/* Helpful notice about usernames */}
                     <div className="mb-3 bg-[#3b82f6]/10 border border-[#3b82f6]/30 rounded-lg p-3">
-                      <p className="text-sm font-semibold text-[#3b82f6] mb-2">💡 Tip: Usernames with Spaces</p>
-                      <p className="text-xs text-[#e5e5e5] mb-2">
-                        If your OSM username has spaces (e.g., "John Doe"), you can enter it exactly as it appears. We'll handle it automatically!
-                      </p>
-                      <p className="text-xs text-[#a3a3a3]">
-                        On OpenStreetMap, usernames with spaces appear as "John%20Doe" in URLs, but you can just type "John Doe" here.
-                      </p>
+                      <p className="text-sm font-semibold text-[#3b82f6] mb-2">💡 Important Tips</p>
+                      <ul className="text-xs text-[#e5e5e5] space-y-2">
+                        <li>
+                          <strong>Spaces are OK:</strong> If your OSM username has spaces (e.g., "Jeremiah james"), you can enter it exactly as it appears. We'll handle it automatically!
+                        </li>
+                        <li>
+                          <strong>Case matters:</strong> Enter your username with the exact capitalization (e.g., "Jeremiah james" not "Jeremiah James").
+                        </li>
+                        <li className="text-[#a3a3a3]">
+                          On OpenStreetMap URLs, spaces appear as "%20" but you should type the actual space.
+                        </li>
+                      </ul>
                     </div>
                     
                     {/* Instructions on how to find OSM username */}
