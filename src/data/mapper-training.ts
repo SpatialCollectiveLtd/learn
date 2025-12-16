@@ -7,7 +7,7 @@ export interface TrainingStep {
   content: {
     introduction: string;
     mainContent: Array<{
-      type: 'text' | 'list' | 'warning' | 'tip' | 'code' | 'image';
+      type: 'text' | 'list' | 'warning' | 'tip' | 'code' | 'image' | 'dynamic-project';
       content: string | string[];
       title?: string;
       imageAlt?: string;
