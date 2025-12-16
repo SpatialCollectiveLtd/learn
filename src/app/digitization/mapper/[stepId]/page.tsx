@@ -38,7 +38,12 @@ function getProjectUrlForYouth(youthId: string): string | null {
     return 'https://tasks.hotosm.org/projects/38055/';
   }
   
-  // Other settlements (KAY) - project not yet assigned
+  if (prefix === 'KAY') {
+    // Kayole Soweto
+    return 'https://tasks.hotosm.org/projects/38056/';
+  }
+  
+  // No project assigned for this settlement
   return null;
 }
 
