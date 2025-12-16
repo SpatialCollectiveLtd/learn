@@ -22,6 +22,21 @@ import { mapperTrainingSteps, getStepById, getNextStep, getPreviousStep } from "
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
+// Get project URL based on youth ID prefix (settlement)
+function getProjectUrlForYouth(youthId: string): string | null {
+  if (!youthId) return null;
+  
+  const prefix = youthId.substring(0, 3).toUpperCase();
+  
+  if (prefix === 'KAR') {
+    // Kariobangi Machakos
+    return 'https://tasks.hotosm.org/projects/38022/';
+  }
+  
+  // Other settlements (KAY, HUR) - project not yet assigned
+  return null;
+}
+
 // Function to make URLs clickable
 function renderTextWithLinks(text: string) {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -64,6 +79,7 @@ export default function MapperTrainingStepPage({
   const [osmError, setOsmError] = useState('');
   const [osmSuccess, setOsmSuccess] = useState('');
   const [osmVerificationStatus, setOsmVerificationStatus] = useState<'none' | 'verified' | 'not-found' | 'error'>('none');
+  const [youthId, setYouthId] = useState<string>('');
   
   const currentStepId = parseInt(stepId);
   const currentStep = getStepById(currentStepId);
@@ -112,7 +128,7 @@ export default function MapperTrainingStepPage({
     fetchProgress();
   }, [currentStepId, router]);
 
-  // Fetch OSM username on component mount
+  // Fetch OSM username and youth ID on component mount
   useEffect(() => {
     const fetchOsmUsername = async () => {
       const token = localStorage.getItem('youthToken');
@@ -123,6 +139,11 @@ export default function MapperTrainingStepPage({
           const response = await axios.get(`${API_URL}/api/youth/profile`, {
             headers: { Authorization: `Bearer ${token}` },
           });
+          
+          // Set youth ID for settlement-based content
+          if (response.data.success && response.data.data.youthId) {
+            setYouthId(response.data.data.youthId);
+          }
           
           // Check for osmUsername (API returns camelCase)
           if (response.data.success && response.data.data.osmUsername) {
@@ -458,6 +479,78 @@ export default function MapperTrainingStepPage({
                         </li>
                       ))}
                     </ul>
+                  </div>
+                )}
+
+                {block.type === 'dynamic-project' && (
+                  <div className="bg-[#0a0a0a] border border-[#262626] rounded-xl p-4 sm:p-6">
+                    {block.title && (
+                      <h3 className="text-lg sm:text-xl font-subheading font-bold text-white mb-3 sm:mb-4">
+                        {block.title}
+                      </h3>
+                    )}
+                    {(() => {
+                      const projectUrl = getProjectUrlForYouth(youthId);
+                      
+                      if (projectUrl) {
+                        // Show project link for assigned settlements
+                        return (
+                          <ul className="space-y-2 sm:space-y-3">
+                            <li className="flex items-start gap-2 sm:gap-3 text-[#e5e5e5] text-sm sm:text-base">
+                              <Check className="w-4 h-4 sm:w-5 sm:h-5 text-[#dc2626] flex-shrink-0 mt-0.5" />
+                              <span className="break-words">
+                                Visit the project page: <a
+                                  href={projectUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-blue-400 hover:text-blue-300 underline inline-flex items-center gap-1 break-all"
+                                >
+                                  <span className="break-all">{projectUrl}</span>
+                                  <ExternalLink className="w-3 h-3 flex-shrink-0" />
+                                </a>
+                              </span>
+                            </li>
+                            <li className="flex items-start gap-2 sm:gap-3 text-[#e5e5e5] text-sm sm:text-base">
+                              <Check className="w-4 h-4 sm:w-5 sm:h-5 text-[#dc2626] flex-shrink-0 mt-0.5" />
+                              <span className="break-words">Click the link above to open the project in a new tab</span>
+                            </li>
+                            <li className="flex items-start gap-2 sm:gap-3 text-[#e5e5e5] text-sm sm:text-base">
+                              <Check className="w-4 h-4 sm:w-5 sm:h-5 text-[#dc2626] flex-shrink-0 mt-0.5" />
+                              <span className="break-words">Review the project instructions carefully</span>
+                            </li>
+                            <li className="flex items-start gap-2 sm:gap-3 text-[#e5e5e5] text-sm sm:text-base">
+                              <Check className="w-4 h-4 sm:w-5 sm:h-5 text-[#dc2626] flex-shrink-0 mt-0.5" />
+                              <span className="break-words">Familiarize yourself with the mapping area</span>
+                            </li>
+                            <li className="flex items-start gap-2 sm:gap-3 text-[#e5e5e5] text-sm sm:text-base">
+                              <Check className="w-4 h-4 sm:w-5 sm:h-5 text-[#dc2626] flex-shrink-0 mt-0.5" />
+                              <span className="break-words">Note the specific features you'll be mapping (buildings, roads, etc.)</span>
+                            </li>
+                            <li className="flex items-start gap-2 sm:gap-3 text-[#e5e5e5] text-sm sm:text-base">
+                              <Check className="w-4 h-4 sm:w-5 sm:h-5 text-[#dc2626] flex-shrink-0 mt-0.5" />
+                              <span className="break-words">Bookmark this project page for easy access during your mapping sessions</span>
+                            </li>
+                          </ul>
+                        );
+                      } else {
+                        // Show coming soon message for settlements without assigned projects
+                        return (
+                          <div className="bg-[#f59e0b]/10 border border-[#f59e0b]/30 rounded-lg p-4">
+                            <div className="flex items-start gap-3">
+                              <Clock className="w-5 h-5 text-[#f59e0b] flex-shrink-0 mt-0.5" />
+                              <div>
+                                <p className="text-[#f59e0b] font-semibold mb-2">Project Assignment Coming Soon</p>
+                                <p className="text-[#e5e5e5] text-sm">
+                                  Your settlement-specific HOT Tasking Manager project is currently being prepared. 
+                                  You will be notified once your project has been assigned and you can begin mapping. 
+                                  Please check back later or contact your training coordinator for updates.
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      }
+                    })()}
                   </div>
                 )}
 

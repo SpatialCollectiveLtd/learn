@@ -192,19 +192,12 @@ export const mapperTrainingSteps: TrainingStep[] = [
         {
           type: 'text',
           title: "Your Training Project",
-          content: "For this training program, you will be working on a specific HOT Tasking Manager project. This project has been selected for its appropriate difficulty level and clear mapping requirements."
+          content: "For this training program, you will be working on a specific HOT Tasking Manager project. This project has been selected for your settlement's mapping area with appropriate difficulty level and clear requirements."
         },
         {
-          type: 'list',
+          type: 'dynamic-project',
           title: "Access Your Training Project",
-          content: [
-            "Visit the project page: https://tasks.hotosm.org/projects/37527/",
-            "Click the link above to open the project in a new tab",
-            "Review the project instructions carefully",
-            "Familiarize yourself with the mapping area",
-            "Note the specific features you'll be mapping (buildings, roads, etc.)",
-            "Bookmark this project page for easy access during your mapping sessions"
-          ]
+          content: "PROJECT_URL_PLACEHOLDER"
         }
       ],
       keyTakeaways: [

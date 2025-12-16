@@ -1,7 +1,7 @@
 const { sql } = require('@vercel/postgres');
 
 const youthToAdd = [
-  { youth_id: 'KAR405DM', full_name: 'Denis Musau', settlement: 'Kariobangi Machakos' }
+  { youth_id: 'HUR777BW', full_name: 'Beatrice Wanjiru', settlement: 'Mji wa Huruma' }
 ];
 
 async function verifyAndAddYouth() {
