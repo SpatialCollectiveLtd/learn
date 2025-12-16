@@ -33,7 +33,12 @@ function getProjectUrlForYouth(youthId: string): string | null {
     return 'https://tasks.hotosm.org/projects/38022/';
   }
   
-  // Other settlements (KAY, HUR) - project not yet assigned
+  if (prefix === 'HUR') {
+    // Mji wa Huruma
+    return 'https://tasks.hotosm.org/projects/38055/';
+  }
+  
+  // Other settlements (KAY) - project not yet assigned
   return null;
 }
 
