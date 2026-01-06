@@ -42,8 +42,8 @@ export default function LoginPage() {
         //   router.push('/dashboard/youth');
         // }
         
-        // Direct to dashboard (contracts disabled)
-        router.push('/dashboard/youth');
+        // Direct to new dashboard selection page
+        router.push('/dashboard');
       }
     } catch (err: any) {
       setError(err.response?.data?.message || 'Authentication failed. Please check your Youth ID.');

@@ -16,7 +16,13 @@ export function OsmUsernameNotification() {
       try {
         const youth = JSON.parse(youthData);
         
-        // Check if OSM username is missing
+        // First check localStorage for recent updates
+        if (youth.osmUsername) {
+          setNeedsOsmUsername(false);
+          return;
+        }
+        
+        // Check if OSM username is missing from API
         const token = localStorage.getItem('youthToken');
         if (token) {
           const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/youth/profile`, {
@@ -24,7 +30,10 @@ export function OsmUsernameNotification() {
           });
           
           const data = await response.json();
-          if (data.success && !data.data.osm_username) {
+          // API returns osmUsername (camelCase), not osm_username
+          const hasUsername = data.success && (data.data.osmUsername || data.data.osm_username);
+          
+          if (!hasUsername) {
             setNeedsOsmUsername(true);
             
             // Check if notification was dismissed recently
@@ -36,6 +45,11 @@ export function OsmUsernameNotification() {
             if (dismissedTime < oneDayAgo) {
               setTimeout(() => setShow(true), 1000); // Show after 1 second
             }
+          } else {
+            // Update localStorage if username was found
+            youth.osmUsername = data.data.osmUsername || data.data.osm_username;
+            localStorage.setItem('youthData', JSON.stringify(youth));
+            setNeedsOsmUsername(false);
           }
         }
       } catch (error) {

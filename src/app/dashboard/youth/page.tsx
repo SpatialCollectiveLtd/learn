@@ -14,35 +14,9 @@ export default function YouthDashboard() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is authenticated as youth
-    const userType = localStorage.getItem('userType');
-    const storedYouthData = localStorage.getItem('youthData');
-    const agreementAccepted = localStorage.getItem(`agreement-accepted-${JSON.parse(storedYouthData || '{}').youthId}`);
-
-    if (userType !== 'youth' || !storedYouthData) {
-      // Not authenticated or not a youth user
-      router.push('/');
-      return;
-    }
-
-    // TEMPORARILY DISABLED: Contract requirement while awaiting module-specific content
-    // TODO: Re-enable with module-specific contracts (Digitization, Mobile Mapping, Household Survey, Microtasking)
-    // if (!agreementAccepted) {
-    //   // Contract not signed - redirect to contract page
-    //   router.push('/contract');
-    //   return;
-    // }
-
-    try {
-      const parsed = JSON.parse(storedYouthData);
-      setYouthData(parsed);
-    } catch (error) {
-      console.error('Failed to parse youth data:', error);
-      router.push('/');
-      return;
-    }
-
-    setIsLoading(false);
+    // Auto-redirect to new dashboard selection page
+    // This page is deprecated in favor of /dashboard
+    router.push('/dashboard');
   }, [router]);
 
   const handleLogout = () => {
