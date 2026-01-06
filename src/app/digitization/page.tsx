@@ -5,6 +5,7 @@ import { CometCard } from "@/components/ui/comet-card";
 import { FloatingHeader } from "@/components/ui/floating-header";
 import { OsmUsernameNotification } from "@/components/notifications/OsmUsernameNotification";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { IconPencil, IconCircleCheck, IconMap } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -16,12 +17,35 @@ export default function DigitizationPage() {
   const [backHref, setBackHref] = useState("/");
   const [mapperProgress, setMapperProgress] = useState<number[]>([]);
   const [isYouth, setIsYouth] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
-    // Determine back button destination based on user type
+    // Auto-redirect youth to their specific role page (mapper or validator)
     const userType = localStorage.getItem('userType');
+    
     if (userType === 'youth') {
-      setBackHref('/dashboard/youth');
+      const youthDataStr = localStorage.getItem('youthData');
+      
+      if (youthDataStr) {
+        try {
+          const youthData = JSON.parse(youthDataStr);
+          
+          // For digitization program, redirect to specific role page
+          if (youthData.programType === 'digitization') {
+            const targetRoute = youthData.moduleAssignment === 'validator'
+              ? '/digitization/validator'
+              : '/digitization/mapper';
+            
+            console.log('[DIGITIZATION] Auto-redirecting to:', targetRoute);
+            router.push(targetRoute);
+            return;
+          }
+        } catch (error) {
+          console.error('[DIGITIZATION] Error parsing youth data:', error);
+        }
+      }
+      
+      setBackHref('/dashboard');
       setIsYouth(true);
       
       // Fetch training progress for youth

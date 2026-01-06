@@ -46,6 +46,8 @@ export async function GET(request: NextRequest) {
         email: youth.email,
         phone: youth.phone_number,
         programType: youth.program_type,
+        moduleAssignment: youth.module_assignment,
+        settlement: youth.settlement,
         osmUsername: youth.osm_username || null,
         isActive: youth.is_active,
       },

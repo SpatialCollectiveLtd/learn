@@ -67,9 +67,9 @@ export async function GET(request: NextRequest) {
 
     const youthId = decoded.youthId;
 
-    // Get youth program type
+    // Get youth program type and module assignment
     const youthResult = await Database.query(`
-      SELECT program_type, osm_username, settlement
+      SELECT program_type, module_assignment, osm_username, settlement
       FROM youth_participants
       WHERE youth_id = $1 AND is_active = TRUE
     `, [youthId]);
@@ -81,7 +81,13 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const { program_type, osm_username, settlement } = youthResult.rows[0];
+    const { program_type, module_assignment, osm_username, settlement } = youthResult.rows[0];
+
+    // CRITICAL FIX: For digitization program, use module_assignment ('mapper' or 'validator')
+    // For other programs, use program_type directly
+    const moduleType = program_type === 'digitization' && module_assignment
+      ? module_assignment  // 'mapper' or 'validator'
+      : program_type;      // 'mobile_mapping', 'household_survey', etc.
 
     // Get required steps for this program
     const requiredSteps = REQUIRED_STEPS[program_type] || [];
@@ -93,12 +99,13 @@ export async function GET(request: NextRequest) {
     }
 
     // Get completed training steps
+    // Use moduleType which is either module_assignment (for digitization) or program_type (for others)
     const progressResult = await Database.query(`
       SELECT step_id, completed_at
       FROM youth_training_progress
       WHERE youth_id = $1 AND module_type = $2
       ORDER BY completed_at ASC
-    `, [youthId, program_type]);
+    `, [youthId, moduleType]);
 
     const completedSteps = new Set(
       progressResult.rows.map((row: any) => row.step_id)
@@ -118,6 +125,8 @@ export async function GET(request: NextRequest) {
       success: true,
       data: {
         programType: program_type,
+        moduleAssignment: module_assignment,
+        moduleType,  // The actual module being checked ('mapper', 'validator', or program_type)
         settlement,
         trainingCompleted: allStepsCompleted,
         hasOsmUsername,

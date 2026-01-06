@@ -6,6 +6,7 @@ import { BookOpen, Briefcase, CheckCircle, Lock, AlertCircle } from 'lucide-reac
 
 interface TrainingStatus {
   programType: string;
+  moduleAssignment?: string;  // 'mapper' or 'validator' for digitization
   settlement: string;
   trainingCompleted: boolean;
   hasOsmUsername: boolean;
@@ -63,15 +64,25 @@ export default function DashboardSelection() {
   };
 
   const handleTrainingClick = () => {
-    // Route based on program type
+    if (!status) return;
+    
+    // Smart routing: For digitization, redirect based on module_assignment
+    if (status.programType === 'digitization') {
+      const targetRoute = status.moduleAssignment === 'validator'
+        ? '/digitization/validator'
+        : '/digitization/mapper';  // Default to mapper if not specified
+      router.push(targetRoute);
+      return;
+    }
+    
+    // For other programs, use direct mapping
     const routes: Record<string, string> = {
-      digitization: '/digitization/mapper',
       mobile_mapping: '/mobile-mapping',
       household_survey: '/household-survey',
       microtasking: '/microtasking',
     };
 
-    const route = routes[status?.programType || ''] || '/digitization/mapper';
+    const route = routes[status.programType] || '/digitization/mapper';
     router.push(route);
   };
 
@@ -126,6 +137,11 @@ export default function DashboardSelection() {
           </h1>
           <p className="text-lg text-foreground-muted mb-2">
             {status.settlement} • {status.programType.replace('_', ' ').toUpperCase()}
+            {status.moduleAssignment && status.programType === 'digitization' && (
+              <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#dc2626]/10 text-[#dc2626] border border-[#dc2626]/20">
+                {status.moduleAssignment.toUpperCase()}
+              </span>
+            )}
           </p>
           <div className="flex items-center justify-center gap-2 text-sm">
             <CheckCircle className="w-5 h-5 text-success" />
