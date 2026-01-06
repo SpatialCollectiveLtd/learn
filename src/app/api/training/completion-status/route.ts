@@ -13,33 +13,15 @@ if (!JWT_SECRET || JWT_SECRET.length < 32) {
 }
 
 // Map of program types to their required training steps
-const REQUIRED_STEPS: Record<string, string[]> = {
-  digitization: [
-    'intro',
-    'building-types',
-    'id-editor',
-    'field-papers',
-    'josm-basics',
-    'mapathon',
-    'quiz'
-  ],
-  mobile_mapping: [
-    'intro',
-    'field-data',
-    'mobile-apps',
-    'quiz'
-  ],
-  household_survey: [
-    'intro',
-    'survey-techniques',
-    'kobo-toolbox',
-    'quiz'
-  ],
-  microtasking: [
-    'intro',
-    'mapswipe',
-    'quiz'
-  ],
+// CRITICAL: step_id in database is stored as INTEGER (1, 2, 3, etc.)
+// NOT as string ('intro', 'building-types', etc.)
+const REQUIRED_STEPS: Record<string, number[]> = {
+  mapper: [1, 2, 3, 4, 5, 6, 7],           // Mapper has 7 steps
+  validator: [1, 2, 3, 4, 5, 6],           // Validator has 6 steps
+  digitization: [1, 2, 3, 4, 5, 6, 7],     // Legacy fallback
+  mobile_mapping: [1, 2, 3, 4],            // 4 steps
+  household_survey: [1, 2, 3, 4],          // 4 steps
+  microtasking: [1, 2, 3],                 // 3 steps
 };
 
 export async function GET(request: NextRequest) {
@@ -89,12 +71,13 @@ export async function GET(request: NextRequest) {
       ? module_assignment  // 'mapper' or 'validator'
       : program_type;      // 'mobile_mapping', 'household_survey', etc.
 
-    // Get required steps for this program
-    const requiredSteps = REQUIRED_STEPS[program_type] || [];
+    // Get required steps for this module type
+    // Use moduleType (mapper/validator) not program_type (digitization)
+    const requiredSteps = REQUIRED_STEPS[moduleType] || [];
     if (requiredSteps.length === 0) {
       return NextResponse.json({
         success: false,
-        message: `No training steps defined for program: ${program_type}`,
+        message: `No training steps defined for module: ${moduleType}`,
       }, { status: 400 });
     }
 
@@ -108,7 +91,7 @@ export async function GET(request: NextRequest) {
     `, [youthId, moduleType]);
 
     const completedSteps = new Set(
-      progressResult.rows.map((row: any) => row.step_id)
+      progressResult.rows.map((row: any) => parseInt(row.step_id))  // Convert to number
     );
 
     // Check if all required steps are completed
