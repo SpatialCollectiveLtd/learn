@@ -1,0 +1,119 @@
+// GET /api/work/days/count
+// Returns the number of approved work days out of maximum (20)
+
+import { NextRequest, NextResponse } from 'next/server';
+import { Database } from '@/app/api/_lib/database';
+import jwt from 'jsonwebtoken';
+
+const JWT_SECRET = process.env.learn_STACK_SECRET_SERVER_KEY || process.env.JWT_SECRET || '';
+
+if (!JWT_SECRET || JWT_SECRET.length < 32) {
+  throw new Error('JWT_SECRET must be configured and at least 32 characters');
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    // Verify JWT authentication
+    const authHeader = request.headers.get('authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
+      return NextResponse.json(
+        { success: false, message: 'Authentication required' },
+        { status: 401 }
+      );
+    }
+
+    const token = authHeader.substring(7);
+    let decoded: any;
+
+    try {
+      decoded = jwt.verify(token, JWT_SECRET);
+    } catch (error) {
+      return NextResponse.json(
+        { success: false, message: 'Invalid or expired token' },
+        { status: 401 }
+      );
+    }
+
+    const youthId = decoded.youthId;
+
+    // Get settlement config to know total allowed days
+    const configResult = await Database.query(`
+      SELECT swc.total_work_days, swc.start_date
+      FROM youth_participants yp
+      JOIN settlement_work_config swc 
+        ON yp.settlement = swc.settlement 
+        AND yp.program_type = swc.program_type
+        AND swc.is_active = TRUE
+      WHERE yp.youth_id = $1
+    `, [youthId]);
+
+    const totalDays = configResult.rows[0]?.total_work_days || 20;
+    const startDate = configResult.rows[0]?.start_date;
+
+    // Count approved work days
+    const approvedResult = await Database.query(`
+      SELECT 
+        COUNT(*) as days_worked,
+        SUM(buildings_count) as total_buildings,
+        COUNT(*) FILTER (WHERE target_met = TRUE) as days_target_met
+      FROM youth_work_days
+      WHERE youth_id = $1 
+      AND status = 'approved'
+    `, [youthId]);
+
+    // Count pending work days
+    const pendingResult = await Database.query(`
+      SELECT COUNT(*) as pending_days
+      FROM youth_work_days
+      WHERE youth_id = $1 
+      AND status = 'pending'
+    `, [youthId]);
+
+    const daysWorked = parseInt(approvedResult.rows[0]?.days_worked || '0');
+    const totalBuildings = parseInt(approvedResult.rows[0]?.total_buildings || '0');
+    const daysTargetMet = parseInt(approvedResult.rows[0]?.days_target_met || '0');
+    const pendingDays = parseInt(pendingResult.rows[0]?.pending_days || '0');
+
+    const remaining = Math.max(0, totalDays - daysWorked);
+    const percentage = Math.round((daysWorked / totalDays) * 100);
+
+    return NextResponse.json({
+      success: true,
+      data: {
+        daysWorked,
+        totalDays,
+        remaining,
+        percentage,
+        pendingDays,
+        totalBuildings,
+        daysTargetMet,
+        avgBuildingsPerDay: daysWorked > 0 ? Math.round(totalBuildings / daysWorked) : 0,
+        startDate: startDate ? new Date(startDate).toISOString().split('T')[0] : null,
+      },
+    });
+
+  } catch (error: any) {
+    console.error('[API] Error fetching work days:', error);
+    
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'Failed to fetch work days count',
+        error: process.env.NODE_ENV === 'development' ? error.message : undefined
+      },
+      { status: 500 }
+    );
+  }
+}
+
+// OPTIONS handler for CORS
+export async function OPTIONS(request: NextRequest) {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': process.env.NEXT_PUBLIC_APP_URL || '*',
+      'Access-Control-Allow-Methods': 'GET, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    },
+  });
+}
