@@ -96,7 +96,7 @@ export async function GET(request: NextRequest) {
     const progressResult = await Database.query(`
       SELECT step_id, completed_at
       FROM youth_training_progress
-      WHERE youth_id = $1 AND module_type = $2 AND completed = TRUE
+      WHERE youth_id = $1 AND module_type = $2
       ORDER BY completed_at ASC
     `, [youthId, program_type]);
 
