@@ -388,7 +388,10 @@ async function fetchUserChangesets(
     const response = await axios.get(url, {
       params,
       timeout: REQUEST_TIMEOUT_MS,
-      headers: { 'User-Agent': USER_AGENT },
+      headers: { 
+        'User-Agent': USER_AGENT,
+        'Accept': 'text/xml', // Request XML format instead of default JSON
+      },
     });
 
     // Parse XML response
