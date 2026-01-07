@@ -162,7 +162,7 @@ export default function DashboardSelection() {
               <div className="bg-primary/20 p-4 rounded-xl border border-primary/30">
                 <BookOpen className="w-8 h-8 text-primary" />
               </div>
-              <span className="text-sm font-subheading font-medium text-primary bg-primary-dark px-3 py-1 rounded-full border border-primary">
+              <span className="text-sm font-subheading font-medium text-white bg-primary-dark px-3 py-1 rounded-full border border-primary">
                 Always Available
               </span>
             </div>
@@ -221,7 +221,7 @@ export default function DashboardSelection() {
                 )}
               </div>
               {canAccessWorkDashboard ? (
-                <span className="text-sm font-subheading font-medium text-primary bg-primary-dark px-3 py-1 rounded-full border border-primary">
+                <span className="text-sm font-subheading font-medium text-white bg-primary-dark px-3 py-1 rounded-full border border-primary">
                   Unlocked
                 </span>
               ) : (
