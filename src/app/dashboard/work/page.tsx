@@ -11,7 +11,9 @@ import {
   Target,
   AlertCircle,
   CheckCircle,
-  ArrowLeft
+  ArrowLeft,
+  ExternalLink,
+  MapPin
 } from 'lucide-react';
 
 interface DailyStats {
@@ -36,12 +38,19 @@ interface WorkDays {
   startDate: string | null;
 }
 
+interface YouthProfile {
+  youthId: string;
+  settlement: string;
+  fullName: string;
+}
+
 export default function WorkDashboard() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [dailyStats, setDailyStats] = useState<DailyStats | null>(null);
   const [workDays, setWorkDays] = useState<WorkDays | null>(null);
+  const [profile, setProfile] = useState<YouthProfile | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [lastRefreshTime, setLastRefreshTime] = useState<Date>(new Date());
 
@@ -84,18 +93,22 @@ export default function WorkDashboard() {
         return;
       }
 
-      // Fetch daily stats and work days in parallel
-      const [statsRes, daysRes] = await Promise.all([
+      // Fetch daily stats, work days, and profile in parallel
+      const [statsRes, daysRes, profileRes] = await Promise.all([
         fetch('/api/work/stats/daily', {
           headers: { 'Authorization': `Bearer ${token}` },
         }),
         fetch('/api/work/days/count', {
           headers: { 'Authorization': `Bearer ${token}` },
         }),
+        fetch('/api/youth/profile', {
+          headers: { 'Authorization': `Bearer ${token}` },
+        }),
       ]);
 
       const statsData = await statsRes.json();
       const daysData = await daysRes.json();
+      const profileData = await profileRes.json();
 
       if (statsData.success) {
         setDailyStats(statsData.data);
@@ -110,6 +123,10 @@ export default function WorkDashboard() {
         setWorkDays(daysData.data);
       } else {
         console.warn('Failed to fetch work days:', daysData.message);
+      }
+
+      if (profileData.success) {
+        setProfile(profileData.data);
       }
 
     } catch (err: any) {
@@ -221,6 +238,59 @@ export default function WorkDashboard() {
             </div>
             <button
               onClick={() => setError(null)}
+              className="text-error hover:text-primary-hover"
+            >
+              ×
+            </button>
+          </div>
+        )}
+
+        {/* Kayole Work Assignment Banner */}
+        {profile?.settlement === 'Kayole' && profile?.youthId?.startsWith('KAY') && (
+          <div className="mb-6 bg-gradient-to-r from-primary/20 to-primary-dark/20 border-2 border-primary rounded-2xl p-6 shadow-lg shadow-primary/20">
+            <div className="flex items-start gap-4">
+              <div className="bg-primary/30 p-3 rounded-xl border border-primary">
+                <MapPin className="w-6 h-6 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl font-heading font-bold text-white mb-2">
+                  📍 Your Work Assignment - Kayole Soweto
+                </h3>
+                <p className="text-foreground-muted mb-4">
+                  Click the button below to access your mapping task on HOT Tasking Manager
+                </p>
+                
+                <a
+                  href="https://tasks.hotosm.org/projects/36570"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-hover transition-colors font-subheading font-semibold shadow-lg shadow-primary/30 mb-4"
+                >
+                  <ExternalLink className="w-5 h-5" />
+                  <span>Open Task #36570</span>
+                </a>
+
+                <div className="bg-black/40 border border-primary/30 rounded-lg p-4 mt-4">
+                  <h4 className="font-subheading font-semibold text-white mb-2 flex items-center gap-2">
+                    <AlertCircle className="w-5 h-5 text-primary" />
+                    Important: Add Hashtag Before Upload
+                  </h4>
+                  <p className="text-sm text-foreground-muted mb-2">
+                    Before uploading your work to OpenStreetMap, you <span className="text-primary font-semibold">MUST</span> add the project hashtag in JOSM:
+                  </p>
+                  <div className="bg-background-elevated border border-border rounded px-4 py-2 font-mono text-primary text-lg">
+                    #DPW2025
+                  </div>
+                  <p className="text-xs text-foreground-subtle mt-2">
+                    ⚠️ Without this hashtag, your work will not be counted in the statistics
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/*   onClick={() => setError(null)}
               className="text-error hover:text-primary-hover"
             >
               ×
