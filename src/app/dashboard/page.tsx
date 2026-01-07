@@ -156,22 +156,22 @@ export default function DashboardSelection() {
           {/* Training Dashboard Card */}
           <button
             onClick={handleTrainingClick}
-            className="bg-background-card rounded-2xl shadow-lg shadow-primary/10 p-8 text-left hover:shadow-2xl hover:shadow-primary/20 transition-all transform hover:-translate-y-1 border border-[#262626] hover:border-primary"
+            className="bg-background-card rounded-2xl shadow-lg shadow-primary/10 p-6 text-left hover:shadow-2xl hover:shadow-primary/20 transition-all transform hover:-translate-y-1 border border-[#262626] hover:border-primary"
           >
             <div className="flex items-center justify-between mb-4">
-              <div className="bg-primary/20 p-4 rounded-xl border border-primary/30">
-                <BookOpen className="w-8 h-8 text-primary" />
+              <div className="bg-primary/20 p-3 rounded-xl border border-primary/30">
+                <BookOpen className="w-7 h-7 text-primary" />
               </div>
               <span className="text-sm font-subheading font-medium text-white bg-primary-dark px-3 py-1 rounded-full border border-primary">
                 Always Available
               </span>
             </div>
             
-            <h2 className="text-2xl font-heading font-bold text-white mb-3">
+            <h2 className="text-xl font-heading font-bold text-white mb-2">
               Training Dashboard
             </h2>
             
-            <p className="text-foreground-subtle mb-4">
+            <p className="text-sm text-foreground-subtle mb-3">
               Continue your training modules, complete steps, and improve your mapping skills.
             </p>
 
@@ -202,22 +202,22 @@ export default function DashboardSelection() {
           <button
             onClick={handleWorkClick}
             disabled={!canAccessWorkDashboard}
-            className={`bg-background-card rounded-2xl shadow-lg p-8 text-left transition-all border ${
+            className={`bg-background-card rounded-2xl shadow-lg p-6 text-left transition-all border ${
               canAccessWorkDashboard
                 ? 'hover:shadow-2xl hover:shadow-primary/20 transform hover:-translate-y-1 border-[#262626] hover:border-primary cursor-pointer'
                 : 'opacity-60 cursor-not-allowed border-[#262626]'
             }`}
           >
             <div className="flex items-center justify-between mb-4">
-              <div className={`p-4 rounded-xl border ${
+              <div className={`p-3 rounded-xl border ${
                 canAccessWorkDashboard 
                   ? 'bg-primary/20 border-primary/30' 
                   : 'bg-[#1a1a1a] border-border'
               }`}>
                 {canAccessWorkDashboard ? (
-                  <Briefcase className="w-8 h-8 text-primary" />
+                  <Briefcase className="w-7 h-7 text-primary" />
                 ) : (
-                  <Lock className="w-8 h-8 text-foreground-subtle" />
+                  <Lock className="w-7 h-7 text-foreground-subtle" />
                 )}
               </div>
               {canAccessWorkDashboard ? (
@@ -231,13 +231,13 @@ export default function DashboardSelection() {
               )}
             </div>
             
-            <h2 className="text-2xl font-heading font-bold text-white mb-3">
+            <h2 className="text-xl font-heading font-bold text-white mb-2">
               Work Dashboard
             </h2>
             
             {canAccessWorkDashboard ? (
               <>
-                <p className="text-foreground-subtle mb-4">
+                <p className="text-sm text-foreground-subtle mb-3">
                   Track your daily mapping work, view building counts, and monitor your 20-day work period.
                 </p>
                 <div className="bg-primary-dark/50 border border-primary rounded-lg p-4">
@@ -254,7 +254,7 @@ export default function DashboardSelection() {
               </>
             ) : (
               <>
-                <p className="text-foreground-subtle mb-4">
+                <p className="text-sm text-foreground-subtle mb-3">
                   Track your daily mapping work, view building counts, and monitor your 20-day work period.
                 </p>
                 <div className="bg-warning/10 border border-warning/30 rounded-lg p-4">
