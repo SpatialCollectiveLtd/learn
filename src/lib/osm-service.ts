@@ -476,6 +476,10 @@ async function countBuildingsInChangeset(
     const parser = new XMLParser({
       ignoreAttributes: false,
       attributeNamePrefix: '',
+      isArray: (name, jpath) => {
+        // Force arrays for OSM elements that can appear multiple times
+        return ['node', 'way', 'relation', 'tag', 'nd', 'member'].includes(name);
+      },
     });
 
     const parsed = parser.parse(response.data);
@@ -483,13 +487,30 @@ async function countBuildingsInChangeset(
     // Count buildings in create and modify sections
     let buildingCount = 0;
     
-    const createWays = parsed.osmChange?.create?.way || [];
-    const modifyWays = parsed.osmChange?.modify?.way || [];
-    
-    const allWays = [
-      ...(Array.isArray(createWays) ? createWays : createWays ? [createWays] : []),
-      ...(Array.isArray(modifyWays) ? modifyWays : modifyWays ? [modifyWays] : [])
-    ];
+    // Extract ways from create section
+    const createSection = parsed.osmChange?.create;
+    const createWays: any[] = [];
+    if (createSection) {
+      // Parser puts each element type in separate objects
+      Object.values(createSection).forEach((item: any) => {
+        if (item && item.way && Array.isArray(item.way)) {
+          createWays.push(...item.way);
+        }
+      });
+    }
+
+    // Extract ways from modify section
+    const modifySection = parsed.osmChange?.modify;
+    const modifyWays: any[] = [];
+    if (modifySection) {
+      Object.values(modifySection).forEach((item: any) => {
+        if (item && item.way && Array.isArray(item.way)) {
+          modifyWays.push(...item.way);
+        }
+      });
+    }
+
+    const allWays = [...createWays, ...modifyWays];
 
     for (const way of allWays) {
       if (hasBuildingTag(way.tag)) {
