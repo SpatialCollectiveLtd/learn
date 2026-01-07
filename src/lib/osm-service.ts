@@ -540,14 +540,34 @@ async function countBuildingsInChangeset(
 }
 
 /**
- * Check if a way has a building tag
+ * Check if a way has a building tag (with typo tolerance)
+ * Common typos: biulding, buiding, buidling, buliding, etc.
  */
 function hasBuildingTag(tagData: any): boolean {
   if (!tagData) return false;
 
   const tags = Array.isArray(tagData) ? tagData : [tagData];
 
-  return tags.some((tag: any) => tag.k === 'building');
+  return tags.some((tag: any) => {
+    const key = tag.k?.toLowerCase() || '';
+    // Exact match
+    if (key === 'building') return true;
+    
+    // Common typos (missing 'l', swapped letters, etc.)
+    // biulding, buiding, buidling, buliding, builidng, buildnig, etc.
+    const typos = [
+      'biulding',  // missing 'l'
+      'buiding',   // missing 'l' 
+      'buidling',  // 'l' in wrong place
+      'buliding',  // 'i' and 'l' swapped
+      'builidng',  // 'i' and 'd' swapped
+      'buildnig',  // 'i' and 'n' swapped
+      'buidlign',  // multiple issues
+      'buliding',  // letters swapped
+    ];
+    
+    return typos.includes(key);
+  });
 }
 
 // ============================================
