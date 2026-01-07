@@ -245,7 +245,7 @@ export default function WorkDashboard() {
           </div>
         )}
 
-        {/* Kayole Work Assignment Banner */}
+        {/* Work Assignment Banners */}
         {profile?.settlement === 'Kayole' && profile?.youthId?.startsWith('KAY') && (
           <div className="mb-6 bg-gradient-to-r from-primary/20 to-primary-dark/20 border-2 border-primary rounded-xl p-4 shadow-lg shadow-primary/20">
             <div className="flex items-start gap-3">
@@ -269,6 +269,98 @@ export default function WorkDashboard() {
                 >
                   <ExternalLink className="w-5 h-5" />
                   <span>Open Task #36570</span>
+                </a>
+
+                <div className="bg-black/40 border border-primary/30 rounded-lg p-3 mt-3">
+                  <h4 className="text-sm font-subheading font-semibold text-white mb-2 flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 text-primary" />
+                    Important: Add Hashtag Before Upload
+                  </h4>
+                  <p className="text-xs text-foreground-muted mb-2">
+                    Before uploading your work to OpenStreetMap, you <span className="text-primary font-semibold">MUST</span> add the project hashtag in JOSM:
+                  </p>
+                  <div className="bg-background-elevated border border-border rounded px-3 py-1.5 font-mono text-primary text-base">
+                    #DPW2025
+                  </div>
+                  <p className="text-xs text-foreground-subtle mt-2 flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3" />
+                    Without this hashtag, your work will not be counted in the statistics
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {profile?.settlement === 'Kariobangi Machakos' && profile?.youthId?.startsWith('KAR') && (
+          <div className="mb-6 bg-gradient-to-r from-primary/20 to-primary-dark/20 border-2 border-primary rounded-xl p-4 shadow-lg shadow-primary/20">
+            <div className="flex items-start gap-3">
+              <div className="bg-primary/30 p-2 rounded-lg border border-primary">
+                <MapPin className="w-6 h-6 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-heading font-bold text-white mb-2 flex items-center gap-2">
+                  <MapPin className="w-5 h-5 text-primary" />
+                  Your Work Assignment - Kariobangi Machakos
+                </h3>
+                <p className="text-sm text-foreground-muted mb-3">
+                  Click the button below to access your mapping task on HOT Tasking Manager
+                </p>
+                
+                <a
+                  href="https://tasks.hotosm.org/projects/36571"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-lg hover:bg-primary-hover transition-colors font-subheading font-semibold shadow-lg shadow-primary/30 mb-3"
+                >
+                  <ExternalLink className="w-5 h-5" />
+                  <span>Open Task #36571</span>
+                </a>
+
+                <div className="bg-black/40 border border-primary/30 rounded-lg p-3 mt-3">
+                  <h4 className="text-sm font-subheading font-semibold text-white mb-2 flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 text-primary" />
+                    Important: Add Hashtag Before Upload
+                  </h4>
+                  <p className="text-xs text-foreground-muted mb-2">
+                    Before uploading your work to OpenStreetMap, you <span className="text-primary font-semibold">MUST</span> add the project hashtag in JOSM:
+                  </p>
+                  <div className="bg-background-elevated border border-border rounded px-3 py-1.5 font-mono text-primary text-base">
+                    #DPW2025
+                  </div>
+                  <p className="text-xs text-foreground-subtle mt-2 flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3" />
+                    Without this hashtag, your work will not be counted in the statistics
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {profile?.settlement === 'Mji wa Huruma' && profile?.youthId?.startsWith('HUR') && (
+          <div className="mb-6 bg-gradient-to-r from-primary/20 to-primary-dark/20 border-2 border-primary rounded-xl p-4 shadow-lg shadow-primary/20">
+            <div className="flex items-start gap-3">
+              <div className="bg-primary/30 p-2 rounded-lg border border-primary">
+                <MapPin className="w-6 h-6 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-heading font-bold text-white mb-2 flex items-center gap-2">
+                  <MapPin className="w-5 h-5 text-primary" />
+                  Your Work Assignment - Mji wa Huruma
+                </h3>
+                <p className="text-sm text-foreground-muted mb-3">
+                  Click the button below to access your mapping task on HOT Tasking Manager
+                </p>
+                
+                <a
+                  href="https://tasks.hotosm.org/projects/36603"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-lg hover:bg-primary-hover transition-colors font-subheading font-semibold shadow-lg shadow-primary/30 mb-3"
+                >
+                  <ExternalLink className="w-5 h-5" />
+                  <span>Open Task #36603</span>
                 </a>
 
                 <div className="bg-black/40 border border-primary/30 rounded-lg p-3 mt-3">
