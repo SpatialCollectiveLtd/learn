@@ -45,6 +45,7 @@ export async function POST(request: NextRequest) {
         yp.osm_username,
         yp.program_type,
         yp.settlement,
+        yp.exception_hashtags,
         swc.daily_target,
         swc.project_hashtag,
         swc.timezone
@@ -91,7 +92,8 @@ export async function POST(request: NextRequest) {
       youth.osm_username,
       youth.project_hashtag || '#DPW2025',
       youth.timezone || 'Africa/Nairobi',
-      true // Force refresh = true
+      true, // Force refresh = true
+      youth.exception_hashtags || [] // Exception hashtags for this user
     );
 
     // Update database
@@ -120,6 +122,27 @@ export async function POST(request: NextRequest) {
 
     const dailyTarget = youth.daily_target || 200;
     const percentage = Math.round((stats.totalBuildings / dailyTarget) * 100);
+
+    // Auto-sync work day (create/update and auto-approve)
+    if (stats.totalBuildings > 0) {
+      const targetMet = stats.totalBuildings >= dailyTarget;
+      await Database.query(`
+        INSERT INTO youth_work_days (
+          youth_id, work_date, buildings_count, daily_target,
+          target_met, status, notes
+        ) VALUES ($1, $2, $3, $4, $5, 'approved', 'Auto-synced from OSM stats')
+        ON CONFLICT (youth_id, work_date) 
+        DO UPDATE SET
+          buildings_count = EXCLUDED.buildings_count,
+          daily_target = EXCLUDED.daily_target,
+          target_met = EXCLUDED.target_met,
+          status = CASE 
+            WHEN youth_work_days.status = 'pending' THEN 'approved'
+            ELSE youth_work_days.status
+          END,
+          updated_at = CURRENT_TIMESTAMP
+      `, [youthId, today, stats.totalBuildings, dailyTarget, targetMet]);
+    }
 
     return NextResponse.json({
       success: true,

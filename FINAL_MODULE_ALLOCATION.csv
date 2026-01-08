@@ -1,0 +1,301 @@
+UniqueID,FirstName,LastName,NationalID,Phone,Settlement,Zone,Gender,Age,Disability,Module
+KAY1498DO,David,Ouma,523579589,757528142,kayole_soweto,muthaiga,Male,21,"None",digitization
+KAY1154SO,Steven,Odhiambo,36117151,793953724,kayole_soweto,shauri_yako,Female,27,"None",digitization
+KAY2579JN,Jane,Njuguna,38454037,729247877,kayole_soweto,musesa,Female,24,"",digitization
+KAY129SL,Selina,Lipukah,305733708,115463624,kayole_soweto,patanisho,Female,20,"",digitization
+KAY2603GK,Gilbert,Karigo,29114677,718321138,kayole_soweto,gitau,Male,33,"Vision (some difficulty)",digitization
+KAY1725LK,Lynn,Waweru,780840244,706789450,kayole_soweto,kibagare,Male,19,"None",digitization
+KAR115SO,Sophie,Gesare,794479841,112813810,kariobangi,,Female,19,"",digitization
+KAR268SM,Samuel,Matheka,32464224,716063337,kariobangi,,Male,30,"",digitization
+KAR399JM,Josephat,Mwanthi,39008822,719766594,kariobangi,,Male,25,"",digitization
+KAR119BN,Bill,Njiru,39801712,793946829,kariobangi,,Male,24,"",digitization
+KAR078KM,Kelvin,Mulela,42580985,758429438,kariobangi,,Male,21,"",digitization
+KAR225CT,Charity,Titus,37025915,758161907,kariobangi,,Female,27,"",digitization
+KAR083JK,Joel,Kihuria,38322816,794456923,kariobangi,,Male,26,"",digitization
+KAR327EM,Eddis,Maina,40326505,741192117,kariobangi,,Female,24,"None",digitization
+KAR339PM,Peter,Muia,37563136,722845192,kariobangi,,Male,25,"None",digitization
+KAR187SM,Samuel,Mutuku,29361872,727712977,kariobangi,,Male,33,"None",digitization
+KAR322FK,Festus,Kaluki,29978724,742088747,kariobangi,,Male,33,"Mobility (a lot of difficulty)",digitization
+KAR298DK,Diana,Kasyula,34881547,712269056,kariobangi,,Female,27,"None",digitization
+KAR369JJ,Jeremiah,James,37924586,799294718,kariobangi,,Male,25,"None",digitization
+KAR158KK,Kelvin,Kinyatta,33107603,114178846,kariobangi,,Male,29,"None",digitization
+HUR455MM,Martin,Mbugua,39840210,797786555,mji_wa_huruma,,Male,24,"Vision (cannot do at all)",digitization
+HUR801DN,Dennis,Njuguna,39952811,794692928,mji_wa_huruma,,Male,24,"",digitization
+HUR765JN,John,Ngigi,38034939,748650160,mji_wa_huruma,,Male,24,"",digitization
+HUR185RN,Richard,Njuguna,41690306,795059568,mji_wa_huruma,,Male,22,"Self-care (some difficulty)",digitization
+HUR756SD,Somo,Duba,42284396,717847997,mji_wa_huruma,,Male,23,"",digitization
+HUR768SW,Stephen,Wanjiru,38833676,708851217,mji_wa_huruma,,Male,25,"",digitization
+KAY2714DV,Doreen,Vutiti,37812985,799317489,kayole_soweto,muoroto,Female,25,"None",digitization
+KAY2705AO,Austine,Ongonga,39656945,715829299,kayole_soweto,bahati,Male,24,"Mobility (some difficulty)",digitization
+KAY2333OO,Oketch,Ochieng,30550499,702740503,kayole_soweto,bahati,Male,34,"Mobility (some difficulty)",digitization
+KAY1395MO,Mercy,Moraa,39168987,748353538,kayole_soweto,shauri_yako,Female,25,"Mobility (a lot of difficulty)",digitization
+KAY251BK,Brian,Karani,39991406,748301706,kayole_soweto,central,Male,22,"None",digitization
+KAY2391LN,Lilian,Naliaka,39166611,757940987,kayole_soweto,bahati,Female,24,"Mobility (a lot of difficulty)",digitization
+KAY2284SM,Selah,Muema,41272996,793625421,kayole_soweto,muoroto,Female,23,"None",digitization
+KAY348RN,Regina,Nzoka,42307801,794031725,kayole_soweto,gitau,Female,21,"None",digitization
+KAY209BM,Ben,Mutua,36420304,797042065,kayole_soweto,patanisho,Male,26,"None",digitization
+KAY2805JK,Joe,Kimani,37911721,759541446,kayole_soweto,shauri_yako,Male,26,"None",digitization
+HUR728CM,Catherine,Mararo,35327007,702809841,mji_wa_huruma,,Female,28,"None",digitization
+HUR777BW,Beatrice,Wanjiru,39339331,724976026,mji_wa_huruma,,Female,24,"None",digitization
+HUR715CW,Charles,Waithira,42129862,705295182,mji_wa_huruma,,Male,21,"None",digitization
+KAR405DM,Denis,Musau,42227405,796428495,kariobangi,,Male,22,"",digitization
+KAY1278MK,Michelle,Kinya,41880238,746349917,kayole_soweto,patanisho,Female,21,"",dropout
+KAY2015NM,Natalia,Mukoya,41200261,712188478,kayole_soweto,central,Female,22,"",dropout
+KAY2615VO,Victor,Omolo,39606401,757156587,kayole_soweto,musesa,Male,25,"",dropout
+KAR074GA,George,Alaka,39014943,748110515,kariobangi,,Male,25,"",dropout
+KAR282PM,Prisca,Musau,37944617,740688025,kariobangi,,Female,26,"",dropout
+KAR224FM,Fredinah,Mbai,34637941,790729611,kariobangi,,Female,30,"None",dropout
+KAR181SM,Stacey,Mutheu,39884916,742685927,kariobangi,,Female,23,"None",dropout
+KAR019JM,Joseph,Muta,31587688,704554924,kariobangi,,Male,31,"",dropout
+HUR478JM,John,Mbugua,663449519,725528860,mji_wa_huruma,,Male,20,"",dropout
+HUR564KM,Lydia,Mwove,39461700,792363806,mji_wa_huruma,,Male,27,"",dropout
+KAY733CM,Catherine,Muli,514865081,790049809,kayole_soweto,kibagare,Female,22,"None",dropout
+KAY269JW,Josephine,Wambua,39777929,792205698,kayole_soweto,muungano,Female,23,"None",dropout
+KAY1255GO,George,Oduor,34347337,713052342,kayole_soweto,muthaiga,Male,31,"None",dropout
+KAY2326TO,Tony,Oroko,37499342,745943380,kayole_soweto,kibagare,Male,25,"None",dropout
+KAY2239NW,Wanjiku,Waithera,41461765,757782571,kayole_soweto,muungano,Female,23,"Communication (some difficulty)",microtasking
+KAY450PM,Pauline,Misigo,32283733,757478386,kayole_soweto,gitau,Female,30,"Cognitive (some difficulty)",microtasking
+KAY204DA,Dorothy,Amimo,35326480,796938335,kayole_soweto,muoroto,Female,27,"Cognitive (some difficulty); Self-care (some difficulty); Communication (a lot of difficulty)",microtasking
+KAY1771NN,Nancy,Nderitu,28703703,702466412,kayole_soweto,patanisho,Female,35,"Communication (some difficulty)",microtasking
+KAY1267DA,Dorine,Opati,40392239,793962379,kayole_soweto,shauri_yako,Female,23,"Vision (some difficulty); Cognitive (some difficulty); Self-care (some difficulty)",microtasking
+KAY1383EN,Edward,Njue,33574512,721271513,kayole_soweto,muungano,Male,30,"Mobility (some difficulty)",microtasking
+KAY2411FM,Flevian,Muhonja,42766232,745407464,kayole_soweto,bahati,Female,23,"Hearing (some difficulty)",microtasking
+KAY2079CI,Cynthia,Injete,36764805,794081447,kayole_soweto,gitau,Female,27,"Vision (some difficulty); Pregnant",microtasking
+KAY157CA,Cynthia,Atieno,37856188,743124294,kayole_soweto,central,Female,25,"Self-care (some difficulty); Communication (some difficulty)",microtasking
+KAY614FO,Francis,Okello,201258445,769154831,kayole_soweto,muungano,Male,21,"Self-care (some difficulty)",microtasking
+KAY1628CK,Colleta,Kiteme,32322387,713517416,kayole_soweto,bahati,Female,31,"Mobility (some difficulty)",microtasking
+KAY2698JO,Joram,Okanga,29132596,759239280,kayole_soweto,central,Male,34,"Cognitive (cannot do at all)",microtasking
+KAY1556SN,Salome,Njoroge,37479923,725070150,kayole_soweto,central,Female,26,"Communication (some difficulty)",microtasking
+KAY900JO,Juliet,Ojwang,32501524,717538260,kayole_soweto,bahati,Female,32,"Vision (some difficulty)",microtasking
+KAY2034MN,Mark,Ndung'u,233979668,700476878,kayole_soweto,muoroto,Male,19,"Cognitive (some difficulty)",microtasking
+KAY1791ZA,Zaina,Anakoli,28385230,716141192,kayole_soweto,bahati,Female,33,"Hearing (some difficulty); Cognitive (cannot do at all); Self-care (some difficulty); Communication (some difficulty)",microtasking
+KAY1803FZ,Florence,Zacharia,33966777,706456045,kayole_soweto,bahati,Female,29,"Vision (some difficulty)",microtasking
+KAY2313AN,Annzippy,Njoroge,42903020,742552996,kayole_soweto,gitau,Female,20,"Vision (some difficulty); Pregnant",microtasking
+KAY514JA,Joan,Anyango,39296862,769646171,kayole_soweto,muthaiga,Female,28,"Mobility (some difficulty); Pregnant",microtasking
+KAY621AM,Ann,Mwangi,29664569,704694663,kayole_soweto,muthaiga,Female,32,"Cognitive (some difficulty)",microtasking
+KAY1040DW,Daina,Wasike,38522306,705660877,kayole_soweto,kibagare,Female,26,"Hearing (some difficulty)",microtasking
+KAY652BO,Beatrice,Ochieng,35424954,708444574,kayole_soweto,patanisho,Female,27,"Communication (some difficulty)",microtasking
+KAY1390RB,Rehema,Bwakali,41598355,701090122,kayole_soweto,muthaiga,Female,21,"Mobility (some difficulty); Self-care (some difficulty)",microtasking
+KAY2744EK,Elizabeth,Kariuki,42744192,746380291,kayole_soweto,muungano,Female,20,"Cognitive (some difficulty)",microtasking
+KAY620JH,Jacklyne,Megere,37677046,711343049,kayole_soweto,muthaiga,Female,29,"Vision (some difficulty)",microtasking
+KAR153SN,Sarah,Nzyoki,30915007,798402449,kariobangi,,Female,31,"Vision (some difficulty)",microtasking
+KAR412CM,Caroline,Mumina,39870899,757322210,kariobangi,,Female,24,"Vision (some difficulty)",microtasking
+KAR323PK,Philles,Kasyoka,39020241,112321845,kariobangi,,Female,24,"Communication (some difficulty)",microtasking
+KAR386DM,Domitilla,Mutunga,29013225,703345542,kariobangi,,Female,33,"Vision (some difficulty)",microtasking
+KAR135NM,Nicholas,Mwendwa,35516925,798483194,kariobangi,,Male,28,"Vision (some difficulty)",microtasking
+KAR102FK,Francis,Kyalo,41652712,716640968,kariobangi,,Male,23,"Vision (a lot of difficulty); Hearing (some difficulty)",microtasking
+KAR110CK,Cynthia,Kituku,29923036,725615566,kariobangi,,Female,33,"Mobility (cannot do at all)",microtasking
+KAR106JM,Janet,Mwalimu,31532369,717443163,kariobangi,,Female,32,"Mobility (a lot of difficulty); Self-care (some difficulty)",microtasking
+HUR771VN,Virginia,Njoki,34943152,714691818,mji_wa_huruma,,Female,29,"Communication (cannot do at all)",microtasking
+HUR512MK,Maurine,Khaemba,560408205,798210157,mji_wa_huruma,,Female,19,"Communication (some difficulty)",microtasking
+HUR750CA,Caroline,Awinja,28788096,727685875,mji_wa_huruma,,Female,34,"Vision (some difficulty)",microtasking
+HUR731AM,Ann,Muniu,36134498,703848964,mji_wa_huruma,,Female,26,"Cognitive (some difficulty)",microtasking
+KAY1265DA,Denish,Alaro,39055353,702846564,kayole_soweto,patanisho,Male,26,"Mobility (cannot do at all); Cognitive (cannot do at all)",microtasking
+KAY1686FM,Fulavian,Misigo,38382801,718980483,kayole_soweto,gitau,Female,24,"Vision (a lot of difficulty); Cognitive (some difficulty); Self-care (some difficulty)",microtasking
+KAY1746PW,Peter,Wanjeri,37786325,706447403,kayole_soweto,muungano,Male,29,"Hearing (some difficulty)",microtasking
+KAY716CW,Charity,Wavinya,38530874,713972935,kayole_soweto,shauri_yako,Female,24,"Mobility (a lot of difficulty)",microtasking
+KAY273AK,Ann,Kasee,41343127,798288004,kayole_soweto,muthaiga,Female,22,"Vision (some difficulty)",microtasking
+KAY1971MW,Michelle,Waweru,39789302,794865282,kayole_soweto,kibagare,Female,22,"Mobility (some difficulty)",microtasking
+KAY2358JM,Jecinta,Munga,38936368,719667710,kayole_soweto,patanisho,Female,26,"Cognitive (some difficulty)",microtasking
+KAY1840TM,Teddy,Mutua,40520768,769868181,kayole_soweto,patanisho,Male,22,"Vision (some difficulty); Mobility (a lot of difficulty); Self-care (some difficulty)",microtasking
+KAY2653VM,Veronica,Mbithe,33192413,740287728,kayole_soweto,bahati,Female,29,"Vision (a lot of difficulty); Hearing (a lot of difficulty); Mobility (a lot of difficulty); Cognitive (a lot of difficulty); Self-care (a lot of difficulty); Communication (a lot of difficulty)",microtasking
+KAY2466GK,Grace,Kiio,41783198,723640973,kayole_soweto,muoroto,Female,21,"Vision (some difficulty); Mobility (some difficulty)",microtasking
+KAY1353CW,Catherine,Wambua,31204677,712493556,kayole_soweto,central,Female,34,"Vision (some difficulty)",microtasking
+KAY2762ZA,Zainab,Ayub,41372757,115265153,kayole_soweto,muungano,Female,21,"Communication (some difficulty)",microtasking
+KAY2202FO,Faith,Ogongo,39296653,757273926,kayole_soweto,muthaiga,Female,23,"Mobility (some difficulty)",microtasking
+KAY2140MN,Miriam,Namasaka,40176022,110462809,kayole_soweto,shauri_yako,Female,24,"Vision (some difficulty)",microtasking
+KAY1522KK,Ken,Kariuki,32889860,707790710,kayole_soweto,patanisho,Male,29,"Hearing (a lot of difficulty)",microtasking
+KAY946MM,Margaret,Mwangi,40693890,792008955,kayole_soweto,kibagare,Female,22,"Vision (some difficulty); Mobility (a lot of difficulty); Cognitive (some difficulty)",microtasking
+KAY221DK,Dennis,Kanumi,41952148,706874088,kayole_soweto,musesa,Male,22,"Vision (some difficulty); Mobility (cannot do at all); Cognitive (some difficulty); Self-care (cannot do at all); Communication (a lot of difficulty)",microtasking
+HUR285MW,MARY,WANJA,314342936,708118182,mji_wa_huruma,,Female,19,"Vision (a lot of difficulty)",microtasking
+KAY2070EM,Emily,Munywoki,41435294,746139777,kayole_soweto,muungano,Female,22,"",mobile_mapping
+KAY498AW,Anne,Wainaina,41358110,740660538,kayole_soweto,muungano,Female,22,"",mobile_mapping
+KAY2065BW,Bonface,Mwaura,41349150,707511260,kayole_soweto,patanisho,Male,22,"",mobile_mapping
+KAY2675PM,Peterson,Mwangi,41494854,710685416,kayole_soweto,shauri_yako,Male,22,"",mobile_mapping
+KAY413GG,George,Githua,39717721,795656724,kayole_soweto,muungano,Male,22,"",mobile_mapping
+KAY1042KM,Keziah,Maina,41824335,726547463,kayole_soweto,muungano,Female,23,"",mobile_mapping
+KAY1008BO,Brian,Otieno,41255406,111619919,kayole_soweto,musesa,Male,22,"",mobile_mapping
+KAY264EM,Esther,Mwangi,40185560,797099994,kayole_soweto,kibagare,Female,24,"",mobile_mapping
+KAY1007FO,Faith,Ochieng,42039342,757191482,kayole_soweto,gitau,Female,21,"",mobile_mapping
+KAY465DO,David,Omondi,40900109,115200105,kayole_soweto,musesa,Female,25,"",mobile_mapping
+KAY744IA,Isaac,Oduory,40705534,727764532,kayole_soweto,muoroto,Male,23,"",mobile_mapping
+KAY1604FA,Fidelis,Wanjiru,850262763,740623034,kayole_soweto,gitau,Female,21,"",mobile_mapping
+KAY2802NM,Naffert,Mburu,42550958,794150696,kayole_soweto,kibagare,Male,21,"",mobile_mapping
+KAY237FM,Faith,Mutua,38129284,792117359,kayole_soweto,muungano,Female,25,"",mobile_mapping
+KAY1000GN,Grace,Syombua,37251100,710826241,kayole_soweto,kibagare,Female,28,"None",mobile_mapping
+KAY1619JG,Josphat,Gitahi,41357635,715312083,kayole_soweto,muungano,Male,23,"",mobile_mapping
+KAY2412FO,Felix,Ochieng,34696001,731202052,kayole_soweto,central,Male,27,"",mobile_mapping
+KAY1990MM,Monica,Mawilu,466993797,769640538,kayole_soweto,muoroto,,22,"",mobile_mapping
+KAY2188EG,Ephantus,Githinji,40107753,115981094,kayole_soweto,muoroto,Male,23,"",mobile_mapping
+KAY2501CM,Caroline,Maina,40100859,795878939,kayole_soweto,muthaiga,Female,23,"",mobile_mapping
+KAY2423BO,Brian,Ogeloh,33341931,713560348,kayole_soweto,muoroto,Male,31,"",mobile_mapping
+KAY2647MN,Mary,Ndenga,38338947,705817650,kayole_soweto,musesa,Female,25,"",mobile_mapping
+KAY760SK,Stephen,Karanja,43189128,705647200,kayole_soweto,patanisho,Male,21,"",mobile_mapping
+KAY1230CA,Clinton,Awino,39280438,745919991,kayole_soweto,central,Male,23,"",mobile_mapping
+KAY2251TK,Titus,Kutula,41844763,715622655,kayole_soweto,central,Male,22,"",mobile_mapping
+KAY2531JO,Jackson,Ochieng,37885445,710477935,kayole_soweto,muoroto,Male,26,"None",mobile_mapping
+KAY2093GN,Geoffrey,Ndegwa,33983141,728575150,kayole_soweto,musesa,Male,29,"",mobile_mapping
+KAY1528CM,Celine,Macharia,38995789,741206229,kayole_soweto,muoroto,Female,24,"",mobile_mapping
+KAY1537MW,Maurine,Apora,36745001,727762051,kayole_soweto,shauri_yako,Female,26,"None",mobile_mapping
+KAY955HO,Hillam,Osogo,36420595,794818612,kayole_soweto,shauri_yako,Male,27,"",mobile_mapping
+KAY2549EG,Edward,Opiyo,39260398,796667070,kayole_soweto,musesa,Male,27,"",mobile_mapping
+KAY2529RW,Ruth,Wainaina,39297793,705956964,kayole_soweto,muoroto,Female,24,"",mobile_mapping
+KAY2301SA,Solomon,Ashiono,40824248,714817438,kayole_soweto,central,Male,23,"",mobile_mapping
+KAY974VE,Vivian,Ekhalie,790907801,719634246,kayole_soweto,central,Female,20,"",mobile_mapping
+KAY2071PG,Pharis,Gacini,37726306,706792036,kayole_soweto,musesa,Male,25,"",mobile_mapping
+KAY2279JN,Joseph,Maina,892426549,742154129,kayole_soweto,patanisho,Male,20,"",mobile_mapping
+KAY1177MS,Mary,Hatayi,149226926,115324919,kayole_soweto,musesa,Female,19,"",mobile_mapping
+KAY1223AK,Annah,Kimakiru,319041422,795274475,kayole_soweto,central,Female,19,"",mobile_mapping
+KAY1731EM,Esther,Maina,137752864,717853168,kayole_soweto,kibagare,Female,21,"",mobile_mapping
+KAY2642PO,Philisian,Ochieng,403561138,793779393,kayole_soweto,musesa,Male,19,"",mobile_mapping
+KAY880LK,Lucywell,Kiunjuri,166794018a,796655450,kayole_soweto,muungano,Female,18,"",mobile_mapping
+KAY098JO,Juliet,Achieng,446929288,705421872,kayole_soweto,shauri_yako,Female,20,"",mobile_mapping
+KAY2031KM,Kelly,Muigai,805364811,711918906,kayole_soweto,muungano,Male,19,"",mobile_mapping
+KAY132DN,David,Ngemi,679215987,717383732,kayole_soweto,gitau,Male,19,"",mobile_mapping
+KAY2587RM,Rooney,Masila,562431522,799739055,kayole_soweto,muungano,Male,19,"",mobile_mapping
+KAY1143IM,Ivor,Mwangi,188658776,719862882,kayole_soweto,gitau,Male,19,"",mobile_mapping
+KAY1973FM,Francis,Mwendwa,42023863,793545104,kayole_soweto,central,Male,21,"",mobile_mapping
+KAY2465DN,Daniel,Ngugi,553603845,742406611,kayole_soweto,bahati,,20,"",mobile_mapping
+KAY1506DM,Dennis,Mutinda,859550668,742185790,kayole_soweto,patanisho,Male,19,"",mobile_mapping
+KAY2687MN,Mary,Nthenya,37851779,797282323,kayole_soweto,patanisho,Female,25,"None",mobile_mapping
+KAR040JK,John,Kioko,3888359,112478735,kariobangi,,Male,27,"",mobile_mapping
+KAR422MM,Mercy,Musango,41977223,758177306,kariobangi,,Female,21,"",mobile_mapping
+KAR127FM,Faith,Mutinda,34318025,793823590,kariobangi,,Female,28,"",mobile_mapping
+KAR345WM,Wambua,Mainga,34536229,757073175,kariobangi,,Male,29,"",mobile_mapping
+KAR350MM,Mourine,Mweu,36878805,741400723,kariobangi,,Female,28,"",mobile_mapping
+KAR370PM,Patrick,Musuu,845586848,114942889,kariobangi,,Male,21,"",mobile_mapping
+KAR192TK,Titus,Kioko,41419548,768166056,kariobangi,,Male,24,"",mobile_mapping
+KAR188MN,Michael,Ngumbi,38528535,758966046,kariobangi,,Male,24,"",mobile_mapping
+KAR189CM,Charity,Mueni,42036314,718291440,kariobangi,,Female,21,"",mobile_mapping
+KAR297CM,Chriss,Mutua,42130301,714965792,kariobangi,,Male,22,"",mobile_mapping
+KAR393CM,Catherine,Maweu,36921660,799545888,kariobangi,,Female,27,"",mobile_mapping
+KAR439SN,Stephen,Nthiwa,36617631,720437342,kariobangi,,Male,26,"",mobile_mapping
+KAR008CM,Christine,Mwaniki,194089492,707112206,kariobangi,,Female,22,"",mobile_mapping
+KAR456PE,Patricia,Elizabeth,41299013,708254481,kariobangi,,Female,21,"",mobile_mapping
+KAR212MN,Margaret,Ngalama,30531827,702726453,kariobangi,,Female,32,"",mobile_mapping
+KAR342RK,Ronald,Kyalo,42863722,115964528,kariobangi,,Male,21,"",mobile_mapping
+KAR447MK,Mark,Mutinda,280403593,748163729,kariobangi,,Male,19,"",mobile_mapping
+KAR128DM,David,Mutua,36408216,798234144,kariobangi,,Male,27,"None",mobile_mapping
+KAR090KM,Kelvin,Maithya,38386292,700610206,kariobangi,,Male,24,"None",mobile_mapping
+KAR385JM,Jackline,Musengya,37802853,758944215,kariobangi,,Female,25,"None",mobile_mapping
+KAR394EM,Elkana,Musembi,32594065,705837582,kariobangi,,Male,31,"None",mobile_mapping
+KAR096WM,Wycliffe,Mbui,39828459,757762076,kariobangi,,Male,24,"None",mobile_mapping
+KAR341CW,Caroline,Wavinya,39305710,112203144,kariobangi,,Female,23,"None",mobile_mapping
+KAR290SK,Simeon,Kenga,39717739,113702025,kariobangi,,Male,24,"None",mobile_mapping
+KAR285JM,June,Mumo,39318805,745775219,kariobangi,,Female,23,"None",mobile_mapping
+KAR284KM,Kevin,Muthusi,40119400,705720673,kariobangi,,Male,24,"None",mobile_mapping
+KAR092GS,Gloria,Sammy,39009851,795589084,kariobangi,,Female,26,"",mobile_mapping
+KAR009MM,Mercy,Muendo,35976262,742816385,kariobangi,,Female,27,"None",mobile_mapping
+KAR108BM,Brian,Mutinda,41298602,793486620,kariobangi,,Male,23,"",mobile_mapping
+KAR112CM,Muindi,Mbindya,34393609,795915014,kariobangi,,Male,32,"None",mobile_mapping
+KAR023MK,Magdalene,Kioko,36349646,791189262,kariobangi,,Female,29,"",mobile_mapping
+KAR388JM,Jane,Mwikya,37066716,110083936,kariobangi,,Female,27,"None",mobile_mapping
+KAR208TS,Theophilus,Samson,37487556,724447970,kariobangi,,Male,27,"None",mobile_mapping
+KAR404RM,Richard,Muthengi,41588801,746374480,kariobangi,,Male,22,"None",mobile_mapping
+KAR446FM,Faith,Musau,38414660,743944625,kariobangi,,Female,25,"None",mobile_mapping
+KAR026MM,Milcah,Mwalimu,42476915,707488823,kariobangi,,Female,21,"",mobile_mapping
+KAR371MM,Melody,Mutuku,32542073,708780354,kariobangi,,Female,30,"",mobile_mapping
+KAR191VM,Virginia,Mbithe,606001054,117118687,kariobangi,,Female,22,"None",mobile_mapping
+KAR029AN,Abednego,Ngina,37794306,719576997,kariobangi,,Male,25,"None",mobile_mapping
+HUR770AN,Abigael,Nguyo,35515592,702327420,mji_wa_huruma,,Female,26,"",mobile_mapping
+HUR438PW,Paul,Njoroge,757754574,711529921,mji_wa_huruma,,Male,20,"",mobile_mapping
+HUR772BN,Benny,Nguyo,39469404,750791879,mji_wa_huruma,,Female,25,"",mobile_mapping
+HUR386PM,Peter,Maina,40389584,796389823,mji_wa_huruma,,Male,22,"",mobile_mapping
+HUR304AM,Anne,Mwangi,29245668,769397110,mji_wa_huruma,,Female,33,"",mobile_mapping
+HUR788AW,Anne,Wambugu,35724239,799667584,mji_wa_huruma,,Female,27,"",mobile_mapping
+HUR419AN,Anne,Nguyo,33683669,725028491,mji_wa_huruma,,Female,31,"",mobile_mapping
+HUR468GW,George,Gitau,42317711,794305109,mji_wa_huruma,,Male,20,"",mobile_mapping
+HUR773MN,Margaret,Nyambura,34453985,701709304,mji_wa_huruma,,Female,26,"",mobile_mapping
+HUR792SW,Susan,Wanja,36014634,793272166,mji_wa_huruma,,Female,27,"",mobile_mapping
+HUR558AC,Ann,Chuhi,41470333,719235689,mji_wa_huruma,,Female,21,"",mobile_mapping
+HUR600HW,Hannah,Wanjiku,41277881,716659327,mji_wa_huruma,,Female,23,"",mobile_mapping
+HUR659SM,Stephen,Muli,42832027,796234138,mji_wa_huruma,,Male,22,"",mobile_mapping
+HUR610SW,Simon,Wambui,712972075,759211682,mji_wa_huruma,,Male,19,"",mobile_mapping
+HUR616PN,Peter,Nduta,34932524,705067513,mji_wa_huruma,,Male,30,"",mobile_mapping
+HUR703SN,Simon,Njeri,42414884,799864602,mji_wa_huruma,,Male,21,"",mobile_mapping
+HUR452DM,Dorcas,Wanja,40390152,757861409,mji_wa_huruma,,Female,22,"",mobile_mapping
+HUR722KN,Kennedy,Nyakio,30708927,740514040,mji_wa_huruma,,Male,35,"",mobile_mapping
+HUR343SK,Susan,Kimani,35517271,759969332,mji_wa_huruma,,Female,27,"",mobile_mapping
+HUR394JG,Josephine,Gikurumi,30693705,723809692,mji_wa_huruma,,Female,32,"",mobile_mapping
+HUR503EN,Edward,Nyakobi,42295491,711164601,mji_wa_huruma,,Male,22,"",mobile_mapping
+HUR653LK,Lucia,Kimani,35216395,708191866,mji_wa_huruma,,Female,28,"",mobile_mapping
+HUR689DM,Doricah,Motonu,716355507,796011378,mji_wa_huruma,,Female,19,"",mobile_mapping
+HUR714AK,Alice,Karanja,41366680,759936866,mji_wa_huruma,,Female,21,"",mobile_mapping
+HUR442JK,Jerusa,Kulali,32836590,757305386,mji_wa_huruma,,Female,32,"",mobile_mapping
+HUR401NM,Nancy,Muthoni,34411957,713393820,mji_wa_huruma,,Female,29,"",mobile_mapping
+HUR007JK,Jane,Kamira,28936029,741799605,mji_wa_huruma,,Female,34,"",household_survey
+HUR259BK,Beatrice,Kombo,33832976,711124298,mji_wa_huruma,,Female,29,"",household_survey
+HUR794RN,Ruth,Njoroge,39715361,743711038,mji_wa_huruma,,Female,25,"",household_survey
+HUR581FM,Faith,Maganjo,41285732,796690037,mji_wa_huruma,,Female,23,"",household_survey
+HUR645EM,Esther,Mwaura,35979851,791995959,mji_wa_huruma,,Female,28,"",household_survey
+KAY1045SN,Sicily,Nyaga,31032856,713398700,kayole_soweto,muoroto,Female,32,"None",household_survey
+KAY1504BA,Brian,Koli,42682301,745018729,kayole_soweto,shauri_yako,Male,21,"None",household_survey
+KAY2190FM,Francis,Muthoni,33983893,710548780,kayole_soweto,muthaiga,Male,28,"None",household_survey
+KAY1640JM,Joab,Mandu,42782310,769934520,kayole_soweto,shauri_yako,Male,20,"None",household_survey
+KAY2468HO,Hellen,Okoth,39549777,707263743,kayole_soweto,musesa,Female,23,"None",household_survey
+KAY1799DM,David,Mandu,40496801,758778887,kayole_soweto,shauri_yako,Male,22,"None",household_survey
+KAY2570SM,Samuel,Mbiyu,42047289,728730532,kayole_soweto,kibagare,Male,21,"None",household_survey
+KAY1043DB,Dennis,Bosire,28128190,714143328,kayole_soweto,shauri_yako,Male,35,"None",household_survey
+KAY1681JM,Joyce,Motaroki,41765980,110062050,kayole_soweto,gitau,Female,21,"None",household_survey
+KAY461VO,Valary,Ochieng',40566240,797671931,kayole_soweto,muungano,Female,22,"None",household_survey
+KAY1975NM,Nancy,Mutinda,39817177,710854457,kayole_soweto,muoroto,Female,22,"None",household_survey
+KAY1726RN,Reuben,Nyangweso,37356657,706327558,kayole_soweto,muthaiga,Male,27,"None",household_survey
+KAY2134VW,Veronica,Wambua,39956293,792123815,kayole_soweto,gitau,Female,22,"None",household_survey
+KAY778DT,Daudi,Tarangei,38311700,757165663,kayole_soweto,muthaiga,Male,25,"None",household_survey
+KAY886MN,Mary,Njoroge,32199778,727781821,kayole_soweto,muoroto,Female,32,"None",household_survey
+KAY2568AI,Auther,Irungu,38783378,746627739,kayole_soweto,bahati,Male,24,"None",household_survey
+KAY1053IO,Irene,Obeli,38782152,748257711,kayole_soweto,muungano,Female,25,"None",household_survey
+KAY1166AM,Abigail,Mukoko,471486054,791350190,kayole_soweto,musesa,Female,19,"None",household_survey
+KAY1459VO,Vivian,Otieno,38616361,768576009,kayole_soweto,patanisho,Female,24,"None",household_survey
+KAY2248LK,Louse,Kitunda,39897845,740153484,kayole_soweto,muoroto,Female,23,"None",household_survey
+KAY2038SI,Solomon,Irungu,29415974,704246480,kayole_soweto,central,Male,33,"None",household_survey
+KAY574GK,Getrude,Kamau,702272234,746288429,kayole_soweto,shauri_yako,Female,21,"None",household_survey
+KAY1590MT,Mary,Theuri,41779274,790097671,kayole_soweto,kibagare,Female,21,"None",household_survey
+KAY2085SB,Samuel,Bogonko,39717702,114460065,kayole_soweto,kibagare,Male,24,"None",household_survey
+KAY346CC,Charles,Chomba,778611601,724176794,kayole_soweto,central,Male,20,"None",household_survey
+KAY2754JD,Joyce,Daniel,37418482,745255633,kayole_soweto,muoroto,Female,27,"None",household_survey
+KAY1398PO,Pauline,Owino,836171964,742930568,kayole_soweto,bahati,Female,21,"None",household_survey
+KAY1449OO,Oginga,Onguko,32280983,711679682,kayole_soweto,central,Male,30,"None",household_survey
+KAY291SM,Sharon,Makanga,39563544,703727192,kayole_soweto,musesa,Female,23,"None",household_survey
+KAY1092LJ,Lucy,Idarasia,40119224,743815945,kayole_soweto,bahati,Female,26,"None",household_survey
+KAY2209BA,Bakhita,Awuor,837523899,757080536,kayole_soweto,muthaiga,Female,19,"None",household_survey
+KAY1138SM,Stephen,Muturi,481091972,705958053,kayole_soweto,muthaiga,Male,20,"None",household_survey
+KAY1380MM,Merlyne,Matseshe,37518787,745152212,kayole_soweto,gitau,Female,28,"None",household_survey
+KAY2729JW,Jane,Wambui,29336418,111293795,kayole_soweto,gitau,Female,32,"None",household_survey
+KAY1145FW,Francis,Wanjau,33690102,718235618,kayole_soweto,patanisho,Male,28,"None",household_survey
+KAY1614VA,Vivian Awino,Arango,40464144,746731273,kayole_soweto,gitau,Female,23,"None",household_survey
+KAY352VO,Veronica,Oluoch,31968960,702373382,kayole_soweto,shauri_yako,Female,34,"None",household_survey
+KAY2491PL,Pauline,Lukhachi,42754214,740381067,kayole_soweto,kibagare,Female,20,"None",household_survey
+KAY2772EB,Evans,Barasa,37978811,790176775,kayole_soweto,kibagare,Male,29,"None",household_survey
+KAY924LO,Lilian,Ondieki,36107928,740121260,kayole_soweto,bahati,Female,26,"None",household_survey
+KAY1966MN,Moses,Ndubi,33673117,759616953,kayole_soweto,muthaiga,Male,29,"None",household_survey
+KAY1994KK,Kenan,Konde,42481864,743288111,kayole_soweto,kibagare,Male,23,"None",household_survey
+KAY2427LM,Laventry,Munyeti,32818675,701727965,kayole_soweto,gitau,Female,32,"None",household_survey
+KAY2546PW,Peter,Wambui,30569603,758084222,kayole_soweto,kibagare,Male,30,"None",household_survey
+KAY1062DM,Dolpine,Murengu,32710332,742154998,kayole_soweto,musesa,Female,29,"None",household_survey
+KAY1198MN,Miriam,Nyakundi,42063346,114831660,kayole_soweto,bahati,Female,23,"None",household_survey
+KAY2544DG,Denis,Gitahi,37911492,713457008,kayole_soweto,bahati,Male,25,"None",household_survey
+KAY868JN,Joy,Nzomo,279653268,790446692,kayole_soweto,musesa,Female,20,"None",household_survey
+KAY1448PO,Paul,Omondi,40664765,769046919,kayole_soweto,bahati,Male,24,"None",household_survey
+KAY2080DM,Daniel,Maina,873004692,748076642,kayole_soweto,musesa,Male,19,"None",household_survey
+KAY2490AM,Agnes,Mutuku,37512014,718769343,kayole_soweto,shauri_yako,Female,27,"None",household_survey
+KAY288SM,Stephen,Mathu,41765616,710254057,kayole_soweto,muthaiga,Male,21,"None",household_survey
+KAY1914KM,Kelvin,Masai,37060930,714759387,kayole_soweto,muungano,Male,26,"None",household_survey
+KAY467DN,Debrah,Nyaang'a,37852910,740157024,kayole_soweto,shauri_yako,Female,25,"None",household_survey
+HUR751QN,Quinter,Akoth,32777813,710944067,mji_wa_huruma,,Female,31,"None",household_survey
+HUR707EW,Elijah,Wanjiru,30965988,797306436,mji_wa_huruma,,Male,35,"None",household_survey
+HUR769PM,Pauline,Macharia,38631569,758805540,mji_wa_huruma,,Female,24,"None",household_survey
+HUR802SK,Sarah,Warurie,37192038,792217719,mji_wa_huruma,,Female,25,"None",household_survey
+HUR583FO,Faith,Otieno,41741232,704815936,mji_wa_huruma,,Female,23,"None",household_survey
+HUR672JM,JAMES,MUTHONI,30713242,740821911,mji_wa_huruma,,Male,31,"None",household_survey
+HUR761RM,RUTH,MUTHONI,464756966,114665648,mji_wa_huruma,,Female,19,"None",household_survey
+HUR429JN,JOHN,NGURE,38136262,713058307,mji_wa_huruma,,Male,25,"None",household_survey
+HUR652MN,Monica,Ng'ang'a,42414934,700033052,mji_wa_huruma,,Female,21,"None",household_survey
+KAR286EM,Emily,Musau,29553553,741379845,kariobangi,,Female,35,"",household_survey
+KAR306WK,Wesly,Kimuyu,543796835,729265123,kariobangi,,Male,19,"",household_survey
+KAR458SK,Sydney,Kiamba,42732788,743341628,kariobangi,,Male,20,"",household_survey
+KAR432GM,Grace,Mutunga,39926988,790615665,kariobangi,,Female,23,"",household_survey
+HUR781MK,Margaret,Karita,41857569,728851865,mji_wa_huruma,,Female,21,"",household_survey
+HUR749AG,Ambrose,Gitau,38997818,716238780,mji_wa_huruma,,Male,25,"",household_survey
+HUR615MN,Michael,Nduati,35240193,797543113,mji_wa_huruma,,Male,28,"",household_survey
+HUR389PC,Peter,Chege,33982498,714144802,mji_wa_huruma,,Male,30,"",household_survey

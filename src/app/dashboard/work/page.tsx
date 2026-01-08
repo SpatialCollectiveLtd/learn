@@ -15,6 +15,7 @@ import {
   ExternalLink,
   MapPin
 } from 'lucide-react';
+import NotificationToast from '@/components/notifications/NotificationToast';
 
 interface DailyStats {
   today: number;
@@ -93,6 +94,12 @@ export default function WorkDashboard() {
         return;
       }
 
+      // First, sync work days from OSM stats (runs in background)
+      fetch('/api/work/days/sync', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+      }).catch(err => console.warn('Work days sync failed:', err));
+
       // Fetch daily stats, work days, and profile in parallel
       const [statsRes, daysRes, profileRes] = await Promise.all([
         fetch('/api/work/stats/daily', {
@@ -158,6 +165,15 @@ export default function WorkDashboard() {
       if (data.success) {
         setDailyStats(data.data);
         setLastRefreshTime(new Date());
+
+        // Re-fetch work days to update Performance Summary
+        const daysRes = await fetch('/api/work/days/count', {
+          headers: { 'Authorization': `Bearer ${token}` },
+        });
+        const daysData = await daysRes.json();
+        if (daysData.success) {
+          setWorkDays(daysData.data);
+        }
       } else {
         throw new Error(data.message);
       }
@@ -598,6 +614,9 @@ export default function WorkDashboard() {
           <p className="text-xs mt-1">Automatic updates every 5 minutes</p>
         </div>
       </div>
+
+      {/* Notification Toast */}
+      {profile && <NotificationToast youthId={profile.youthId} />}
     </div>
   );
 }

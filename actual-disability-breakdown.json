@@ -1,0 +1,672 @@
+{
+  "summary": {
+    "total": 300,
+    "withDisabilities": 63,
+    "withoutDisabilities": 237
+  },
+  "details": [
+    {
+      "uniqueId": "KAY2239NW",
+      "name": "Wanjiku Waithera",
+      "disability": "Communication (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY450PM",
+      "name": "Pauline Misigo",
+      "disability": "Cognitive (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY204DA",
+      "name": "Dorothy Amimo",
+      "disability": "Cognitive (some difficulty); Self-care (some difficulty); Communication (a lot of difficulty)"
+    },
+    {
+      "uniqueId": "KAY1771NN",
+      "name": "Nancy Nderitu",
+      "disability": "Communication (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY1267DA",
+      "name": "Dorine Opati",
+      "disability": "Vision (some difficulty); Cognitive (some difficulty); Self-care (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY1383EN",
+      "name": "Edward Njue",
+      "disability": "Mobility (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY2411FM",
+      "name": "Flevian Muhonja",
+      "disability": "Hearing (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY2079CI",
+      "name": "Cynthia Injete",
+      "disability": "Vision (some difficulty); Pregnant"
+    },
+    {
+      "uniqueId": "KAY157CA",
+      "name": "Cynthia Atieno",
+      "disability": "Self-care (some difficulty); Communication (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY614FO",
+      "name": "Francis Okello",
+      "disability": "Self-care (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY2603GK",
+      "name": "Gilbert Karigo",
+      "disability": "Vision (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY1628CK",
+      "name": "Colleta Kiteme",
+      "disability": "Mobility (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY2698JO",
+      "name": "Joram Okanga",
+      "disability": "Cognitive (cannot do at all)"
+    },
+    {
+      "uniqueId": "KAY1556SN",
+      "name": "Salome Njoroge",
+      "disability": "Communication (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY900JO",
+      "name": "Juliet Ojwang",
+      "disability": "Vision (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY2034MN",
+      "name": "Mark Ndung'u",
+      "disability": "Cognitive (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY1791ZA",
+      "name": "Zaina Anakoli",
+      "disability": "Hearing (some difficulty); Cognitive (cannot do at all); Self-care (some difficulty); Communication (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY1803FZ",
+      "name": "Florence Zacharia",
+      "disability": "Vision (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY2313AN",
+      "name": "Annzippy Njoroge",
+      "disability": "Vision (some difficulty); Pregnant"
+    },
+    {
+      "uniqueId": "KAY514JA",
+      "name": "Joan Anyango",
+      "disability": "Mobility (some difficulty); Pregnant"
+    },
+    {
+      "uniqueId": "KAY621AM",
+      "name": "Ann Mwangi",
+      "disability": "Cognitive (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY1040DW",
+      "name": "Daina Wasike",
+      "disability": "Hearing (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY652BO",
+      "name": "Beatrice Ochieng",
+      "disability": "Communication (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY1390RB",
+      "name": "Rehema Bwakali",
+      "disability": "Mobility (some difficulty); Self-care (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY2744EK",
+      "name": "Elizabeth Kariuki",
+      "disability": "Cognitive (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY620JH",
+      "name": "Jacklyne Megere",
+      "disability": "Vision (some difficulty)"
+    },
+    {
+      "uniqueId": "KAR153SN",
+      "name": "Sarah Nzyoki",
+      "disability": "Vision (some difficulty)"
+    },
+    {
+      "uniqueId": "KAR412CM",
+      "name": "Caroline Mumina",
+      "disability": "Vision (some difficulty)"
+    },
+    {
+      "uniqueId": "KAR323PK",
+      "name": "Philles Kasyoka",
+      "disability": "Communication (some difficulty)"
+    },
+    {
+      "uniqueId": "KAR386DM",
+      "name": "Domitilla Mutunga",
+      "disability": "Vision (some difficulty)"
+    },
+    {
+      "uniqueId": "KAR135NM",
+      "name": "Nicholas Mwendwa",
+      "disability": "Vision (some difficulty)"
+    },
+    {
+      "uniqueId": "KAR102FK",
+      "name": "Francis Kyalo",
+      "disability": "Vision (a lot of difficulty); Hearing (some difficulty)"
+    },
+    {
+      "uniqueId": "KAR322FK",
+      "name": "Festus Kaluki",
+      "disability": "Mobility (a lot of difficulty)"
+    },
+    {
+      "uniqueId": "KAR110CK",
+      "name": "Cynthia Kituku",
+      "disability": "Mobility (cannot do at all)"
+    },
+    {
+      "uniqueId": "KAR106JM",
+      "name": "Janet Mwalimu",
+      "disability": "Mobility (a lot of difficulty); Self-care (some difficulty)"
+    },
+    {
+      "uniqueId": "HUR455MM",
+      "name": "Martin Mbugua",
+      "disability": "Vision (cannot do at all)"
+    },
+    {
+      "uniqueId": "HUR185RN",
+      "name": "Richard Njuguna",
+      "disability": "Self-care (some difficulty)"
+    },
+    {
+      "uniqueId": "HUR771VN",
+      "name": "Virginia Njoki",
+      "disability": "Communication (cannot do at all)"
+    },
+    {
+      "uniqueId": "HUR512MK",
+      "name": "Maurine Khaemba",
+      "disability": "Communication (some difficulty)"
+    },
+    {
+      "uniqueId": "HUR750CA",
+      "name": "Caroline Awinja",
+      "disability": "Vision (some difficulty)"
+    },
+    {
+      "uniqueId": "HUR731AM",
+      "name": "Ann Muniu",
+      "disability": "Cognitive (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY1265DA",
+      "name": "Denish Alaro",
+      "disability": "Mobility (cannot do at all); Cognitive (cannot do at all)"
+    },
+    {
+      "uniqueId": "KAY1686FM",
+      "name": "Fulavian Misigo",
+      "disability": "Vision (a lot of difficulty); Cognitive (some difficulty); Self-care (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY1746PW",
+      "name": "Peter Wanjeri",
+      "disability": "Hearing (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY2705AO",
+      "name": "Austine Ongonga",
+      "disability": "Mobility (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY2333OO",
+      "name": "Oketch Ochieng",
+      "disability": "Mobility (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY1395MO",
+      "name": "Mercy Moraa",
+      "disability": "Mobility (a lot of difficulty)"
+    },
+    {
+      "uniqueId": "KAY716CW",
+      "name": "Charity Wavinya",
+      "disability": "Mobility (a lot of difficulty)"
+    },
+    {
+      "uniqueId": "KAY2391LN",
+      "name": "Lilian Naliaka",
+      "disability": "Mobility (a lot of difficulty)"
+    },
+    {
+      "uniqueId": "KAY273AK",
+      "name": "Ann Kasee",
+      "disability": "Vision (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY1971MW",
+      "name": "Michelle Waweru",
+      "disability": "Mobility (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY2358JM",
+      "name": "Jecinta Munga",
+      "disability": "Cognitive (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY1840TM",
+      "name": "Teddy Mutua",
+      "disability": "Vision (some difficulty); Mobility (a lot of difficulty); Self-care (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY2653VM",
+      "name": "Veronica Mbithe",
+      "disability": "Vision (a lot of difficulty); Hearing (a lot of difficulty); Mobility (a lot of difficulty); Cognitive (a lot of difficulty); Self-care (a lot of difficulty); Communication (a lot of difficulty)"
+    },
+    {
+      "uniqueId": "KAY2466GK",
+      "name": "Grace Kiio",
+      "disability": "Vision (some difficulty); Mobility (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY1353CW",
+      "name": "Catherine Wambua",
+      "disability": "Vision (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY2762ZA",
+      "name": "Zainab Ayub",
+      "disability": "Communication (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY2202FO",
+      "name": "Faith Ogongo",
+      "disability": "Mobility (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY2140MN",
+      "name": "Miriam Namasaka",
+      "disability": "Vision (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY1522KK",
+      "name": "Ken Kariuki",
+      "disability": "Hearing (a lot of difficulty)"
+    },
+    {
+      "uniqueId": "KAY946MM",
+      "name": "Margaret Mwangi",
+      "disability": "Vision (some difficulty); Mobility (a lot of difficulty); Cognitive (some difficulty)"
+    },
+    {
+      "uniqueId": "KAY221DK",
+      "name": "Dennis Kanumi",
+      "disability": "Vision (some difficulty); Mobility (cannot do at all); Cognitive (some difficulty); Self-care (cannot do at all); Communication (a lot of difficulty)"
+    },
+    {
+      "uniqueId": "HUR285MW",
+      "name": "MARY WANJA",
+      "disability": "Vision (a lot of difficulty)"
+    }
+  ],
+  "groups": {
+    "vision": [
+      {
+        "uniqueId": "KAY2079CI",
+        "name": "Cynthia Injete",
+        "disability": "Vision (some difficulty); Pregnant"
+      },
+      {
+        "uniqueId": "KAY2603GK",
+        "name": "Gilbert Karigo",
+        "disability": "Vision (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY900JO",
+        "name": "Juliet Ojwang",
+        "disability": "Vision (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY1803FZ",
+        "name": "Florence Zacharia",
+        "disability": "Vision (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY2313AN",
+        "name": "Annzippy Njoroge",
+        "disability": "Vision (some difficulty); Pregnant"
+      },
+      {
+        "uniqueId": "KAY620JH",
+        "name": "Jacklyne Megere",
+        "disability": "Vision (some difficulty)"
+      },
+      {
+        "uniqueId": "KAR153SN",
+        "name": "Sarah Nzyoki",
+        "disability": "Vision (some difficulty)"
+      },
+      {
+        "uniqueId": "KAR412CM",
+        "name": "Caroline Mumina",
+        "disability": "Vision (some difficulty)"
+      },
+      {
+        "uniqueId": "KAR386DM",
+        "name": "Domitilla Mutunga",
+        "disability": "Vision (some difficulty)"
+      },
+      {
+        "uniqueId": "KAR135NM",
+        "name": "Nicholas Mwendwa",
+        "disability": "Vision (some difficulty)"
+      },
+      {
+        "uniqueId": "HUR455MM",
+        "name": "Martin Mbugua",
+        "disability": "Vision (cannot do at all)"
+      },
+      {
+        "uniqueId": "HUR750CA",
+        "name": "Caroline Awinja",
+        "disability": "Vision (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY273AK",
+        "name": "Ann Kasee",
+        "disability": "Vision (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY1353CW",
+        "name": "Catherine Wambua",
+        "disability": "Vision (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY2140MN",
+        "name": "Miriam Namasaka",
+        "disability": "Vision (some difficulty)"
+      },
+      {
+        "uniqueId": "HUR285MW",
+        "name": "MARY WANJA",
+        "disability": "Vision (a lot of difficulty)"
+      }
+    ],
+    "hearing": [
+      {
+        "uniqueId": "KAY2411FM",
+        "name": "Flevian Muhonja",
+        "disability": "Hearing (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY1040DW",
+        "name": "Daina Wasike",
+        "disability": "Hearing (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY1746PW",
+        "name": "Peter Wanjeri",
+        "disability": "Hearing (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY1522KK",
+        "name": "Ken Kariuki",
+        "disability": "Hearing (a lot of difficulty)"
+      }
+    ],
+    "mobility": [
+      {
+        "uniqueId": "KAY1383EN",
+        "name": "Edward Njue",
+        "disability": "Mobility (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY1628CK",
+        "name": "Colleta Kiteme",
+        "disability": "Mobility (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY514JA",
+        "name": "Joan Anyango",
+        "disability": "Mobility (some difficulty); Pregnant"
+      },
+      {
+        "uniqueId": "KAR322FK",
+        "name": "Festus Kaluki",
+        "disability": "Mobility (a lot of difficulty)"
+      },
+      {
+        "uniqueId": "KAR110CK",
+        "name": "Cynthia Kituku",
+        "disability": "Mobility (cannot do at all)"
+      },
+      {
+        "uniqueId": "KAY2705AO",
+        "name": "Austine Ongonga",
+        "disability": "Mobility (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY2333OO",
+        "name": "Oketch Ochieng",
+        "disability": "Mobility (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY1395MO",
+        "name": "Mercy Moraa",
+        "disability": "Mobility (a lot of difficulty)"
+      },
+      {
+        "uniqueId": "KAY716CW",
+        "name": "Charity Wavinya",
+        "disability": "Mobility (a lot of difficulty)"
+      },
+      {
+        "uniqueId": "KAY2391LN",
+        "name": "Lilian Naliaka",
+        "disability": "Mobility (a lot of difficulty)"
+      },
+      {
+        "uniqueId": "KAY1971MW",
+        "name": "Michelle Waweru",
+        "disability": "Mobility (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY2202FO",
+        "name": "Faith Ogongo",
+        "disability": "Mobility (some difficulty)"
+      }
+    ],
+    "cognitive": [
+      {
+        "uniqueId": "KAY450PM",
+        "name": "Pauline Misigo",
+        "disability": "Cognitive (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY2698JO",
+        "name": "Joram Okanga",
+        "disability": "Cognitive (cannot do at all)"
+      },
+      {
+        "uniqueId": "KAY2034MN",
+        "name": "Mark Ndung'u",
+        "disability": "Cognitive (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY621AM",
+        "name": "Ann Mwangi",
+        "disability": "Cognitive (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY2744EK",
+        "name": "Elizabeth Kariuki",
+        "disability": "Cognitive (some difficulty)"
+      },
+      {
+        "uniqueId": "HUR731AM",
+        "name": "Ann Muniu",
+        "disability": "Cognitive (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY2358JM",
+        "name": "Jecinta Munga",
+        "disability": "Cognitive (some difficulty)"
+      }
+    ],
+    "selfCare": [
+      {
+        "uniqueId": "KAY614FO",
+        "name": "Francis Okello",
+        "disability": "Self-care (some difficulty)"
+      },
+      {
+        "uniqueId": "HUR185RN",
+        "name": "Richard Njuguna",
+        "disability": "Self-care (some difficulty)"
+      }
+    ],
+    "communication": [
+      {
+        "uniqueId": "KAY2239NW",
+        "name": "Wanjiku Waithera",
+        "disability": "Communication (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY1771NN",
+        "name": "Nancy Nderitu",
+        "disability": "Communication (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY1556SN",
+        "name": "Salome Njoroge",
+        "disability": "Communication (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY652BO",
+        "name": "Beatrice Ochieng",
+        "disability": "Communication (some difficulty)"
+      },
+      {
+        "uniqueId": "KAR323PK",
+        "name": "Philles Kasyoka",
+        "disability": "Communication (some difficulty)"
+      },
+      {
+        "uniqueId": "HUR771VN",
+        "name": "Virginia Njoki",
+        "disability": "Communication (cannot do at all)"
+      },
+      {
+        "uniqueId": "HUR512MK",
+        "name": "Maurine Khaemba",
+        "disability": "Communication (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY2762ZA",
+        "name": "Zainab Ayub",
+        "disability": "Communication (some difficulty)"
+      }
+    ],
+    "pregnant": [
+      {
+        "uniqueId": "KAY2079CI",
+        "name": "Cynthia Injete",
+        "disability": "Vision (some difficulty); Pregnant"
+      },
+      {
+        "uniqueId": "KAY2313AN",
+        "name": "Annzippy Njoroge",
+        "disability": "Vision (some difficulty); Pregnant"
+      },
+      {
+        "uniqueId": "KAY514JA",
+        "name": "Joan Anyango",
+        "disability": "Mobility (some difficulty); Pregnant"
+      }
+    ],
+    "multiple": [
+      {
+        "uniqueId": "KAY204DA",
+        "name": "Dorothy Amimo",
+        "disability": "Cognitive (some difficulty); Self-care (some difficulty); Communication (a lot of difficulty)"
+      },
+      {
+        "uniqueId": "KAY1267DA",
+        "name": "Dorine Opati",
+        "disability": "Vision (some difficulty); Cognitive (some difficulty); Self-care (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY157CA",
+        "name": "Cynthia Atieno",
+        "disability": "Self-care (some difficulty); Communication (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY1791ZA",
+        "name": "Zaina Anakoli",
+        "disability": "Hearing (some difficulty); Cognitive (cannot do at all); Self-care (some difficulty); Communication (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY1390RB",
+        "name": "Rehema Bwakali",
+        "disability": "Mobility (some difficulty); Self-care (some difficulty)"
+      },
+      {
+        "uniqueId": "KAR102FK",
+        "name": "Francis Kyalo",
+        "disability": "Vision (a lot of difficulty); Hearing (some difficulty)"
+      },
+      {
+        "uniqueId": "KAR106JM",
+        "name": "Janet Mwalimu",
+        "disability": "Mobility (a lot of difficulty); Self-care (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY1265DA",
+        "name": "Denish Alaro",
+        "disability": "Mobility (cannot do at all); Cognitive (cannot do at all)"
+      },
+      {
+        "uniqueId": "KAY1686FM",
+        "name": "Fulavian Misigo",
+        "disability": "Vision (a lot of difficulty); Cognitive (some difficulty); Self-care (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY1840TM",
+        "name": "Teddy Mutua",
+        "disability": "Vision (some difficulty); Mobility (a lot of difficulty); Self-care (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY2653VM",
+        "name": "Veronica Mbithe",
+        "disability": "Vision (a lot of difficulty); Hearing (a lot of difficulty); Mobility (a lot of difficulty); Cognitive (a lot of difficulty); Self-care (a lot of difficulty); Communication (a lot of difficulty)"
+      },
+      {
+        "uniqueId": "KAY2466GK",
+        "name": "Grace Kiio",
+        "disability": "Vision (some difficulty); Mobility (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY946MM",
+        "name": "Margaret Mwangi",
+        "disability": "Vision (some difficulty); Mobility (a lot of difficulty); Cognitive (some difficulty)"
+      },
+      {
+        "uniqueId": "KAY221DK",
+        "name": "Dennis Kanumi",
+        "disability": "Vision (some difficulty); Mobility (cannot do at all); Cognitive (some difficulty); Self-care (cannot do at all); Communication (a lot of difficulty)"
+      }
+    ]
+  }
+}

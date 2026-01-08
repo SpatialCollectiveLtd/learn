@@ -164,7 +164,8 @@ export async function getTodayBuildingCount(
   osmUsername: string,
   projectHashtag: string = '#DPW2025',
   timezone: string = 'Africa/Nairobi',
-  forceRefresh: boolean = false
+  forceRefresh: boolean = false,
+  exceptionHashtags: string[] = []
 ): Promise<OSMStats> {
   const startTime = Date.now();
   const today = new Date().toISOString().split('T')[0];
@@ -234,9 +235,23 @@ export async function getTodayBuildingCount(
     
     console.log(`[OSM] Found ${changesets.length} total changesets`);
     
-    // Filter by project hashtag
-    const projectChangesets = filterByHashtag(changesets, projectHashtag);
-    console.log(`[OSM] ${projectChangesets.length} changesets match ${projectHashtag}`);
+    // Filter by project hashtag or exception hashtags
+    let projectChangesets = filterByHashtag(changesets, projectHashtag);
+    
+    // If user has exception hashtags, also include those
+    if (exceptionHashtags.length > 0) {
+      for (const exceptionTag of exceptionHashtags) {
+        const exceptionChangesets = filterByHashtag(changesets, exceptionTag);
+        // Add exception changesets that aren't already included
+        for (const cs of exceptionChangesets) {
+          if (!projectChangesets.find(existing => existing.id === cs.id)) {
+            projectChangesets.push(cs);
+          }
+        }
+      }
+    }
+    
+    console.log(`[OSM] ${projectChangesets.length} changesets match ${projectHashtag}${exceptionHashtags.length > 0 ? ' or exception hashtags' : ''}`);
     
     // Edge case: Handle zero matching changesets
     if (projectChangesets.length === 0) {
@@ -489,35 +504,35 @@ async function countBuildingsInChangeset(
     
     // Count buildings in create and modify sections
     let buildingCount = 0;
-    
-    // Extract ways from create section
-    const createSection = parsed.osmChange?.create;
-    const createWays: any[] = [];
-    if (createSection) {
-      // Parser puts each element type in separate objects
-      Object.values(createSection).forEach((item: any) => {
-        if (item && item.way && Array.isArray(item.way)) {
-          createWays.push(...item.way);
+    const osmChange = parsed?.osmChange || {};
+
+    // Check all modification types (create, modify, delete)
+    for (const modType of ['create', 'modify']) {
+      const section = osmChange[modType];
+      if (!section) continue;
+
+      // Check ways (buildings are typically ways, not nodes)
+      const ways = section.way || [];
+      for (const way of ways) {
+        if (hasBuildingTag(way.tag)) {
+          buildingCount++;
         }
-      });
-    }
+      }
 
-    // Extract ways from modify section
-    const modifySection = parsed.osmChange?.modify;
-    const modifyWays: any[] = [];
-    if (modifySection) {
-      Object.values(modifySection).forEach((item: any) => {
-        if (item && item.way && Array.isArray(item.way)) {
-          modifyWays.push(...item.way);
+      // Also check nodes (rare, but some buildings might be points)
+      const nodes = section.node || [];
+      for (const node of nodes) {
+        if (hasBuildingTag(node.tag)) {
+          buildingCount++;
         }
-      });
-    }
+      }
 
-    const allWays = [...createWays, ...modifyWays];
-
-    for (const way of allWays) {
-      if (hasBuildingTag(way.tag)) {
-        buildingCount++;
+      // Check relations (multipolygons for complex buildings)
+      const relations = section.relation || [];
+      for (const relation of relations) {
+        if (hasBuildingTag(relation.tag)) {
+          buildingCount++;
+        }
       }
     }
 
