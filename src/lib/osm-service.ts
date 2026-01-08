@@ -506,9 +506,18 @@ async function countBuildingsInChangeset(
     let buildingCount = 0;
     const osmChange = parsed?.osmChange || {};
 
-    // Check all modification types (create, modify, delete)
-    for (const modType of ['create', 'modify']) {
-      const section = osmChange[modType];
+    // OSM API returns each element in its own <create> or <modify> tag
+    // So osmChange.create is an array of sections, not a single section
+    const sections = [];
+    if (osmChange.create) {
+      sections.push(...(Array.isArray(osmChange.create) ? osmChange.create : [osmChange.create]));
+    }
+    if (osmChange.modify) {
+      sections.push(...(Array.isArray(osmChange.modify) ? osmChange.modify : [osmChange.modify]));
+    }
+
+    // Check each section
+    for (const section of sections) {
       if (!section) continue;
 
       // Check ways (buildings are typically ways, not nodes)
