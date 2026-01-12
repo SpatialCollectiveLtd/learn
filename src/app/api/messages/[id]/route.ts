@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyYouthToken } from '@/app/api/_lib/auth';
 import { Database } from '@/app/api/_lib/database';
 
-const EMAIL_API_URL = process.env.EMAIL_API_URL || 'https://email-api.spatialcollective.co.ke/api';
+const EMAIL_API_URL = process.env.EMAIL_API_URL || 'https://tasks.spatialcollective.co.ke/email-api';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || '06682c28d538516b9920423822798612';
 
 export async function GET(

@@ -4,8 +4,10 @@ REST API for fetching emails from domain mailboxes (`@spatialcollective.co.ke`).
 
 ## Base URL
 ```
-https://email-api.spatialcollective.co.ke/api
+https://tasks.spatialcollective.co.ke/email-api
 ```
+
+> **Note:** The Email API is served as a path under the Tasking Manager domain.
 
 ## Authentication
 All endpoints (except `/health`) require an API key header:
@@ -17,8 +19,10 @@ X-API-Key: 06682c28d538516b9920423822798612
 
 ### Health Check
 ```http
-GET /api/health
+GET /health
 ```
+Full URL: `https://tasks.spatialcollective.co.ke/email-api/health`
+
 No authentication required.
 
 **Response:**
@@ -36,10 +40,11 @@ No authentication required.
 Fetch emails from a user's mailbox.
 
 ```http
-POST /api/emails
+POST /emails
 Content-Type: application/json
 X-API-Key: YOUR_API_KEY
 ```
+Full URL: `https://tasks.spatialcollective.co.ke/email-api/emails`
 
 **Request Body:**
 ```json
@@ -281,6 +286,7 @@ sudo systemctl restart email-api
 # View logs
 sudo journalctl -u email-api -f
 ```
+
 
 ### Account List
 
