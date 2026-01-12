@@ -44,9 +44,8 @@ export async function GET(request: NextRequest) {
 
     const workEmail = result.rows[0].work_email;
     
-    // Get youth's platform password (same as email password due to SSO)
-    // Note: In production, passwords should be hashed. For now, youth_id is the password
-    const emailPassword = youthId; // SSO: platform password = youth_id
+    // Default email password as per Email API specification
+    const emailPassword = 'DPW2026Map!';
 
     // Get query parameters
     const { searchParams } = new URL(request.url);

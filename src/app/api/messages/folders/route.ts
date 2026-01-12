@@ -42,7 +42,8 @@ export async function GET(request: NextRequest) {
     }
 
     const workEmail = result.rows[0].work_email;
-    const emailPassword = youthId; // SSO approach
+    // Default email password as per Email API specification
+    const emailPassword = 'DPW2026Map!';
 
     // Fetch folders from Email API
     const response = await fetch(`${EMAIL_API_URL}/folders`, {

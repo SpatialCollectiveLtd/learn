@@ -168,7 +168,7 @@ export default function MessagesPage() {
   };
 
   const copyPassword = () => {
-    navigator.clipboard.writeText(youthId);
+    navigator.clipboard.writeText('DPW2026Map!');
     setCopiedPassword(true);
     setTimeout(() => setCopiedPassword(false), 2000);
   };
@@ -325,7 +325,7 @@ export default function MessagesPage() {
                 <div className="flex items-center gap-2">
                   <input
                     type="text"
-                    value={youthId}
+                    value="DPW2026Map!"
                     readOnly
                     className="flex-1 px-4 py-2 bg-[#262626] border border-[#3a3a3a] rounded-lg text-white font-mono"
                   />
