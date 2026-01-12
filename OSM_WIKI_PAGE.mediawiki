@@ -1,0 +1,230 @@
+= DPW2025 - Digital Public Works 2025 =
+
+'''DPW2025''' is a structured mapping initiative supporting 61 youth mappers in informal settlements around Nairobi, Kenya. The project runs from January through March 2026, focusing on building digital literacy and contributing quality building data to OpenStreetMap.
+
+== Project Overview ==
+
+'''Goal:''' Map buildings in underserved informal settlements while training local youth in digital mapping skills.
+
+'''Duration:''' January - March 2026
+
+'''Locations:''' Three informal settlements in Nairobi:
+* Kayole (28 mappers)
+* Kariobangi Machakos (22 mappers)
+* Mji wa Huruma (11 mappers)
+
+'''Total Mappers:''' 61 active digitizers
+
+== Methodology ==
+
+=== Task Management ===
+* All mapping is conducted through [https://tasks.hotosm.org/ HOT Tasking Manager]
+* Mappers work on assigned tasks in their respective settlements
+* Tasks are distributed to ensure even coverage and prevent duplication
+
+=== Quality Control Measures ===
+* '''Daily limit:''' 200 buildings per mapper (quality over quantity)
+* Tasks may span multiple days due to this limit
+* Incomplete tasks are resumed the next day or by another mapper
+* All work is validated by trained validators before marking complete
+* Regular feedback sessions with mappers
+
+=== Workflow ===
+# Mapper selects/is assigned a HOTOSM task
+# Maps buildings using approved imagery sources
+# Stops at 200 buildings (even if task incomplete)
+# Validator reviews and provides feedback
+# Task marked complete or returned for fixes
+# Incomplete tasks resumed next day
+
+== Data Sources ==
+
+All mapping uses approved high-resolution imagery:
+* '''Bing Aerial Imagery''' (available through iD/JOSM editors)
+* '''Maxar Premium Imagery''' (accessed via HOTOSM)
+* Field surveys conducted where aerial imagery is unclear
+
+'''Note:''' We do NOT use Mapbox imagery. Previous incorrect source tags have been corrected.
+
+== Changeset Comment Format ==
+
+All changesets follow this standardized format:
+
+<code>
+DPW2025: [Settlement Name] - HOTOSM Task #[number] - [status]
+Source: [Bing/Maxar via HOTOSM]
+Info: https://wiki.openstreetmap.org/wiki/DPW2025_Nairobi_Informal_Settlements
+</code>
+
+'''Examples:'''
+* <code>DPW2025: Kayole - HOTOSM Task #12345 - Complete</code>
+* <code>DPW2025: Huruma - HOTOSM Task #12346 - Partial (daily limit reached)</code>
+* <code>DPW2025: Kariobangi - HOTOSM Task #12347 - Validation fixes</code>
+
+== Validation Process ==
+
+=== Validator Training ===
+All validators have completed:
+* OSM mapping fundamentals
+* Quality assurance procedures
+* Common error identification
+* Feedback delivery techniques
+
+=== Validation Checklist ===
+* Geometry accuracy (buildings aligned to imagery)
+* Proper tagging (<code>building=yes</code>, <code>building=residential</code>, etc.)
+* No duplicate features
+* Connectivity to roads where appropriate
+* Proper source attribution
+
+=== Daily Reports ===
+* Building counts tracked per mapper
+* Quality metrics monitored
+* Issues addressed in training sessions
+
+== Active Mappers ==
+
+=== Kayole Settlement (28 mappers) ===
+# Austine Ongonga - [https://www.openstreetmap.org/user/AUSTINE%20OCHIENG AUSTINE OCHIENG]
+# Ben Mutua - [https://www.openstreetmap.org/user/BenMutua BenMutua]
+# Brian Karani - [https://www.openstreetmap.org/user/BrianKarani BrianKarani]
+# Catherine Muli
+# David Ouma - [https://www.openstreetmap.org/user/DAVIDOUMA DAVIDOUMA]
+# Dennis Kanumi
+# Doreen Vutiti - [https://www.openstreetmap.org/user/akumudorroh akumudorroh]
+# George Oduor
+# Gilbert Karigo - [https://www.openstreetmap.org/user/gillykarigo gillykarigo]
+# Jacklyne Megere
+# Jane Njuguna - [https://www.openstreetmap.org/user/JANENJUGUNA JANENJUGUNA]
+# Joe Kimani - [https://www.openstreetmap.org/user/Joekaranja Joekaranja]
+# Josephine Wambua
+# Ken Kariuki
+# Lilian Naliaka - [https://www.openstreetmap.org/user/liliannaliaka liliannaliaka]
+# Lynn Waweru - [https://www.openstreetmap.org/user/LYNNKARANJA LYNNKARANJA]
+# Mercy Moraa - [https://www.openstreetmap.org/user/MercyObwoge MercyObwoge]
+# Michelle Kinya
+# Natalia Mukoya
+# Oketch Ochieng - [https://www.openstreetmap.org/user/Oketch%20ochieng Oketch ochieng]
+# Regina Nzoka - [https://www.openstreetmap.org/user/renamads renamads]
+# Selah Muema - [https://www.openstreetmap.org/user/SelahMuema SelahMuema]
+# Selina Lipukah - [https://www.openstreetmap.org/user/LIPUKAH LIPUKAH]
+# Steven Odhiambo - [https://www.openstreetmap.org/user/StevenOdhiambo StevenOdhiambo]
+# Test Youth Kayole - [https://www.openstreetmap.org/user/EdmundSpira EdmundSpira]
+# Tony Oroko
+# Victor Omolo
+# Zainab Ayub
+
+=== Kariobangi Machakos Settlement (22 mappers) ===
+# Bill Njiru - [https://www.openstreetmap.org/user/bill%20njiru bill njiru]
+# Caroline Mumina
+# Charity Titus - [https://www.openstreetmap.org/user/ritah22 ritah22]
+# Denis Musau - [https://www.openstreetmap.org/user/DENNIS%20MUSAU DENNIS MUSAU]
+# Diana Kasyula - [https://www.openstreetmap.org/user/DIANA%20KASYULA DIANA KASYULA]
+# Domitilla Mutunga
+# Eddis Maina - [https://www.openstreetmap.org/user/joyce56 joyce56]
+# Festus Kaluki - [https://www.openstreetmap.org/user/Festus%20Kaluki Festus Kaluki]
+# Fredinah Mbai
+# George Alaka
+# Jeremiah James - [https://www.openstreetmap.org/user/Jeremiah%20james Jeremiah james]
+# Joel Kihuria - [https://www.openstreetmap.org/user/JOEL%20KIHURIA JOEL KIHURIA]
+# Joseph Muta
+# Josephat Mwanthi - [https://www.openstreetmap.org/user/JOOH%20JR JOOH JR]
+# Kelvin Kinyatta - [https://www.openstreetmap.org/user/Kelvin%20Kinyatta Kelvin Kinyatta]
+# Kelvin Mulela - [https://www.openstreetmap.org/user/Kelvin%20Mulela Kelvin Mulela]
+# Peter Muia - [https://www.openstreetmap.org/user/pmuia pmuia]
+# Prisca Musau
+# Samuel Matheka - [https://www.openstreetmap.org/user/samuelmutie20 samuelmutie20]
+# Samuel Mutuku - [https://www.openstreetmap.org/user/mutuku254 mutuku254]
+# Sophie Gesare - [https://www.openstreetmap.org/user/Sophie%20Gesare Sophie Gesare]
+# Stacey Mutheu
+
+=== Mji wa Huruma Settlement (11 mappers) ===
+# Beatrice Wanjiru - [https://www.openstreetmap.org/user/Wanjiruwaithira Wanjiruwaithira]
+# Catherine Mararo - [https://www.openstreetmap.org/user/catherinewanjira catherinewanjira]
+# Charles Waithira - [https://www.openstreetmap.org/user/kamauwaithera kamauwaithera]
+# Dennis Njuguna - [https://www.openstreetmap.org/user/njugunamurihia njugunamurihia]
+# John Mbugua
+# John Ngigi - [https://www.openstreetmap.org/user/KamauNgigi KamauNgigi]
+# Lydia Mwove
+# Martin Mbugua - [https://www.openstreetmap.org/user/martingitau martingitau]
+# Richard Njuguna - [https://www.openstreetmap.org/user/Richardmuchina Richardmuchina]
+# Somo Duba - [https://www.openstreetmap.org/user/SomoDuba SomoDuba]
+# Stephen Wanjiru - [https://www.openstreetmap.org/user/stephennjuguna stephennjuguna]
+
+== Project Impact ==
+
+=== Community Benefits ===
+* '''Skills Development:''' 61 youth trained in GIS and digital mapping
+* '''Local Knowledge:''' Mappers live in the settlements they map, ensuring accuracy
+* '''Employment:''' Providing income opportunities for youth in underserved areas
+* '''Data for Good:''' Improving base maps for urban planning, disaster response, and service delivery
+
+=== Mapping Goals ===
+* Complete building mapping in three informal settlements
+* Create reliable baseline data for population estimation
+* Support infrastructure planning and improvement
+* Enable better emergency response coordination
+
+== Community Engagement ==
+
+=== Communication Channels ===
+* '''Mailing List:''' Posting updates to [https://lists.openstreetmap.org/listinfo/talk-ke talk-ke mailing list]
+* '''Wiki:''' This page maintained with current information
+* '''OSM Diaries:''' Regular blog posts about project progress
+* '''Local Meetups:''' Coordinating with OSM Kenya community
+
+=== Feedback Welcome ===
+We actively seek feedback from the OSM community on:
+* Mapping quality and techniques
+* Changeset comment clarity
+* Tagging standards for informal settlements
+* Validation procedures
+* Community collaboration opportunities
+
+== Contact Information ==
+
+'''Project Lead:''' [Your Name]
+* '''Email:''' [Your Email]
+* '''OSM User:''' [Your OSM Username - link it]
+
+'''Technical Lead:''' [If applicable]
+
+'''For Questions or Concerns:'''
+* Post to [https://lists.openstreetmap.org/listinfo/talk-ke talk-ke mailing list]
+* Comment on this wiki page discussion
+* Send OSM message to project lead
+
+== Acknowledgments ==
+
+We acknowledge and thank:
+* '''HOT (Humanitarian OpenStreetMap Team)''' for task management infrastructure
+* '''OSM Kenya Community''' for guidance and support
+* '''Maxar''' for high-resolution imagery access
+* '''Microsoft''' for Bing aerial imagery
+* '''OSM Data Working Group''' for constructive feedback
+
+== Related Links ==
+
+* [https://tasks.hotosm.org/ HOT Tasking Manager]
+* [https://wiki.openstreetmap.org/wiki/Kenya Kenya OSM Wiki Page]
+* [https://lists.openstreetmap.org/listinfo/talk-ke OSM Kenya Mailing List]
+* [https://wiki.openstreetmap.org/wiki/Informal_settlements Mapping Informal Settlements]
+
+== Project History ==
+
+'''January 9, 2026:''' Received feedback from OSM community regarding changeset comments and documentation. Immediately paused mapping to:
+* Create this wiki page
+* Improve changeset comment format
+* Correct source attribution
+* Engage with OSM Kenya community
+
+'''January 2026:''' Project launch with initial mapper training
+
+== Categories ==
+
+[[Category:Kenya]]
+[[Category:Africa]]
+[[Category:HOT]]
+[[Category:Organized Editing]]
+[[Category:Mapping Projects]]
+[[Category:Capacity Building]]

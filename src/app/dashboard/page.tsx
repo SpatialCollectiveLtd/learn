@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { BookOpen, Briefcase, CheckCircle, Lock, AlertCircle } from 'lucide-react';
+import { BookOpen, Briefcase, CheckCircle, Lock, AlertCircle, Mail } from 'lucide-react';
 
 interface TrainingStatus {
   programType: string;
@@ -152,7 +152,7 @@ export default function DashboardSelection() {
         </div>
 
         {/* Dashboard Cards */}
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-3 gap-6">
           {/* Training Dashboard Card */}
           <button
             onClick={handleTrainingClick}
@@ -281,6 +281,43 @@ export default function DashboardSelection() {
                 </div>
               </>
             )}
+          </button>
+
+          {/* Messages Card */}
+          <button
+            onClick={() => router.push('/dashboard/messages')}
+            className="bg-background-card rounded-2xl shadow-lg shadow-primary/10 p-6 text-left hover:shadow-2xl hover:shadow-primary/20 transition-all transform hover:-translate-y-1 border border-[#262626] hover:border-primary"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="bg-primary/20 p-3 rounded-xl border border-primary/30">
+                <Mail className="w-7 h-7 text-primary" />
+              </div>
+              <span className="text-sm font-subheading font-medium text-white bg-primary-dark px-3 py-1 rounded-full border border-primary">
+                New Feature
+              </span>
+            </div>
+            
+            <h2 className="text-xl font-heading font-bold text-white mb-2">
+              Messages
+            </h2>
+            
+            <p className="text-sm text-foreground-subtle mb-3">
+              Check your work email, read messages from coordinators, and stay updated with project communications.
+            </p>
+
+            <div className="bg-primary-dark/50 border border-primary rounded-lg p-4">
+              <div className="flex items-start gap-2">
+                <Mail className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                <div className="text-sm">
+                  <p className="font-subheading font-medium text-primary-light mb-1">
+                    @spatialcollective.co.ke
+                  </p>
+                  <p className="text-foreground-muted">
+                    Access your professional work email inbox
+                  </p>
+                </div>
+              </div>
+            </div>
           </button>
         </div>
 

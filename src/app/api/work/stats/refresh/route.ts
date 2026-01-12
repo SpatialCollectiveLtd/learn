@@ -96,8 +96,12 @@ export async function POST(request: NextRequest) {
       youth.exception_hashtags || [] // Exception hashtags for this user
     );
 
-    // Update database
-    const today = new Date().toISOString().split('T')[0];
+    // Get today's date in settlement timezone
+    const timezone = youth.timezone || 'Africa/Nairobi';
+    const offset = timezone === 'Africa/Nairobi' ? 3 : 0;
+    const now = new Date();
+    const localDate = new Date(now.getTime() + (offset * 60 * 60 * 1000));
+    const today = localDate.toISOString().split('T')[0];
     await Database.query(`
       INSERT INTO youth_osm_stats (
         youth_id, osm_username, date, buildings_mapped,

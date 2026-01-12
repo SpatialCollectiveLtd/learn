@@ -40,7 +40,7 @@ export default function ReviewSubmissionsPage() {
       taskType: "Building Mapping",
       submittedAt: "2 hours ago",
       status: "pending",
-      changesetUrl: "https://www.openstreetmap.org/changeset/12345",
+      changesetUrl: "https://osm.spatialcollective.co.ke/changeset/12345",
       osmUsername: "johndoe_mapper",
     },
     {
@@ -50,7 +50,7 @@ export default function ReviewSubmissionsPage() {
       taskType: "Road Mapping",
       submittedAt: "5 hours ago",
       status: "pending",
-      changesetUrl: "https://www.openstreetmap.org/changeset/12346",
+      changesetUrl: "https://osm.spatialcollective.co.ke/changeset/12346",
       osmUsername: "janesmith_osm",
     },
     {
@@ -60,7 +60,7 @@ export default function ReviewSubmissionsPage() {
       taskType: "Building Mapping",
       submittedAt: "1 day ago",
       status: "approved",
-      changesetUrl: "https://www.openstreetmap.org/changeset/12344",
+      changesetUrl: "https://osm.spatialcollective.co.ke/changeset/12344",
       osmUsername: "mikejohnson",
     },
   ];

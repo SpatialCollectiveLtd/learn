@@ -106,10 +106,10 @@ export function OsmUsernameNotification() {
               <strong>How to find your OSM username:</strong>
             </p>
             <ol className="text-white/80 text-xs space-y-1 list-decimal list-inside">
-              <li>Go to openstreetmap.org and login</li>
+              <li>Go to osm.spatialcollective.co.ke and login</li>
               <li>Click "My Profile" (top right)</li>
               <li>Copy the <strong className="text-white">last part of the URL</strong></li>
-              <li>Example: openstreetmap.org/user/<span className="text-[#22c55e] font-semibold">YourUsername</span></li>
+              <li>Example: osm.spatialcollective.co.ke/user/<span className="text-[#22c55e] font-semibold">YourUsername</span></li>
             </ol>
           </div>
 

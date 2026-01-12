@@ -21,17 +21,19 @@ export async function GET(request: NextRequest) {
     const normalizedUsername = username.trim();
 
     // Call OSM API to verify user exists
-    // OSM API endpoint: https://api.openstreetmap.org/api/0.6/user/{username}
+    // OSM API endpoint: https://osm.spatialcollective.co.ke/api/0.6/user/{username}
     // Note: This requires the username to be the display name or ID
     
     try {
       // First, try to get user details by username
       // OSM API doesn't have a direct username lookup, so we use the user details endpoint
       // We need to search by display name which requires authentication OR
-      // Use the public OSM website to verify
+      // Use the private OSM server to verify
+      
+      const OSM_SERVER_BASE = process.env.NEXT_PUBLIC_OSM_SERVER_URL || 'https://osm.spatialcollective.co.ke';
       
       const response = await fetch(
-        `https://api.openstreetmap.org/api/0.6/user/details.json`,
+        `${OSM_SERVER_BASE}/api/0.6/user/details.json`,
         {
           headers: {
             'User-Agent': 'Spatial-Collective-Training-Platform/1.0',
@@ -43,7 +45,7 @@ export async function GET(request: NextRequest) {
       // Alternative: Check if user profile page exists
       // encodeURIComponent handles spaces correctly (converts to %20)
       const profileCheck = await fetch(
-        `https://www.openstreetmap.org/user/${encodeURIComponent(normalizedUsername)}`,
+        `${OSM_SERVER_BASE}/user/${encodeURIComponent(normalizedUsername)}`,
         {
           method: 'HEAD',
           headers: {
@@ -58,7 +60,7 @@ export async function GET(request: NextRequest) {
           success: true,
           exists: true,
           username: normalizedUsername,
-          profileUrl: `https://www.openstreetmap.org/user/${encodeURIComponent(normalizedUsername)}`,
+          profileUrl: `${OSM_SERVER_BASE}/user/${encodeURIComponent(normalizedUsername)}`,
           message: 'OSM account verified successfully',
         });
       } else if (profileCheck.status === 404) {
