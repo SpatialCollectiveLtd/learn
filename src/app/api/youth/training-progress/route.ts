@@ -55,7 +55,10 @@ export async function GET(request: NextRequest) {
     // Group by module type
     const progressByModule: { [key: string]: number[] } = {
       mapper: [],
-      validator: []
+      validator: [],
+      mobile_mapping: [],
+      household_survey: [],
+      microtasking: []
     };
 
     result.rows.forEach((row: any) => {
@@ -120,17 +123,27 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!['mapper', 'validator'].includes(moduleType)) {
+    if (!['mapper', 'validator', 'mobile_mapping', 'household_survey', 'microtasking'].includes(moduleType)) {
       return NextResponse.json(
         { success: false, message: 'Invalid module type' },
         { status: 400 }
       );
     }
 
+    // Define max steps per module
+    const maxSteps: { [key: string]: number } = {
+      mapper: 7,
+      validator: 6,
+      mobile_mapping: 4,
+      household_survey: 4,
+      microtasking: 3
+    };
+
     const stepNumber = parseInt(stepId);
-    if (isNaN(stepNumber) || stepNumber < 1 || stepNumber > 7) {
+    const maxStep = maxSteps[moduleType] || 7;
+    if (isNaN(stepNumber) || stepNumber < 1 || stepNumber > maxStep) {
       return NextResponse.json(
-        { success: false, message: 'Step ID must be between 1 and 7' },
+        { success: false, message: `Step ID must be between 1 and ${maxStep}` },
         { status: 400 }
       );
     }

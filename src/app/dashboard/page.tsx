@@ -91,7 +91,12 @@ export default function DashboardSelection() {
       return; // Button should be disabled
     }
 
-    router.push('/dashboard/work');
+    // Route to appropriate work dashboard based on program type
+    if (status.programType === 'mobile_mapping') {
+      router.push('/mobile-mapping/work');
+    } else {
+      router.push('/dashboard/work');
+    }
   };
 
   if (loading) {
