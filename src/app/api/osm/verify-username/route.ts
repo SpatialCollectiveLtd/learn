@@ -28,9 +28,9 @@ export async function GET(request: NextRequest) {
       // First, try to get user details by username
       // OSM API doesn't have a direct username lookup, so we use the user details endpoint
       // We need to search by display name which requires authentication OR
-      // Use the private OSM server to verify
+      // Use the public OSM server to verify
       
-      const OSM_SERVER_BASE = process.env.NEXT_PUBLIC_OSM_SERVER_URL || 'https://osm.spatialcollective.co.ke';
+      const OSM_SERVER_BASE = process.env.NEXT_PUBLIC_OSM_SERVER_URL || 'https://www.openstreetmap.org';
       
       const response = await fetch(
         `${OSM_SERVER_BASE}/api/0.6/user/details.json`,

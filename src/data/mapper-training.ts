@@ -117,7 +117,7 @@ export const mapperTrainingSteps: TrainingStep[] = [
           type: 'list',
           title: "OSM Registration Steps",
           content: [
-            "Visit https://osm.spatialcollective.co.ke in your browser",
+            "Visit https://www.openstreetmap.org in your browser",
             "Click the 'Sign Up' button in the top-right corner",
             "Enter your email address (use your Gmail from Step 1)",
             "Create a display name (this will be publicly visible on all your edits)",

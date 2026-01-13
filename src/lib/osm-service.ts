@@ -47,8 +47,8 @@ interface CachedStats {
 // CONSTANTS & CONFIGURATION
 // ============================================
 
-// Private OSM Server Configuration
-const OSM_SERVER_BASE = process.env.NEXT_PUBLIC_OSM_SERVER_URL || 'https://osm.spatialcollective.co.ke';
+// Public OSM Server Configuration (revert to private when ready)
+const OSM_SERVER_BASE = process.env.NEXT_PUBLIC_OSM_SERVER_URL || 'https://api.openstreetmap.org';
 const OSM_API_BASE = `${OSM_SERVER_BASE}/api/0.6`;
 const CACHE_TTL_SECONDS = 300; // 5 minutes
 const REQUEST_TIMEOUT_MS = 30000; // 30 seconds

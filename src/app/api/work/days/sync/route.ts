@@ -7,10 +7,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Database } from '@/app/api/_lib/database';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.learn_STACK_SECRET_SERVER_KEY || process.env.JWT_SECRET || '';
-
-if (!JWT_SECRET || JWT_SECRET.length < 32) {
-  throw new Error('JWT_SECRET must be configured and at least 32 characters');
+// Get JWT secret at runtime, not module load time (for Vercel compatibility)
+function getJwtSecret(): string {
+  const secret = process.env.learn_STACK_SECRET_SERVER_KEY || process.env.JWT_SECRET || '';
+  if (!secret || secret.length < 32) {
+    throw new Error('JWT_SECRET must be configured and at least 32 characters');
+  }
+  return secret;
 }
 
 export async function POST(request: NextRequest) {
@@ -28,7 +31,7 @@ export async function POST(request: NextRequest) {
     let decoded: any;
 
     try {
-      decoded = jwt.verify(token, JWT_SECRET);
+      decoded = jwt.verify(token, getJwtSecret());
     } catch (error) {
       return NextResponse.json(
         { success: false, message: 'Invalid or expired token' },

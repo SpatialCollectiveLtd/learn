@@ -237,7 +237,7 @@ export default function MapperTrainingStepPage({
         if (verifyResponse.data.exists === false) {
           // Username not found on OSM
           setOsmVerificationStatus('not-found');
-          setOsmError(`⚠ This username was not found on our OSM server. Please check the spelling (including capital letters) or create an account at osm.spatialcollective.co.ke first. Tried: "${normalizedUsername}"`);  
+          setOsmError(`⚠ This username was not found on OpenStreetMap. Please check the spelling (including capital letters) or create an account at openstreetmap.org first. Tried: "${normalizedUsername}"`);  
           setIsSavingOsm(false);
           setIsVerifyingOsm(false);
           return;
@@ -642,7 +642,7 @@ export default function MapperTrainingStepPage({
                           <p className="text-sm text-[#a3a3a3] mb-1">✓ Saved OSM Username</p>
                           <p className="text-lg font-semibold text-white">{savedOsmUsername}</p>
                           <a 
-                            href={`https://osm.spatialcollective.co.ke/user/${encodeURIComponent(savedOsmUsername)}`}
+                            href={`https://www.openstreetmap.org/user/${encodeURIComponent(savedOsmUsername)}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-xs text-[#3b82f6] hover:text-[#2563eb] inline-flex items-center gap-1 mt-1"
@@ -701,11 +701,11 @@ export default function MapperTrainingStepPage({
                         <strong>How to find your OSM username:</strong>
                       </p>
                       <ol className="text-xs text-[#a3a3a3] space-y-1 list-decimal list-inside">
-                        <li>Go to <a href="https://osm.spatialcollective.co.ke" target="_blank" rel="noopener noreferrer" className="text-[#3b82f6] hover:underline">osm.spatialcollective.co.ke</a> and login</li>
+                        <li>Go to <a href="https://www.openstreetmap.org" target="_blank" rel="noopener noreferrer" className="text-[#3b82f6] hover:underline">openstreetmap.org</a> and login</li>
                         <li>Click on your profile icon (top right corner)</li>
                         <li>Click "My Profile"</li>
                         <li>Your username is the <strong className="text-white">last part of the URL</strong> in your browser</li>
-                        <li>Example: osm.spatialcollective.co.ke/user/<strong className="text-[#22c55e]">YourUsername</strong></li>
+                        <li>Example: openstreetmap.org/user/<strong className="text-[#22c55e]">YourUsername</strong></li>
                       </ol>
                     </div>
                     
@@ -744,7 +744,7 @@ export default function MapperTrainingStepPage({
                         <AlertTriangle className="w-5 h-5 text-[#dc2626] flex-shrink-0 mt-0.5" />
                         <div>
                           <p className="text-sm text-red-400 mb-1">⚠ Username not found on OpenStreetMap</p>
-                          <p className="text-xs text-[#a3a3a3]">Please check the spelling or create an account at osm.spatialcollective.co.ke</p>
+                          <p className="text-xs text-[#a3a3a3]">Please check the spelling or create an account at openstreetmap.org</p>
                         </div>
                       </div>
                     </div>
