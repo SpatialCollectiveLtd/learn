@@ -27,6 +27,44 @@ const REQUIRED_STEPS: Record<string, number[]> = {
   microtasking: [1, 2, 3],                 // 3 steps
 };
 
+// Step titles for display
+const STEP_TITLES: Record<string, Record<number, string>> = {
+  mapper: {
+    1: 'Introduction',
+    2: 'Building Types',
+    3: 'Building Identification',
+    4: 'Drawing Techniques',
+    5: 'Quality Guidelines',
+    6: 'OSM Setup',
+    7: 'Final Assessment',
+  },
+  validator: {
+    1: 'Introduction',
+    2: 'Validation Basics',
+    3: 'Error Detection',
+    4: 'Correction Techniques',
+    5: 'Quality Standards',
+    6: 'Final Assessment',
+  },
+  mobile_mapping: {
+    1: 'Install ODK Collect',
+    2: 'Connect to Server',
+    3: 'Download Forms',
+    4: 'Collect Data',
+  },
+  household_survey: {
+    1: 'Survey Introduction',
+    2: 'Form Navigation',
+    3: 'Data Entry',
+    4: 'Submission',
+  },
+  microtasking: {
+    1: 'Task Overview',
+    2: 'Completing Tasks',
+    3: 'Quality Standards',
+  },
+};
+
 export async function GET(request: NextRequest) {
   try {
     // Verify JWT authentication
@@ -98,8 +136,12 @@ export async function GET(request: NextRequest) {
     );
 
     // Check if all required steps are completed
-    const missingSteps = requiredSteps.filter(step => !completedSteps.has(step));
-    const allStepsCompleted = missingSteps.length === 0;
+    const missingStepIds = requiredSteps.filter(step => !completedSteps.has(step));
+    const allStepsCompleted = missingStepIds.length === 0;
+    
+    // Convert missing step IDs to readable titles
+    const stepTitles = STEP_TITLES[moduleType] || STEP_TITLES['mapper'] || {};
+    const missingSteps = missingStepIds.map(stepId => stepTitles[stepId] || `Step ${stepId}`);
 
     // Additional check: OSM username required for digitization
     const requiresOsmUsername = program_type === 'digitization';

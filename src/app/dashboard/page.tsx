@@ -157,7 +157,7 @@ export default function DashboardSelection() {
         </div>
 
         {/* Dashboard Cards */}
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className={`grid gap-6 ${status.programType === 'digitization' ? 'md:grid-cols-3' : 'md:grid-cols-2'}`}>
           {/* Training Dashboard Card */}
           <button
             onClick={handleTrainingClick}
@@ -288,42 +288,44 @@ export default function DashboardSelection() {
             )}
           </button>
 
-          {/* Messages Card */}
-          <button
-            onClick={() => router.push('/dashboard/messages')}
-            className="bg-background-card rounded-2xl shadow-lg shadow-primary/10 p-6 text-left hover:shadow-2xl hover:shadow-primary/20 transition-all transform hover:-translate-y-1 border border-[#262626] hover:border-primary"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className="bg-primary/20 p-3 rounded-xl border border-primary/30">
-                <Mail className="w-7 h-7 text-primary" />
+          {/* Messages Card - Only for digitization users */}
+          {status.programType === 'digitization' && (
+            <button
+              onClick={() => router.push('/dashboard/messages')}
+              className="bg-background-card rounded-2xl shadow-lg shadow-primary/10 p-6 text-left hover:shadow-2xl hover:shadow-primary/20 transition-all transform hover:-translate-y-1 border border-[#262626] hover:border-primary"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="bg-primary/20 p-3 rounded-xl border border-primary/30">
+                  <Mail className="w-7 h-7 text-primary" />
+                </div>
+                <span className="text-sm font-subheading font-medium text-white bg-primary-dark px-3 py-1 rounded-full border border-primary">
+                  New Feature
+                </span>
               </div>
-              <span className="text-sm font-subheading font-medium text-white bg-primary-dark px-3 py-1 rounded-full border border-primary">
-                New Feature
-              </span>
-            </div>
-            
-            <h2 className="text-xl font-heading font-bold text-white mb-2">
-              Messages
-            </h2>
-            
-            <p className="text-sm text-foreground-subtle mb-3">
-              Check your work email, read messages from coordinators, and stay updated with project communications.
-            </p>
+              
+              <h2 className="text-xl font-heading font-bold text-white mb-2">
+                Messages
+              </h2>
+              
+              <p className="text-sm text-foreground-subtle mb-3">
+                Check your work email, read messages from coordinators, and stay updated with project communications.
+              </p>
 
-            <div className="bg-primary-dark/50 border border-primary rounded-lg p-4">
-              <div className="flex items-start gap-2">
-                <Mail className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <div className="text-sm">
-                  <p className="font-subheading font-medium text-primary-light mb-1">
-                    @spatialcollective.co.ke
-                  </p>
-                  <p className="text-foreground-muted">
-                    Access your professional work email inbox
-                  </p>
+              <div className="bg-primary-dark/50 border border-primary rounded-lg p-4">
+                <div className="flex items-start gap-2">
+                  <Mail className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                  <div className="text-sm">
+                    <p className="font-subheading font-medium text-primary-light mb-1">
+                      @spatialcollective.co.ke
+                    </p>
+                    <p className="text-foreground-muted">
+                      Access your professional work email inbox
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </button>
+            </button>
+          )}
         </div>
 
         {/* Help Text */}
