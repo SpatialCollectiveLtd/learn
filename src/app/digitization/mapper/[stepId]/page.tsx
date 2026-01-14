@@ -681,7 +681,7 @@ export default function MapperTrainingStepPage({
                     
                     {/* Helpful notice about usernames */}
                     <div className="mb-3 bg-[#3b82f6]/10 border border-[#3b82f6]/30 rounded-lg p-3">
-                      <p className="text-sm font-semibold text-[#3b82f6] mb-2">💡 Important Tips</p>
+                      <p className="text-sm font-semibold text-[#3b82f6] mb-2 flex items-center gap-1"><Lightbulb className="w-4 h-4" /> Important Tips</p>
                       <ul className="text-xs text-[#e5e5e5] space-y-2">
                         <li>
                           <strong>Spaces are OK:</strong> If your OSM username has spaces (e.g., "Jeremiah james"), you can enter it exactly as it appears. We'll handle it automatically!

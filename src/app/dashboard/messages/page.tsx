@@ -17,7 +17,68 @@ import {
   Settings,
   Copy,
   Check,
+  Lightbulb,
 } from 'lucide-react';
+
+/**
+ * Process email body to ensure proper HTML rendering
+ * - Converts plain text URLs to clickable links
+ * - Converts email addresses to mailto links
+ * - Preserves line breaks
+ * - Handles both HTML and plain text emails
+ */
+function processEmailBody(body: string): string {
+  if (!body) return '';
+  
+  // Check if the body already contains HTML tags
+  const hasHtml = /<[a-z][\s\S]*>/i.test(body);
+  
+  let processed = body;
+  
+  // If it's plain text, convert to HTML
+  if (!hasHtml) {
+    // Escape HTML entities first
+    processed = processed
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+    
+    // Convert URLs to clickable links
+    // Matches http, https, and www URLs
+    const urlRegex = /(https?:\/\/[^\s<>"]+|www\.[^\s<>"]+)/gi;
+    processed = processed.replace(urlRegex, (url) => {
+      const href = url.startsWith('www.') ? `https://${url}` : url;
+      return `<a href="${href}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+    });
+    
+    // Convert email addresses to mailto links
+    const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi;
+    processed = processed.replace(emailRegex, '<a href="mailto:$1">$1</a>');
+    
+    // Convert line breaks to <br> tags
+    processed = processed.replace(/\r?\n/g, '<br>');
+    
+    // Wrap in a paragraph for better styling
+    processed = `<p>${processed}</p>`;
+  } else {
+    // For HTML emails, ensure URLs without <a> tags are linkified
+    // This handles cases where the email has some HTML but URLs are plain text
+    
+    // First, find text that's not already inside an anchor tag
+    // We use a simpler approach: just make sure existing anchors have target="_blank"
+    processed = processed.replace(
+      /<a\s+([^>]*href="[^"]*"[^>]*)>/gi, 
+      (match, attrs) => {
+        if (!attrs.includes('target=')) {
+          return `<a ${attrs} target="_blank" rel="noopener noreferrer">`;
+        }
+        return match;
+      }
+    );
+  }
+  
+  return processed;
+}
 
 interface Email {
   id: string;
@@ -340,8 +401,9 @@ export default function MessagesPage() {
                     )}
                   </button>
                 </div>
-                <p className="text-xs text-[#737373] mt-2">
-                  💡 Use these credentials with any email client (Outlook, Thunderbird, etc.)
+                <p className="text-xs text-[#737373] mt-2 flex items-center gap-1">
+                  <Lightbulb className="w-3 h-3" />
+                  Use these credentials with any email client (Outlook, Thunderbird, etc.)
                 </p>
               </div>
             </div>
@@ -510,64 +572,65 @@ export default function MessagesPage() {
 
                   <div className="p-6 max-h-[calc(100vh-400px)] overflow-y-auto bg-white rounded-lg">
                     <div
-                      className="text-[#1a1a1a] text-base leading-relaxed"
+                      className="email-body text-[#1a1a1a] text-base leading-relaxed"
                       style={{
                         fontSize: '16px',
                         lineHeight: '1.7',
                         wordBreak: 'break-word',
                       }}
-                      dangerouslySetInnerHTML={{ __html: selectedEmail.body }}
+                      dangerouslySetInnerHTML={{ __html: processEmailBody(selectedEmail.body) }}
                     />
                     <style jsx global>{`
-                      .bg-white a {
+                      .email-body a {
                         color: #dc2626 !important;
                         text-decoration: underline !important;
+                        word-break: break-all;
                       }
-                      .bg-white a:hover {
+                      .email-body a:hover {
                         color: #b91c1c !important;
                       }
-                      .bg-white p {
+                      .email-body p {
                         margin-bottom: 1em;
                       }
-                      .bg-white img {
+                      .email-body img {
                         max-width: 100%;
                         height: auto;
                       }
-                      .bg-white table {
+                      .email-body table {
                         max-width: 100%;
                         border-collapse: collapse;
                       }
-                      .bg-white td, .bg-white th {
+                      .email-body td, .email-body th {
                         padding: 8px;
                         border: 1px solid #e5e5e5;
                       }
-                      .bg-white blockquote {
+                      .email-body blockquote {
                         border-left: 4px solid #dc2626;
                         padding-left: 1em;
                         margin-left: 0;
                         color: #525252;
                       }
-                      .bg-white ul, .bg-white ol {
+                      .email-body ul, .email-body ol {
                         padding-left: 1.5em;
                         margin-bottom: 1em;
                       }
-                      .bg-white li {
+                      .email-body li {
                         margin-bottom: 0.5em;
                       }
-                      .bg-white pre {
+                      .email-body pre {
                         background: #f5f5f5;
                         padding: 1em;
                         overflow-x: auto;
                         border-radius: 4px;
                       }
-                      .bg-white h1, .bg-white h2, .bg-white h3, .bg-white h4 {
+                      .email-body h1, .email-body h2, .email-body h3, .email-body h4 {
                         margin-top: 1em;
                         margin-bottom: 0.5em;
                         font-weight: bold;
                       }
-                      .bg-white h1 { font-size: 1.5em; }
-                      .bg-white h2 { font-size: 1.3em; }
-                      .bg-white h3 { font-size: 1.1em; }
+                      .email-body h1 { font-size: 1.5em; }
+                      .email-body h2 { font-size: 1.3em; }
+                      .email-body h3 { font-size: 1.1em; }
                     `}</style>
                   </div>
                 </>

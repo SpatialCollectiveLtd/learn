@@ -6,7 +6,7 @@ import { CometCard } from "@/components/ui/comet-card";
 import { QRCodeDisplay } from "@/components/ui/qr-code-display";
 import Link from "next/link";
 import { mobileMappingSteps, formGuides } from "@/data/mobile-mapping-training";
-import { Clock, BookOpen, CheckCircle2, Smartphone, QrCode, Loader2, AlertCircle, FileText, ChevronDown, ChevronUp, HelpCircle } from "lucide-react";
+import { Clock, BookOpen, CheckCircle2, Smartphone, QrCode, Loader2, AlertCircle, FileText, ChevronDown, ChevronUp, HelpCircle, Lightbulb, Wifi, Upload, MessageCircleQuestion, Hand } from "lucide-react";
 import { useState, useEffect } from "react";
 
 interface OdkConfig {
@@ -22,6 +22,7 @@ export default function MobileMappingOverviewPage() {
   const [odkConfig, setOdkConfig] = useState<OdkConfig | null>(null);
   const [odkLoading, setOdkLoading] = useState(true);
   const [showQrCode, setShowQrCode] = useState(false);
+  const [qrLoading, setQrLoading] = useState(false);
   const [expandedForm, setExpandedForm] = useState<string | null>(null);
   
   useEffect(() => {
@@ -119,10 +120,14 @@ export default function MobileMappingOverviewPage() {
 
                   {!showQrCode ? (
                     <button
-                      onClick={() => setShowQrCode(true)}
-                      className="w-full bg-primary text-white py-4 px-6 rounded-xl hover:bg-primary-hover transition-colors font-semibold text-lg shadow-lg shadow-primary/30"
+                      onClick={() => {
+                        setQrLoading(true);
+                        setShowQrCode(true);
+                      }}
+                      className="w-full bg-primary text-white py-4 px-6 rounded-xl hover:bg-primary-hover transition-colors font-semibold text-lg shadow-lg shadow-primary/30 flex items-center justify-center gap-2"
                     >
-                      👆 Tap to Show QR Code
+                      <Hand className="w-5 h-5" />
+                      Tap to Show QR Code
                     </button>
                   ) : (
                     <div className="space-y-4">
@@ -130,7 +135,7 @@ export default function MobileMappingOverviewPage() {
                         <QRCodeDisplay data={odkConfig.configUrl || ''} size={250} />
                       </div>
                       <div className="bg-background-elevated rounded-lg p-4 border border-border">
-                        <p className="text-sm text-foreground-muted font-semibold mb-2">📱 How to scan:</p>
+                        <p className="text-sm text-foreground-muted font-semibold mb-2 flex items-center gap-2"><Smartphone className="w-4 h-4" /> How to scan:</p>
                         <ol className="text-sm text-foreground-subtle space-y-1 list-decimal list-inside">
                           <li>Open ODK Collect on your phone</li>
                           <li>Tap menu (⋮) → Add project</li>
@@ -287,8 +292,9 @@ export default function MobileMappingOverviewPage() {
                                 )}
                                 
                                 {q.tip && (
-                                  <div className="bg-success/10 border border-success/20 rounded-lg px-3 py-2">
-                                    <p className="text-xs text-success">💡 {q.tip}</p>
+                                  <div className="bg-success/10 border border-success/20 rounded-lg px-3 py-2 flex items-start gap-2">
+                                    <Lightbulb className="w-3 h-3 text-success flex-shrink-0 mt-0.5" />
+                                    <p className="text-xs text-success">{q.tip}</p>
                                   </div>
                                 )}
                               </div>
@@ -316,12 +322,12 @@ export default function MobileMappingOverviewPage() {
                 <Smartphone className="w-5 h-5 text-primary" />
                 Quick Reference
               </h3>
-              <ul className="text-sm text-foreground-muted space-y-2">
-                <li>📱 <strong>App:</strong> ODK Collect (free on Play Store)</li>
-                <li>🌐 <strong>Works Offline:</strong> Download forms first, then collect data anywhere</li>
-                <li>📤 <strong>Submit Daily:</strong> Send your forms when you have internet</li>
-                <li>📖 <strong>Form Guides:</strong> Check above to understand questions</li>
-                <li>❓ <strong>Need Help?</strong> Contact your supervisor</li>
+              <ul className="text-sm text-foreground-muted space-y-3">
+                <li className="flex items-center gap-2"><Smartphone className="w-4 h-4 text-primary flex-shrink-0" /> <span><strong>App:</strong> ODK Collect (free on Play Store)</span></li>
+                <li className="flex items-center gap-2"><Wifi className="w-4 h-4 text-primary flex-shrink-0" /> <span><strong>Works Offline:</strong> Download forms first, then collect data anywhere</span></li>
+                <li className="flex items-center gap-2"><Upload className="w-4 h-4 text-primary flex-shrink-0" /> <span><strong>Submit Daily:</strong> Send your forms when you have internet</span></li>
+                <li className="flex items-center gap-2"><BookOpen className="w-4 h-4 text-primary flex-shrink-0" /> <span><strong>Form Guides:</strong> Check above to understand questions</span></li>
+                <li className="flex items-center gap-2"><MessageCircleQuestion className="w-4 h-4 text-primary flex-shrink-0" /> <span><strong>Need Help?</strong> Contact your supervisor</span></li>
               </ul>
             </div>
           </div>
