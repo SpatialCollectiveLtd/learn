@@ -3,20 +3,55 @@
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import { FloatingHeader } from "@/components/ui/floating-header";
 import { CometCard } from "@/components/ui/comet-card";
+import { QRCodeDisplay } from "@/components/ui/qr-code-display";
 import Link from "next/link";
 import { mobileMappingSteps } from "@/data/mobile-mapping-training";
-import { Clock, BookOpen, CheckCircle2, Smartphone } from "lucide-react";
+import { Clock, BookOpen, CheckCircle2, Smartphone, QrCode, Loader2, AlertCircle } from "lucide-react";
 import { useState, useEffect } from "react";
+
+interface OdkConfig {
+  configured: boolean;
+  displayName?: string;
+  configUrl?: string;
+  instructions?: string[];
+  message?: string;
+}
 
 export default function MobileMappingOverviewPage() {
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
+  const [odkConfig, setOdkConfig] = useState<OdkConfig | null>(null);
+  const [odkLoading, setOdkLoading] = useState(true);
+  const [showQrCode, setShowQrCode] = useState(false);
   
   useEffect(() => {
     const saved = localStorage.getItem('mobile-mapping-completed-steps');
     if (saved) {
       setCompletedSteps(new Set(JSON.parse(saved)));
     }
+    
+    // Fetch ODK configuration
+    fetchOdkConfig();
   }, []);
+
+  const fetchOdkConfig = async () => {
+    try {
+      const token = localStorage.getItem('youthToken');
+      if (!token) return;
+
+      const response = await fetch('/api/youth/odk-config', {
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setOdkConfig(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching ODK config:', error);
+    } finally {
+      setOdkLoading(false);
+    }
+  };
 
   const totalTime = mobileMappingSteps.reduce((sum, step) => sum + step.estimatedTime, 0);
 
@@ -130,6 +165,70 @@ export default function MobileMappingOverviewPage() {
                 <li>📤 <strong>Submit Daily:</strong> Send your forms when you have internet</li>
                 <li>❓ <strong>Need Help?</strong> Contact your supervisor</li>
               </ul>
+            </div>
+          </div>
+
+          {/* ODK Setup QR Code Section */}
+          <div className="max-w-2xl mx-auto mt-8">
+            <div className="bg-background-card border border-primary/30 rounded-xl p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-heading font-bold text-white flex items-center gap-2">
+                  <QrCode className="w-5 h-5 text-primary" />
+                  Setup ODK Collect
+                </h3>
+                {odkConfig?.configured && (
+                  <button
+                    onClick={() => setShowQrCode(!showQrCode)}
+                    className="text-sm bg-primary/20 border border-primary/30 text-primary px-4 py-2 rounded-lg hover:bg-primary/30 transition-colors"
+                  >
+                    {showQrCode ? 'Hide QR Code' : 'Show QR Code'}
+                  </button>
+                )}
+              </div>
+
+              {odkLoading ? (
+                <div className="flex items-center justify-center py-8">
+                  <Loader2 className="w-6 h-6 text-primary animate-spin" />
+                  <span className="ml-2 text-foreground-muted">Loading configuration...</span>
+                </div>
+              ) : odkConfig?.configured ? (
+                <>
+                  <p className="text-sm text-foreground-muted mb-4">
+                    Scan this QR code with ODK Collect to connect to the data collection server.
+                    <br />
+                    <span className="text-foreground-subtle">Account: {odkConfig.displayName}</span>
+                  </p>
+
+                  {showQrCode && odkConfig.configUrl && (
+                    <div className="flex flex-col items-center py-6 bg-background-elevated rounded-lg border border-border">
+                      <QRCodeDisplay data={odkConfig.configUrl} size={220} />
+                      <p className="mt-4 text-xs text-foreground-subtle text-center max-w-xs">
+                        Open ODK Collect → Menu → Add Project → Scan QR Code
+                      </p>
+                    </div>
+                  )}
+
+                  {odkConfig.instructions && !showQrCode && (
+                    <ol className="text-sm text-foreground-muted space-y-2 list-decimal list-inside">
+                      {odkConfig.instructions.map((instruction, idx) => (
+                        <li key={idx}>{instruction}</li>
+                      ))}
+                    </ol>
+                  )}
+                </>
+              ) : (
+                <div className="flex items-start gap-3 py-4">
+                  <AlertCircle className="w-5 h-5 text-warning flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-foreground-muted text-sm">
+                      {odkConfig?.message || 'ODK has not been configured for your account yet.'}
+                    </p>
+                    <p className="text-foreground-subtle text-xs mt-1">
+                      Please contact your trainer to set up your ODK access.
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
