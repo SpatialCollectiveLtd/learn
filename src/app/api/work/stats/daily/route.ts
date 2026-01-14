@@ -166,8 +166,63 @@ export async function GET(request: NextRequest) {
   } catch (error: any) {
     console.error('[API] Error fetching daily stats:', error);
     
-    // Handle specific errors
-    if (error.message?.includes('Failed to fetch changesets')) {
+    // Try to return cached data from database on OSM error
+    if (error.message?.includes('Failed to fetch changesets') || error.message?.includes('OSM')) {
+      try {
+        // Attempt to get last known stats from database
+        const authHeader = request.headers.get('authorization');
+        const token = authHeader?.substring(7);
+        if (token) {
+          const decoded: any = jwt.verify(token, JWT_SECRET);
+          const youthId = decoded.youthId;
+          
+          // Get today's date
+          const today = new Date().toISOString().split('T')[0];
+          
+          // Check for cached stats in database
+          const cachedResult = await Database.query(`
+            SELECT buildings_mapped, changesets_analyzed, last_upload_time
+            FROM youth_osm_stats
+            WHERE youth_id = $1 AND date = $2
+          `, [youthId, today]);
+          
+          if (cachedResult.rows.length > 0) {
+            const cached = cachedResult.rows[0];
+            console.log('[API] Returning cached stats from database due to OSM error');
+            
+            return NextResponse.json({
+              success: true,
+              data: {
+                today: cached.buildings_mapped || 0,
+                target: 200,
+                percentage: Math.round((cached.buildings_mapped || 0) / 200 * 100),
+                changesetsAnalyzed: cached.changesets_analyzed || 0,
+                lastUpdated: cached.last_upload_time || new Date().toISOString(),
+                cacheHit: true,
+                fromDatabase: true,
+                note: 'Stats from cache - OSM API temporarily unavailable'
+              },
+            });
+          }
+          
+          // If no cached stats for today, return 0 with a message
+          return NextResponse.json({
+            success: true,
+            data: {
+              today: 0,
+              target: 200,
+              percentage: 0,
+              changesetsAnalyzed: 0,
+              lastUpdated: new Date().toISOString(),
+              cacheHit: false,
+              note: 'OSM API temporarily unavailable - no cached data for today'
+            },
+          });
+        }
+      } catch (fallbackError) {
+        console.error('[API] Fallback also failed:', fallbackError);
+      }
+      
       return NextResponse.json(
         { 
           success: false, 

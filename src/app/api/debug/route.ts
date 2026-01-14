@@ -6,6 +6,9 @@ export async function GET(request: NextRequest) {
     // Test database connection
     const result = await Database.query('SELECT NOW() as current_time, version() as pg_version');
     
+    // Get OSM server configuration
+    const osmServerUrl = process.env.NEXT_PUBLIC_OSM_SERVER_URL || 'https://api.openstreetmap.org';
+    
     return NextResponse.json({
       success: true,
       database: {
@@ -17,6 +20,10 @@ export async function GET(request: NextRequest) {
         nodeEnv: process.env.NODE_ENV,
         hasDbUrl: !!process.env.DATABASE_URL,
         hasLearnDbUrl: !!process.env.learn_DATABASE_URL,
+      },
+      osm: {
+        serverUrl: osmServerUrl,
+        isPrivateServer: osmServerUrl.includes('spatialcollective'),
       }
     });
 

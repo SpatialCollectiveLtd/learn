@@ -438,9 +438,28 @@ async function fetchUserChangesets(
   } catch (error) {
     const axiosError = error as AxiosError;
     
-    // Retry on network errors
-    if (retryCount < MAX_RETRIES && axiosError.code === 'ECONNABORTED') {
-      console.warn(`[OSM] Request timeout, retrying... (${retryCount + 1}/${MAX_RETRIES})`);
+    // Log detailed error info
+    console.error(`[OSM] Changeset fetch error:`, {
+      code: axiosError.code,
+      status: axiosError.response?.status,
+      message: axiosError.message,
+      url: url
+    });
+    
+    // Retry on network errors or timeout
+    const shouldRetry = retryCount < MAX_RETRIES && (
+      axiosError.code === 'ECONNABORTED' ||
+      axiosError.code === 'ETIMEDOUT' ||
+      axiosError.code === 'ENOTFOUND' ||
+      axiosError.code === 'ECONNREFUSED' ||
+      axiosError.code === 'ERR_NETWORK' ||
+      axiosError.response?.status === 503 ||
+      axiosError.response?.status === 502 ||
+      axiosError.response?.status === 504
+    );
+    
+    if (shouldRetry) {
+      console.warn(`[OSM] Request failed, retrying... (${retryCount + 1}/${MAX_RETRIES})`);
       await delay(2000 * (retryCount + 1));
       return fetchUserChangesets(username, startTime, endTime, retryCount + 1);
     }
