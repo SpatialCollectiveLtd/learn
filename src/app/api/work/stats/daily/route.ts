@@ -173,7 +173,7 @@ export async function GET(request: NextRequest) {
         const authHeader = request.headers.get('authorization');
         const token = authHeader?.substring(7);
         if (token) {
-          const decoded: any = jwt.verify(token, JWT_SECRET);
+          const decoded: any = jwt.verify(token, getJwtSecret());
           const youthId = decoded.youthId;
           
           // Get today's date
