@@ -508,11 +508,67 @@ export default function MessagesPage() {
                     )}
                   </div>
 
-                  <div className="p-6 max-h-[calc(100vh-500px)] overflow-y-auto">
+                  <div className="p-6 max-h-[calc(100vh-400px)] overflow-y-auto bg-white rounded-lg">
                     <div
-                      className="text-[#e5e5e5] prose prose-invert max-w-none"
+                      className="text-[#1a1a1a] text-base leading-relaxed"
+                      style={{
+                        fontSize: '16px',
+                        lineHeight: '1.7',
+                        wordBreak: 'break-word',
+                      }}
                       dangerouslySetInnerHTML={{ __html: selectedEmail.body }}
                     />
+                    <style jsx global>{`
+                      .bg-white a {
+                        color: #dc2626 !important;
+                        text-decoration: underline !important;
+                      }
+                      .bg-white a:hover {
+                        color: #b91c1c !important;
+                      }
+                      .bg-white p {
+                        margin-bottom: 1em;
+                      }
+                      .bg-white img {
+                        max-width: 100%;
+                        height: auto;
+                      }
+                      .bg-white table {
+                        max-width: 100%;
+                        border-collapse: collapse;
+                      }
+                      .bg-white td, .bg-white th {
+                        padding: 8px;
+                        border: 1px solid #e5e5e5;
+                      }
+                      .bg-white blockquote {
+                        border-left: 4px solid #dc2626;
+                        padding-left: 1em;
+                        margin-left: 0;
+                        color: #525252;
+                      }
+                      .bg-white ul, .bg-white ol {
+                        padding-left: 1.5em;
+                        margin-bottom: 1em;
+                      }
+                      .bg-white li {
+                        margin-bottom: 0.5em;
+                      }
+                      .bg-white pre {
+                        background: #f5f5f5;
+                        padding: 1em;
+                        overflow-x: auto;
+                        border-radius: 4px;
+                      }
+                      .bg-white h1, .bg-white h2, .bg-white h3, .bg-white h4 {
+                        margin-top: 1em;
+                        margin-bottom: 0.5em;
+                        font-weight: bold;
+                      }
+                      .bg-white h1 { font-size: 1.5em; }
+                      .bg-white h2 { font-size: 1.3em; }
+                      .bg-white h3 { font-size: 1.1em; }
+                    `}</style>
                   </div>
                 </>
               ) : (
