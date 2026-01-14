@@ -5,8 +5,8 @@ import { FloatingHeader } from "@/components/ui/floating-header";
 import { CometCard } from "@/components/ui/comet-card";
 import { QRCodeDisplay } from "@/components/ui/qr-code-display";
 import Link from "next/link";
-import { mobileMappingSteps } from "@/data/mobile-mapping-training";
-import { Clock, BookOpen, CheckCircle2, Smartphone, QrCode, Loader2, AlertCircle } from "lucide-react";
+import { mobileMappingSteps, formGuides } from "@/data/mobile-mapping-training";
+import { Clock, BookOpen, CheckCircle2, Smartphone, QrCode, Loader2, AlertCircle, FileText, ChevronDown, ChevronUp, HelpCircle } from "lucide-react";
 import { useState, useEffect } from "react";
 
 interface OdkConfig {
@@ -22,6 +22,7 @@ export default function MobileMappingOverviewPage() {
   const [odkConfig, setOdkConfig] = useState<OdkConfig | null>(null);
   const [odkLoading, setOdkLoading] = useState(true);
   const [showQrCode, setShowQrCode] = useState(false);
+  const [expandedForm, setExpandedForm] = useState<string | null>(null);
   
   useEffect(() => {
     const saved = localStorage.getItem('mobile-mapping-completed-steps');
@@ -64,15 +65,15 @@ export default function MobileMappingOverviewPage() {
       <div className="relative z-10 pt-20 pb-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
           {/* Header */}
-          <div className="text-center mb-12">
+          <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 border border-primary/30 mb-4">
               <Smartphone className="w-8 h-8 text-primary" />
             </div>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-white mb-4">
               Mobile Mapping Training
             </h1>
-            <p className="text-lg text-foreground-muted max-w-3xl mx-auto mb-6">
-              Learn how to collect field data using ODK Collect on your smartphone. Simple, quick training to get you started!
+            <p className="text-lg text-foreground-muted max-w-3xl mx-auto mb-4">
+              Kayole Soweto Data Collection
             </p>
             <div className="flex items-center justify-center gap-6 text-foreground-subtle">
               <div className="flex items-center gap-2">
@@ -81,20 +82,92 @@ export default function MobileMappingOverviewPage() {
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="w-5 h-5" />
-                <span>~{totalTime} minutes</span>
+                <span>~{totalTime} min</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-5 h-5" />
-                <span>{completedSteps.size}/{mobileMappingSteps.length} Completed</span>
+                <span>{completedSteps.size}/{mobileMappingSteps.length} Done</span>
               </div>
             </div>
           </div>
 
-          {/* Progress Bar */}
+          {/* ========== ODK SETUP QR CODE - PROMINENT AT TOP ========== */}
           <div className="max-w-2xl mx-auto mb-10">
+            <div className="bg-gradient-to-r from-primary/20 to-primary/5 border-2 border-primary/50 rounded-2xl p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-heading font-bold text-white flex items-center gap-3">
+                  <div className="bg-primary/30 p-2 rounded-lg">
+                    <QrCode className="w-6 h-6 text-primary" />
+                  </div>
+                  Your ODK Setup Code
+                </h2>
+              </div>
+
+              {odkLoading ? (
+                <div className="flex items-center justify-center py-8">
+                  <Loader2 className="w-6 h-6 text-primary animate-spin" />
+                  <span className="ml-2 text-foreground-muted">Loading your configuration...</span>
+                </div>
+              ) : odkConfig?.configured ? (
+                <div>
+                  <p className="text-sm text-foreground-muted mb-2">
+                    Your personal QR code for ODK Collect setup:
+                  </p>
+                  <p className="text-primary font-semibold mb-4">
+                    {odkConfig.displayName}
+                  </p>
+
+                  {!showQrCode ? (
+                    <button
+                      onClick={() => setShowQrCode(true)}
+                      className="w-full bg-primary text-white py-4 px-6 rounded-xl hover:bg-primary-hover transition-colors font-semibold text-lg shadow-lg shadow-primary/30"
+                    >
+                      👆 Tap to Show QR Code
+                    </button>
+                  ) : (
+                    <div className="space-y-4">
+                      <div className="flex flex-col items-center py-6 bg-white rounded-xl">
+                        <QRCodeDisplay data={odkConfig.configUrl || ''} size={250} />
+                      </div>
+                      <div className="bg-background-elevated rounded-lg p-4 border border-border">
+                        <p className="text-sm text-foreground-muted font-semibold mb-2">📱 How to scan:</p>
+                        <ol className="text-sm text-foreground-subtle space-y-1 list-decimal list-inside">
+                          <li>Open ODK Collect on your phone</li>
+                          <li>Tap menu (⋮) → Add project</li>
+                          <li>Select "Configure with QR code"</li>
+                          <li>Point camera at this QR code</li>
+                        </ol>
+                      </div>
+                      <button
+                        onClick={() => setShowQrCode(false)}
+                        className="w-full text-foreground-subtle py-2 text-sm hover:text-foreground-muted"
+                      >
+                        Hide QR Code
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="flex items-start gap-3 py-4 bg-warning/10 rounded-lg px-4">
+                  <AlertCircle className="w-6 h-6 text-warning flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-foreground-muted font-semibold">
+                      ODK not configured yet
+                    </p>
+                    <p className="text-foreground-subtle text-sm mt-1">
+                      {odkConfig?.message || 'Please contact your trainer to set up your ODK access.'}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Progress Bar */}
+          <div className="max-w-2xl mx-auto mb-8">
             <div className="bg-background-card border border-border rounded-xl p-4">
               <div className="flex justify-between text-sm mb-2">
-                <span className="text-foreground-subtle">Your Progress</span>
+                <span className="text-foreground-subtle">Training Progress</span>
                 <span className="text-primary font-semibold">
                   {Math.round((completedSteps.size / mobileMappingSteps.length) * 100)}%
                 </span>
@@ -109,7 +182,7 @@ export default function MobileMappingOverviewPage() {
           </div>
 
           {/* Training Steps Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-12">
             {mobileMappingSteps.map((step) => {
               const isCompleted = completedSteps.has(step.id);
               
@@ -119,12 +192,17 @@ export default function MobileMappingOverviewPage() {
                     <div className="bg-background-elevated border border-border rounded-xl p-6 hover:border-primary/50 transition-all h-full">
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-lg bg-primary/10 border border-primary/30 flex items-center justify-center">
-                            <span className="text-primary font-heading font-bold">{step.id}</span>
+                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                            isCompleted 
+                              ? 'bg-success/20 border border-success/30' 
+                              : 'bg-primary/10 border border-primary/30'
+                          }`}>
+                            {isCompleted ? (
+                              <CheckCircle2 className="w-5 h-5 text-success" />
+                            ) : (
+                              <span className="text-primary font-heading font-bold">{step.id}</span>
+                            )}
                           </div>
-                          {isCompleted && (
-                            <CheckCircle2 className="w-5 h-5 text-success" />
-                          )}
                         </div>
                         <div className="flex items-center gap-1.5 text-foreground-subtle text-xs">
                           <Clock className="w-3.5 h-3.5" />
@@ -152,83 +230,99 @@ export default function MobileMappingOverviewPage() {
             })}
           </div>
 
-          {/* Quick Help Section */}
-          <div className="max-w-2xl mx-auto mt-12">
-            <div className="bg-info/10 border border-info/30 rounded-xl p-6">
-              <h3 className="text-lg font-heading font-bold text-white mb-2 flex items-center gap-2">
-                <Smartphone className="w-5 h-5 text-info" />
+          {/* ========== FORM GUIDES SECTION ========== */}
+          <div className="max-w-4xl mx-auto mb-12">
+            <div className="bg-background-card border border-border rounded-2xl overflow-hidden">
+              <div className="bg-gradient-to-r from-info/20 to-info/5 p-6 border-b border-border">
+                <h2 className="text-xl font-heading font-bold text-white flex items-center gap-3">
+                  <div className="bg-info/30 p-2 rounded-lg">
+                    <FileText className="w-6 h-6 text-info" />
+                  </div>
+                  Form Guides
+                </h2>
+                <p className="text-foreground-muted mt-2">
+                  Learn what each question means and how to answer correctly
+                </p>
+              </div>
+
+              <div className="divide-y divide-border">
+                {formGuides.map((form) => (
+                  <div key={form.formId}>
+                    <button
+                      onClick={() => setExpandedForm(expandedForm === form.formId ? null : form.formId)}
+                      className="w-full p-4 flex items-center justify-between hover:bg-background-elevated transition-colors"
+                    >
+                      <div className="text-left">
+                        <h3 className="font-semibold text-white">{form.formName}</h3>
+                        <p className="text-sm text-foreground-subtle">{form.description}</p>
+                      </div>
+                      {expandedForm === form.formId ? (
+                        <ChevronUp className="w-5 h-5 text-foreground-subtle" />
+                      ) : (
+                        <ChevronDown className="w-5 h-5 text-foreground-subtle" />
+                      )}
+                    </button>
+
+                    {expandedForm === form.formId && (
+                      <div className="bg-background-elevated p-4 space-y-4">
+                        {form.questions.map((q, idx) => (
+                          <div key={idx} className="bg-background-card rounded-lg p-4 border border-border">
+                            <div className="flex items-start gap-3">
+                              <div className="bg-primary/20 p-1.5 rounded-lg flex-shrink-0">
+                                <HelpCircle className="w-4 h-4 text-primary" />
+                              </div>
+                              <div className="flex-1">
+                                <h4 className="font-semibold text-white mb-1">{q.question}</h4>
+                                <p className="text-sm text-foreground-muted mb-2">{q.explanation}</p>
+                                
+                                {q.examples && q.examples.length > 0 && (
+                                  <div className="mb-2">
+                                    <p className="text-xs text-foreground-subtle font-semibold mb-1">Examples:</p>
+                                    <ul className="text-xs text-foreground-subtle space-y-0.5">
+                                      {q.examples.map((ex, i) => (
+                                        <li key={i}>• {ex}</li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                )}
+                                
+                                {q.tip && (
+                                  <div className="bg-success/10 border border-success/20 rounded-lg px-3 py-2">
+                                    <p className="text-xs text-success">💡 {q.tip}</p>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+
+                {formGuides.length === 0 && (
+                  <div className="p-8 text-center">
+                    <p className="text-foreground-subtle">No form guides available yet.</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Reference */}
+          <div className="max-w-2xl mx-auto">
+            <div className="bg-background-card border border-border rounded-xl p-6">
+              <h3 className="text-lg font-heading font-bold text-white mb-4 flex items-center gap-2">
+                <Smartphone className="w-5 h-5 text-primary" />
                 Quick Reference
               </h3>
               <ul className="text-sm text-foreground-muted space-y-2">
                 <li>📱 <strong>App:</strong> ODK Collect (free on Play Store)</li>
                 <li>🌐 <strong>Works Offline:</strong> Download forms first, then collect data anywhere</li>
                 <li>📤 <strong>Submit Daily:</strong> Send your forms when you have internet</li>
+                <li>📖 <strong>Form Guides:</strong> Check above to understand questions</li>
                 <li>❓ <strong>Need Help?</strong> Contact your supervisor</li>
               </ul>
-            </div>
-          </div>
-
-          {/* ODK Setup QR Code Section */}
-          <div className="max-w-2xl mx-auto mt-8">
-            <div className="bg-background-card border border-primary/30 rounded-xl p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-heading font-bold text-white flex items-center gap-2">
-                  <QrCode className="w-5 h-5 text-primary" />
-                  Setup ODK Collect
-                </h3>
-                {odkConfig?.configured && (
-                  <button
-                    onClick={() => setShowQrCode(!showQrCode)}
-                    className="text-sm bg-primary/20 border border-primary/30 text-primary px-4 py-2 rounded-lg hover:bg-primary/30 transition-colors"
-                  >
-                    {showQrCode ? 'Hide QR Code' : 'Show QR Code'}
-                  </button>
-                )}
-              </div>
-
-              {odkLoading ? (
-                <div className="flex items-center justify-center py-8">
-                  <Loader2 className="w-6 h-6 text-primary animate-spin" />
-                  <span className="ml-2 text-foreground-muted">Loading configuration...</span>
-                </div>
-              ) : odkConfig?.configured ? (
-                <>
-                  <p className="text-sm text-foreground-muted mb-4">
-                    Scan this QR code with ODK Collect to connect to the data collection server.
-                    <br />
-                    <span className="text-foreground-subtle">Account: {odkConfig.displayName}</span>
-                  </p>
-
-                  {showQrCode && odkConfig.configUrl && (
-                    <div className="flex flex-col items-center py-6 bg-background-elevated rounded-lg border border-border">
-                      <QRCodeDisplay data={odkConfig.configUrl} size={220} />
-                      <p className="mt-4 text-xs text-foreground-subtle text-center max-w-xs">
-                        Open ODK Collect → Menu → Add Project → Scan QR Code
-                      </p>
-                    </div>
-                  )}
-
-                  {odkConfig.instructions && !showQrCode && (
-                    <ol className="text-sm text-foreground-muted space-y-2 list-decimal list-inside">
-                      {odkConfig.instructions.map((instruction, idx) => (
-                        <li key={idx}>{instruction}</li>
-                      ))}
-                    </ol>
-                  )}
-                </>
-              ) : (
-                <div className="flex items-start gap-3 py-4">
-                  <AlertCircle className="w-5 h-5 text-warning flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-foreground-muted text-sm">
-                      {odkConfig?.message || 'ODK has not been configured for your account yet.'}
-                    </p>
-                    <p className="text-foreground-subtle text-xs mt-1">
-                      Please contact your trainer to set up your ODK access.
-                    </p>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>

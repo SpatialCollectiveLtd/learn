@@ -18,28 +18,26 @@ export function QRCodeDisplay({ data, size = 200, className = '' }: QRCodeDispla
   useEffect(() => {
     if (!canvasRef.current || !data) return;
     
-    // Use a simple QR code library loaded from CDN or generate pattern
-    // For now, we'll use an API service that generates QR codes
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Create an image from QR code API
+    // Create an image from QR code API - white background, black QR for best scanning
     const img = new Image();
     img.crossOrigin = 'anonymous';
-    // Using Google Charts API for QR code generation (reliable and free)
     const encodedData = encodeURIComponent(data);
-    img.src = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodedData}&bgcolor=1a1a1a&color=ffffff`;
+    // Use white background (#ffffff) and black code (#000000) for best scannability
+    img.src = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodedData}&bgcolor=ffffff&color=000000&margin=10`;
     
     img.onload = () => {
-      ctx.fillStyle = '#1a1a1a';
+      ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, size, size);
       ctx.drawImage(img, 0, 0, size, size);
     };
 
     img.onerror = () => {
       // Fallback: show text if QR generation fails
-      ctx.fillStyle = '#1a1a1a';
+      ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, size, size);
       ctx.fillStyle = '#dc2626';
       ctx.font = '14px sans-serif';

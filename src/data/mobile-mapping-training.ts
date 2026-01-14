@@ -24,23 +24,23 @@ export const mobileMappingSteps: MobileMappingStep[] = [
     id: 1,
     title: "Welcome to Mobile Mapping",
     shortTitle: "Introduction",
-    estimatedTime: 5,
+    estimatedTime: 3,
     content: {
-      introduction: "Mobile mapping allows you to collect real-world data using your smartphone. You'll be visiting locations, recording information, and helping create accurate maps of your community.",
+      introduction: "Mobile mapping allows you to collect real-world data using your smartphone. You'll be visiting locations in Kayole Soweto and recording information about what you find.",
       mainContent: [
         {
           type: 'text',
-          content: "As a mobile mapper, you'll use a simple app called ODK Collect to gather information about buildings, roads, and facilities in your area. The data you collect helps planners and organizations make better decisions for your community."
+          content: "As a mobile mapper, you'll use a simple app called ODK Collect to gather information. The data you collect helps planners and organizations make better decisions for your community."
         },
         {
           type: 'list',
           title: "What You'll Be Doing",
           content: [
-            "Walking around assigned areas in your community",
-            "Using your phone to fill out simple forms about what you see",
+            "Walking around assigned areas in Kayole Soweto",
+            "Using your phone to fill out forms about what you see",
             "Taking photos when required",
             "Recording GPS locations automatically",
-            "Submitting your data when you have internet connection"
+            "Submitting your data when you have internet"
           ]
         },
         {
@@ -48,219 +48,206 @@ export const mobileMappingSteps: MobileMappingStep[] = [
           title: "What You Need",
           content: [
             "An Android smartphone (Android 5.0 or newer)",
-            "At least 100MB of free storage space",
-            "Access to Google Play Store",
-            "Internet connection for downloading forms and submitting data",
-            "Charged phone battery (bring a power bank if possible)"
+            "ODK Collect app installed (free from Play Store)",
+            "Internet for downloading forms and submitting data"
           ]
         },
         {
           type: 'tip',
-          content: "Don't worry if you've never done this before! The app is very simple to use, and you'll get the hang of it quickly. Just follow the steps in this training."
+          content: "The app is very simple! You'll learn everything in this short training."
         }
       ],
       keyTakeaways: [
-        "Mobile mapping uses your smartphone to collect real data",
-        "You need an Android phone with internet access",
-        "The app (ODK Collect) is free and easy to use",
-        "Your work helps improve your community"
+        "Mobile mapping uses your smartphone to collect data",
+        "You need an Android phone with ODK Collect app",
+        "Your work helps improve Kayole Soweto community"
       ]
     }
   },
   {
     id: 2,
-    title: "Installing ODK Collect",
+    title: "Install ODK Collect",
     shortTitle: "Install App",
-    estimatedTime: 10,
+    estimatedTime: 5,
     content: {
-      introduction: "ODK Collect is a free app that lets you fill out forms and collect data on your phone. Let's install it step by step.",
+      introduction: "ODK Collect is a free app that lets you fill out forms on your phone. Here's how to install it.",
       mainContent: [
         {
           type: 'list',
-          title: "Step 1: Open Google Play Store",
+          title: "Installation Steps",
           content: [
-            "Find the Play Store icon on your phone (looks like a colorful triangle)",
-            "Tap to open it",
-            "Make sure you're connected to the internet (WiFi is best)"
+            "Open Google Play Store on your phone",
+            "Search for: ODK Collect",
+            "Look for the app with a blue clipboard icon",
+            "Tap Install (it's about 20MB)",
+            "Wait for download to complete"
           ]
         },
         {
           type: 'list',
-          title: "Step 2: Search for ODK Collect",
+          title: "Allow Permissions",
           content: [
-            "Tap the search bar at the top",
-            "Type: ODK Collect",
-            "Look for the app with a blue icon showing a clipboard",
-            "Make sure it says 'ODK' and has millions of downloads"
-          ]
-        },
-        {
-          type: 'list',
-          title: "Step 3: Install the App",
-          content: [
-            "Tap the green 'Install' button",
-            "Wait for the download to complete (about 20MB)",
-            "The button will change to 'Open' when done",
-            "Tap 'Open' to launch the app"
-          ]
-        },
-        {
-          type: 'list',
-          title: "Step 4: Allow Permissions",
-          content: [
-            "When asked, tap 'Allow' for location access - needed for GPS",
-            "Tap 'Allow' for camera access - needed for photos",
-            "Tap 'Allow' for storage access - needed to save forms"
+            "When asked, tap 'Allow' for LOCATION - needed for GPS",
+            "Tap 'Allow' for CAMERA - needed for photos",
+            "Tap 'Allow' for STORAGE - needed to save forms"
           ]
         },
         {
           type: 'warning',
-          content: "Important: You MUST allow all permissions for the app to work properly. Without location permission, your data won't have GPS coordinates."
-        },
-        {
-          type: 'tip',
-          content: "If you can't find the app, you can also visit this link on your phone: https://play.google.com/store/apps/details?id=org.odk.collect.android"
+          content: "You MUST allow all permissions! Without location, your data won't have GPS coordinates."
         }
       ],
       keyTakeaways: [
-        "ODK Collect is free from Google Play Store",
-        "Search for 'ODK Collect' - blue clipboard icon",
+        "ODK Collect is free from Play Store",
         "Allow ALL permissions when asked",
-        "The app needs about 20MB to download"
+        "Look for the blue clipboard icon"
       ]
     }
   },
   {
     id: 3,
-    title: "Getting Your Forms",
-    shortTitle: "Get Forms",
-    estimatedTime: 10,
+    title: "Connect to Server",
+    shortTitle: "Connect",
+    estimatedTime: 5,
     content: {
-      introduction: "Now that ODK Collect is installed, you need to connect it to our server to download the data collection forms you'll use in the field.",
+      introduction: "Now connect ODK Collect to our server. The easiest way is to scan a QR code.",
       mainContent: [
         {
           type: 'list',
-          title: "Step 1: Open App Settings",
+          title: "Method 1: QR Code (Recommended)",
           content: [
-            "Open ODK Collect app",
-            "Tap the three dots (⋮) in the top right corner",
-            "Select 'Settings' from the menu",
-            "Tap 'Server'"
-          ]
-        },
-        {
-          type: 'list',
-          title: "Step 2: Enter Server Details",
-          content: [
-            "Your supervisor will give you the server URL",
-            "Type or paste the URL exactly as given",
-            "Enter your username (usually your Youth ID)",
-            "Enter the password provided to you",
-            "Tap 'Save' or go back"
-          ]
-        },
-        {
-          type: 'list',
-          title: "Step 3: Download Forms",
-          content: [
-            "Go back to the main screen",
-            "Tap 'Get Blank Form'",
-            "Wait for the list of available forms to load",
-            "Tap 'Select All' or choose the forms you need",
-            "Tap 'Get Selected'"
+            "Open ODK Collect",
+            "Tap the menu icon (three dots ⋮)",
+            "Select 'Add project'",
+            "Select 'Configure with QR code'",
+            "Scan the QR code shown on your training dashboard",
+            "The server will connect automatically!"
           ]
         },
         {
           type: 'tip',
-          content: "Always download forms when you have a good internet connection. Once downloaded, you can fill them even without internet!"
+          content: "Your personal QR code is on this training page. Ask your trainer to show it on screen for you to scan."
         },
         {
-          type: 'warning',
-          content: "Keep your username and password safe. Don't share them with anyone. Each person must use their own account."
+          type: 'list',
+          title: "After Connecting",
+          content: [
+            "The app will show 'Project added'",
+            "You'll see the project name at the top",
+            "Now you can download forms!"
+          ]
         }
       ],
       keyTakeaways: [
-        "Get server details from your supervisor",
-        "Enter URL, username, and password in Settings",
-        "Download forms using 'Get Blank Form'",
-        "Forms work offline once downloaded"
+        "Scan the QR code from your training dashboard",
+        "Your trainer can display it for you",
+        "Server connects automatically"
       ]
     }
   },
   {
     id: 4,
-    title: "Collecting Data in the Field",
-    shortTitle: "Collect Data",
-    estimatedTime: 10,
+    title: "Collect & Submit Data",
+    shortTitle: "Collect",
+    estimatedTime: 5,
     content: {
-      introduction: "You're now ready to collect data! Here's how to fill out forms and submit your work.",
+      introduction: "You're ready to collect data! Here's how to fill forms and submit your work.",
       mainContent: [
         {
           type: 'list',
-          title: "Starting a New Form",
+          title: "Download Forms First",
           content: [
-            "Open ODK Collect",
+            "Tap 'Get Blank Form'",
+            "Wait for forms to load",
+            "Tap each form to download it",
+            "Forms work offline once downloaded!"
+          ]
+        },
+        {
+          type: 'list',
+          title: "Fill Out a Form",
+          content: [
             "Tap 'Fill Blank Form'",
-            "Select the form you want to fill",
-            "The form will open with the first question"
+            "Select the form you need",
+            "Answer each question",
+            "Swipe LEFT to go next, RIGHT to go back",
+            "At the end, tap 'Save Form and Exit'"
           ]
         },
         {
           type: 'list',
-          title: "Filling Out Questions",
+          title: "Submit Your Work",
           content: [
-            "Read each question carefully",
-            "Swipe LEFT to go to the next question",
-            "Swipe RIGHT to go back to the previous question",
-            "Some questions are required - you can't skip them",
-            "For GPS questions, wait for accuracy to show (lower is better)"
-          ]
-        },
-        {
-          type: 'list',
-          title: "Taking Photos",
-          content: [
-            "When a photo is needed, tap 'Take Photo'",
-            "Your camera will open",
-            "Take a clear photo of what's required",
-            "Tap the checkmark to accept the photo"
-          ]
-        },
-        {
-          type: 'list',
-          title: "Saving Your Work",
-          content: [
-            "At the end of the form, tap 'Save Form and Exit'",
-            "You can mark it as 'Finalized' if complete",
-            "Or save as draft if you need to finish later"
-          ]
-        },
-        {
-          type: 'list',
-          title: "Submitting Data",
-          content: [
-            "Go back to the main screen",
-            "Tap 'Send Finalized Form'",
-            "Select the forms you want to submit",
+            "When you have internet, tap 'Send Finalized Form'",
+            "Select forms to send",
             "Tap 'Send Selected'",
             "Wait for 'Success' message"
           ]
         },
         {
           type: 'warning',
-          content: "Always submit your forms at the end of each day when you have internet. Don't let forms pile up!"
+          content: "Submit your forms at the end of EVERY day. Don't let them pile up!"
         },
         {
           type: 'tip',
-          content: "If you make a mistake, you can go back and change your answers before saving. Once submitted, you cannot change it."
+          content: "Check the Form Guides section on this page to understand what each question means."
         }
       ],
       keyTakeaways: [
-        "Use 'Fill Blank Form' to start collecting data",
-        "Swipe left/right to navigate between questions",
-        "Save your form when done",
-        "Submit forms daily using 'Send Finalized Form'"
+        "Download forms first (Get Blank Form)",
+        "Fill forms even without internet",
+        "Submit daily using 'Send Finalized Form'",
+        "Read Form Guides to understand questions"
       ]
     }
+  }
+];
+
+// Form guides - explanations of questions in each form
+export interface FormGuide {
+  formId: string;
+  formName: string;
+  description: string;
+  questions: Array<{
+    question: string;
+    explanation: string;
+    examples?: string[];
+    tip?: string;
+  }>;
+}
+
+export const formGuides: FormGuide[] = [
+  {
+    formId: 'streetlight_training',
+    formName: 'Street Light Survey (Training)',
+    description: 'This form helps you practice data collection by surveying street lights in your area.',
+    questions: [
+      {
+        question: 'GPS Location',
+        explanation: 'This automatically captures where you are standing. Wait for the accuracy number to be below 10 meters before continuing.',
+        tip: 'Stand directly next to the street light pole for best accuracy.'
+      },
+      {
+        question: 'Street Light Status',
+        explanation: 'Is the street light working or not? Working means it turns on at night. Broken means it does not work at all.',
+        examples: ['Working - light turns on at night', 'Not Working - bulb is dead or pole is damaged', 'Unknown - cannot tell during daytime'],
+        tip: 'If surveying during the day, check for visible damage. Ask residents if unsure.'
+      },
+      {
+        question: 'Pole Condition',
+        explanation: 'Describe the physical state of the light pole.',
+        examples: ['Good - standing straight, no rust', 'Fair - minor rust or leaning slightly', 'Poor - heavily rusted, leaning badly, or damaged'],
+      },
+      {
+        question: 'Photo',
+        explanation: 'Take a clear photo of the street light. Make sure the whole pole is visible.',
+        tip: 'Step back enough to capture the full pole in the photo. Avoid blurry images.'
+      },
+      {
+        question: 'Additional Notes',
+        explanation: 'Any other observations about this street light. This is optional.',
+        examples: ['Near school entrance', 'Wires hanging dangerously', 'Recently installed']
+      }
+    ]
   }
 ];
