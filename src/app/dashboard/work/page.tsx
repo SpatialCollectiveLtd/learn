@@ -278,13 +278,13 @@ export default function WorkDashboard() {
                 </p>
                 
                 <a
-                  href="https://tasks.hotosm.org/projects/36570"
+                  href="https://tasks.hotosm.org/projects/39443"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-lg hover:bg-primary-hover transition-colors font-subheading font-semibold shadow-lg shadow-primary/30 mb-3"
                 >
                   <ExternalLink className="w-5 h-5" />
-                  <span>Open Task #36570</span>
+                  <span>Open Task #39443</span>
                 </a>
 
                 <div className="bg-black/40 border border-primary/30 rounded-lg p-3 mt-3">
