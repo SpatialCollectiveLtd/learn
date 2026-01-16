@@ -5,7 +5,7 @@ import { BackgroundBeams } from "@/components/ui/background-beams";
 import { CometCard } from "@/components/ui/comet-card";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Shield, LogOut, BookOpen, Map, Smartphone, Home, CheckSquare } from "lucide-react";
+import { Shield, LogOut, BookOpen, Map, Smartphone, Home, CheckSquare, ClipboardList } from "lucide-react";
 
 export default function StaffDashboard() {
   const router = useRouter();
@@ -214,6 +214,21 @@ export default function StaffDashboard() {
               Admin Resources
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Link href="/dashboard/staff/attendance">
+                <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-xl p-6 hover:border-[#dc2626]/50 transition-all cursor-pointer">
+                  <div className="flex items-center gap-3 mb-2">
+                    <ClipboardList className="w-5 h-5 text-[#dc2626]" />
+                    <h4 className="text-white font-semibold">Attendance Sheet</h4>
+                  </div>
+                  <p className="text-[#a3a3a3] text-sm mb-3">
+                    Record daily attendance for mobile mappers.
+                  </p>
+                  <span className="text-[#dc2626] text-sm font-semibold">
+                    Open Attendance →
+                  </span>
+                </div>
+              </Link>
+
               <Link href="/dashboard/staff/manage">
                 <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-xl p-6 hover:border-[#dc2626]/50 transition-all cursor-pointer">
                   <h4 className="text-white font-semibold mb-2">Staff Management</h4>
@@ -225,16 +240,6 @@ export default function StaffDashboard() {
                   </span>
                 </div>
               </Link>
-
-              <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-xl p-6">
-                <h4 className="text-white font-semibold mb-2">Youth Progress Tracking</h4>
-                <p className="text-[#a3a3a3] text-sm mb-3">
-                  Monitor youth participant progress and training completion.
-                </p>
-                <button className="text-[#737373] text-sm hover:text-[#a3a3a3]">
-                  Coming Soon
-                </button>
-              </div>
 
               <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-xl p-6">
                 <h4 className="text-white font-semibold mb-2">Training Reports</h4>
