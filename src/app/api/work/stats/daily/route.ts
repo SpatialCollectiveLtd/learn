@@ -96,12 +96,14 @@ export async function GET(request: NextRequest) {
     const today = localDate.toISOString().split('T')[0];
 
     // First check database cache for recent stats (within last 5 minutes)
+    // Note: dates in youth_osm_stats are stored as EAT midnight in UTC (e.g., 2026-01-15T21:00:00Z for Jan 16 EAT)
     const cachedStatsResult = await Database.query(`
       SELECT buildings_mapped, changesets_analyzed, last_changeset_id, last_upload_time, updated_at
       FROM youth_osm_stats
-      WHERE youth_id = $1 AND date::text LIKE $2
+      WHERE youth_id = $1 
+      AND (date AT TIME ZONE 'UTC' AT TIME ZONE 'Africa/Nairobi')::date = $2::date
       AND updated_at > NOW() - INTERVAL '5 minutes'
-    `, [youthId, today + '%']);
+    `, [youthId, today]);
 
     let stats;
     if (cachedStatsResult.rows.length > 0) {
