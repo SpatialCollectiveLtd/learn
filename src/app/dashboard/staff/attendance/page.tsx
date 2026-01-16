@@ -15,14 +15,12 @@ import {
   ClipboardList,
   User,
   Phone,
-  CreditCard,
   X
 } from 'lucide-react';
 
 interface Youth {
   youth_id: string;
   full_name: string;
-  id_number: string | null;
   phone_number: string | null;
   program_type: string;
 }
@@ -388,12 +386,6 @@ export default function StaffAttendancePage() {
                     <User className="w-4 h-4" />
                     <span>ID: {selectedYouth.youth_id}</span>
                   </div>
-                  {selectedYouth.id_number && (
-                    <div className="flex items-center gap-2 text-[#a3a3a3]">
-                      <CreditCard className="w-4 h-4" />
-                      <span>National ID: {selectedYouth.id_number}</span>
-                    </div>
-                  )}
                   {selectedYouth.phone_number && (
                     <div className="flex items-center gap-2 text-[#a3a3a3]">
                       <Phone className="w-4 h-4" />

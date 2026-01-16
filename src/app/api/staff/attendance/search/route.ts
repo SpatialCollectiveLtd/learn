@@ -36,7 +36,6 @@ export async function GET(request: NextRequest) {
       SELECT 
         youth_id,
         full_name,
-        id_number,
         phone_number,
         program_type
       FROM youth_participants

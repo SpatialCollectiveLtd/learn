@@ -7,13 +7,23 @@ const pool = new Pool({
 });
 
 async function check() {
+  // Check table columns
+  const cols = await pool.query(`
+    SELECT column_name 
+    FROM information_schema.columns 
+    WHERE table_name = 'youth_participants'
+    ORDER BY ordinal_position
+  `);
+  console.log('Columns in youth_participants:');
+  cols.rows.forEach(r => console.log(' -', r.column_name));
+
   // Check specific mapper
   const result = await pool.query(`
     SELECT youth_id, full_name, program_type, is_active 
     FROM youth_participants 
     WHERE youth_id = 'KAY1799DM'
   `);
-  console.log('KAY1799DM:', result.rows);
+  console.log('\nKAY1799DM:', result.rows);
   
   // Check program type breakdown
   const count = await pool.query(`
