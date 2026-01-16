@@ -88,46 +88,74 @@ export async function GET(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Fetch OSM stats (from cache or API)
-    const stats = await getTodayBuildingCount(
-      youth.osm_username,
-      youth.project_hashtag || '#DPW2025',
-      youth.timezone || 'Africa/Nairobi',
-      false, // Don't force refresh
-      youth.exception_hashtags || [] // Exception hashtags for this user
-    );
-
-    // Calculate percentage
-    const dailyTarget = youth.daily_target || 200;
-    const percentage = Math.round((stats.totalBuildings / dailyTarget) * 100);
-
     // Get today's date in settlement timezone
     const timezone = youth.timezone || 'Africa/Nairobi';
     const offset = timezone === 'Africa/Nairobi' ? 3 : 0;
     const now = new Date();
     const localDate = new Date(now.getTime() + (offset * 60 * 60 * 1000));
     const today = localDate.toISOString().split('T')[0];
-    await Database.query(`
-      INSERT INTO youth_osm_stats (
-        youth_id, osm_username, date, buildings_mapped,
-        changesets_analyzed, last_changeset_id, last_upload_time
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7)
-      ON CONFLICT (youth_id, date) 
-      DO UPDATE SET
-        buildings_mapped = EXCLUDED.buildings_mapped,
-        changesets_analyzed = EXCLUDED.changesets_analyzed,
-        last_changeset_id = EXCLUDED.last_changeset_id,
-        last_upload_time = EXCLUDED.last_upload_time,
-        updated_at = CURRENT_TIMESTAMP
-    `, [
-      youthId,
-      youth.osm_username,
-      today,
-      stats.totalBuildings,
-      stats.changesetsAnalyzed,
-      stats.lastChangesetId || null,
-      stats.lastUploadTime || null,
-    ]);
+
+    // First check database cache for recent stats (within last 5 minutes)
+    const cachedStatsResult = await Database.query(`
+      SELECT buildings_mapped, changesets_analyzed, last_changeset_id, last_upload_time, updated_at
+      FROM youth_osm_stats
+      WHERE youth_id = $1 AND date::text LIKE $2
+      AND updated_at > NOW() - INTERVAL '5 minutes'
+    `, [youthId, today + '%']);
+
+    let stats;
+    if (cachedStatsResult.rows.length > 0) {
+      // Use cached stats from database
+      const cached = cachedStatsResult.rows[0];
+      console.log(`[API] Using cached stats from database for ${youthId}`);
+      stats = {
+        totalBuildings: cached.buildings_mapped || 0,
+        changesetsAnalyzed: cached.changesets_analyzed || 0,
+        lastChangesetId: cached.last_changeset_id,
+        lastUploadTime: cached.last_upload_time,
+        cacheHit: true,
+        processingTime: 0,
+      };
+    } else {
+      // Fetch fresh OSM stats
+      console.log(`[API] Fetching fresh OSM stats for ${youthId}`);
+      stats = await getTodayBuildingCount(
+        youth.osm_username,
+        youth.project_hashtag || '#DPW2025',
+        youth.timezone || 'Africa/Nairobi',
+        false, // Don't force refresh
+        youth.exception_hashtags || [] // Exception hashtags for this user
+      );
+    }
+
+    // Calculate percentage
+    const dailyTarget = youth.daily_target || 200;
+    const percentage = Math.round((stats.totalBuildings / dailyTarget) * 100);
+
+    // Only update database if we fetched fresh stats (not from cache)
+    if (!stats.cacheHit) {
+      await Database.query(`
+        INSERT INTO youth_osm_stats (
+          youth_id, osm_username, date, buildings_mapped,
+          changesets_analyzed, last_changeset_id, last_upload_time
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+        ON CONFLICT (youth_id, date) 
+        DO UPDATE SET
+          buildings_mapped = EXCLUDED.buildings_mapped,
+          changesets_analyzed = EXCLUDED.changesets_analyzed,
+          last_changeset_id = EXCLUDED.last_changeset_id,
+          last_upload_time = EXCLUDED.last_upload_time,
+          updated_at = CURRENT_TIMESTAMP
+      `, [
+        youthId,
+        youth.osm_username,
+        today,
+        stats.totalBuildings,
+        stats.changesetsAnalyzed,
+        stats.lastChangesetId || null,
+        stats.lastUploadTime || null,
+      ]);
+    }
 
     // Auto-sync work day (create/update and auto-approve)
     if (stats.totalBuildings > 0) {
