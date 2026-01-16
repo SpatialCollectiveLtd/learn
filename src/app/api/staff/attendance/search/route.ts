@@ -31,6 +31,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Search for youth - mobile mapping only for now
+    console.log('Searching for youth with query:', query);
     const result = await Database.query(`
       SELECT 
         youth_id,
@@ -44,6 +45,8 @@ export async function GET(request: NextRequest) {
         AND is_active = TRUE
       LIMIT 10
     `, [`%${query}%`]);
+    
+    console.log('Search results:', result.rows.length, 'records found');
 
     return NextResponse.json({
       success: true,
