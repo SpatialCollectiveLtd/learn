@@ -131,11 +131,15 @@ export default function StaffAttendancePage() {
     setSearching(true);
     try {
       const token = localStorage.getItem('staffToken');
+      console.log('Searching for:', query, 'with token:', token ? 'present' : 'missing');
       const response = await fetch(`/api/staff/attendance/search?q=${encodeURIComponent(query)}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
+      console.log('Search response status:', response.status);
       const data = await response.json();
+      console.log('Search response data:', data);
+      
       if (data.success) {
         setSearchResults(data.data.results);
       }
