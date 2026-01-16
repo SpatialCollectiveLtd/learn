@@ -271,7 +271,9 @@ export default function StaffAttendancePage() {
               </div>
               <div className="min-w-0">
                 <p className="text-xl sm:text-2xl font-bold text-white">{attendanceCount}</p>
-                <p className="text-xs text-[#a3a3a3] truncate">Present Today</p>
+                <p className="text-xs text-[#a3a3a3] truncate">
+                  {attendanceDate === new Date().toISOString().split('T')[0] ? 'Present Today' : 'Present on Date'}
+                </p>
               </div>
             </div>
           </div>
@@ -315,17 +317,25 @@ export default function StaffAttendancePage() {
 
             {/* Date Picker */}
             <div className="mb-4">
-              <label className="block text-sm text-[#a3a3a3] mb-2 flex items-center gap-2">
-                <Calendar className="w-4 h-4" />
-                Attendance Date
+              <label className="block text-sm font-semibold text-white mb-2 flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-primary" />
+                Select Date to View/Record
               </label>
               <input
                 type="date"
                 value={attendanceDate}
                 onChange={(e) => setAttendanceDate(e.target.value)}
                 max={new Date().toISOString().split('T')[0]}
-                className="w-full px-4 py-3 bg-[#262626] border border-[#3a3a3a] rounded-lg text-white focus:border-primary focus:outline-none"
+                className="w-full px-4 py-3 bg-[#262626] border-2 border-[#3a3a3a] rounded-lg text-white text-base font-medium focus:border-primary focus:outline-none hover:border-[#4a4a4a] transition-colors cursor-pointer"
               />
+              <p className="text-xs text-[#737373] mt-1.5">
+                Viewing attendance for {new Date(attendanceDate).toLocaleDateString('en-US', { 
+                  weekday: 'long', 
+                  month: 'short', 
+                  day: 'numeric',
+                  year: 'numeric'
+                })}
+              </p>
             </div>
 
             {/* Search or Selected Youth */}
