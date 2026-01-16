@@ -14,7 +14,8 @@ import {
   BarChart3, 
   CheckCircle2,
   Clock,
-  TrendingUp
+  TrendingUp,
+  ClipboardList
 } from "lucide-react";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
@@ -108,6 +109,13 @@ export default function TrainerDashboard() {
   };
 
   const quickActions = [
+    {
+      title: "Attendance Sheet",
+      description: "Record daily attendance for mobile mappers",
+      link: "/dashboard/staff/attendance",
+      icon: <ClipboardList className="w-12 h-12" />,
+      available: true,
+    },
     {
       title: "View Youth Progress",
       description: "Monitor trainee progress across all modules",

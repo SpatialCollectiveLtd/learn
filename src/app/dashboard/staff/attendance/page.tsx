@@ -66,23 +66,29 @@ export default function StaffAttendancePage() {
   const [totalMappers, setTotalMappers] = useState(0);
   const [loadingRecords, setLoadingRecords] = useState(true);
 
-  // Check auth on mount
+  // Check auth on mount - allow trainer, admin, and superadmin
   useEffect(() => {
     const token = localStorage.getItem('staffToken');
     const staffData = localStorage.getItem('staffData');
     
     if (!token || !staffData) {
-      router.push('/dashboard/staff');
+      router.push('/');
       return;
     }
     
     try {
       const parsed = JSON.parse(staffData);
-      setStaffName(parsed.name || parsed.staffId);
+      // Allow trainer, admin, and superadmin roles
+      const allowedRoles = ['trainer', 'admin', 'superadmin'];
+      if (!allowedRoles.includes(parsed.role)) {
+        router.push('/');
+        return;
+      }
+      setStaffName(parsed.fullName || parsed.name || parsed.staffId);
       setIsAuthenticated(true);
       fetchTodayAttendance();
     } catch {
-      router.push('/dashboard/staff');
+      router.push('/');
     }
   }, [router]);
 
@@ -215,75 +221,75 @@ export default function StaffAttendancePage() {
   }
 
   return (
-    <div className="min-h-screen bg-black py-8 px-4">
+    <div className="min-h-screen bg-black py-4 sm:py-8 px-3 sm:px-4">
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
+        {/* Header - Mobile responsive */}
+        <div className="mb-6 sm:mb-8">
           <button
-            onClick={() => router.push('/dashboard/staff')}
-            className="flex items-center gap-2 text-[#a3a3a3] hover:text-primary mb-4 transition-colors"
+            onClick={() => router.back()}
+            className="flex items-center gap-2 text-[#a3a3a3] hover:text-primary mb-3 sm:mb-4 transition-colors text-sm sm:text-base"
           >
-            <ArrowLeft className="w-5 h-5" />
-            <span>Back to Dashboard</span>
+            <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span>Back</span>
           </button>
           
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
-              <h1 className="text-3xl font-heading font-bold text-white flex items-center gap-3">
-                <ClipboardList className="w-8 h-8 text-primary" />
+              <h1 className="text-xl sm:text-3xl font-heading font-bold text-white flex items-center gap-2 sm:gap-3">
+                <ClipboardList className="w-6 h-6 sm:w-8 sm:h-8 text-primary flex-shrink-0" />
                 Attendance Sheet
               </h1>
-              <p className="text-[#a3a3a3] mt-1">Mobile Mapping - Daily Attendance</p>
+              <p className="text-[#a3a3a3] mt-1 text-sm sm:text-base">Mobile Mapping - Daily Attendance</p>
             </div>
-            <div className="text-right">
-              <p className="text-sm text-[#a3a3a3]">Logged in as</p>
-              <p className="text-white font-semibold">{staffName}</p>
+            <div className="text-left sm:text-right bg-[#1a1a1a] sm:bg-transparent p-2 sm:p-0 rounded-lg sm:rounded-none">
+              <p className="text-xs sm:text-sm text-[#a3a3a3]">Logged in as</p>
+              <p className="text-white font-semibold text-sm sm:text-base">{staffName}</p>
             </div>
           </div>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-3 gap-4 mb-8">
-          <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-4">
+        {/* Stats Cards - Mobile responsive */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
+          <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-3 sm:p-4">
             <div className="flex items-center gap-3">
-              <div className="bg-primary/20 p-2 rounded-lg">
+              <div className="bg-primary/20 p-2 rounded-lg flex-shrink-0">
                 <Users className="w-5 h-5 text-primary" />
               </div>
-              <div>
-                <p className="text-2xl font-bold text-white">{totalMappers}</p>
-                <p className="text-xs text-[#a3a3a3]">Total Mappers</p>
+              <div className="min-w-0">
+                <p className="text-xl sm:text-2xl font-bold text-white">{totalMappers}</p>
+                <p className="text-xs text-[#a3a3a3] truncate">Total Mappers</p>
               </div>
             </div>
           </div>
           
-          <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-4">
+          <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-3 sm:p-4">
             <div className="flex items-center gap-3">
-              <div className="bg-success/20 p-2 rounded-lg">
+              <div className="bg-success/20 p-2 rounded-lg flex-shrink-0">
                 <UserCheck className="w-5 h-5 text-success" />
               </div>
-              <div>
-                <p className="text-2xl font-bold text-white">{attendanceCount}</p>
-                <p className="text-xs text-[#a3a3a3]">Present Today</p>
+              <div className="min-w-0">
+                <p className="text-xl sm:text-2xl font-bold text-white">{attendanceCount}</p>
+                <p className="text-xs text-[#a3a3a3] truncate">Present Today</p>
               </div>
             </div>
           </div>
           
-          <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-4">
+          <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-3 sm:p-4">
             <div className="flex items-center gap-3">
-              <div className="bg-warning/20 p-2 rounded-lg">
+              <div className="bg-warning/20 p-2 rounded-lg flex-shrink-0">
                 <AlertCircle className="w-5 h-5 text-warning" />
               </div>
-              <div>
-                <p className="text-2xl font-bold text-white">{totalMappers - attendanceCount}</p>
-                <p className="text-xs text-[#a3a3a3]">Not Recorded</p>
+              <div className="min-w-0">
+                <p className="text-xl sm:text-2xl font-bold text-white">{totalMappers - attendanceCount}</p>
+                <p className="text-xs text-[#a3a3a3] truncate">Not Recorded</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           {/* Left: Attendance Form */}
-          <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-6">
+          <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl sm:rounded-2xl p-4 sm:p-6">
             <h2 className="text-lg font-heading font-bold text-white mb-4 flex items-center gap-2">
               <UserCheck className="w-5 h-5 text-primary" />
               Record Attendance
@@ -431,7 +437,7 @@ export default function StaffAttendancePage() {
           </div>
 
           {/* Right: Today's Attendance List */}
-          <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-6">
+          <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl sm:rounded-2xl p-4 sm:p-6">
             <h2 className="text-lg font-heading font-bold text-white mb-4 flex items-center gap-2">
               <Clock className="w-5 h-5 text-primary" />
               Attendance for {new Date(attendanceDate).toLocaleDateString('en-US', { 
