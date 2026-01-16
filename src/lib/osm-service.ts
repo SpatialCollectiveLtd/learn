@@ -586,7 +586,7 @@ async function countBuildingsInChangeset(
 
 /**
  * Check if a way has a building tag (with typo tolerance)
- * Common typos: biulding, buiding, buidling, buliding, etc.
+ * Common typos: biulding, buiding, buidling, buliding, buildiing, etc.
  */
 function hasBuildingTag(tagData: any): boolean {
   if (!tagData) return false;
@@ -598,17 +598,18 @@ function hasBuildingTag(tagData: any): boolean {
     // Exact match
     if (key === 'building') return true;
     
-    // Common typos (missing 'l', swapped letters, etc.)
-    // biulding, buiding, buidling, buliding, builidng, buildnig, etc.
+    // Common typos (missing 'l', swapped letters, double letters, etc.)
     const typos = [
-      'biulding',  // missing 'l'
-      'buiding',   // missing 'l' 
-      'buidling',  // 'l' in wrong place
-      'buliding',  // 'i' and 'l' swapped
-      'builidng',  // 'i' and 'd' swapped
-      'buildnig',  // 'i' and 'n' swapped
-      'buidlign',  // multiple issues
-      'buliding',  // letters swapped
+      'biulding',   // missing 'l'
+      'buiding',    // missing 'l' 
+      'buidling',   // 'l' in wrong place
+      'buliding',   // 'i' and 'l' swapped
+      'builidng',   // 'i' and 'd' swapped
+      'buildnig',   // 'i' and 'n' swapped
+      'buidlign',   // multiple issues
+      'buildiing',  // double 'i' (common typo found in KAY1154SO changesets)
+      'buildding',  // double 'd'
+      'buillding',  // double 'l'
     ];
     
     return typos.includes(key);
