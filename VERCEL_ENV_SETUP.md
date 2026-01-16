@@ -39,6 +39,14 @@ NEXT_PUBLIC_API_URL=https://learn.spatialcollective.co.ke
 NEXT_PUBLIC_DOMAIN=spatialcollective.co.ke
 ```
 
+### DPW Manager Integration (NEW - January 16, 2026)
+
+```
+DPW_MANAGER_API_KEY=806920718fb09a005ce0672fb9cf202995ef4c42e4b7582db7c5e15881d29bd3
+```
+
+This key authenticates requests from app.spatialcollective.com to sync participant data.
+
 ## Setup Steps
 
 1. Go to https://vercel.com/spatialcollectiveltd/learn/settings/environment-variables
