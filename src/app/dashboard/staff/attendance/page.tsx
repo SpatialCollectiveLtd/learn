@@ -42,6 +42,9 @@ export default function StaffAttendancePage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [staffName, setStaffName] = useState('');
   
+  // Module selection state
+  const [selectedModule, setSelectedModule] = useState('mobile_mapping');
+  
   // Search state
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Youth[]>([]);
@@ -63,6 +66,14 @@ export default function StaffAttendancePage() {
   const [attendanceCount, setAttendanceCount] = useState(0);
   const [totalMappers, setTotalMappers] = useState(0);
   const [loadingRecords, setLoadingRecords] = useState(true);
+
+  // Module display names
+  const moduleNames: Record<string, string> = {
+    mobile_mapping: 'Mobile Mapping',
+    digitization: 'Digitization',
+    microtasking: 'Microtasking',
+    household_survey: 'Household Survey'
+  };
 
   // Check auth on mount - allow trainer, admin, and superadmin
   useEffect(() => {
@@ -95,7 +106,7 @@ export default function StaffAttendancePage() {
     setLoadingRecords(true);
     try {
       const token = localStorage.getItem('staffToken');
-      const response = await fetch(`/api/staff/attendance?date=${attendanceDate}`, {
+      const response = await fetch(`/api/staff/attendance?date=${attendanceDate}&module=${selectedModule}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
@@ -112,12 +123,16 @@ export default function StaffAttendancePage() {
     }
   };
 
-  // Fetch attendance when date changes
+  // Fetch attendance when date or module changes
   useEffect(() => {
     if (isAuthenticated) {
       fetchTodayAttendance();
+      // Clear selected youth when module changes
+      setSelectedYouth(null);
+      setSearchQuery('');
+      setSearchResults([]);
     }
-  }, [attendanceDate, isAuthenticated]);
+  }, [attendanceDate, selectedModule, isAuthenticated]);
 
   // Search youth
   const searchYouth = useCallback(async (query: string) => {
@@ -130,7 +145,7 @@ export default function StaffAttendancePage() {
     try {
       const token = localStorage.getItem('staffToken');
       console.log('Searching for:', query, 'with token:', token ? 'present' : 'missing');
-      const response = await fetch(`/api/staff/attendance/search?q=${encodeURIComponent(query)}`, {
+      const response = await fetch(`/api/staff/attendance/search?q=${encodeURIComponent(query)}&module=${selectedModule}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
@@ -146,7 +161,7 @@ export default function StaffAttendancePage() {
     } finally {
       setSearching(false);
     }
-  }, []);
+  }, [selectedModule]);
 
   // Debounced search
   useEffect(() => {
@@ -241,7 +256,7 @@ export default function StaffAttendancePage() {
                 <ClipboardList className="w-6 h-6 sm:w-8 sm:h-8 text-primary flex-shrink-0" />
                 Attendance Sheet
               </h1>
-              <p className="text-[#a3a3a3] mt-1 text-sm sm:text-base">Mobile Mapping - Daily Attendance</p>
+              <p className="text-[#a3a3a3] mt-1 text-sm sm:text-base">{moduleNames[selectedModule]} - Daily Attendance</p>
             </div>
             <div className="text-left sm:text-right bg-[#1a1a1a] sm:bg-transparent p-2 sm:p-0 rounded-lg sm:rounded-none">
               <p className="text-xs sm:text-sm text-[#a3a3a3]">Logged in as</p>
@@ -314,6 +329,24 @@ export default function StaffAttendancePage() {
                 <span className="text-sm">{submitMessage.text}</span>
               </div>
             )}
+
+            {/* Module Selector */}
+            <div className="mb-4">
+              <label className="block text-sm font-semibold text-white mb-2 flex items-center gap-2">
+                <Users className="w-4 h-4 text-primary" />
+                Select Module
+              </label>
+              <select
+                value={selectedModule}
+                onChange={(e) => setSelectedModule(e.target.value)}
+                className="w-full px-4 py-3 bg-[#262626] border-2 border-[#3a3a3a] rounded-lg text-white text-base font-medium focus:border-primary focus:outline-none hover:border-[#4a4a4a] transition-colors cursor-pointer"
+              >
+                <option value="mobile_mapping">Mobile Mapping</option>
+                <option value="digitization">Digitization</option>
+                <option value="microtasking">Microtasking</option>
+                <option value="household_survey">Household Survey</option>
+              </select>
+            </div>
 
             {/* Date Picker */}
             <div className="mb-4">
@@ -460,7 +493,13 @@ export default function StaffAttendancePage() {
             ) : todayRecords.length === 0 ? (
               <div className="text-center py-8">
                 <Users className="w-12 h-12 text-[#525252] mx-auto mb-3" />
-                <p className="text-[#a3a3a3]">No attendance recorded yet</p>
+                <p className="text-[#a3a3a3] font-medium mb-1">No attendance recorded</p>
+                <p className="text-sm text-[#737373]">
+                  {attendanceDate === new Date().toISOString().split('T')[0] 
+                    ? `No one has been marked present today for ${moduleNames[selectedModule]}`
+                    : `No attendance was recorded on this date for ${moduleNames[selectedModule]}`
+                  }
+                </p>
               </div>
             ) : (
               <div className="space-y-2 max-h-[500px] overflow-y-auto">

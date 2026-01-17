@@ -22,6 +22,7 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const query = searchParams.get('q')?.trim().toUpperCase();
+    const module = searchParams.get('module') || 'mobile_mapping';
 
     if (!query || query.length < 3) {
       return NextResponse.json({ 
@@ -30,8 +31,8 @@ export async function GET(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Search for youth - mobile mapping only for now
-    console.log('Searching for youth with query:', query);
+    // Search for youth in the specified module
+    console.log('Searching for youth with query:', query, 'in module:', module);
     const result = await Database.query(`
       SELECT 
         youth_id,
@@ -40,10 +41,10 @@ export async function GET(request: NextRequest) {
         program_type
       FROM youth_participants
       WHERE youth_id ILIKE $1
-        AND program_type = 'mobile_mapping'
+        AND program_type = $2
         AND is_active = TRUE
       LIMIT 10
-    `, [`%${query}%`]);
+    `, [`%${query}%`, module]);
     
     console.log('Search results:', result.rows.length, 'records found');
 

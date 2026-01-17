@@ -31,16 +31,16 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Verify youth exists and is active mobile mapper
+    // Verify youth exists and is active participant
     const youthCheck = await Database.query(`
-      SELECT youth_id, full_name FROM youth_participants 
-      WHERE youth_id = $1 AND program_type = 'mobile_mapping' AND is_active = TRUE
+      SELECT youth_id, full_name, program_type FROM youth_participants 
+      WHERE youth_id = $1 AND is_active = TRUE
     `, [youth_id.toUpperCase()]);
 
     if (youthCheck.rows.length === 0) {
       return NextResponse.json({ 
         success: false, 
-        message: 'Youth not found or not an active mobile mapper' 
+        message: 'Youth not found or not an active participant' 
       }, { status: 404 });
     }
 
@@ -97,60 +97,64 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const date = searchParams.get('date');
+    const module = searchParams.get('module') || 'mobile_mapping';
 
     // Get attendance records
     let query: string;
-    let params: string[];
+    let params: (string | undefined)[];
 
     if (date) {
-      // Get attendance for specific date
+      // Get attendance for specific date and module
       query = `
         SELECT 
           ar.id,
           ar.youth_id,
           yp.full_name,
+          yp.program_type,
           ar.attendance_date,
           ar.submitted_at,
           ar.submitted_by,
           ar.notes
         FROM attendance_records ar
         JOIN youth_participants yp ON ar.youth_id = yp.youth_id
-        WHERE ar.attendance_date = $1
+        WHERE ar.attendance_date = $1 AND yp.program_type = $2
         ORDER BY ar.submitted_at DESC
       `;
-      params = [date];
+      params = [date, module];
     } else {
-      // Get today's attendance
+      // Get today's attendance for module
       query = `
         SELECT 
           ar.id,
           ar.youth_id,
           yp.full_name,
+          yp.program_type,
           ar.attendance_date,
           ar.submitted_at,
           ar.submitted_by,
           ar.notes
         FROM attendance_records ar
         JOIN youth_participants yp ON ar.youth_id = yp.youth_id
-        WHERE ar.attendance_date = CURRENT_DATE
+        WHERE ar.attendance_date = CURRENT_DATE AND yp.program_type = $1
         ORDER BY ar.submitted_at DESC
       `;
-      params = [];
+      params = [module];
     }
 
     const result = await Database.query(query, params);
 
-    // Get total count for the date
+    // Get total count for the date and module
     const countQuery = date 
-      ? `SELECT COUNT(*) as total FROM attendance_records WHERE attendance_date = $1`
-      : `SELECT COUNT(*) as total FROM attendance_records WHERE attendance_date = CURRENT_DATE`;
-    const countResult = await Database.query(countQuery, date ? [date] : []);
+      ? `SELECT COUNT(*) as total FROM attendance_records ar JOIN youth_participants yp ON ar.youth_id = yp.youth_id WHERE ar.attendance_date = $1 AND yp.program_type = $2`
+      : `SELECT COUNT(*) as total FROM attendance_records ar JOIN youth_participants yp ON ar.youth_id = yp.youth_id WHERE ar.attendance_date = CURRENT_DATE AND yp.program_type = $1`;
+    const countParams = date ? [date, module] : [module];
+    const countResult = await Database.query(countQuery, countParams);
 
-    // Get total active mobile mappers
+    // Get total active participants for the module
     const totalMappers = await Database.query(`
       SELECT COUNT(*) as total FROM youth_participants 
-      WHERE program_type = 'mobile_mapping' AND is_active = TRUE
-    `);
+      WHERE program_type = $1 AND is_active = TRUE
+    `, [module]);
 
     return NextResponse.json({
       success: true,
