@@ -78,10 +78,9 @@ export async function GET(request: NextRequest) {
         
         (
           SELECT json_build_object(
-            'buildings_mapped', COALESCE(buildings_mapped, 0),
-            'total_days', COALESCE(work_days, 0),
-            'latest_date', last_work_date,
-            'first_work_date', first_work_date
+            'buildings_mapped', COALESCE(total_buildings, 0),
+            'total_days', COALESCE(days_worked, 0),
+            'latest_date', last_work_date
           )
           FROM youth_work_summary
           WHERE youth_id = yp.youth_id
@@ -162,7 +161,7 @@ export async function GET(request: NextRequest) {
         )), 0) as total_days_worked,
         
         COALESCE(SUM((
-          SELECT COALESCE(buildings_mapped, 0) 
+          SELECT COALESCE(total_buildings, 0) 
           FROM youth_work_summary 
           WHERE youth_id = yp.youth_id
         )), 0) as total_buildings_mapped,
