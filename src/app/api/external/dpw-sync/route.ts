@@ -66,24 +66,24 @@ export async function GET(request: NextRequest) {
         yp.last_login,
         
         -- Contract status
-        (SELECT COUNT(*) FROM contracts WHERE youth_id = yp.youth_id AND signed_at IS NOT NULL) > 0 as has_signed_contract,
-        (SELECT signed_at FROM contracts WHERE youth_id = yp.youth_id ORDER BY signed_at DESC LIMIT 1) as contract_signed_date,
+        (SELECT COUNT(*) FROM signed_contracts WHERE youth_id = yp.youth_id AND is_valid = TRUE) > 0 as has_signed_contract,
+        (SELECT signed_at FROM signed_contracts WHERE youth_id = yp.youth_id AND is_valid = TRUE ORDER BY signed_at DESC LIMIT 1) as contract_signed_date,
         
-        -- Work performance (from work_stats_daily)
+        -- Work performance (from youth_work_days and youth_work_summary)
         COALESCE((
-          SELECT SUM(days_worked) 
-          FROM work_stats_daily 
+          SELECT COUNT(*) 
+          FROM youth_work_days 
           WHERE youth_id = yp.youth_id
         ), 0) as total_days_worked,
         
         (
           SELECT json_build_object(
-            'buildings_mapped', COALESCE(SUM(buildings_mapped), 0),
-            'total_days', COALESCE(SUM(days_worked), 0),
-            'latest_date', MAX(work_date),
-            'first_work_date', MIN(work_date)
+            'buildings_mapped', COALESCE(buildings_mapped, 0),
+            'total_days', COALESCE(work_days, 0),
+            'latest_date', last_work_date,
+            'first_work_date', first_work_date
           )
-          FROM work_stats_daily
+          FROM youth_work_summary
           WHERE youth_id = yp.youth_id
         ) as work_summary,
         
@@ -110,13 +110,31 @@ export async function GET(request: NextRequest) {
         -- Training progress
         (
           SELECT json_build_object(
-            'digitization_completed', COALESCE(digitization_completed, false),
-            'digitization_completion_date', digitization_completion_date,
-            'mobile_mapping_completed', COALESCE(mobile_mapping_completed, false),
-            'mobile_mapping_completion_date', mobile_mapping_completion_date
+            'digitization_completed', (
+              SELECT COUNT(*) > 0 
+              FROM youth_training_progress ytp 
+              WHERE ytp.youth_id = yp.youth_id 
+              AND ytp.module_type = 'digitization'
+            ),
+            'digitization_completion_date', (
+              SELECT MAX(completed_at) 
+              FROM youth_training_progress ytp 
+              WHERE ytp.youth_id = yp.youth_id 
+              AND ytp.module_type = 'digitization'
+            ),
+            'mobile_mapping_completed', (
+              SELECT COUNT(*) > 0 
+              FROM youth_training_progress ytp 
+              WHERE ytp.youth_id = yp.youth_id 
+              AND ytp.module_type = 'mobile_mapping'
+            ),
+            'mobile_mapping_completion_date', (
+              SELECT MAX(completed_at) 
+              FROM youth_training_progress ytp 
+              WHERE ytp.youth_id = yp.youth_id 
+              AND ytp.module_type = 'mobile_mapping'
+            )
           )
-          FROM training_progress
-          WHERE youth_id = yp.youth_id
         ) as training_progress,
         
         -- ODK Configuration
@@ -138,14 +156,14 @@ export async function GET(request: NextRequest) {
         
         -- Work stats
         COALESCE(SUM((
-          SELECT SUM(days_worked) 
-          FROM work_stats_daily 
+          SELECT COUNT(*) 
+          FROM youth_work_days 
           WHERE youth_id = yp.youth_id
         )), 0) as total_days_worked,
         
         COALESCE(SUM((
-          SELECT SUM(buildings_mapped) 
-          FROM work_stats_daily 
+          SELECT COALESCE(buildings_mapped, 0) 
+          FROM youth_work_summary 
           WHERE youth_id = yp.youth_id
         )), 0) as total_buildings_mapped,
         
@@ -158,12 +176,10 @@ export async function GET(request: NextRequest) {
         
         -- Training completion
         COUNT((
-          SELECT 1 FROM training_progress tp 
-          WHERE tp.youth_id = yp.youth_id 
-          AND (
-            (yp.program_type = 'digitization' AND tp.digitization_completed = true) OR
-            (yp.program_type = 'mobile_mapping' AND tp.mobile_mapping_completed = true)
-          )
+          SELECT 1 FROM youth_training_progress ytp 
+          WHERE ytp.youth_id = yp.youth_id 
+          AND ytp.module_type = yp.program_type
+          LIMIT 1
         )) as training_completed_count,
         
         -- ODK configured
