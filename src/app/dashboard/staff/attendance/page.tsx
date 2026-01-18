@@ -121,6 +121,15 @@ export default function StaffAttendancePage() {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
+      // Handle auth errors
+      if (response.status === 401) {
+        console.error('Authentication failed - redirecting to login');
+        localStorage.removeItem('staffToken');
+        localStorage.removeItem('staffData');
+        router.push('/');
+        return;
+      }
+      
       const data = await response.json();
       if (data.success) {
         // Filter records by settlement if not 'all'
@@ -137,6 +146,11 @@ export default function StaffAttendancePage() {
         setTodayRecords(records);
         setAttendanceCount(records.length);
         setTotalMappers(data.data.total_mappers);
+      } else if (data.message?.includes('token')) {
+        // Token error - redirect to login
+        localStorage.removeItem('staffToken');
+        localStorage.removeItem('staffData');
+        router.push('/');
       }
     } catch (error) {
       console.error('Error fetching attendance:', error);

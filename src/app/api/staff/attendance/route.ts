@@ -90,7 +90,17 @@ export async function GET(request: NextRequest) {
     }
 
     const token = authHeader.substring(7);
-    const decoded = verifyStaffToken(token);
+    let decoded;
+    try {
+      decoded = verifyStaffToken(token);
+    } catch (error) {
+      console.error('Token verification failed:', error);
+      return NextResponse.json({ 
+        success: false, 
+        message: 'Invalid or expired token. Please log in again.' 
+      }, { status: 401 });
+    }
+
     if (!decoded) {
       return NextResponse.json({ success: false, message: 'Invalid token' }, { status: 401 });
     }
