@@ -348,27 +348,88 @@ export default function StaffAttendancePage() {
               </select>
             </div>
 
-            {/* Date Picker */}
+            {/* Date Picker with Quick Actions */}
             <div className="mb-4">
               <label className="block text-sm font-semibold text-white mb-2 flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-primary" />
                 Select Date to View/Record
               </label>
-              <input
-                type="date"
-                value={attendanceDate}
-                onChange={(e) => setAttendanceDate(e.target.value)}
-                max={new Date().toISOString().split('T')[0]}
-                className="w-full px-4 py-3 bg-[#262626] border-2 border-[#3a3a3a] rounded-lg text-white text-base font-medium focus:border-primary focus:outline-none hover:border-[#4a4a4a] transition-colors cursor-pointer"
-              />
-              <p className="text-xs text-[#737373] mt-1.5">
-                Viewing attendance for {new Date(attendanceDate).toLocaleDateString('en-US', { 
-                  weekday: 'long', 
-                  month: 'short', 
-                  day: 'numeric',
-                  year: 'numeric'
-                })}
-              </p>
+              
+              {/* Quick Date Buttons */}
+              <div className="grid grid-cols-3 gap-2 mb-3">
+                <button
+                  type="button"
+                  onClick={() => setAttendanceDate(new Date().toISOString().split('T')[0])}
+                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                    attendanceDate === new Date().toISOString().split('T')[0]
+                      ? 'bg-primary text-white'
+                      : 'bg-[#262626] text-[#a3a3a3] hover:bg-[#333] hover:text-white border border-[#3a3a3a]'
+                  }`}
+                >
+                  Today
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const yesterday = new Date();
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    setAttendanceDate(yesterday.toISOString().split('T')[0]);
+                  }}
+                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                    attendanceDate === new Date(new Date().setDate(new Date().getDate() - 1)).toISOString().split('T')[0]
+                      ? 'bg-primary text-white'
+                      : 'bg-[#262626] text-[#a3a3a3] hover:bg-[#333] hover:text-white border border-[#3a3a3a]'
+                  }`}
+                >
+                  Yesterday
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const weekAgo = new Date();
+                    weekAgo.setDate(weekAgo.getDate() - 7);
+                    setAttendanceDate(weekAgo.toISOString().split('T')[0]);
+                  }}
+                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                    attendanceDate === new Date(new Date().setDate(new Date().getDate() - 7)).toISOString().split('T')[0]
+                      ? 'bg-primary text-white'
+                      : 'bg-[#262626] text-[#a3a3a3] hover:bg-[#333] hover:text-white border border-[#3a3a3a]'
+                  }`}
+                >
+                  Last Week
+                </button>
+              </div>
+
+              {/* Date Input with Better Styling */}
+              <div className="relative">
+                <input
+                  type="date"
+                  value={attendanceDate}
+                  onChange={(e) => setAttendanceDate(e.target.value)}
+                  max={new Date().toISOString().split('T')[0]}
+                  className="w-full px-4 py-3 bg-[#262626] border-2 border-[#3a3a3a] rounded-lg text-white text-base font-medium focus:border-primary focus:outline-none hover:border-[#4a4a4a] transition-colors cursor-pointer [color-scheme:dark]"
+                  style={{
+                    colorScheme: 'dark'
+                  }}
+                />
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                  <Calendar className="w-5 h-5 text-[#737373]" />
+                </div>
+              </div>
+              
+              <div className="mt-2 p-2 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg">
+                <p className="text-xs text-[#a3a3a3] flex items-center gap-2">
+                  <Clock className="w-3 h-3" />
+                  Viewing: <span className="text-white font-medium">
+                    {new Date(attendanceDate + 'T12:00:00').toLocaleDateString('en-US', { 
+                      weekday: 'long', 
+                      month: 'long', 
+                      day: 'numeric',
+                      year: 'numeric'
+                    })}
+                  </span>
+                </p>
+              </div>
             </div>
 
             {/* Search or Selected Youth */}
@@ -479,7 +540,7 @@ export default function StaffAttendancePage() {
           <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl sm:rounded-2xl p-4 sm:p-6">
             <h2 className="text-lg font-heading font-bold text-white mb-4 flex items-center gap-2">
               <Clock className="w-5 h-5 text-primary" />
-              Attendance for {new Date(attendanceDate).toLocaleDateString('en-US', { 
+              Attendance for {new Date(attendanceDate + 'T12:00:00').toLocaleDateString('en-US', { 
                 weekday: 'short', 
                 month: 'short', 
                 day: 'numeric' 
@@ -502,27 +563,35 @@ export default function StaffAttendancePage() {
                 </p>
               </div>
             ) : (
-              <div className="space-y-2 max-h-[500px] overflow-y-auto">
+              <div className="space-y-2 max-h-[500px] overflow-y-auto pr-2">
                 {todayRecords.map((record, index) => (
                   <div 
                     key={record.id}
-                    className="flex items-center justify-between p-3 bg-[#262626] rounded-lg"
+                    className="group flex items-center justify-between p-3 sm:p-4 bg-[#262626] hover:bg-[#2a2a2a] rounded-lg transition-all border border-transparent hover:border-primary/20"
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-success/20 rounded-full flex items-center justify-center">
-                        <span className="text-success text-sm font-bold">{index + 1}</span>
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <div className="w-10 h-10 bg-success/20 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-success/30 transition-colors">
+                        <span className="text-success text-sm font-bold">#{index + 1}</span>
                       </div>
-                      <div>
-                        <p className="text-white font-semibold text-sm">{record.full_name}</p>
-                        <p className="text-xs text-[#a3a3a3]">{record.youth_id}</p>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-white font-semibold text-sm truncate">{record.full_name}</p>
+                        <div className="flex items-center gap-2 text-xs">
+                          <span className="text-[#a3a3a3]">{record.youth_id}</span>
+                          {record.notes && (
+                            <span className="text-[#737373] truncate max-w-[150px]">• {record.notes}</span>
+                          )}
+                        </div>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-xs text-[#a3a3a3]">
+                    <div className="text-right flex-shrink-0 ml-2">
+                      <p className="text-xs text-primary font-medium">
                         {new Date(record.submitted_at).toLocaleTimeString('en-US', {
                           hour: '2-digit',
                           minute: '2-digit'
                         })}
+                      </p>
+                      <p className="text-xs text-[#737373]">
+                        by {record.submitted_by}
                       </p>
                     </div>
                   </div>
