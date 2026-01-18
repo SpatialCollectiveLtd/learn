@@ -45,6 +45,9 @@ export default function StaffAttendancePage() {
   // Module selection state
   const [selectedModule, setSelectedModule] = useState('mobile_mapping');
   
+  // Settlement filter state
+  const [selectedSettlement, setSelectedSettlement] = useState('all');
+  
   // Search state
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Youth[]>([]);
@@ -74,6 +77,14 @@ export default function StaffAttendancePage() {
     microtasking: 'Microtasking',
     household_survey: 'Household Survey'
   };
+
+  // Settlement display names and prefixes
+  const settlements = [
+    { value: 'all', label: 'All Settlements', prefix: '' },
+    { value: 'kayole', label: 'Kayole Soweto', prefix: 'KAY' },
+    { value: 'huruma', label: 'Mji wa Huruma', prefix: 'HUR' },
+    { value: 'kariobangi', label: 'Kariobangi Machakos', prefix: 'KAR' }
+  ];
 
   // Check auth on mount - allow trainer, admin, and superadmin
   useEffect(() => {
@@ -112,8 +123,19 @@ export default function StaffAttendancePage() {
       
       const data = await response.json();
       if (data.success) {
-        setTodayRecords(data.data.records);
-        setAttendanceCount(data.data.attendance_count);
+        // Filter records by settlement if not 'all'
+        let records = data.data.records;
+        if (selectedSettlement !== 'all') {
+          const settlement = settlements.find(s => s.value === selectedSettlement);
+          if (settlement && settlement.prefix) {
+            records = records.filter((r: AttendanceRecord) => 
+              r.youth_id.startsWith(settlement.prefix)
+            );
+          }
+        }
+        
+        setTodayRecords(records);
+        setAttendanceCount(records.length);
         setTotalMappers(data.data.total_mappers);
       }
     } catch (error) {
@@ -123,7 +145,7 @@ export default function StaffAttendancePage() {
     }
   };
 
-  // Fetch attendance when date or module changes
+  // Fetch attendance when date, module, or settlement changes
   useEffect(() => {
     if (isAuthenticated) {
       fetchTodayAttendance();
@@ -132,7 +154,7 @@ export default function StaffAttendancePage() {
       setSearchQuery('');
       setSearchResults([]);
     }
-  }, [attendanceDate, selectedModule, isAuthenticated]);
+  }, [attendanceDate, selectedModule, selectedSettlement, isAuthenticated]);
 
   // Search youth
   const searchYouth = useCallback(async (query: string) => {
@@ -345,6 +367,28 @@ export default function StaffAttendancePage() {
                 <option value="digitization">Digitization</option>
                 <option value="microtasking">Microtasking</option>
                 <option value="household_survey">Household Survey</option>
+              </select>
+            </div>
+
+            {/* Settlement Filter */}
+            <div className="mb-4">
+              <label className="block text-sm font-semibold text-white mb-2 flex items-center gap-2">
+                <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Filter by Settlement
+              </label>
+              <select
+                value={selectedSettlement}
+                onChange={(e) => setSelectedSettlement(e.target.value)}
+                className="w-full px-4 py-3 bg-[#262626] border-2 border-[#3a3a3a] rounded-lg text-white text-base font-medium focus:border-primary focus:outline-none hover:border-[#4a4a4a] transition-colors cursor-pointer"
+              >
+                {settlements.map(settlement => (
+                  <option key={settlement.value} value={settlement.value}>
+                    {settlement.label}
+                  </option>
+                ))}
               </select>
             </div>
 
