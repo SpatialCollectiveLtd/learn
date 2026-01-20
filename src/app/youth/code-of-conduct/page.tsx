@@ -14,7 +14,7 @@ export default function CodeOfConductPage() {
 
   useEffect(() => {
     // Check authentication
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('youthToken');
     const youthData = localStorage.getItem('youthData');
     
     if (!token || !youthData) {
