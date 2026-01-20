@@ -13,7 +13,8 @@ import {
   CheckCircle,
   ArrowLeft,
   ExternalLink,
-  MapPin
+  MapPin,
+  FileText
 } from 'lucide-react';
 import NotificationToast from '@/components/notifications/NotificationToast';
 
@@ -43,6 +44,7 @@ interface YouthProfile {
   youthId: string;
   settlement: string;
   fullName: string;
+  programType: string;
 }
 
 export default function WorkDashboard() {
@@ -395,6 +397,34 @@ export default function WorkDashboard() {
                     Without this hashtag, your work will not be counted in the statistics
                   </p>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Code of Conduct Banner for Digitization Users */}
+        {profile?.programType === 'digitization' && (
+          <div className="mb-6 bg-gradient-to-r from-blue-600/20 to-blue-800/20 border-2 border-blue-500 rounded-xl p-4 shadow-lg shadow-blue-500/20">
+            <div className="flex items-start gap-3">
+              <div className="bg-blue-500/30 p-2 rounded-lg border border-blue-500">
+                <FileText className="w-6 h-6 text-blue-400" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-heading font-bold text-white mb-2 flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-blue-400" />
+                  Youth Code of Conduct
+                </h3>
+                <p className="text-sm text-foreground-muted mb-3">
+                  Review the important guidelines and expectations for all digitization participants
+                </p>
+                
+                <a
+                  href="/youth/code-of-conduct"
+                  className="inline-flex items-center gap-2 bg-blue-500 text-white px-5 py-2.5 rounded-lg hover:bg-blue-600 transition-colors font-subheading font-semibold shadow-lg shadow-blue-500/30"
+                >
+                  <FileText className="w-5 h-5" />
+                  <span>View Code of Conduct</span>
+                </a>
               </div>
             </div>
           </div>
