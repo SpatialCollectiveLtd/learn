@@ -233,6 +233,30 @@ export default function YouthDashboard() {
               Resources & Support
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Code of Conduct - Only for Digitization */}
+              {youthData?.programType === 'digitization' && (
+                <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-xl p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
+                      <FileText className="w-6 h-6 text-primary" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-white font-semibold mb-2">Code of Conduct</h4>
+                      <p className="text-[#a3a3a3] text-sm mb-3">
+                        Required reading for all digitization team members.
+                      </p>
+                      <Link
+                        href="/youth/code-of-conduct"
+                        className="inline-flex items-center gap-2 text-primary text-sm hover:text-primary/80 font-medium transition-colors"
+                      >
+                        <span>View Document</span>
+                        <span>→</span>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
               {/* TEMPORARILY REMOVED: Contract link while contracts are being updated */}
               {/* <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-xl p-6">
                 <div className="flex items-start gap-4">
