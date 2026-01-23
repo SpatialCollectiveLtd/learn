@@ -5,7 +5,7 @@ import { FloatingHeader } from "@/components/ui/floating-header";
 import { CometCard } from "@/components/ui/comet-card";
 import { QRCodeDisplay } from "@/components/ui/qr-code-display";
 import Link from "next/link";
-import { mobileMappingSteps, formGuides } from "@/data/mobile-mapping-training";
+import { mobileMappingSteps as defaultSteps, getMobileMappingSteps, formGuides, MobileMappingStep } from "@/data/mobile-mapping-training";
 import { Clock, BookOpen, CheckCircle2, Smartphone, QrCode, Loader2, AlertCircle, FileText, ChevronDown, ChevronUp, HelpCircle, Lightbulb, Wifi, Upload, MessageCircleQuestion, Hand } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -24,6 +24,8 @@ export default function MobileMappingOverviewPage() {
   const [showQrCode, setShowQrCode] = useState(false);
   const [qrLoading, setQrLoading] = useState(false);
   const [expandedForm, setExpandedForm] = useState<string | null>(null);
+  const [mobileMappingSteps, setMobileMappingSteps] = useState<MobileMappingStep[]>(defaultSteps);
+  const [settlement, setSettlement] = useState<string>("");
   
   useEffect(() => {
     const saved = localStorage.getItem('mobile-mapping-completed-steps');
@@ -47,6 +49,16 @@ export default function MobileMappingOverviewPage() {
       const data = await response.json();
       if (data.success) {
         setOdkConfig(data.data);
+      }
+      
+      // Fetch user profile to get settlement
+      const profileResponse = await fetch('/api/youth/profile', {
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      const profileData = await profileResponse.json();
+      if (profileData.success && profileData.data.settlement) {
+        setSettlement(profileData.data.settlement);
+        setMobileMappingSteps(getMobileMappingSteps(profileData.data.settlement));
       }
     } catch (error) {
       console.error('Error fetching ODK config:', error);
@@ -74,7 +86,7 @@ export default function MobileMappingOverviewPage() {
               Mobile Mapping Training
             </h1>
             <p className="text-lg text-foreground-muted max-w-3xl mx-auto mb-4">
-              Kayole Soweto Data Collection
+              {settlement ? `${settlement} Data Collection` : 'Data Collection'}
             </p>
             <div className="flex items-center justify-center gap-6 text-foreground-subtle">
               <div className="flex items-center gap-2">

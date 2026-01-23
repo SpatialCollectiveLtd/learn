@@ -18,24 +18,11 @@ import {
   ExternalLink,
   Smartphone
 } from "lucide-react";
-import { mobileMappingSteps } from "@/data/mobile-mapping-training";
+import { mobileMappingSteps as defaultSteps, getMobileMappingSteps, MobileMappingStep } from "@/data/mobile-mapping-training";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
-// Helper functions
-function getStepById(id: number) {
-  return mobileMappingSteps.find(step => step.id === id);
-}
 
-function getNextStep(currentId: number) {
-  const currentIndex = mobileMappingSteps.findIndex(step => step.id === currentId);
-  return currentIndex < mobileMappingSteps.length - 1 ? mobileMappingSteps[currentIndex + 1] : null;
-}
-
-function getPreviousStep(currentId: number) {
-  const currentIndex = mobileMappingSteps.findIndex(step => step.id === currentId);
-  return currentIndex > 0 ? mobileMappingSteps[currentIndex - 1] : null;
-}
 
 // Function to make URLs clickable
 function renderTextWithLinks(text: string) {
@@ -71,15 +58,16 @@ export default function MobileMappingStepPage({
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
   const [isStepLocked, setIsStepLocked] = useState(false);
   const [isLoadingProgress, setIsLoadingProgress] = useState(true);
+  const [steps, setSteps] = useState<MobileMappingStep[]>(defaultSteps);
+  const [currentStep, setCurrentStep] = useState<MobileMappingStep | undefined>(undefined);
+  const [nextStep, setNextStep] = useState<MobileMappingStep | null>(null);
+  const [previousStep, setPreviousStep] = useState<MobileMappingStep | null>(null);
   
   const currentStepId = parseInt(stepId);
-  const currentStep = getStepById(currentStepId);
-  const nextStep = getNextStep(currentStepId);
-  const previousStep = getPreviousStep(currentStepId);
 
-  // Load completed steps from server
+  // Load user profile and completed steps from server
   useEffect(() => {
-    const fetchProgress = async () => {
+    const fetchData = async () => {
       const token = localStorage.getItem('youthToken');
       if (!token) {
         setIsLoadingProgress(false);
@@ -87,6 +75,27 @@ export default function MobileMappingStepPage({
       }
 
       try {
+        // 1. Fetch user profile for settlement
+        const profileResponse = await axios.get(`${API_URL}/api/youth/profile`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        
+        let userSteps = defaultSteps;
+        if (profileResponse.data.success && profileResponse.data.data.settlement) {
+          const settlement = profileResponse.data.data.settlement;
+          userSteps = getMobileMappingSteps(settlement);
+          setSteps(userSteps);
+        }
+
+        // Update current, next, prev based on user's steps
+        const step = userSteps.find(s => s.id === currentStepId);
+        setCurrentStep(step);
+
+        const currentIndex = userSteps.findIndex(s => s.id === currentStepId);
+        setNextStep(currentIndex < userSteps.length - 1 ? userSteps[currentIndex + 1] : null);
+        setPreviousStep(currentIndex > 0 ? userSteps[currentIndex - 1] : null);
+
+        // 2. Fetch progress
         const response = await axios.get(`${API_URL}/api/youth/training-progress?module=mobile_mapping`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -109,13 +118,13 @@ export default function MobileMappingStepPage({
           }
         }
       } catch (error) {
-        console.error('Error fetching progress:', error);
+        console.error('Error fetching data:', error);
       } finally {
         setIsLoadingProgress(false);
       }
     };
 
-    fetchProgress();
+    fetchData();
   }, [currentStepId, router]);
 
   const markStepComplete = async () => {
@@ -229,7 +238,7 @@ export default function MobileMappingStepPage({
                 <span className="text-primary font-heading font-bold text-lg">{currentStep.id}</span>
               </div>
               <div>
-                <p className="text-foreground-subtle text-sm">Step {currentStep.id} of {mobileMappingSteps.length}</p>
+                <p className="text-foreground-subtle text-sm">Step {currentStep.id} of {steps.length}</p>
                 <div className="flex items-center gap-2 text-foreground-subtle text-xs">
                   <Clock className="w-3.5 h-3.5" />
                   <span>{currentStep.estimatedTime} minutes</span>
@@ -251,7 +260,7 @@ export default function MobileMappingStepPage({
             <div className="w-full h-2 bg-background-card rounded-full overflow-hidden">
               <div 
                 className="h-full bg-gradient-to-r from-primary to-primary-hover transition-all duration-300"
-                style={{ width: `${(currentStepId / mobileMappingSteps.length) * 100}%` }}
+                style={{ width: `${(currentStepId / steps.length) * 100}%` }}
               />
             </div>
           </div>
