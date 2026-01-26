@@ -30,6 +30,8 @@ interface DailyStats {
 
 interface WorkDays {
   daysWorked: number;
+  daysWorked2025: number;
+  daysWorked2026: number;
   totalDays: number;
   remaining: number;
   percentage: number;
@@ -548,6 +550,20 @@ export default function WorkDashboard() {
                   <p className="text-sm text-foreground-subtle">
                     Days completed • {workDays.remaining} remaining
                   </p>
+                  {(workDays.daysWorked2025 > 0 || workDays.daysWorked2026 > 0) && (
+                    <div className="mt-2 flex items-center gap-3 text-xs">
+                      {workDays.daysWorked2025 > 0 && (
+                        <span className="text-foreground-subtle">
+                          2025: <span className="text-white font-medium">{workDays.daysWorked2025}</span>
+                        </span>
+                      )}
+                      {workDays.daysWorked2026 > 0 && (
+                        <span className="text-foreground-subtle">
+                          2026: <span className="text-white font-medium">{workDays.daysWorked2026}</span>
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 <div className="mb-6">

@@ -53,12 +53,14 @@ export async function GET(request: NextRequest) {
     const totalDays = configResult.rows[0]?.total_work_days || 20;
     const startDate = configResult.rows[0]?.start_date;
 
-    // Count approved work days
+    // Count approved work days - separate 2025 and 2026
     const approvedResult = await Database.query(`
       SELECT 
-        COUNT(*) as days_worked,
-        SUM(buildings_count) as total_buildings,
-        COUNT(*) FILTER (WHERE target_met = TRUE) as days_target_met
+        COUNT(*)::INTEGER as days_worked,
+        COUNT(*) FILTER (WHERE work_date < '2026-01-01')::INTEGER as days_worked_2025,
+        COUNT(*) FILTER (WHERE work_date >= '2026-01-01')::INTEGER as days_worked_2026,
+        SUM(buildings_count)::INTEGER as total_buildings,
+        COUNT(*) FILTER (WHERE target_met = TRUE)::INTEGER as days_target_met
       FROM youth_work_days
       WHERE youth_id = $1 
       AND status = 'approved'
@@ -66,16 +68,18 @@ export async function GET(request: NextRequest) {
 
     // Count pending work days
     const pendingResult = await Database.query(`
-      SELECT COUNT(*) as pending_days
+      SELECT COUNT(*)::INTEGER as pending_days
       FROM youth_work_days
       WHERE youth_id = $1 
       AND status = 'pending'
     `, [youthId]);
 
-    const daysWorked = parseInt(approvedResult.rows[0]?.days_worked || '0');
-    const totalBuildings = parseInt(approvedResult.rows[0]?.total_buildings || '0');
-    const daysTargetMet = parseInt(approvedResult.rows[0]?.days_target_met || '0');
-    const pendingDays = parseInt(pendingResult.rows[0]?.pending_days || '0');
+    const daysWorked = approvedResult.rows[0]?.days_worked || 0;
+    const daysWorked2025 = approvedResult.rows[0]?.days_worked_2025 || 0;
+    const daysWorked2026 = approvedResult.rows[0]?.days_worked_2026 || 0;
+    const totalBuildings = approvedResult.rows[0]?.total_buildings || 0;
+    const daysTargetMet = approvedResult.rows[0]?.days_target_met || 0;
+    const pendingDays = pendingResult.rows[0]?.pending_days || 0;
 
     const remaining = Math.max(0, totalDays - daysWorked);
     const percentage = Math.round((daysWorked / totalDays) * 100);
@@ -84,6 +88,8 @@ export async function GET(request: NextRequest) {
       success: true,
       data: {
         daysWorked,
+        daysWorked2025,
+        daysWorked2026,
         totalDays,
         remaining,
         percentage,
