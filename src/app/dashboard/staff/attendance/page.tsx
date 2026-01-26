@@ -15,7 +15,8 @@ import {
   ClipboardList,
   User,
   Phone,
-  X
+  X,
+  Trash2
 } from 'lucide-react';
 
 interface Youth {
@@ -69,6 +70,10 @@ export default function StaffAttendancePage() {
   const [attendanceCount, setAttendanceCount] = useState(0);
   const [totalMappers, setTotalMappers] = useState(0);
   const [loadingRecords, setLoadingRecords] = useState(true);
+  
+  // Delete state
+  const [deletingRecordId, setDeletingRecordId] = useState<number | null>(null);
+  const [deleteMessage, setDeleteMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   // Module display names
   const moduleNames: Record<string, string> = {
@@ -224,7 +229,42 @@ export default function StaffAttendancePage() {
     setNotes('');
     setSubmitMessage(null);
   };
+  // Delete attendance record
+  const deleteAttendanceRecord = async (recordId: number, youthName: string) => {
+    if (!confirm(`Are you sure you want to delete the attendance record for ${youthName}? This action cannot be undone.`)) {
+      return;
+    }
 
+    setDeletingRecordId(recordId);
+    setDeleteMessage(null);
+    
+    try {
+      const token = localStorage.getItem('staffToken');
+      const response = await fetch(`/api/staff/attendance?id=${recordId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setDeleteMessage({ type: 'success', text: data.message });
+        // Refresh the attendance list
+        fetchTodayAttendance();
+        // Clear message after 5 seconds
+        setTimeout(() => setDeleteMessage(null), 5000);
+      } else {
+        setDeleteMessage({ type: 'error', text: data.message || 'Failed to delete attendance record' });
+      }
+    } catch (error) {
+      console.error('Delete error:', error);
+      setDeleteMessage({ type: 'error', text: 'Network error. Please try again.' });
+    } finally {
+      setDeletingRecordId(null);
+    }
+  };
   // Submit attendance
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -363,6 +403,22 @@ export default function StaffAttendancePage() {
                   <AlertCircle className="w-5 h-5 flex-shrink-0" />
                 )}
                 <span className="text-sm">{submitMessage.text}</span>
+              </div>
+            )}
+
+            {/* Delete Success/Error Message */}
+            {deleteMessage && (
+              <div className={`mb-4 p-3 rounded-lg flex items-center gap-2 ${
+                deleteMessage.type === 'success' 
+                  ? 'bg-success/10 border border-success/30 text-success' 
+                  : 'bg-error/10 border border-error/30 text-error'
+              }`}>
+                {deleteMessage.type === 'success' ? (
+                  <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
+                ) : (
+                  <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                )}
+                <span className="text-sm">{deleteMessage.text}</span>
               </div>
             )}
 
@@ -641,16 +697,30 @@ export default function StaffAttendancePage() {
                         </div>
                       </div>
                     </div>
-                    <div className="text-right flex-shrink-0 ml-2">
-                      <p className="text-xs text-primary font-medium">
-                        {new Date(record.submitted_at).toLocaleTimeString('en-US', {
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}
-                      </p>
-                      <p className="text-xs text-[#737373]">
-                        by {record.submitted_by}
-                      </p>
+                    <div className="flex items-center gap-3 flex-shrink-0 ml-2">
+                      <div className="text-right">
+                        <p className="text-xs text-primary font-medium">
+                          {new Date(record.submitted_at).toLocaleTimeString('en-US', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </p>
+                        <p className="text-xs text-[#737373]">
+                          by {record.submitted_by}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => deleteAttendanceRecord(record.id, record.full_name)}
+                        disabled={deletingRecordId === record.id}
+                        className="p-2 rounded-lg bg-error/10 hover:bg-error/20 text-error border border-error/30 hover:border-error/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                        title="Delete this attendance record"
+                      >
+                        {deletingRecordId === record.id ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <Trash2 className="w-4 h-4" />
+                        )}
+                      </button>
                     </div>
                   </div>
                 ))}

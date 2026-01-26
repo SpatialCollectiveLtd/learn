@@ -5,6 +5,7 @@
 -- Drop existing tables if they exist (in correct order due to foreign keys)
 DROP VIEW IF EXISTS recent_auth_activity CASCADE;
 DROP VIEW IF EXISTS youth_contract_status CASCADE;
+DROP TABLE IF EXISTS attendance_records CASCADE;
 DROP TABLE IF EXISTS auth_logs CASCADE;
 DROP TABLE IF EXISTS signed_contracts CASCADE;
 DROP TABLE IF EXISTS contract_templates CASCADE;
@@ -122,6 +123,26 @@ CREATE TABLE IF NOT EXISTS auth_logs (
 CREATE INDEX IF NOT EXISTS idx_auth_user ON auth_logs(user_id, user_type);
 CREATE INDEX IF NOT EXISTS idx_auth_created ON auth_logs(created_at);
 CREATE INDEX IF NOT EXISTS idx_auth_success ON auth_logs(success);
+
+-- ============================================
+-- ATTENDANCE RECORDS TABLE
+-- ============================================
+CREATE TABLE IF NOT EXISTS attendance_records (
+  id SERIAL PRIMARY KEY,
+  youth_id VARCHAR(50) NOT NULL,
+  attendance_date DATE NOT NULL,
+  submitted_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  submitted_by VARCHAR(50) NOT NULL,
+  notes TEXT,
+  UNIQUE(youth_id, attendance_date),
+  FOREIGN KEY (youth_id) REFERENCES youth_participants(youth_id) ON DELETE CASCADE,
+  FOREIGN KEY (submitted_by) REFERENCES staff_members(staff_id) ON DELETE SET NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_attendance_date ON attendance_records(attendance_date);
+CREATE INDEX IF NOT EXISTS idx_attendance_youth ON attendance_records(youth_id);
+CREATE INDEX IF NOT EXISTS idx_attendance_submitted_by ON attendance_records(submitted_by);
+CREATE INDEX IF NOT EXISTS idx_attendance_youth_date ON attendance_records(youth_id, attendance_date);
 
 -- ============================================
 -- TRIGGER: Update updated_at timestamp

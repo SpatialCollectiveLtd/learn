@@ -184,3 +184,100 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+
+export async function DELETE(request: NextRequest) {
+  try {
+    // Verify staff authentication
+    const authHeader = request.headers.get('authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
+      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    }
+
+    const token = authHeader.substring(7);
+    let decoded;
+    try {
+      decoded = verifyStaffToken(token);
+    } catch (error) {
+      console.error('Token verification failed:', error);
+      return NextResponse.json({ 
+        success: false, 
+        message: 'Invalid or expired token. Please log in again.' 
+      }, { status: 401 });
+    }
+
+    if (!decoded) {
+      return NextResponse.json({ success: false, message: 'Invalid token' }, { status: 401 });
+    }
+
+    const { searchParams } = new URL(request.url);
+    const recordId = searchParams.get('id');
+
+    if (!recordId) {
+      return NextResponse.json({ 
+        success: false, 
+        message: 'Attendance record ID is required' 
+      }, { status: 400 });
+    }
+
+    // Get the record details before deleting (for logging and response)
+    const recordCheck = await Database.query(`
+      SELECT ar.id, ar.youth_id, yp.full_name, ar.attendance_date, ar.submitted_by
+      FROM attendance_records ar
+      JOIN youth_participants yp ON ar.youth_id = yp.youth_id
+      WHERE ar.id = $1
+    `, [parseInt(recordId)]);
+
+    if (recordCheck.rows.length === 0) {
+      return NextResponse.json({ 
+        success: false, 
+        message: 'Attendance record not found' 
+      }, { status: 404 });
+    }
+
+    const record = recordCheck.rows[0];
+
+    // Delete the attendance record
+    const result = await Database.query(`
+      DELETE FROM attendance_records
+      WHERE id = $1
+      RETURNING id
+    `, [parseInt(recordId)]);
+
+    if (result.rows.length === 0) {
+      return NextResponse.json({ 
+        success: false, 
+        message: 'Failed to delete attendance record' 
+      }, { status: 500 });
+    }
+
+    // Log the deletion
+    console.log(`[ATTENDANCE DELETE] Record #${recordId} deleted by ${decoded.staffId}:`, {
+      youth_id: record.youth_id,
+      full_name: record.full_name,
+      attendance_date: record.attendance_date,
+      originally_submitted_by: record.submitted_by,
+      deleted_by: decoded.staffId,
+      deleted_at: new Date().toISOString()
+    });
+
+    return NextResponse.json({
+      success: true,
+      message: `Attendance record for ${record.full_name} on ${record.attendance_date} has been deleted`,
+      data: {
+        deleted_record: {
+          id: record.id,
+          youth_id: record.youth_id,
+          full_name: record.full_name,
+          attendance_date: record.attendance_date
+        }
+      }
+    });
+
+  } catch (error: unknown) {
+    console.error('Attendance DELETE error:', error);
+    return NextResponse.json(
+      { success: false, message: 'Server error while deleting attendance record' },
+      { status: 500 }
+    );
+  }
+}
