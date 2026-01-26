@@ -86,17 +86,18 @@ export async function GET(request: NextRequest) {
           WHERE youth_id = yp.youth_id
         ) as work_summary,
         
-        -- Attendance records
+        -- Attendance records (fixed to return array instead of null)
         COALESCE((
           SELECT COUNT(DISTINCT attendance_date)
           FROM attendance_records
           WHERE youth_id = yp.youth_id
         ), 0) as attendance_days,
         
-        (
+        -- Fixed: Return empty array [] instead of null when no records exist
+        COALESCE((
           SELECT json_agg(
             json_build_object(
-              'date', attendance_date,
+              'date', attendance_date::text,
               'submitted_at', submitted_at,
               'submitted_by', submitted_by,
               'notes', notes
@@ -104,7 +105,7 @@ export async function GET(request: NextRequest) {
           )
           FROM attendance_records
           WHERE youth_id = yp.youth_id
-        ) as attendance_history,
+        ), '[]'::json) as attendance_history,
         
         -- Training progress
         (
