@@ -15,12 +15,24 @@ import { Database } from '@/app/api/_lib/database';
  */
 
 export async function GET(request: NextRequest) {
+  const startTime = Date.now();
+  const requestId = crypto.randomUUID();
+  
   try {
     // Verify API key authentication
     const apiKey = request.headers.get('X-API-Key');
     const validApiKey = process.env.DPW_MANAGER_API_KEY;
     
+    // Log incoming request
+    console.log(`[DPW-API ${requestId}] Incoming request:`, {
+      timestamp: new Date().toISOString(),
+      apiKey: apiKey ? `${apiKey.substring(0, 10)}...` : 'MISSING',
+      ip: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
+      userAgent: request.headers.get('user-agent')
+    });
+    
     if (!apiKey || !validApiKey || apiKey !== validApiKey) {
+      console.log(`[DPW-API ${requestId}] ❌ Auth failed - Invalid API key`);
       return NextResponse.json(
         { success: false, message: 'Unauthorized - Invalid API Key' },
         { status: 401 }
@@ -30,6 +42,8 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const youthId = searchParams.get('youth_id');
     const moduleFilter = searchParams.get('module');
+    
+    console.log(`[DPW-API ${requestId}] Query params:`, { youthId, moduleFilter });
 
     // Build query conditions
     let whereConditions = ['yp.is_active = TRUE'];
@@ -191,8 +205,10 @@ export async function GET(request: NextRequest) {
       ORDER BY program_type
     `, queryParams);
 
+    console.log(`[DPW-API ${requestId}] ✅ Query executed: ${youthData.rows.length} participants, ${stats.rows.length} stat rows`);
+
     // Return comprehensive response
-    return NextResponse.json({
+    const response = {
       success: true,
       timestamp: new Date().toISOString(),
       data: {
@@ -204,15 +220,32 @@ export async function GET(request: NextRequest) {
           module: moduleFilter || null
         }
       }
-    });
+    };
+    
+    const duration = Date.now() - startTime;
+    console.log(`[DPW-API ${requestId}] ✅ Response sent in ${duration}ms`);
+    
+    return NextResponse.json(response);
 
   } catch (error: unknown) {
-    console.error('DPW Sync API error:', error);
+    const duration = Date.now() - startTime;
+    console.error(`[DPW-API ${requestId}] ❌ Error after ${duration}ms:`, {
+      error: error instanceof Error ? error.message : 'Unknown error',
+      errorType: error instanceof Error ? error.constructor.name : typeof error,
+      stack: error instanceof Error ? error.stack : undefined
+    });
+    
     return NextResponse.json(
       { 
         success: false, 
         message: 'Internal server error',
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : 'Unknown error',
+        errorType: error instanceof Error ? error.constructor.name : 'UnknownError',
+        timestamp: new Date().toISOString(),
+        // Include stack trace only in development
+        ...(process.env.NODE_ENV !== 'production' && { 
+          stack: error instanceof Error ? error.stack : undefined 
+        })
       },
       { status: 500 }
     );
