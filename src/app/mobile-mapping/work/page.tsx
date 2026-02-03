@@ -15,6 +15,11 @@ import {
   User,
   TrendingUp
 } from 'lucide-react';
+import WorkDashboardTabs from '@/components/mobile-mapping/WorkDashboardTabs';
+import PaymentTab from '@/components/mobile-mapping/PaymentTab';
+import PerformanceTab from '@/components/mobile-mapping/PerformanceTab';
+import BadgesTab from '@/components/mobile-mapping/BadgesTab';
+import ResolveCenterTab from '@/components/mobile-mapping/ResolveCenterTab';
 
 interface WorkDays {
   daysWorked: number;
@@ -293,6 +298,16 @@ export default function MobileMappingWorkDashboard() {
             <li>• Submit your ODK forms daily</li>
             <li>• Contact your supervisor for any issues</li>
           </ul>
+        </div>
+
+        {/* New: Tabbed Dashboard */}
+        <div className="mb-6 bg-background-card border border-border rounded-xl overflow-hidden">
+          <WorkDashboardTabs
+            paymentTab={<PaymentTab />}
+            performanceTab={<PerformanceTab />}
+            badgesTab={<BadgesTab />}
+            resolveTab={<ResolveCenterTab />}
+          />
         </div>
 
         {/* Back to Training Link */}
