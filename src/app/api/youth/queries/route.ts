@@ -18,6 +18,8 @@ export async function GET(request: NextRequest) {
   const startTime = Date.now();
   const requestId = crypto.randomUUID();
   
+  console.log(`[Queries-API ${requestId}] Route accessed, DPW_BASE_URL: ${DPW_BASE_URL}`);
+  
   try {
     // Verify youth authentication
     const authHeader = request.headers.get('authorization');

@@ -137,8 +137,8 @@ node scripts/export-odk-config.js
 
 - **youth_training_progress**: Training completion tracking
   - Links: `youth_id` → youth_participants
-  - `module_type`: `mapper`, `validator`, `mobile_mapping`, `household_survey`, `microtasking`1-3 for microtasking
-  - `step_id`: Training step number (1-7 for mapper, 1-6 for validator, 1-4 for mobile_mapping, etc.)
+  - `module_type`: `mapper`, `validator`, `mobile_mapping`, `household_survey`, `microtasking1`, `microtasking2`, `microtasking3`
+  - `step_id`: Training step number (1-7 for mapper, 1-6 for validator, 1-4 for mobile_mapping, 1-3 for microtasking)
   - Sequential validation enforced: must complete step N-1 before step N
 
 - **youth_work_days**: Daily work tracking (20-day work periods)
