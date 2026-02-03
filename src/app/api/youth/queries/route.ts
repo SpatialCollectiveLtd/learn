@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
     
     try {
       const decoded = verifyYouthToken(token);
-      youthId = decoded.youth_id;
+      youthId = decoded.youthId;
     } catch (error) {
       return NextResponse.json(
         { success: false, error: { code: 'INVALID_TOKEN', message: 'Invalid or expired token' } },

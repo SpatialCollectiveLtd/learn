@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     
     try {
       const decoded = verifyYouthToken(token);
-      youthId = decoded.youth_id;
+      youthId = decoded.youthId;
       settlement = decoded.settlement || 'Unknown';
     } catch (error) {
       return NextResponse.json(
