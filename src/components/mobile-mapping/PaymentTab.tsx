@@ -86,13 +86,22 @@ export default function PaymentTab() {
     fetchPaymentData();
   };
 
-  const formatCurrency = (amount: number) => {
+  const formatCurrency = (amount: number | undefined | null) => {
+    if (amount === undefined || amount === null || isNaN(amount)) {
+      return '0.00 KES';
+    }
     return `${amount.toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} KES`;
   };
 
-  const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+  const formatDate = (dateStr: string | undefined | null) => {
+    if (!dateStr) return 'N/A';
+    try {
+      const date = new Date(dateStr);
+      if (isNaN(date.getTime())) return 'Invalid date';
+      return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+    } catch {
+      return 'Invalid date';
+    }
   };
 
   const getQualityTier = (score: number) => {
@@ -256,7 +265,9 @@ export default function PaymentTab() {
                     <div>
                       <span className="text-foreground-subtle">Quality Score</span>
                       <p className={`font-semibold ${qualityTier.color}`}>
-                        {day.quality_score.toFixed(1)}% • {qualityTier.label}
+                        {(day?.quality_score !== undefined && day?.quality_score !== null && !isNaN(day.quality_score)) 
+                          ? day.quality_score.toFixed(1) 
+                          : '0.0'}% • {qualityTier.label}
                       </p>
                     </div>
                   </div>

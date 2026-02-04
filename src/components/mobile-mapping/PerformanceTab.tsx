@@ -51,6 +51,11 @@ export default function PerformanceTab() {
   const [performanceData, setPerformanceData] = useState<PerformanceData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const safeNumber = (value: number | undefined | null, decimals: number = 1): string => {
+    if (value === undefined || value === null || isNaN(value)) return '0';
+    return value.toFixed(decimals);
+  };
+
   useEffect(() => {
     fetchPerformanceData();
   }, []);
@@ -183,7 +188,11 @@ export default function PerformanceTab() {
             <Target className="w-4 h-4 text-success" />
             <span className="text-xs text-foreground-subtle">Overall Score</span>
           </div>
-          <p className="text-2xl font-bold text-white">{personal_metrics.overall_score.toFixed(1)}%</p>
+          <p className="text-2xl font-bold text-white">
+            {(personal_metrics?.overall_score !== undefined && personal_metrics?.overall_score !== null && !isNaN(personal_metrics.overall_score)) 
+              ? personal_metrics.overall_score.toFixed(1) 
+              : '0.0'}%
+          </p>
         </div>
         
         <div className="bg-background-elevated border border-border rounded-lg p-4">
@@ -191,7 +200,11 @@ export default function PerformanceTab() {
             <Award className="w-4 h-4 text-info" />
             <span className="text-xs text-foreground-subtle">Quality Score</span>
           </div>
-          <p className="text-2xl font-bold text-white">{personal_metrics.quality_score.toFixed(1)}%</p>
+          <p className="text-2xl font-bold text-white">
+            {(personal_metrics?.quality_score !== undefined && personal_metrics?.quality_score !== null && !isNaN(personal_metrics.quality_score)) 
+              ? personal_metrics.quality_score.toFixed(1) 
+              : '0.0'}%
+          </p>
         </div>
         
         <div className="bg-background-elevated border border-border rounded-lg p-4">
@@ -207,7 +220,11 @@ export default function PerformanceTab() {
             <Trophy className="w-4 h-4 text-warning" />
             <span className="text-xs text-foreground-subtle">Avg Per Day</span>
           </div>
-          <p className="text-2xl font-bold text-white">{personal_metrics.avg_pois_per_day.toFixed(0)}</p>
+          <p className="text-2xl font-bold text-white">
+            {(personal_metrics?.avg_pois_per_day !== undefined && personal_metrics?.avg_pois_per_day !== null && !isNaN(personal_metrics.avg_pois_per_day)) 
+              ? personal_metrics.avg_pois_per_day.toFixed(0) 
+              : '0'}
+          </p>
         </div>
       </div>
 
@@ -219,12 +236,16 @@ export default function PerformanceTab() {
           <div>
             <div className="flex justify-between text-xs mb-1">
               <span className="text-foreground-subtle">Quality (70% weight)</span>
-              <span className="text-white font-semibold">{personal_metrics.quality_score.toFixed(1)}%</span>
+              <span className="text-white font-semibold">
+                {(personal_metrics?.quality_score !== undefined && personal_metrics?.quality_score !== null && !isNaN(personal_metrics.quality_score)) 
+                  ? personal_metrics.quality_score.toFixed(1) 
+                  : '0.0'}%
+              </span>
             </div>
             <div className="h-2 bg-background rounded-full overflow-hidden">
               <div 
                 className="h-full bg-info rounded-full transition-all"
-                style={{ width: `${personal_metrics.quality_score}%` }}
+                style={{ width: `${personal_metrics?.quality_score || 0}%` }}
               />
             </div>
           </div>
@@ -232,12 +253,16 @@ export default function PerformanceTab() {
           <div>
             <div className="flex justify-between text-xs mb-1">
               <span className="text-foreground-subtle">Attendance (30% weight)</span>
-              <span className="text-white font-semibold">{personal_metrics.attendance_rate.toFixed(1)}%</span>
+              <span className="text-white font-semibold">
+                {(personal_metrics?.attendance_rate !== undefined && personal_metrics?.attendance_rate !== null && !isNaN(personal_metrics.attendance_rate)) 
+                  ? personal_metrics.attendance_rate.toFixed(1) 
+                  : '0.0'}%
+              </span>
             </div>
             <div className="h-2 bg-background rounded-full overflow-hidden">
               <div 
                 className="h-full bg-success rounded-full transition-all"
-                style={{ width: `${personal_metrics.attendance_rate}%` }}
+                style={{ width: `${personal_metrics?.attendance_rate || 0}%` }}
               />
             </div>
           </div>
@@ -273,13 +298,17 @@ export default function PerformanceTab() {
                       {isCurrentUser ? 'You' : entry.youth_id}
                     </p>
                     <p className="text-xs text-foreground-subtle">
-                      {entry.total_pois} POIs • {entry.quality_score.toFixed(1)}% quality
+                      {entry.total_pois} POIs • {(entry?.quality_score !== undefined && entry?.quality_score !== null && !isNaN(entry.quality_score)) 
+                        ? entry.quality_score.toFixed(1) 
+                        : '0.0'}% quality
                     </p>
                   </div>
                   
                   <div className="text-right">
                     <p className={`text-sm font-bold ${getRankColor(entry.rank)}`}>
-                      {entry.overall_score.toFixed(1)}%
+                      {(entry?.overall_score !== undefined && entry?.overall_score !== null && !isNaN(entry.overall_score)) 
+                        ? entry.overall_score.toFixed(1) 
+                        : '0.0'}%
                     </p>
                   </div>
                 </div>

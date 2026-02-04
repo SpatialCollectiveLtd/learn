@@ -359,7 +359,11 @@ export default function ResolveCenterTab() {
                   <div className="flex items-center gap-3 text-xs text-foreground-subtle">
                     <span>{query.category}</span>
                     <span>•</span>
-                    <span>{new Date(query.submitted_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span>
+                    <span>
+                      {query.submitted_at 
+                        ? new Date(query.submitted_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) 
+                        : 'N/A'}
+                    </span>
                     {query.messages.length > 0 && (
                       <>
                         <span>•</span>
