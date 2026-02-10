@@ -75,6 +75,9 @@ export default function StaffAttendancePage() {
   // Delete state
   const [deletingRecordId, setDeletingRecordId] = useState<number | null>(null);
   const [deleteMessage, setDeleteMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  
+  // Filter state for existing records
+  const [recordsFilter, setRecordsFilter] = useState('');
 
   // Module display names
   const moduleNames: Record<string, string> = {
@@ -230,6 +233,17 @@ export default function StaffAttendancePage() {
     setNotes('');
     setSubmitMessage(null);
   };
+  
+  // Filter attendance records based on search query
+  const filteredRecords = recordsFilter.trim()
+    ? todayRecords.filter(record => {
+        const query = recordsFilter.toLowerCase();
+        return (
+          record.full_name.toLowerCase().includes(query) ||
+          record.youth_id.toLowerCase().includes(query)
+        );
+      })
+    : todayRecords;
   // Delete attendance record
   const deleteAttendanceRecord = async (recordId: number, youthName: string) => {
     if (!confirm(`Are you sure you want to delete the attendance record for ${youthName}? This action cannot be undone.`)) {
@@ -694,6 +708,38 @@ export default function StaffAttendancePage() {
               })}
             </h2>
 
+            {/* Search existing records */}
+            {todayRecords.length > 0 && (
+              <div className="mb-4">
+                <label className="block text-sm text-[#a3a3a3] mb-2 flex items-center gap-2">
+                  <Search className="w-4 h-4" />
+                  Search Existing Records
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={recordsFilter}
+                    onChange={(e) => setRecordsFilter(e.target.value)}
+                    placeholder="Filter by name or ID to verify..."
+                    className="w-full px-4 py-2.5 bg-[#262626] border border-[#3a3a3a] rounded-lg text-white placeholder-[#525252] focus:border-primary focus:outline-none pr-10"
+                  />
+                  {recordsFilter && (
+                    <button
+                      onClick={() => setRecordsFilter('')}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#737373] hover:text-white"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+                {recordsFilter && (
+                  <p className="mt-2 text-xs text-[#a3a3a3]">
+                    Showing {filteredRecords.length} of {todayRecords.length} records
+                  </p>
+                )}
+              </div>
+            )}
+
             {loadingRecords ? (
               <div className="flex items-center justify-center py-8">
                 <Loader2 className="w-6 h-6 text-primary animate-spin" />
@@ -709,54 +755,93 @@ export default function StaffAttendancePage() {
                   }
                 </p>
               </div>
+            ) : filteredRecords.length === 0 ? (
+              <div className="text-center py-8">
+                <Search className="w-12 h-12 text-[#525252] mx-auto mb-3" />
+                <p className="text-[#a3a3a3] font-medium mb-1">No matches found</p>
+                <p className="text-sm text-[#737373]">
+                  No records match "{recordsFilter}"
+                </p>
+                <button
+                  onClick={() => setRecordsFilter('')}
+                  className="mt-3 text-sm text-primary hover:underline"
+                >
+                  Clear filter
+                </button>
+              </div>
             ) : (
               <div className="space-y-2 max-h-[500px] overflow-y-auto pr-2">
-                {todayRecords.map((record, index) => (
-                  <div 
-                    key={record.id}
-                    className="group flex items-center justify-between p-3 sm:p-4 bg-[#262626] hover:bg-[#2a2a2a] rounded-lg transition-all border border-transparent hover:border-primary/20"
-                  >
-                    <div className="flex items-center gap-3 flex-1 min-w-0">
-                      <div className="w-10 h-10 bg-success/20 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-success/30 transition-colors">
-                        <span className="text-success text-sm font-bold">#{index + 1}</span>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-white font-semibold text-sm truncate">{record.full_name}</p>
-                        <div className="flex items-center gap-2 text-xs">
-                          <span className="text-[#a3a3a3]">{record.youth_id}</span>
-                          {record.notes && (
-                            <span className="text-[#737373] truncate max-w-[150px]">• {record.notes}</span>
+                {filteredRecords.map((record, index) => {
+                  // Highlight matching text
+                  const query = recordsFilter.toLowerCase();
+                  const nameMatches = record.full_name.toLowerCase().includes(query);
+                  const idMatches = record.youth_id.toLowerCase().includes(query);
+                  
+                  return (
+                    <div 
+                      key={record.id}
+                      className={`group flex items-center justify-between p-3 sm:p-4 rounded-lg transition-all border ${
+                        recordsFilter && (nameMatches || idMatches)
+                          ? 'bg-primary/5 border-primary/30 hover:bg-primary/10'
+                          : 'bg-[#262626] hover:bg-[#2a2a2a] border-transparent hover:border-primary/20'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
+                          recordsFilter && (nameMatches || idMatches)
+                            ? 'bg-primary/20 text-primary'
+                            : 'bg-success/20 text-success group-hover:bg-success/30'
+                        }`}>
+                          {recordsFilter && (nameMatches || idMatches) ? (
+                            <CheckCircle2 className="w-5 h-5" />
+                          ) : (
+                            <span className="text-sm font-bold">#{todayRecords.indexOf(record) + 1}</span>
                           )}
                         </div>
+                        <div className="flex-1 min-w-0">
+                          <p className={`font-semibold text-sm truncate ${
+                            recordsFilter && nameMatches ? 'text-primary' : 'text-white'
+                          }`}>
+                            {record.full_name}
+                          </p>
+                          <div className="flex items-center gap-2 text-xs">
+                            <span className={recordsFilter && idMatches ? 'text-primary font-medium' : 'text-[#a3a3a3]'}>
+                              {record.youth_id}
+                            </span>
+                            {record.notes && (
+                              <span className="text-[#737373] truncate max-w-[150px]">• {record.notes}</span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 flex-shrink-0 ml-2">
+                        <div className="text-right">
+                          <p className="text-xs text-primary font-medium">
+                            {new Date(record.submitted_at).toLocaleTimeString('en-US', {
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </p>
+                          <p className="text-xs text-[#737373]">
+                            by {record.submitted_by}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => deleteAttendanceRecord(record.id, record.full_name)}
+                          disabled={deletingRecordId === record.id}
+                          className="p-2 rounded-lg bg-error/10 hover:bg-error/20 text-error border border-error/30 hover:border-error/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                          title="Delete this attendance record"
+                        >
+                          {deletingRecordId === record.id ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            <Trash2 className="w-4 h-4" />
+                          )}
+                        </button>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3 flex-shrink-0 ml-2">
-                      <div className="text-right">
-                        <p className="text-xs text-primary font-medium">
-                          {new Date(record.submitted_at).toLocaleTimeString('en-US', {
-                            hour: '2-digit',
-                            minute: '2-digit'
-                          })}
-                        </p>
-                        <p className="text-xs text-[#737373]">
-                          by {record.submitted_by}
-                        </p>
-                      </div>
-                      <button
-                        onClick={() => deleteAttendanceRecord(record.id, record.full_name)}
-                        disabled={deletingRecordId === record.id}
-                        className="p-2 rounded-lg bg-error/10 hover:bg-error/20 text-error border border-error/30 hover:border-error/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                        title="Delete this attendance record"
-                      >
-                        {deletingRecordId === record.id ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                        ) : (
-                          <Trash2 className="w-4 h-4" />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
