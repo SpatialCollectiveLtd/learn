@@ -3,8 +3,10 @@ import { verifyStaffToken } from '@/app/api/_lib/auth';
 import { Database } from '@/app/api/_lib/database';
 
 /**
- * Search for youth by ID - returns name, ID number, phone
+ * Search for youth by ID, name, or phone number - returns name, ID, phone
  * GET /api/staff/attendance/search?q=KAY123
+ * GET /api/staff/attendance/search?q=John
+ * GET /api/staff/attendance/search?q=0712345678
  */
 export async function GET(request: NextRequest) {
   try {
@@ -21,7 +23,7 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const query = searchParams.get('q')?.trim().toUpperCase();
+    const query = searchParams.get('q')?.trim();
     const module = searchParams.get('module') || 'mobile_mapping';
 
     if (!query || query.length < 3) {
@@ -31,20 +33,32 @@ export async function GET(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Search for youth in the specified module
+    // Search for youth by ID, name, or phone number in the specified module
     console.log('Searching for youth with query:', query, 'in module:', module);
     const result = await Database.query(`
       SELECT 
         youth_id,
         full_name,
         phone_number,
-        program_type
+        program_type,
+        settlement
       FROM youth_participants
-      WHERE youth_id ILIKE $1
+      WHERE (
+        youth_id ILIKE $1
+        OR full_name ILIKE $1
+        OR phone_number ILIKE $1
+      )
         AND program_type = $2
         AND is_active = TRUE
-      LIMIT 10
-    `, [`%${query}%`, module]);
+      ORDER BY 
+        CASE 
+          WHEN youth_id ILIKE $1 THEN 1
+          WHEN full_name ILIKE $3 THEN 2
+          ELSE 3
+        END,
+        full_name
+      LIMIT 20
+    `, [`%${query}%`, module, `${query}%`]);
     
     console.log('Search results:', result.rows.length, 'records found');
 

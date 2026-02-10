@@ -24,6 +24,7 @@ interface Youth {
   full_name: string;
   phone_number: string | null;
   program_type: string;
+  settlement?: string;
 }
 
 interface AttendanceRecord {
@@ -551,14 +552,14 @@ export default function StaffAttendancePage() {
               <div className="mb-4">
                 <label className="block text-sm text-[#a3a3a3] mb-2 flex items-center gap-2">
                   <Search className="w-4 h-4" />
-                  Search by Unique ID
+                  Search by ID, Name, or Phone Number
                 </label>
                 <div className="relative">
                   <input
                     type="text"
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value.toUpperCase())}
-                    placeholder="Enter ID (e.g., KAY1799DM)"
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Enter ID, name, or phone (e.g., KAY1799DM, John, 0712...)"
                     className="w-full px-4 py-3 bg-[#262626] border border-[#3a3a3a] rounded-lg text-white placeholder-[#525252] focus:border-primary focus:outline-none pr-10"
                   />
                   {searching && (
@@ -568,22 +569,39 @@ export default function StaffAttendancePage() {
 
                 {/* Search Results */}
                 {searchResults.length > 0 && (
-                  <div className="mt-2 bg-[#262626] border border-[#3a3a3a] rounded-lg overflow-hidden">
+                  <div className="mt-2 bg-[#262626] border border-[#3a3a3a] rounded-lg overflow-hidden max-h-80 overflow-y-auto">
                     {searchResults.map((youth) => (
                       <button
                         key={youth.youth_id}
                         onClick={() => handleSelectYouth(youth)}
                         className="w-full px-4 py-3 text-left hover:bg-[#333] transition-colors border-b border-[#3a3a3a] last:border-b-0"
                       >
-                        <p className="text-white font-semibold">{youth.youth_id}</p>
-                        <p className="text-sm text-[#a3a3a3]">{youth.full_name}</p>
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex-1 min-w-0">
+                            <p className="text-white font-semibold flex items-center gap-2">
+                              <User className="w-4 h-4 text-primary flex-shrink-0" />
+                              {youth.full_name}
+                            </p>
+                            <p className="text-sm text-[#a3a3a3] mt-1">ID: {youth.youth_id}</p>
+                            {youth.phone_number && (
+                              <p className="text-sm text-[#a3a3a3] flex items-center gap-1 mt-1">
+                                <Phone className="w-3 h-3" />
+                                {youth.phone_number}
+                              </p>
+                            )}
+                            {youth.settlement && (
+                              <p className="text-xs text-[#737373] mt-1">{youth.settlement}</p>
+                            )}
+                          </div>
+                          <CheckCircle2 className="w-5 h-5 text-primary/50 flex-shrink-0" />
+                        </div>
                       </button>
                     ))}
                   </div>
                 )}
 
                 {searchQuery.length >= 3 && searchResults.length === 0 && !searching && (
-                  <p className="mt-2 text-sm text-[#a3a3a3]">No mappers found</p>
+                  <p className="mt-2 text-sm text-[#a3a3a3]">No participants found matching "{searchQuery}"</p>
                 )}
               </div>
             ) : (
@@ -602,14 +620,29 @@ export default function StaffAttendancePage() {
                 <div className="space-y-2 text-sm">
                   <div className="flex items-center gap-2 text-[#a3a3a3]">
                     <User className="w-4 h-4" />
-                    <span>ID: {selectedYouth.youth_id}</span>
+                    <span>ID: <span className="text-white font-medium">{selectedYouth.youth_id}</span></span>
                   </div>
                   {selectedYouth.phone_number && (
                     <div className="flex items-center gap-2 text-[#a3a3a3]">
                       <Phone className="w-4 h-4" />
-                      <span>{selectedYouth.phone_number}</span>
+                      <span className="text-white font-medium">{selectedYouth.phone_number}</span>
                     </div>
                   )}
+                  {selectedYouth.settlement && (
+                    <div className="flex items-center gap-2 text-[#a3a3a3]">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      <span className="text-white font-medium">{selectedYouth.settlement}</span>
+                    </div>
+                  )}
+                  <div className="mt-3 pt-3 border-t border-[#3a3a3a]">
+                    <p className="text-xs text-primary/80 flex items-center gap-1">
+                      <CheckCircle2 className="w-3 h-3" />
+                      Verify this information before submitting
+                    </p>
+                  </div>
                 </div>
               </div>
             )}
