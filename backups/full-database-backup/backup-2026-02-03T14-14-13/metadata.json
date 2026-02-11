@@ -1,0 +1,1190 @@
+{
+  "backupTimestamp": "2026-02-03T14:14:13.740Z",
+  "database": "learn_platform",
+  "tables": [
+    {
+      "name": "attendance_records",
+      "rowCount": 1438,
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "youth_id",
+          "type": "character varying",
+          "maxLength": 20,
+          "nullable": false
+        },
+        {
+          "name": "attendance_date",
+          "type": "date",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "submitted_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "submitted_by",
+          "type": "character varying",
+          "maxLength": 50,
+          "nullable": false
+        },
+        {
+          "name": "notes",
+          "type": "text",
+          "maxLength": null,
+          "nullable": true
+        }
+      ]
+    },
+    {
+      "name": "audit_log",
+      "rowCount": 12597,
+      "columns": [
+        {
+          "name": "audit_id",
+          "type": "uuid",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "table_name",
+          "type": "character varying",
+          "maxLength": 100,
+          "nullable": false
+        },
+        {
+          "name": "record_id",
+          "type": "character varying",
+          "maxLength": 100,
+          "nullable": false
+        },
+        {
+          "name": "operation",
+          "type": "character varying",
+          "maxLength": 10,
+          "nullable": false
+        },
+        {
+          "name": "old_data",
+          "type": "jsonb",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "new_data",
+          "type": "jsonb",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "changed_by",
+          "type": "character varying",
+          "maxLength": 50,
+          "nullable": true
+        },
+        {
+          "name": "changed_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "ip_address",
+          "type": "inet",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "session_id",
+          "type": "character varying",
+          "maxLength": 100,
+          "nullable": true
+        }
+      ]
+    },
+    {
+      "name": "auth_logs",
+      "rowCount": 2292,
+      "columns": [
+        {
+          "name": "log_id",
+          "type": "uuid",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "user_id",
+          "type": "character varying",
+          "maxLength": 50,
+          "nullable": false
+        },
+        {
+          "name": "user_type",
+          "type": "character varying",
+          "maxLength": 20,
+          "nullable": false
+        },
+        {
+          "name": "action",
+          "type": "character varying",
+          "maxLength": 50,
+          "nullable": false
+        },
+        {
+          "name": "success",
+          "type": "boolean",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "ip_address",
+          "type": "character varying",
+          "maxLength": 100,
+          "nullable": true
+        },
+        {
+          "name": "user_agent",
+          "type": "text",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "error_message",
+          "type": "text",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        }
+      ]
+    },
+    {
+      "name": "contract_templates",
+      "rowCount": 3,
+      "columns": [
+        {
+          "name": "template_id",
+          "type": "uuid",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "program_type",
+          "type": "character varying",
+          "maxLength": 50,
+          "nullable": false
+        },
+        {
+          "name": "version",
+          "type": "character varying",
+          "maxLength": 50,
+          "nullable": false
+        },
+        {
+          "name": "title",
+          "type": "character varying",
+          "maxLength": 500,
+          "nullable": false
+        },
+        {
+          "name": "content",
+          "type": "text",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "pdf_url",
+          "type": "text",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "is_active",
+          "type": "boolean",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "created_by",
+          "type": "character varying",
+          "maxLength": 50,
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        }
+      ]
+    },
+    {
+      "name": "modules",
+      "rowCount": 4,
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "name",
+          "type": "character varying",
+          "maxLength": 255,
+          "nullable": false
+        },
+        {
+          "name": "slug",
+          "type": "character varying",
+          "maxLength": 255,
+          "nullable": false
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "icon",
+          "type": "character varying",
+          "maxLength": 100,
+          "nullable": true
+        },
+        {
+          "name": "display_order",
+          "type": "integer",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "is_active",
+          "type": "boolean",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        }
+      ]
+    },
+    {
+      "name": "roles",
+      "rowCount": 2,
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "module_id",
+          "type": "integer",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "name",
+          "type": "character varying",
+          "maxLength": 255,
+          "nullable": false
+        },
+        {
+          "name": "slug",
+          "type": "character varying",
+          "maxLength": 255,
+          "nullable": false
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "display_order",
+          "type": "integer",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "is_active",
+          "type": "boolean",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        }
+      ]
+    },
+    {
+      "name": "settlement_work_config",
+      "rowCount": 4,
+      "columns": [
+        {
+          "name": "config_id",
+          "type": "uuid",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "settlement",
+          "type": "character varying",
+          "maxLength": 100,
+          "nullable": false
+        },
+        {
+          "name": "program_type",
+          "type": "character varying",
+          "maxLength": 50,
+          "nullable": false
+        },
+        {
+          "name": "start_date",
+          "type": "date",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "end_date",
+          "type": "date",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "total_work_days",
+          "type": "integer",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "daily_target",
+          "type": "integer",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "project_hashtag",
+          "type": "character varying",
+          "maxLength": 100,
+          "nullable": true
+        },
+        {
+          "name": "timezone",
+          "type": "character varying",
+          "maxLength": 50,
+          "nullable": true
+        },
+        {
+          "name": "is_active",
+          "type": "boolean",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        }
+      ]
+    },
+    {
+      "name": "settlements",
+      "rowCount": 3,
+      "columns": [
+        {
+          "name": "settlement_id",
+          "type": "integer",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "settlement_name",
+          "type": "character varying",
+          "maxLength": 100,
+          "nullable": false
+        },
+        {
+          "name": "settlement_code",
+          "type": "character varying",
+          "maxLength": 10,
+          "nullable": true
+        },
+        {
+          "name": "region",
+          "type": "character varying",
+          "maxLength": 100,
+          "nullable": true
+        },
+        {
+          "name": "county",
+          "type": "character varying",
+          "maxLength": 100,
+          "nullable": true
+        },
+        {
+          "name": "timezone",
+          "type": "character varying",
+          "maxLength": 50,
+          "nullable": true
+        },
+        {
+          "name": "is_active",
+          "type": "boolean",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        }
+      ]
+    },
+    {
+      "name": "signed_contracts",
+      "rowCount": 2,
+      "columns": [
+        {
+          "name": "contract_id",
+          "type": "uuid",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "youth_id",
+          "type": "character varying",
+          "maxLength": 50,
+          "nullable": false
+        },
+        {
+          "name": "template_id",
+          "type": "uuid",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "signature_data",
+          "type": "text",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "ip_address",
+          "type": "character varying",
+          "maxLength": 100,
+          "nullable": true
+        },
+        {
+          "name": "user_agent",
+          "type": "text",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "signed_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "pdf_url",
+          "type": "text",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "is_valid",
+          "type": "boolean",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "invalidated_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "invalidated_by",
+          "type": "character varying",
+          "maxLength": 50,
+          "nullable": true
+        },
+        {
+          "name": "invalidation_reason",
+          "type": "text",
+          "maxLength": null,
+          "nullable": true
+        }
+      ]
+    },
+    {
+      "name": "staff_members",
+      "rowCount": 14,
+      "columns": [
+        {
+          "name": "staff_id",
+          "type": "character varying",
+          "maxLength": 50,
+          "nullable": false
+        },
+        {
+          "name": "full_name",
+          "type": "character varying",
+          "maxLength": 255,
+          "nullable": false
+        },
+        {
+          "name": "email",
+          "type": "character varying",
+          "maxLength": 255,
+          "nullable": true
+        },
+        {
+          "name": "role",
+          "type": "character varying",
+          "maxLength": 20,
+          "nullable": false
+        },
+        {
+          "name": "is_active",
+          "type": "boolean",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "last_login",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "phone_number",
+          "type": "character varying",
+          "maxLength": 50,
+          "nullable": true
+        },
+        {
+          "name": "created_by",
+          "type": "character varying",
+          "maxLength": 50,
+          "nullable": true
+        }
+      ]
+    },
+    {
+      "name": "training_sections",
+      "rowCount": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "role_id",
+          "type": "integer",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "title",
+          "type": "character varying",
+          "maxLength": 500,
+          "nullable": false
+        },
+        {
+          "name": "content_type",
+          "type": "USER-DEFINED",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "content",
+          "type": "text",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "display_order",
+          "type": "integer",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "parent_section_id",
+          "type": "integer",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "is_required",
+          "type": "boolean",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "estimated_time",
+          "type": "integer",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        }
+      ]
+    },
+    {
+      "name": "user_progress",
+      "rowCount": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "user_id",
+          "type": "integer",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "section_id",
+          "type": "integer",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "completed_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "notes",
+          "type": "text",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "time_spent",
+          "type": "integer",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        }
+      ]
+    },
+    {
+      "name": "users",
+      "rowCount": 0,
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "email",
+          "type": "character varying",
+          "maxLength": 255,
+          "nullable": false
+        },
+        {
+          "name": "name",
+          "type": "character varying",
+          "maxLength": 255,
+          "nullable": false
+        },
+        {
+          "name": "role",
+          "type": "USER-DEFINED",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "is_active",
+          "type": "boolean",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        }
+      ]
+    },
+    {
+      "name": "youth_notifications",
+      "rowCount": 1,
+      "columns": [
+        {
+          "name": "notification_id",
+          "type": "uuid",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "youth_id",
+          "type": "character varying",
+          "maxLength": 50,
+          "nullable": false
+        },
+        {
+          "name": "title",
+          "type": "character varying",
+          "maxLength": 255,
+          "nullable": false
+        },
+        {
+          "name": "message",
+          "type": "text",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "type",
+          "type": "character varying",
+          "maxLength": 50,
+          "nullable": true
+        },
+        {
+          "name": "is_read",
+          "type": "boolean",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "is_hidden",
+          "type": "boolean",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "auto_expire_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        }
+      ]
+    },
+    {
+      "name": "youth_osm_stats",
+      "rowCount": 489,
+      "columns": [
+        {
+          "name": "stats_id",
+          "type": "uuid",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "youth_id",
+          "type": "character varying",
+          "maxLength": 50,
+          "nullable": false
+        },
+        {
+          "name": "osm_username",
+          "type": "character varying",
+          "maxLength": 255,
+          "nullable": false
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "buildings_mapped",
+          "type": "integer",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "changesets_analyzed",
+          "type": "integer",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "last_changeset_id",
+          "type": "bigint",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "last_upload_time",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        }
+      ]
+    },
+    {
+      "name": "youth_participants",
+      "rowCount": 206,
+      "columns": [
+        {
+          "name": "youth_id",
+          "type": "character varying",
+          "maxLength": 50,
+          "nullable": false
+        },
+        {
+          "name": "full_name",
+          "type": "character varying",
+          "maxLength": 255,
+          "nullable": false
+        },
+        {
+          "name": "email",
+          "type": "character varying",
+          "maxLength": 255,
+          "nullable": true
+        },
+        {
+          "name": "phone_number",
+          "type": "character varying",
+          "maxLength": 50,
+          "nullable": true
+        },
+        {
+          "name": "program_type",
+          "type": "character varying",
+          "maxLength": 50,
+          "nullable": false
+        },
+        {
+          "name": "is_active",
+          "type": "boolean",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "last_login",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "osm_username",
+          "type": "character varying",
+          "maxLength": 255,
+          "nullable": true
+        },
+        {
+          "name": "settlement",
+          "type": "character varying",
+          "maxLength": 100,
+          "nullable": true
+        },
+        {
+          "name": "module_assignment",
+          "type": "character varying",
+          "maxLength": 20,
+          "nullable": true
+        },
+        {
+          "name": "exception_hashtags",
+          "type": "ARRAY",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "work_email",
+          "type": "character varying",
+          "maxLength": 255,
+          "nullable": true
+        },
+        {
+          "name": "odk_token",
+          "type": "text",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "odk_actor_id",
+          "type": "integer",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "odk_configured_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        }
+      ]
+    },
+    {
+      "name": "youth_training_progress",
+      "rowCount": 746,
+      "columns": [
+        {
+          "name": "progress_id",
+          "type": "uuid",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "youth_id",
+          "type": "character varying",
+          "maxLength": 50,
+          "nullable": false
+        },
+        {
+          "name": "module_type",
+          "type": "character varying",
+          "maxLength": 20,
+          "nullable": false
+        },
+        {
+          "name": "step_id",
+          "type": "integer",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "completed_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        }
+      ]
+    },
+    {
+      "name": "youth_work_days",
+      "rowCount": 932,
+      "columns": [
+        {
+          "name": "work_day_id",
+          "type": "uuid",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "youth_id",
+          "type": "character varying",
+          "maxLength": 50,
+          "nullable": false
+        },
+        {
+          "name": "work_date",
+          "type": "date",
+          "maxLength": null,
+          "nullable": false
+        },
+        {
+          "name": "buildings_count",
+          "type": "integer",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "hours_worked",
+          "type": "numeric",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "daily_target",
+          "type": "integer",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "target_met",
+          "type": "boolean",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "status",
+          "type": "character varying",
+          "maxLength": 20,
+          "nullable": true
+        },
+        {
+          "name": "notes",
+          "type": "text",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "approved_by",
+          "type": "character varying",
+          "maxLength": 50,
+          "nullable": true
+        },
+        {
+          "name": "approved_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "rejection_reason",
+          "type": "text",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "maxLength": null,
+          "nullable": true
+        }
+      ]
+    }
+  ],
+  "totalTables": 18,
+  "totalRecords": 18733
+}

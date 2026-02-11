@@ -1,0 +1,133 @@
+{
+  "total": 16,
+  "foreignKeys": [
+    {
+      "table": "attendance_records",
+      "column": "youth_id",
+      "referencesTable": "youth_participants",
+      "referencesColumn": "youth_id",
+      "onDelete": "NO ACTION",
+      "onUpdate": "NO ACTION"
+    },
+    {
+      "table": "contract_templates",
+      "column": "created_by",
+      "referencesTable": "staff_members",
+      "referencesColumn": "staff_id",
+      "onDelete": "SET NULL",
+      "onUpdate": "NO ACTION"
+    },
+    {
+      "table": "roles",
+      "column": "module_id",
+      "referencesTable": "modules",
+      "referencesColumn": "id",
+      "onDelete": "CASCADE",
+      "onUpdate": "NO ACTION"
+    },
+    {
+      "table": "signed_contracts",
+      "column": "invalidated_by",
+      "referencesTable": "staff_members",
+      "referencesColumn": "staff_id",
+      "onDelete": "SET NULL",
+      "onUpdate": "NO ACTION"
+    },
+    {
+      "table": "signed_contracts",
+      "column": "template_id",
+      "referencesTable": "contract_templates",
+      "referencesColumn": "template_id",
+      "onDelete": "CASCADE",
+      "onUpdate": "NO ACTION"
+    },
+    {
+      "table": "signed_contracts",
+      "column": "youth_id",
+      "referencesTable": "youth_participants",
+      "referencesColumn": "youth_id",
+      "onDelete": "CASCADE",
+      "onUpdate": "NO ACTION"
+    },
+    {
+      "table": "staff_members",
+      "column": "created_by",
+      "referencesTable": "staff_members",
+      "referencesColumn": "staff_id",
+      "onDelete": "SET NULL",
+      "onUpdate": "NO ACTION"
+    },
+    {
+      "table": "training_sections",
+      "column": "parent_section_id",
+      "referencesTable": "training_sections",
+      "referencesColumn": "id",
+      "onDelete": "CASCADE",
+      "onUpdate": "NO ACTION"
+    },
+    {
+      "table": "training_sections",
+      "column": "role_id",
+      "referencesTable": "roles",
+      "referencesColumn": "id",
+      "onDelete": "CASCADE",
+      "onUpdate": "NO ACTION"
+    },
+    {
+      "table": "user_progress",
+      "column": "section_id",
+      "referencesTable": "training_sections",
+      "referencesColumn": "id",
+      "onDelete": "CASCADE",
+      "onUpdate": "NO ACTION"
+    },
+    {
+      "table": "user_progress",
+      "column": "user_id",
+      "referencesTable": "users",
+      "referencesColumn": "id",
+      "onDelete": "CASCADE",
+      "onUpdate": "NO ACTION"
+    },
+    {
+      "table": "youth_notifications",
+      "column": "youth_id",
+      "referencesTable": "youth_participants",
+      "referencesColumn": "youth_id",
+      "onDelete": "CASCADE",
+      "onUpdate": "NO ACTION"
+    },
+    {
+      "table": "youth_osm_stats",
+      "column": "youth_id",
+      "referencesTable": "youth_participants",
+      "referencesColumn": "youth_id",
+      "onDelete": "CASCADE",
+      "onUpdate": "NO ACTION"
+    },
+    {
+      "table": "youth_training_progress",
+      "column": "youth_id",
+      "referencesTable": "youth_participants",
+      "referencesColumn": "youth_id",
+      "onDelete": "CASCADE",
+      "onUpdate": "NO ACTION"
+    },
+    {
+      "table": "youth_work_days",
+      "column": "approved_by",
+      "referencesTable": "staff_members",
+      "referencesColumn": "staff_id",
+      "onDelete": "SET NULL",
+      "onUpdate": "NO ACTION"
+    },
+    {
+      "table": "youth_work_days",
+      "column": "youth_id",
+      "referencesTable": "youth_participants",
+      "referencesColumn": "youth_id",
+      "onDelete": "CASCADE",
+      "onUpdate": "NO ACTION"
+    }
+  ]
+}

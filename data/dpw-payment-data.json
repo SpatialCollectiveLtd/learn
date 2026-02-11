@@ -1,0 +1,3773 @@
+{
+  "generated_at": "2026-02-11T06:43:56.165Z",
+  "period_displayed": "Feb 7-6, 2025",
+  "cycle2_period": "Jan 7-23, 2025",
+  "cycle3_period": "Jan 26-Feb 6, 2025",
+  "total_participants": 164,
+  "data": {
+    "KAY1353CW": {
+      "youth_id": "KAY1353CW",
+      "name": "Catherine Wambua",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 608,
+        "total_earned": 6688,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 10
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1672,
+        "total_earned": 9272,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 22
+      },
+      "total_payment": 15960,
+      "total_days": 18,
+      "overall_quality_percentage": 17
+    },
+    "KAY2468HO": {
+      "youth_id": "KAY2468HO",
+      "name": "Hellen Okoth",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 608,
+        "total_earned": 6688,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 10
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1596,
+        "total_earned": 9196,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 21
+      },
+      "total_payment": 15884,
+      "total_days": 18,
+      "overall_quality_percentage": 16
+    },
+    "KAY2642PO": {
+      "youth_id": "KAY2642PO",
+      "name": "Philisian Ochieng",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 608,
+        "total_earned": 6688,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 10
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1672,
+        "total_earned": 9272,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 22
+      },
+      "total_payment": 15960,
+      "total_days": 18,
+      "overall_quality_percentage": 17
+    },
+    "KAY2015NM": {
+      "youth_id": "KAY2015NM",
+      "name": "Natalia Mukoya",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 608,
+        "total_earned": 6688,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 10
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1672,
+        "total_earned": 9272,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 22
+      },
+      "total_payment": 15960,
+      "total_days": 18,
+      "overall_quality_percentage": 17
+    },
+    "KAY2529RW": {
+      "youth_id": "KAY2529RW",
+      "name": "Ruth Wainaina",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 608,
+        "total_earned": 6688,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 10
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1672,
+        "total_earned": 9272,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 22
+      },
+      "total_payment": 15960,
+      "total_days": 18,
+      "overall_quality_percentage": 17
+    },
+    "KAY2239NW": {
+      "youth_id": "KAY2239NW",
+      "name": "Wanjiku Waithera",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 608,
+        "total_earned": 6688,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 10
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1520,
+        "total_earned": 9120,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 15808,
+      "total_days": 18,
+      "overall_quality_percentage": 16
+    },
+    "KAY1042KM": {
+      "youth_id": "KAY1042KM",
+      "name": "Keziah Maina",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 608,
+        "total_earned": 6688,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 10
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1748,
+        "total_earned": 9348,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 23
+      },
+      "total_payment": 16036,
+      "total_days": 18,
+      "overall_quality_percentage": 17
+    },
+    "KAY1604FA": {
+      "youth_id": "KAY1604FA",
+      "name": "Fidelis Wanjiru",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 608,
+        "total_earned": 6688,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 10
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1976,
+        "total_earned": 9576,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 26
+      },
+      "total_payment": 16264,
+      "total_days": 18,
+      "overall_quality_percentage": 19
+    },
+    "KAY1398PO": {
+      "youth_id": "KAY1398PO",
+      "name": "Pauline Owino",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 532,
+        "total_earned": 6612,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 9
+      },
+      "cycle3": {
+        "days_present": 9,
+        "base_pay": 6840,
+        "quality_pay": 1672,
+        "total_earned": 8512,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 24
+      },
+      "total_payment": 15124,
+      "total_days": 17,
+      "overall_quality_percentage": 17
+    },
+    "KAY237FM": {
+      "youth_id": "KAY237FM",
+      "name": "Faith Mutua",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 456,
+        "total_earned": 6536,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 8
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1900,
+        "total_earned": 9500,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 25
+      },
+      "total_payment": 16036,
+      "total_days": 18,
+      "overall_quality_percentage": 17
+    },
+    "KAY465DO": {
+      "youth_id": "KAY465DO",
+      "name": "David Omondi",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1672,
+        "total_earned": 9272,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 22
+      },
+      "total_payment": 15732,
+      "total_days": 18,
+      "overall_quality_percentage": 15
+    },
+    "KAY1380MM": {
+      "youth_id": "KAY1380MM",
+      "name": "Merlyne Matseshe",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1748,
+        "total_earned": 9348,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 23
+      },
+      "total_payment": 15808,
+      "total_days": 18,
+      "overall_quality_percentage": 16
+    },
+    "KAY2301SA": {
+      "youth_id": "KAY2301SA",
+      "name": "Solomon Ashiono",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1672,
+        "total_earned": 9272,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 22
+      },
+      "total_payment": 15732,
+      "total_days": 18,
+      "overall_quality_percentage": 15
+    },
+    "KAY2544DG": {
+      "youth_id": "KAY2544DG",
+      "name": "Denis Gitahi",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1672,
+        "total_earned": 9272,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 22
+      },
+      "total_payment": 15732,
+      "total_days": 18,
+      "overall_quality_percentage": 15
+    },
+    "KAY868JN": {
+      "youth_id": "KAY868JN",
+      "name": "Joy Nzomo",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1520,
+        "total_earned": 9120,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 15580,
+      "total_days": 18,
+      "overall_quality_percentage": 14
+    },
+    "KAY1448PO": {
+      "youth_id": "KAY1448PO",
+      "name": "Paul Omondi",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1824,
+        "total_earned": 9424,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 24
+      },
+      "total_payment": 15884,
+      "total_days": 18,
+      "overall_quality_percentage": 16
+    },
+    "KAY2326TO": {
+      "youth_id": "KAY2326TO",
+      "name": "Tony Oroko",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1596,
+        "total_earned": 9196,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 21
+      },
+      "total_payment": 15656,
+      "total_days": 18,
+      "overall_quality_percentage": 14
+    },
+    "KAY2490AM": {
+      "youth_id": "KAY2490AM",
+      "name": "Agnes Mutuku",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1824,
+        "total_earned": 9424,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 24
+      },
+      "total_payment": 15884,
+      "total_days": 18,
+      "overall_quality_percentage": 16
+    },
+    "KAY288SM": {
+      "youth_id": "KAY288SM",
+      "name": "Stephen Mathu",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1748,
+        "total_earned": 9348,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 23
+      },
+      "total_payment": 15808,
+      "total_days": 18,
+      "overall_quality_percentage": 16
+    },
+    "KAY924LO": {
+      "youth_id": "KAY924LO",
+      "name": "Lilian Ondieki",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 2052,
+        "total_earned": 9652,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 27
+      },
+      "total_payment": 16112,
+      "total_days": 18,
+      "overall_quality_percentage": 18
+    },
+    "KAY2491PL": {
+      "youth_id": "KAY2491PL",
+      "name": "Pauline Lukhachi",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1596,
+        "total_earned": 9196,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 21
+      },
+      "total_payment": 15656,
+      "total_days": 18,
+      "overall_quality_percentage": 14
+    },
+    "KAY1255GO": {
+      "youth_id": "KAY1255GO",
+      "name": "George Oduor",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1976,
+        "total_earned": 9576,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 26
+      },
+      "total_payment": 16036,
+      "total_days": 18,
+      "overall_quality_percentage": 17
+    },
+    "KAY1614VA": {
+      "youth_id": "KAY1614VA",
+      "name": "Vivian Awino Arango",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1520,
+        "total_earned": 9120,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 15580,
+      "total_days": 18,
+      "overall_quality_percentage": 14
+    },
+    "KAY1138SM": {
+      "youth_id": "KAY1138SM",
+      "name": "Stephen  Muturi",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 2052,
+        "total_earned": 9652,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 27
+      },
+      "total_payment": 16112,
+      "total_days": 18,
+      "overall_quality_percentage": 18
+    },
+    "KAY2134VW": {
+      "youth_id": "KAY2134VW",
+      "name": "Veronica Wambua",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1520,
+        "total_earned": 9120,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 15580,
+      "total_days": 18,
+      "overall_quality_percentage": 14
+    },
+    "KAY778DT": {
+      "youth_id": "KAY778DT",
+      "name": "Daudi Tarangei",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1976,
+        "total_earned": 9576,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 26
+      },
+      "total_payment": 16036,
+      "total_days": 18,
+      "overall_quality_percentage": 17
+    },
+    "KAY1166AM": {
+      "youth_id": "KAY1166AM",
+      "name": "Abigail  Mukoko",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1748,
+        "total_earned": 9348,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 23
+      },
+      "total_payment": 15808,
+      "total_days": 18,
+      "overall_quality_percentage": 16
+    },
+    "KAY2248LK": {
+      "youth_id": "KAY2248LK",
+      "name": "Louse Kitunda",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1976,
+        "total_earned": 9576,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 26
+      },
+      "total_payment": 16036,
+      "total_days": 18,
+      "overall_quality_percentage": 17
+    },
+    "KAY1681JM": {
+      "youth_id": "KAY1681JM",
+      "name": "Joyce Motaroki",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1520,
+        "total_earned": 9120,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 15580,
+      "total_days": 18,
+      "overall_quality_percentage": 14
+    },
+    "KAY461VO": {
+      "youth_id": "KAY461VO",
+      "name": "Valary Ochieng'",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1596,
+        "total_earned": 9196,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 21
+      },
+      "total_payment": 15656,
+      "total_days": 18,
+      "overall_quality_percentage": 14
+    },
+    "KAY2190FM": {
+      "youth_id": "KAY2190FM",
+      "name": "Francis Muthoni",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1976,
+        "total_earned": 9576,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 26
+      },
+      "total_payment": 16036,
+      "total_days": 18,
+      "overall_quality_percentage": 17
+    },
+    "KAY1640JM": {
+      "youth_id": "KAY1640JM",
+      "name": "Joab Mandu",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1596,
+        "total_earned": 9196,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 21
+      },
+      "total_payment": 15656,
+      "total_days": 18,
+      "overall_quality_percentage": 14
+    },
+    "KAY2085SB": {
+      "youth_id": "KAY2085SB",
+      "name": "Samuel Bogonko",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 9,
+        "base_pay": 6840,
+        "quality_pay": 1520,
+        "total_earned": 8360,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 22
+      },
+      "total_payment": 14820,
+      "total_days": 17,
+      "overall_quality_percentage": 15
+    },
+    "KAY2754JD": {
+      "youth_id": "KAY2754JD",
+      "name": "Joyce Daniel",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1976,
+        "total_earned": 9576,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 26
+      },
+      "total_payment": 16036,
+      "total_days": 18,
+      "overall_quality_percentage": 17
+    },
+    "KAY291SM": {
+      "youth_id": "KAY291SM",
+      "name": "Sharon Makanga",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1748,
+        "total_earned": 9348,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 23
+      },
+      "total_payment": 15808,
+      "total_days": 18,
+      "overall_quality_percentage": 16
+    },
+    "KAY1092LJ": {
+      "youth_id": "KAY1092LJ",
+      "name": "Lucy Idarasia",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1596,
+        "total_earned": 9196,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 21
+      },
+      "total_payment": 15656,
+      "total_days": 18,
+      "overall_quality_percentage": 14
+    },
+    "KAY1504BA": {
+      "youth_id": "KAY1504BA",
+      "name": "Brian Koli",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1748,
+        "total_earned": 9348,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 23
+      },
+      "total_payment": 15808,
+      "total_days": 18,
+      "overall_quality_percentage": 16
+    },
+    "KAY620JH": {
+      "youth_id": "KAY620JH",
+      "name": "Jacklyne Megere",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1976,
+        "total_earned": 9576,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 26
+      },
+      "total_payment": 16036,
+      "total_days": 18,
+      "overall_quality_percentage": 17
+    },
+    "KAY621AM": {
+      "youth_id": "KAY621AM",
+      "name": "Ann Mwangi",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1824,
+        "total_earned": 9424,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 24
+      },
+      "total_payment": 15884,
+      "total_days": 18,
+      "overall_quality_percentage": 16
+    },
+    "KAY2465DN": {
+      "youth_id": "KAY2465DN",
+      "name": "Daniel Ngugi",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1520,
+        "total_earned": 9120,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 15580,
+      "total_days": 18,
+      "overall_quality_percentage": 14
+    },
+    "KAY1506DM": {
+      "youth_id": "KAY1506DM",
+      "name": "Dennis Mutinda",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1520,
+        "total_earned": 9120,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 15580,
+      "total_days": 18,
+      "overall_quality_percentage": 14
+    },
+    "KAY1223AK": {
+      "youth_id": "KAY1223AK",
+      "name": "Annah  Kimakiru",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1216,
+        "total_earned": 8816,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 16
+      },
+      "total_payment": 15276,
+      "total_days": 18,
+      "overall_quality_percentage": 12
+    },
+    "KAY1771NN": {
+      "youth_id": "KAY1771NN",
+      "name": "Nancy Nderitu",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1672,
+        "total_earned": 9272,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 22
+      },
+      "total_payment": 15732,
+      "total_days": 18,
+      "overall_quality_percentage": 15
+    },
+    "KAY880LK": {
+      "youth_id": "KAY880LK",
+      "name": "Lucywell Kiunjuri",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1900,
+        "total_earned": 9500,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 25
+      },
+      "total_payment": 15960,
+      "total_days": 18,
+      "overall_quality_percentage": 17
+    },
+    "KAY098JO": {
+      "youth_id": "KAY098JO",
+      "name": "Juliet Achieng",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 9,
+        "base_pay": 6840,
+        "quality_pay": 1444,
+        "total_earned": 8284,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 21
+      },
+      "total_payment": 14744,
+      "total_days": 17,
+      "overall_quality_percentage": 14
+    },
+    "KAY2093GN": {
+      "youth_id": "KAY2093GN",
+      "name": "Geoffrey Ndegwa",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 2128,
+        "total_earned": 9728,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 28
+      },
+      "total_payment": 16188,
+      "total_days": 18,
+      "overall_quality_percentage": 18
+    },
+    "KAY2531JO": {
+      "youth_id": "KAY2531JO",
+      "name": "Jackson  Ochieng",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 9,
+        "base_pay": 6840,
+        "quality_pay": 1672,
+        "total_earned": 8512,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 24
+      },
+      "total_payment": 14972,
+      "total_days": 17,
+      "overall_quality_percentage": 16
+    },
+    "KAY1537MW": {
+      "youth_id": "KAY1537MW",
+      "name": "Maurine Apora",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1748,
+        "total_earned": 9348,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 23
+      },
+      "total_payment": 15808,
+      "total_days": 18,
+      "overall_quality_percentage": 16
+    },
+    "KAY2549EG": {
+      "youth_id": "KAY2549EG",
+      "name": "Edward Opiyo",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 9,
+        "base_pay": 6840,
+        "quality_pay": 1520,
+        "total_earned": 8360,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 22
+      },
+      "total_payment": 14820,
+      "total_days": 17,
+      "overall_quality_percentage": 15
+    },
+    "KAY974VE": {
+      "youth_id": "KAY974VE",
+      "name": "Vivian  Ekhalie",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1444,
+        "total_earned": 9044,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 19
+      },
+      "total_payment": 15504,
+      "total_days": 18,
+      "overall_quality_percentage": 13
+    },
+    "KAY2071PG": {
+      "youth_id": "KAY2071PG",
+      "name": "Pharis  Gacini",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 2052,
+        "total_earned": 9652,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 27
+      },
+      "total_payment": 16112,
+      "total_days": 18,
+      "overall_quality_percentage": 18
+    },
+    "KAY1383EN": {
+      "youth_id": "KAY1383EN",
+      "name": "Edward Njue",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1976,
+        "total_earned": 9576,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 26
+      },
+      "total_payment": 16036,
+      "total_days": 18,
+      "overall_quality_percentage": 17
+    },
+    "KAY132DN": {
+      "youth_id": "KAY132DN",
+      "name": "David  Ngemi",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1596,
+        "total_earned": 9196,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 21
+      },
+      "total_payment": 15656,
+      "total_days": 18,
+      "overall_quality_percentage": 14
+    },
+    "KAY614FO": {
+      "youth_id": "KAY614FO",
+      "name": "Francis  Okello",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1748,
+        "total_earned": 9348,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 23
+      },
+      "total_payment": 15808,
+      "total_days": 18,
+      "overall_quality_percentage": 16
+    },
+    "KAY1143IM": {
+      "youth_id": "KAY1143IM",
+      "name": "Ivor Mwangi",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1444,
+        "total_earned": 9044,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 19
+      },
+      "total_payment": 15504,
+      "total_days": 18,
+      "overall_quality_percentage": 13
+    },
+    "KAY2501CM": {
+      "youth_id": "KAY2501CM",
+      "name": "Caroline Maina",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1748,
+        "total_earned": 9348,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 23
+      },
+      "total_payment": 15808,
+      "total_days": 18,
+      "overall_quality_percentage": 16
+    },
+    "KAY2423BO": {
+      "youth_id": "KAY2423BO",
+      "name": "Brian Ogeloh",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1976,
+        "total_earned": 9576,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 26
+      },
+      "total_payment": 16036,
+      "total_days": 18,
+      "overall_quality_percentage": 17
+    },
+    "KAY2070EM": {
+      "youth_id": "KAY2070EM",
+      "name": "Emily  Munywoki",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1748,
+        "total_earned": 9348,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 23
+      },
+      "total_payment": 15808,
+      "total_days": 18,
+      "overall_quality_percentage": 16
+    },
+    "KAY2065BW": {
+      "youth_id": "KAY2065BW",
+      "name": "Bonface Mwaura",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 9,
+        "base_pay": 6840,
+        "quality_pay": 1520,
+        "total_earned": 8360,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 22
+      },
+      "total_payment": 14820,
+      "total_days": 17,
+      "overall_quality_percentage": 15
+    },
+    "KAY1278MK": {
+      "youth_id": "KAY1278MK",
+      "name": "Michelle  Kinya",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1672,
+        "total_earned": 9272,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 22
+      },
+      "total_payment": 15732,
+      "total_days": 18,
+      "overall_quality_percentage": 15
+    },
+    "KAY2675PM": {
+      "youth_id": "KAY2675PM",
+      "name": "Peterson Mwangi",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1444,
+        "total_earned": 9044,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 19
+      },
+      "total_payment": 15504,
+      "total_days": 18,
+      "overall_quality_percentage": 13
+    },
+    "KAY1008BO": {
+      "youth_id": "KAY1008BO",
+      "name": "Brian Otieno",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1900,
+        "total_earned": 9500,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 25
+      },
+      "total_payment": 15960,
+      "total_days": 18,
+      "overall_quality_percentage": 17
+    },
+    "KAY1007FO": {
+      "youth_id": "KAY1007FO",
+      "name": "Faith Ochieng",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1824,
+        "total_earned": 9424,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 24
+      },
+      "total_payment": 15884,
+      "total_days": 18,
+      "overall_quality_percentage": 16
+    },
+    "KAY2802NM": {
+      "youth_id": "KAY2802NM",
+      "name": "Naffert Mburu",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1672,
+        "total_earned": 9272,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 22
+      },
+      "total_payment": 15732,
+      "total_days": 18,
+      "overall_quality_percentage": 15
+    },
+    "KAY1619JG": {
+      "youth_id": "KAY1619JG",
+      "name": "Josphat Gitahi",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 380,
+        "total_earned": 6460,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 6
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1976,
+        "total_earned": 9576,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 26
+      },
+      "total_payment": 16036,
+      "total_days": 18,
+      "overall_quality_percentage": 17
+    },
+    "KAY413GG": {
+      "youth_id": "KAY413GG",
+      "name": "George Githua",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 5320,
+        "quality_pay": 456,
+        "total_earned": 5776,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 9
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1748,
+        "total_earned": 9348,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 23
+      },
+      "total_payment": 15124,
+      "total_days": 18,
+      "overall_quality_percentage": 17
+    },
+    "KAY2570SM": {
+      "youth_id": "KAY2570SM",
+      "name": "Samuel Mbiyu",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 5320,
+        "quality_pay": 380,
+        "total_earned": 5700,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 7
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1672,
+        "total_earned": 9272,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 22
+      },
+      "total_payment": 14972,
+      "total_days": 18,
+      "overall_quality_percentage": 16
+    },
+    "KAY1799DM": {
+      "youth_id": "KAY1799DM",
+      "name": "David Mandu",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 7,
+        "base_pay": 5320,
+        "quality_pay": 380,
+        "total_earned": 5700,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 7
+      },
+      "cycle3": {
+        "days_present": 9,
+        "base_pay": 6840,
+        "quality_pay": 1596,
+        "total_earned": 8436,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 23
+      },
+      "total_payment": 14136,
+      "total_days": 16,
+      "overall_quality_percentage": 16
+    },
+    "KAY1177MS": {
+      "youth_id": "KAY1177MS",
+      "name": "Mary Hatayi",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 7,
+        "base_pay": 5320,
+        "quality_pay": 380,
+        "total_earned": 5700,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 7
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1520,
+        "total_earned": 9120,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 14820,
+      "total_days": 17,
+      "overall_quality_percentage": 15
+    },
+    "KAY1731EM": {
+      "youth_id": "KAY1731EM",
+      "name": "Esther  Maina",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 7,
+        "base_pay": 5320,
+        "quality_pay": 380,
+        "total_earned": 5700,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 7
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1672,
+        "total_earned": 9272,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 22
+      },
+      "total_payment": 14972,
+      "total_days": 17,
+      "overall_quality_percentage": 16
+    },
+    "KAY1230CA": {
+      "youth_id": "KAY1230CA",
+      "name": "Clinton Awino",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 7,
+        "base_pay": 5320,
+        "quality_pay": 380,
+        "total_earned": 5700,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 7
+      },
+      "cycle3": {
+        "days_present": 8,
+        "base_pay": 6080,
+        "quality_pay": 1368,
+        "total_earned": 7448,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 23
+      },
+      "total_payment": 13148,
+      "total_days": 15,
+      "overall_quality_percentage": 15
+    },
+    "KAY1726RN": {
+      "youth_id": "KAY1726RN",
+      "name": "Reuben Nyangweso",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 5320,
+        "quality_pay": 152,
+        "total_earned": 5472,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 3
+      },
+      "cycle3": {
+        "days_present": 9,
+        "base_pay": 6840,
+        "quality_pay": 1064,
+        "total_earned": 7904,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 16
+      },
+      "total_payment": 13376,
+      "total_days": 17,
+      "overall_quality_percentage": 10
+    },
+    "KAY2279JN": {
+      "youth_id": "KAY2279JN",
+      "name": "Joseph Maina",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 7,
+        "base_pay": 5320,
+        "quality_pay": 152,
+        "total_earned": 5472,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 3
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1672,
+        "total_earned": 9272,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 22
+      },
+      "total_payment": 14744,
+      "total_days": 17,
+      "overall_quality_percentage": 14
+    },
+    "KAY498AW": {
+      "youth_id": "KAY498AW",
+      "name": "Anne Wainaina",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 7,
+        "base_pay": 5320,
+        "quality_pay": 152,
+        "total_earned": 5472,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 3
+      },
+      "cycle3": null,
+      "total_payment": 5472,
+      "total_days": 7,
+      "overall_quality_percentage": 3
+    },
+    "KAY264EM": {
+      "youth_id": "KAY264EM",
+      "name": "Esther Mwangi",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 6,
+        "base_pay": 4560,
+        "quality_pay": 380,
+        "total_earned": 4940,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 8
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1596,
+        "total_earned": 9196,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 21
+      },
+      "total_payment": 14136,
+      "total_days": 16,
+      "overall_quality_percentage": 16
+    },
+    "KAY574GK": {
+      "youth_id": "KAY574GK",
+      "name": "Getrude Kamau",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 7,
+        "base_pay": 4560,
+        "quality_pay": 152,
+        "total_earned": 4712,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 3
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1672,
+        "total_earned": 9272,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 22
+      },
+      "total_payment": 13984,
+      "total_days": 17,
+      "overall_quality_percentage": 15
+    },
+    "KAY2031KM": {
+      "youth_id": "KAY2031KM",
+      "name": "Kelly Muigai",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 8,
+        "base_pay": 3800,
+        "quality_pay": 0,
+        "total_earned": 3800,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 0
+      },
+      "cycle3": {
+        "days_present": 9,
+        "base_pay": 6840,
+        "quality_pay": 760,
+        "total_earned": 7600,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 11
+      },
+      "total_payment": 11400,
+      "total_days": 17,
+      "overall_quality_percentage": 7
+    },
+    "KAY269JW": {
+      "youth_id": "KAY269JW",
+      "name": "Josephine  Wambua",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 4,
+        "base_pay": 3040,
+        "quality_pay": 380,
+        "total_earned": 3420,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 13
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1596,
+        "total_earned": 9196,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 21
+      },
+      "total_payment": 12616,
+      "total_days": 14,
+      "overall_quality_percentage": 19
+    },
+    "KAY2546PW": {
+      "youth_id": "KAY2546PW",
+      "name": "Peter Wambui",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 4,
+        "base_pay": 3040,
+        "quality_pay": 380,
+        "total_earned": 3420,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 13
+      },
+      "cycle3": {
+        "days_present": 7,
+        "base_pay": 5320,
+        "quality_pay": 1216,
+        "total_earned": 6536,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 23
+      },
+      "total_payment": 9956,
+      "total_days": 11,
+      "overall_quality_percentage": 19
+    },
+    "KAY2587RM": {
+      "youth_id": "KAY2587RM",
+      "name": "Rooney Masila",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 7,
+        "base_pay": 3040,
+        "quality_pay": 0,
+        "total_earned": 3040,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 0
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1748,
+        "total_earned": 9348,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 23
+      },
+      "total_payment": 12388,
+      "total_days": 17,
+      "overall_quality_percentage": 16
+    },
+    "KAY2647MN": {
+      "youth_id": "KAY2647MN",
+      "name": "Mary Ndenga",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 1,
+        "base_pay": 760,
+        "quality_pay": 0,
+        "total_earned": 760,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 0
+      },
+      "cycle3": null,
+      "total_payment": 760,
+      "total_days": 1,
+      "overall_quality_percentage": 0
+    },
+    "KAY1840TM": {
+      "youth_id": "KAY1840TM",
+      "name": "Teddy Mutua",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 1,
+        "base_pay": 760,
+        "quality_pay": 0,
+        "total_earned": 760,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 0
+      },
+      "cycle3": null,
+      "total_payment": 760,
+      "total_days": 1,
+      "overall_quality_percentage": 0
+    },
+    "KAY467DN": {
+      "youth_id": "KAY467DN",
+      "name": "Debrah Nyaang'a",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 1,
+        "base_pay": 760,
+        "quality_pay": 0,
+        "total_earned": 760,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 0
+      },
+      "cycle3": null,
+      "total_payment": 760,
+      "total_days": 1,
+      "overall_quality_percentage": 0
+    },
+    "KAY1528CM": {
+      "youth_id": "KAY1528CM",
+      "name": "Celine Macharia",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 1,
+        "base_pay": 760,
+        "quality_pay": 0,
+        "total_earned": 760,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 0
+      },
+      "cycle3": null,
+      "total_payment": 760,
+      "total_days": 1,
+      "overall_quality_percentage": 0
+    },
+    "KAY1973FM": {
+      "youth_id": "KAY1973FM",
+      "name": "Francis Mwendwa",
+      "settlement": "Kayole Soweto",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 1,
+        "base_pay": 760,
+        "quality_pay": 0,
+        "total_earned": 760,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 0
+      },
+      "cycle3": null,
+      "total_payment": 760,
+      "total_days": 1,
+      "overall_quality_percentage": 0
+    },
+    "HUR792SW": {
+      "youth_id": "HUR792SW",
+      "name": "Susan Wanja",
+      "settlement": "Mji wa Huruma",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 2,
+        "base_pay": 1520,
+        "quality_pay": 0,
+        "total_earned": 1520,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 0
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1672,
+        "total_earned": 9272,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 22
+      },
+      "total_payment": 10792,
+      "total_days": 12,
+      "overall_quality_percentage": 18
+    },
+    "HUR564KM": {
+      "youth_id": "HUR564KM",
+      "name": "Lydia Mwove",
+      "settlement": "Mji wa Huruma",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 2,
+        "base_pay": 1520,
+        "quality_pay": 0,
+        "total_earned": 1520,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 0
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1216,
+        "total_earned": 8816,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 16
+      },
+      "total_payment": 10336,
+      "total_days": 12,
+      "overall_quality_percentage": 13
+    },
+    "HUR452DM": {
+      "youth_id": "HUR452DM",
+      "name": "Dorcas Wanja",
+      "settlement": "Mji wa Huruma",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 2,
+        "base_pay": 1520,
+        "quality_pay": 0,
+        "total_earned": 1520,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 0
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1444,
+        "total_earned": 9044,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 19
+      },
+      "total_payment": 10564,
+      "total_days": 12,
+      "overall_quality_percentage": 16
+    },
+    "HUR714AK": {
+      "youth_id": "HUR714AK",
+      "name": "Alice Karanja",
+      "settlement": "Mji wa Huruma",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 2,
+        "base_pay": 1520,
+        "quality_pay": 0,
+        "total_earned": 1520,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 0
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1368,
+        "total_earned": 8968,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 18
+      },
+      "total_payment": 10488,
+      "total_days": 12,
+      "overall_quality_percentage": 15
+    },
+    "HUR703SN": {
+      "youth_id": "HUR703SN",
+      "name": "Simon Njeri",
+      "settlement": "Mji wa Huruma",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 2,
+        "base_pay": 1520,
+        "quality_pay": 0,
+        "total_earned": 1520,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 0
+      },
+      "cycle3": {
+        "days_present": 9,
+        "base_pay": 6840,
+        "quality_pay": 1368,
+        "total_earned": 8208,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 9728,
+      "total_days": 11,
+      "overall_quality_percentage": 16
+    },
+    "HUR773MN": {
+      "youth_id": "HUR773MN",
+      "name": "Margaret  Nyambura",
+      "settlement": "Mji wa Huruma",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 2,
+        "base_pay": 1520,
+        "quality_pay": 0,
+        "total_earned": 1520,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 0
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1064,
+        "total_earned": 8664,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 14
+      },
+      "total_payment": 10184,
+      "total_days": 12,
+      "overall_quality_percentage": 12
+    },
+    "HUR600HW": {
+      "youth_id": "HUR600HW",
+      "name": "Hannah Wanjiku",
+      "settlement": "Mji wa Huruma",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 2,
+        "base_pay": 1520,
+        "quality_pay": 0,
+        "total_earned": 1520,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 0
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1292,
+        "total_earned": 8892,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 17
+      },
+      "total_payment": 10412,
+      "total_days": 12,
+      "overall_quality_percentage": 14
+    },
+    "HUR558AC": {
+      "youth_id": "HUR558AC",
+      "name": "Ann Chuhi",
+      "settlement": "Mji wa Huruma",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 2,
+        "base_pay": 1520,
+        "quality_pay": 0,
+        "total_earned": 1520,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 0
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1444,
+        "total_earned": 9044,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 19
+      },
+      "total_payment": 10564,
+      "total_days": 12,
+      "overall_quality_percentage": 16
+    },
+    "HUR772BN": {
+      "youth_id": "HUR772BN",
+      "name": "Benny Nguyo",
+      "settlement": "Mji wa Huruma",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 2,
+        "base_pay": 1520,
+        "quality_pay": 0,
+        "total_earned": 1520,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 0
+      },
+      "cycle3": {
+        "days_present": 9,
+        "base_pay": 6840,
+        "quality_pay": 1368,
+        "total_earned": 8208,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 9728,
+      "total_days": 11,
+      "overall_quality_percentage": 16
+    },
+    "HUR788AW": {
+      "youth_id": "HUR788AW",
+      "name": "Anne Wambugu",
+      "settlement": "Mji wa Huruma",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 2,
+        "base_pay": 1520,
+        "quality_pay": 0,
+        "total_earned": 1520,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 0
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1520,
+        "total_earned": 9120,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 10640,
+      "total_days": 12,
+      "overall_quality_percentage": 17
+    },
+    "HUR438PW": {
+      "youth_id": "HUR438PW",
+      "name": "Paul Njoroge",
+      "settlement": "Mji wa Huruma",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 1,
+        "base_pay": 760,
+        "quality_pay": 0,
+        "total_earned": 760,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 0
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1520,
+        "total_earned": 9120,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 9880,
+      "total_days": 11,
+      "overall_quality_percentage": 18
+    },
+    "HUR610SW": {
+      "youth_id": "HUR610SW",
+      "name": "Simon Wambui",
+      "settlement": "Mji wa Huruma",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 1,
+        "base_pay": 760,
+        "quality_pay": 0,
+        "total_earned": 760,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 0
+      },
+      "cycle3": {
+        "days_present": 9,
+        "base_pay": 6840,
+        "quality_pay": 836,
+        "total_earned": 7676,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 12
+      },
+      "total_payment": 8436,
+      "total_days": 10,
+      "overall_quality_percentage": 11
+    },
+    "HUR689DM": {
+      "youth_id": "HUR689DM",
+      "name": "Doricah Motonu",
+      "settlement": "Mji wa Huruma",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 1,
+        "base_pay": 760,
+        "quality_pay": 0,
+        "total_earned": 760,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 0
+      },
+      "cycle3": null,
+      "total_payment": 760,
+      "total_days": 1,
+      "overall_quality_percentage": 0
+    },
+    "HUR770AN": {
+      "youth_id": "HUR770AN",
+      "name": "Abigael Nguyo",
+      "settlement": "Mji wa Huruma",
+      "program_type": "Mobile Mapping",
+      "cycle2": {
+        "days_present": 1,
+        "base_pay": 760,
+        "quality_pay": 0,
+        "total_earned": 760,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 0
+      },
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1292,
+        "total_earned": 8892,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 17
+      },
+      "total_payment": 9652,
+      "total_days": 11,
+      "overall_quality_percentage": 15
+    },
+    "KAR339PM": {
+      "youth_id": "KAR339PM",
+      "name": "Peter  Muia",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 13,
+        "base_pay": 9880,
+        "quality_pay": 2888,
+        "total_earned": 12768,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 29
+      },
+      "cycle3": {
+        "days_present": 2,
+        "base_pay": 1520,
+        "quality_pay": 380,
+        "total_earned": 1900,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 25
+      },
+      "total_payment": 14668,
+      "total_days": 15,
+      "overall_quality_percentage": 29
+    },
+    "KAR298DK": {
+      "youth_id": "KAR298DK",
+      "name": "Diana Kasyula",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 13,
+        "base_pay": 9880,
+        "quality_pay": 2964,
+        "total_earned": 12844,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 30
+      },
+      "cycle3": {
+        "days_present": 2,
+        "base_pay": 1520,
+        "quality_pay": 304,
+        "total_earned": 1824,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 14668,
+      "total_days": 15,
+      "overall_quality_percentage": 29
+    },
+    "KAR187SM": {
+      "youth_id": "KAR187SM",
+      "name": "Samuel  Mutuku",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 13,
+        "base_pay": 9880,
+        "quality_pay": 2964,
+        "total_earned": 12844,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 30
+      },
+      "cycle3": {
+        "days_present": 2,
+        "base_pay": 1520,
+        "quality_pay": 304,
+        "total_earned": 1824,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 14668,
+      "total_days": 15,
+      "overall_quality_percentage": 29
+    },
+    "KAR322FK": {
+      "youth_id": "KAR322FK",
+      "name": "Festus Kaluki",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 12,
+        "base_pay": 9120,
+        "quality_pay": 2660,
+        "total_earned": 11780,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 29
+      },
+      "cycle3": {
+        "days_present": 2,
+        "base_pay": 1520,
+        "quality_pay": 380,
+        "total_earned": 1900,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 25
+      },
+      "total_payment": 13680,
+      "total_days": 14,
+      "overall_quality_percentage": 29
+    },
+    "KAR399JM": {
+      "youth_id": "KAR399JM",
+      "name": "Josephat Mwanthi",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 13,
+        "base_pay": 9880,
+        "quality_pay": 2812,
+        "total_earned": 12692,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 28
+      },
+      "cycle3": {
+        "days_present": 2,
+        "base_pay": 1520,
+        "quality_pay": 380,
+        "total_earned": 1900,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 25
+      },
+      "total_payment": 14592,
+      "total_days": 15,
+      "overall_quality_percentage": 28
+    },
+    "KAR405DM": {
+      "youth_id": "KAR405DM",
+      "name": "Denis Musau",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 13,
+        "base_pay": 9880,
+        "quality_pay": 2888,
+        "total_earned": 12768,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 29
+      },
+      "cycle3": {
+        "days_present": 2,
+        "base_pay": 1520,
+        "quality_pay": 304,
+        "total_earned": 1824,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 14592,
+      "total_days": 15,
+      "overall_quality_percentage": 28
+    },
+    "KAR115SO": {
+      "youth_id": "KAR115SO",
+      "name": "Sophie  Gesare",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 13,
+        "base_pay": 9880,
+        "quality_pay": 2812,
+        "total_earned": 12692,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 28
+      },
+      "cycle3": {
+        "days_present": 2,
+        "base_pay": 1520,
+        "quality_pay": 304,
+        "total_earned": 1824,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 14516,
+      "total_days": 15,
+      "overall_quality_percentage": 27
+    },
+    "KAR268SM": {
+      "youth_id": "KAR268SM",
+      "name": "Samuel  Matheka",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 13,
+        "base_pay": 9880,
+        "quality_pay": 2964,
+        "total_earned": 12844,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 30
+      },
+      "cycle3": {
+        "days_present": 2,
+        "base_pay": 1520,
+        "quality_pay": 304,
+        "total_earned": 1824,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 14668,
+      "total_days": 15,
+      "overall_quality_percentage": 29
+    },
+    "KAR369JJ": {
+      "youth_id": "KAR369JJ",
+      "name": "Jeremiah  James",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 13,
+        "base_pay": 9880,
+        "quality_pay": 2812,
+        "total_earned": 12692,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 28
+      },
+      "cycle3": {
+        "days_present": 2,
+        "base_pay": 1520,
+        "quality_pay": 304,
+        "total_earned": 1824,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 14516,
+      "total_days": 15,
+      "overall_quality_percentage": 27
+    },
+    "KAR158KK": {
+      "youth_id": "KAR158KK",
+      "name": "Kelvin  Kinyatta",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 13,
+        "base_pay": 9880,
+        "quality_pay": 2508,
+        "total_earned": 12388,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 25
+      },
+      "cycle3": {
+        "days_present": 2,
+        "base_pay": 1520,
+        "quality_pay": 380,
+        "total_earned": 1900,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 25
+      },
+      "total_payment": 14288,
+      "total_days": 15,
+      "overall_quality_percentage": 25
+    },
+    "KAR327EM": {
+      "youth_id": "KAR327EM",
+      "name": "Eddis Maina",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 13,
+        "base_pay": 9880,
+        "quality_pay": 2964,
+        "total_earned": 12844,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 30
+      },
+      "cycle3": {
+        "days_present": 2,
+        "base_pay": 1520,
+        "quality_pay": 304,
+        "total_earned": 1824,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 14668,
+      "total_days": 15,
+      "overall_quality_percentage": 29
+    },
+    "KAR083JK": {
+      "youth_id": "KAR083JK",
+      "name": "Joel Kihuria",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 13,
+        "base_pay": 9880,
+        "quality_pay": 2660,
+        "total_earned": 12540,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 27
+      },
+      "cycle3": {
+        "days_present": 2,
+        "base_pay": 1520,
+        "quality_pay": 304,
+        "total_earned": 1824,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 14364,
+      "total_days": 15,
+      "overall_quality_percentage": 26
+    },
+    "KAR225CT": {
+      "youth_id": "KAR225CT",
+      "name": "Charity  Titus",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 13,
+        "base_pay": 9880,
+        "quality_pay": 2888,
+        "total_earned": 12768,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 29
+      },
+      "cycle3": {
+        "days_present": 2,
+        "base_pay": 1520,
+        "quality_pay": 304,
+        "total_earned": 1824,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 14592,
+      "total_days": 15,
+      "overall_quality_percentage": 28
+    },
+    "KAR078KM": {
+      "youth_id": "KAR078KM",
+      "name": "Kelvin Mulela",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 13,
+        "base_pay": 9880,
+        "quality_pay": 2812,
+        "total_earned": 12692,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 28
+      },
+      "cycle3": {
+        "days_present": 2,
+        "base_pay": 1520,
+        "quality_pay": 304,
+        "total_earned": 1824,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 14516,
+      "total_days": 15,
+      "overall_quality_percentage": 27
+    },
+    "KAR119BN": {
+      "youth_id": "KAR119BN",
+      "name": "Bill Njiru",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 13,
+        "base_pay": 9880,
+        "quality_pay": 2888,
+        "total_earned": 12768,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 29
+      },
+      "cycle3": {
+        "days_present": 2,
+        "base_pay": 1520,
+        "quality_pay": 304,
+        "total_earned": 1824,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 14592,
+      "total_days": 15,
+      "overall_quality_percentage": 28
+    },
+    "KAY1154SO": {
+      "youth_id": "KAY1154SO",
+      "name": "Steven Odhiambo",
+      "settlement": "Kayole Soweto",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 12,
+        "base_pay": 9120,
+        "quality_pay": 2736,
+        "total_earned": 11856,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 30
+      },
+      "cycle3": null,
+      "total_payment": 11856,
+      "total_days": 12,
+      "overall_quality_percentage": 30
+    },
+    "KAY209BM": {
+      "youth_id": "KAY209BM",
+      "name": "Ben Mutua",
+      "settlement": "Kayole Soweto",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 12,
+        "base_pay": 9120,
+        "quality_pay": 2660,
+        "total_earned": 11780,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 29
+      },
+      "cycle3": null,
+      "total_payment": 11780,
+      "total_days": 12,
+      "overall_quality_percentage": 29
+    },
+    "KAY2805JK": {
+      "youth_id": "KAY2805JK",
+      "name": "Joe Kimani",
+      "settlement": "Kayole Soweto",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 1,
+        "base_pay": 760,
+        "quality_pay": 228,
+        "total_earned": 988,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 30
+      },
+      "cycle3": null,
+      "total_payment": 988,
+      "total_days": 1,
+      "overall_quality_percentage": 30
+    },
+    "KAY348RN": {
+      "youth_id": "KAY348RN",
+      "name": "Regina Nzoka",
+      "settlement": "Kayole Soweto",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 6,
+        "base_pay": 4560,
+        "quality_pay": 1368,
+        "total_earned": 5928,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 30
+      },
+      "cycle3": null,
+      "total_payment": 5928,
+      "total_days": 6,
+      "overall_quality_percentage": 30
+    },
+    "KAY2391LN": {
+      "youth_id": "KAY2391LN",
+      "name": "Lilian Naliaka",
+      "settlement": "Kayole Soweto",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 12,
+        "base_pay": 9120,
+        "quality_pay": 2736,
+        "total_earned": 11856,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 30
+      },
+      "cycle3": null,
+      "total_payment": 11856,
+      "total_days": 12,
+      "overall_quality_percentage": 30
+    },
+    "KAY251BK": {
+      "youth_id": "KAY251BK",
+      "name": "Brian Karani",
+      "settlement": "Kayole Soweto",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 12,
+        "base_pay": 9120,
+        "quality_pay": 2584,
+        "total_earned": 11704,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 28
+      },
+      "cycle3": null,
+      "total_payment": 11704,
+      "total_days": 12,
+      "overall_quality_percentage": 28
+    },
+    "KAY2333OO": {
+      "youth_id": "KAY2333OO",
+      "name": "Oketch Ochieng",
+      "settlement": "Kayole Soweto",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 12,
+        "base_pay": 9120,
+        "quality_pay": 2660,
+        "total_earned": 11780,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 29
+      },
+      "cycle3": null,
+      "total_payment": 11780,
+      "total_days": 12,
+      "overall_quality_percentage": 29
+    },
+    "KAY1725LK": {
+      "youth_id": "KAY1725LK",
+      "name": "Lynn Waweru",
+      "settlement": "Kayole Soweto",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 12,
+        "base_pay": 9120,
+        "quality_pay": 2584,
+        "total_earned": 11704,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 28
+      },
+      "cycle3": null,
+      "total_payment": 11704,
+      "total_days": 12,
+      "overall_quality_percentage": 28
+    },
+    "KAY2579JN": {
+      "youth_id": "KAY2579JN",
+      "name": "Jane  Njuguna",
+      "settlement": "Kayole Soweto",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 12,
+        "base_pay": 9120,
+        "quality_pay": 2736,
+        "total_earned": 11856,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 30
+      },
+      "cycle3": null,
+      "total_payment": 11856,
+      "total_days": 12,
+      "overall_quality_percentage": 30
+    },
+    "KAY2705AO": {
+      "youth_id": "KAY2705AO",
+      "name": "Austine Ongonga",
+      "settlement": "Kayole Soweto",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 12,
+        "base_pay": 9120,
+        "quality_pay": 2660,
+        "total_earned": 11780,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 29
+      },
+      "cycle3": null,
+      "total_payment": 11780,
+      "total_days": 12,
+      "overall_quality_percentage": 29
+    },
+    "KAY1498DO": {
+      "youth_id": "KAY1498DO",
+      "name": "David  Ouma",
+      "settlement": "Kayole Soweto",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 12,
+        "base_pay": 9120,
+        "quality_pay": 2736,
+        "total_earned": 11856,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 30
+      },
+      "cycle3": null,
+      "total_payment": 11856,
+      "total_days": 12,
+      "overall_quality_percentage": 30
+    },
+    "KAY2714DV": {
+      "youth_id": "KAY2714DV",
+      "name": "Doreen Vutiti",
+      "settlement": "Kayole Soweto",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 12,
+        "base_pay": 9120,
+        "quality_pay": 2736,
+        "total_earned": 11856,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 30
+      },
+      "cycle3": null,
+      "total_payment": 11856,
+      "total_days": 12,
+      "overall_quality_percentage": 30
+    },
+    "KAY2603GK": {
+      "youth_id": "KAY2603GK",
+      "name": "Gilbert Karigo",
+      "settlement": "Kayole Soweto",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 12,
+        "base_pay": 9120,
+        "quality_pay": 2736,
+        "total_earned": 11856,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 30
+      },
+      "cycle3": null,
+      "total_payment": 11856,
+      "total_days": 12,
+      "overall_quality_percentage": 30
+    },
+    "KAY2284SM": {
+      "youth_id": "KAY2284SM",
+      "name": "Selah Muema",
+      "settlement": "Kayole Soweto",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 12,
+        "base_pay": 9120,
+        "quality_pay": 2508,
+        "total_earned": 11628,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 28
+      },
+      "cycle3": null,
+      "total_payment": 11628,
+      "total_days": 12,
+      "overall_quality_percentage": 28
+    },
+    "KAY129SL": {
+      "youth_id": "KAY129SL",
+      "name": "Selina Lipukah",
+      "settlement": "Kayole Soweto",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 12,
+        "base_pay": 9120,
+        "quality_pay": 2660,
+        "total_earned": 11780,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 29
+      },
+      "cycle3": null,
+      "total_payment": 11780,
+      "total_days": 12,
+      "overall_quality_percentage": 29
+    },
+    "HUR715CW": {
+      "youth_id": "HUR715CW",
+      "name": "Charles Waithira",
+      "settlement": "Mji wa Huruma",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 13,
+        "base_pay": 9880,
+        "quality_pay": 2964,
+        "total_earned": 12844,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 30
+      },
+      "cycle3": {
+        "days_present": 1,
+        "base_pay": 760,
+        "quality_pay": 152,
+        "total_earned": 912,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 13756,
+      "total_days": 14,
+      "overall_quality_percentage": 29
+    },
+    "HUR777BW": {
+      "youth_id": "HUR777BW",
+      "name": "Beatrice Wanjiru",
+      "settlement": "Mji wa Huruma",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 13,
+        "base_pay": 9880,
+        "quality_pay": 2964,
+        "total_earned": 12844,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 30
+      },
+      "cycle3": {
+        "days_present": 1,
+        "base_pay": 760,
+        "quality_pay": 152,
+        "total_earned": 912,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 13756,
+      "total_days": 14,
+      "overall_quality_percentage": 29
+    },
+    "HUR801DN": {
+      "youth_id": "HUR801DN",
+      "name": "Dennis Njuguna",
+      "settlement": "Mji wa Huruma",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 13,
+        "base_pay": 9880,
+        "quality_pay": 2888,
+        "total_earned": 12768,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 29
+      },
+      "cycle3": {
+        "days_present": 1,
+        "base_pay": 760,
+        "quality_pay": 152,
+        "total_earned": 912,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 13680,
+      "total_days": 14,
+      "overall_quality_percentage": 29
+    },
+    "HUR455MM": {
+      "youth_id": "HUR455MM",
+      "name": "Martin  Mbugua",
+      "settlement": "Mji wa Huruma",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 13,
+        "base_pay": 9880,
+        "quality_pay": 2736,
+        "total_earned": 12616,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 28
+      },
+      "cycle3": {
+        "days_present": 1,
+        "base_pay": 760,
+        "quality_pay": 152,
+        "total_earned": 912,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 13528,
+      "total_days": 14,
+      "overall_quality_percentage": 27
+    },
+    "HUR185RN": {
+      "youth_id": "HUR185RN",
+      "name": "Richard  Njuguna",
+      "settlement": "Mji wa Huruma",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 13,
+        "base_pay": 9880,
+        "quality_pay": 2964,
+        "total_earned": 12844,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 30
+      },
+      "cycle3": {
+        "days_present": 1,
+        "base_pay": 760,
+        "quality_pay": 152,
+        "total_earned": 912,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 13756,
+      "total_days": 14,
+      "overall_quality_percentage": 29
+    },
+    "HUR765JN": {
+      "youth_id": "HUR765JN",
+      "name": "John Ngigi",
+      "settlement": "Mji wa Huruma",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 13,
+        "base_pay": 9880,
+        "quality_pay": 2964,
+        "total_earned": 12844,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 30
+      },
+      "cycle3": {
+        "days_present": 1,
+        "base_pay": 760,
+        "quality_pay": 228,
+        "total_earned": 988,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 30
+      },
+      "total_payment": 13832,
+      "total_days": 14,
+      "overall_quality_percentage": 30
+    },
+    "HUR756SD": {
+      "youth_id": "HUR756SD",
+      "name": "Somo Duba",
+      "settlement": "Mji wa Huruma",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 13,
+        "base_pay": 9880,
+        "quality_pay": 2964,
+        "total_earned": 12844,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 30
+      },
+      "cycle3": {
+        "days_present": 1,
+        "base_pay": 760,
+        "quality_pay": 228,
+        "total_earned": 988,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 30
+      },
+      "total_payment": 13832,
+      "total_days": 14,
+      "overall_quality_percentage": 30
+    },
+    "HUR768SW": {
+      "youth_id": "HUR768SW",
+      "name": "Stephen  Wanjiru",
+      "settlement": "Mji wa Huruma",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 11,
+        "base_pay": 8360,
+        "quality_pay": 2508,
+        "total_earned": 10868,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 30
+      },
+      "cycle3": {
+        "days_present": 1,
+        "base_pay": 760,
+        "quality_pay": 152,
+        "total_earned": 912,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 20
+      },
+      "total_payment": 11780,
+      "total_days": 12,
+      "overall_quality_percentage": 29
+    },
+    "HUR728CM": {
+      "youth_id": "HUR728CM",
+      "name": "Catherine Mararo",
+      "settlement": "Mji wa Huruma",
+      "program_type": "digitization",
+      "cycle2": {
+        "days_present": 13,
+        "base_pay": 9880,
+        "quality_pay": 2888,
+        "total_earned": 12768,
+        "period": "Jan 7-23, 2025",
+        "quality_percentage": 29
+      },
+      "cycle3": {
+        "days_present": 1,
+        "base_pay": 760,
+        "quality_pay": 228,
+        "total_earned": 988,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 30
+      },
+      "total_payment": 13756,
+      "total_days": 14,
+      "overall_quality_percentage": 29
+    },
+    "KAR029AN": {
+      "youth_id": "KAR029AN",
+      "name": "Abednego Ngina",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "Mobile Mapping",
+      "cycle2": null,
+      "cycle3": {
+        "days_present": 9,
+        "base_pay": 6840,
+        "quality_pay": 1748,
+        "total_earned": 8588,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 26
+      },
+      "total_payment": 8588,
+      "total_days": 9,
+      "overall_quality_percentage": 26
+    },
+    "KAR341CW": {
+      "youth_id": "KAR341CW",
+      "name": "Caroline Wavinya",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "Mobile Mapping",
+      "cycle2": null,
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1900,
+        "total_earned": 9500,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 25
+      },
+      "total_payment": 9500,
+      "total_days": 10,
+      "overall_quality_percentage": 25
+    },
+    "KAR393CM": {
+      "youth_id": "KAR393CM",
+      "name": "Catherine Maweu",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "Mobile Mapping",
+      "cycle2": null,
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1900,
+        "total_earned": 9500,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 25
+      },
+      "total_payment": 9500,
+      "total_days": 10,
+      "overall_quality_percentage": 25
+    },
+    "KAR297CM": {
+      "youth_id": "KAR297CM",
+      "name": "Chriss Mutua",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "Mobile Mapping",
+      "cycle2": null,
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1976,
+        "total_earned": 9576,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 26
+      },
+      "total_payment": 9576,
+      "total_days": 10,
+      "overall_quality_percentage": 26
+    },
+    "KAR008CM": {
+      "youth_id": "KAR008CM",
+      "name": "Christine Mwaniki",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "Mobile Mapping",
+      "cycle2": null,
+      "cycle3": {
+        "days_present": 1,
+        "base_pay": 760,
+        "quality_pay": 228,
+        "total_earned": 988,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 30
+      },
+      "total_payment": 988,
+      "total_days": 1,
+      "overall_quality_percentage": 30
+    },
+    "KAR128DM": {
+      "youth_id": "KAR128DM",
+      "name": "David Mutua",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "Mobile Mapping",
+      "cycle2": null,
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1976,
+        "total_earned": 9576,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 26
+      },
+      "total_payment": 9576,
+      "total_days": 10,
+      "overall_quality_percentage": 26
+    },
+    "KAR394EM": {
+      "youth_id": "KAR394EM",
+      "name": "Elkana Musembi",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "Mobile Mapping",
+      "cycle2": null,
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1976,
+        "total_earned": 9576,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 26
+      },
+      "total_payment": 9576,
+      "total_days": 10,
+      "overall_quality_percentage": 26
+    },
+    "KAR446FM": {
+      "youth_id": "KAR446FM",
+      "name": "Faith Musau",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "Mobile Mapping",
+      "cycle2": null,
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1824,
+        "total_earned": 9424,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 24
+      },
+      "total_payment": 9424,
+      "total_days": 10,
+      "overall_quality_percentage": 24
+    },
+    "KAR074GA": {
+      "youth_id": "KAR074GA",
+      "name": "George Alaka",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "Mobile Mapping",
+      "cycle2": null,
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1976,
+        "total_earned": 9576,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 26
+      },
+      "total_payment": 9576,
+      "total_days": 10,
+      "overall_quality_percentage": 26
+    },
+    "KAR385JM": {
+      "youth_id": "KAR385JM",
+      "name": "Jackline Musengya",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "Mobile Mapping",
+      "cycle2": null,
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1976,
+        "total_earned": 9576,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 26
+      },
+      "total_payment": 9576,
+      "total_days": 10,
+      "overall_quality_percentage": 26
+    },
+    "KAR388JM": {
+      "youth_id": "KAR388JM",
+      "name": "Jane Mwikya",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "Mobile Mapping",
+      "cycle2": null,
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1976,
+        "total_earned": 9576,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 26
+      },
+      "total_payment": 9576,
+      "total_days": 10,
+      "overall_quality_percentage": 26
+    },
+    "KAR040JK": {
+      "youth_id": "KAR040JK",
+      "name": "John Kioko",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "Mobile Mapping",
+      "cycle2": null,
+      "cycle3": {
+        "days_present": 9,
+        "base_pay": 6840,
+        "quality_pay": 1824,
+        "total_earned": 8664,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 27
+      },
+      "total_payment": 8664,
+      "total_days": 9,
+      "overall_quality_percentage": 27
+    },
+    "KAR090KM": {
+      "youth_id": "KAR090KM",
+      "name": "Kelvin Maithya",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "Mobile Mapping",
+      "cycle2": null,
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1976,
+        "total_earned": 9576,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 26
+      },
+      "total_payment": 9576,
+      "total_days": 10,
+      "overall_quality_percentage": 26
+    },
+    "KAR023MK": {
+      "youth_id": "KAR023MK",
+      "name": "Magdalene Kioko",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "Mobile Mapping",
+      "cycle2": null,
+      "cycle3": {
+        "days_present": 9,
+        "base_pay": 6840,
+        "quality_pay": 1748,
+        "total_earned": 8588,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 26
+      },
+      "total_payment": 8588,
+      "total_days": 9,
+      "overall_quality_percentage": 26
+    },
+    "KAR212MN": {
+      "youth_id": "KAR212MN",
+      "name": "Margaret Ngalama",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "Mobile Mapping",
+      "cycle2": null,
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1976,
+        "total_earned": 9576,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 26
+      },
+      "total_payment": 9576,
+      "total_days": 10,
+      "overall_quality_percentage": 26
+    },
+    "KAR447MK": {
+      "youth_id": "KAR447MK",
+      "name": "Mark Mutinda",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "Mobile Mapping",
+      "cycle2": null,
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1596,
+        "total_earned": 9196,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 21
+      },
+      "total_payment": 9196,
+      "total_days": 10,
+      "overall_quality_percentage": 21
+    },
+    "KAR009MM": {
+      "youth_id": "KAR009MM",
+      "name": "Mercy Muendo",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "Mobile Mapping",
+      "cycle2": null,
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1900,
+        "total_earned": 9500,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 25
+      },
+      "total_payment": 9500,
+      "total_days": 10,
+      "overall_quality_percentage": 25
+    },
+    "KAR350MM": {
+      "youth_id": "KAR350MM",
+      "name": "Mourine Mweu",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "Mobile Mapping",
+      "cycle2": null,
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1976,
+        "total_earned": 9576,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 26
+      },
+      "total_payment": 9576,
+      "total_days": 10,
+      "overall_quality_percentage": 26
+    },
+    "KAR456PE": {
+      "youth_id": "KAR456PE",
+      "name": "Patricia Elizabeth",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "Mobile Mapping",
+      "cycle2": null,
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1976,
+        "total_earned": 9576,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 26
+      },
+      "total_payment": 9576,
+      "total_days": 10,
+      "overall_quality_percentage": 26
+    },
+    "KAR370PM": {
+      "youth_id": "KAR370PM",
+      "name": "Patrick Musuu",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "Mobile Mapping",
+      "cycle2": null,
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1976,
+        "total_earned": 9576,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 26
+      },
+      "total_payment": 9576,
+      "total_days": 10,
+      "overall_quality_percentage": 26
+    },
+    "KAR404RM": {
+      "youth_id": "KAR404RM",
+      "name": "Richard Muthengi",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "Mobile Mapping",
+      "cycle2": null,
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1900,
+        "total_earned": 9500,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 25
+      },
+      "total_payment": 9500,
+      "total_days": 10,
+      "overall_quality_percentage": 25
+    },
+    "KAR439SN": {
+      "youth_id": "KAR439SN",
+      "name": "Stephen Nthiwa",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "Mobile Mapping",
+      "cycle2": null,
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1900,
+        "total_earned": 9500,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 25
+      },
+      "total_payment": 9500,
+      "total_days": 10,
+      "overall_quality_percentage": 25
+    },
+    "KAR208TS": {
+      "youth_id": "KAR208TS",
+      "name": "Theophilus Samson",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "Mobile Mapping",
+      "cycle2": null,
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1900,
+        "total_earned": 9500,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 25
+      },
+      "total_payment": 9500,
+      "total_days": 10,
+      "overall_quality_percentage": 25
+    },
+    "KAR192TK": {
+      "youth_id": "KAR192TK",
+      "name": "Titus Kioko",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "Mobile Mapping",
+      "cycle2": null,
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1824,
+        "total_earned": 9424,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 24
+      },
+      "total_payment": 9424,
+      "total_days": 10,
+      "overall_quality_percentage": 24
+    },
+    "KAR345WM": {
+      "youth_id": "KAR345WM",
+      "name": "Wambua Mainga",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "Mobile Mapping",
+      "cycle2": null,
+      "cycle3": {
+        "days_present": 10,
+        "base_pay": 7600,
+        "quality_pay": 1976,
+        "total_earned": 9576,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 26
+      },
+      "total_payment": 9576,
+      "total_days": 10,
+      "overall_quality_percentage": 26
+    },
+    "HUR343SK": {
+      "youth_id": "HUR343SK",
+      "name": "Susan Kimani",
+      "settlement": "Mji wa Huruma",
+      "program_type": "Mobile Mapping",
+      "cycle2": null,
+      "cycle3": {
+        "days_present": 1,
+        "base_pay": 760,
+        "quality_pay": 0,
+        "total_earned": 760,
+        "period": "Jan 26-Feb 6, 2025",
+        "quality_percentage": 0
+      },
+      "total_payment": 760,
+      "total_days": 1,
+      "overall_quality_percentage": 0
+    }
+  }
+}

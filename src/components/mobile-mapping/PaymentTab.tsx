@@ -8,14 +8,19 @@ import {
   AlertCircle,
   CheckCircle,
   Info,
-  RefreshCw
+  RefreshCw,
+  ToggleLeft,
+  ToggleRight
 } from 'lucide-react';
 
 interface DailyBreakdown {
   date: string;
-  pois_submitted: number;
+  pois_submitted?: number;
+  work_type?: string;
+  days_worked?: number;
   quality_score: number;
-  base_pay: number;
+  base_pay?: number;
+  base_rate?: number;
   quality_bonus: number;
   earnings: number;
 }
@@ -34,12 +39,15 @@ interface PaymentData {
   youth_id: string;
   settlement: string;
   total_earnings: number;
-  work_days_completed: number;
+  work_days_completed?: number;
+  total_days_worked?: number;
   daily_breakdown: DailyBreakdown[];
-  payment_formula: PaymentFormula;
+  payment_formula?: PaymentFormula;
+  period?: string;
+  overall_quality_score?: number;
   message?: string;
-  last_updated: string;
-  sync_status: string;
+  last_updated?: string;
+  sync_status?: string;
 }
 
 export default function PaymentTab() {
@@ -47,10 +55,11 @@ export default function PaymentTab() {
   const [refreshing, setRefreshing] = useState(false);
   const [paymentData, setPaymentData] = useState<PaymentData | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showDPWData, setShowDPWData] = useState(true); // Default to DPW data
 
   useEffect(() => {
     fetchPaymentData();
-  }, []);
+  }, [showDPWData]);
 
   const fetchPaymentData = async () => {
     try {
@@ -61,16 +70,21 @@ export default function PaymentTab() {
         return;
       }
 
-      const response = await fetch('/api/youth/payment/breakdown', {
+      // Choose endpoint based on toggle
+      const endpoint = showDPWData 
+        ? '/api/youth/payment/dpw-breakdown' 
+        : '/api/youth/payment/breakdown';
+
+      const response = await fetch(endpoint, {
         headers: { 'Authorization': `Bearer ${token}` },
       });
 
       const result = await response.json();
 
-      if (result.success) {
-        setPaymentData(result.data);
+      if (response.ok) {
+        setPaymentData(result);
       } else {
-        setError(result.error?.message || 'Failed to load payment data');
+        setError(result.error?.message || result.message || 'Failed to load payment data');
       }
     } catch (err: any) {
       console.error('Payment fetch error:', err);
@@ -148,21 +162,55 @@ export default function PaymentTab() {
     );
   }
 
-  const hasWorkData = paymentData.work_days_completed > 0;
+  const hasWorkData = (paymentData?.work_days_completed || paymentData?.total_days_worked || 0) > 0;
 
   return (
     <div className="p-4 space-y-4">
-      {/* Header with Refresh */}
+      {/* Header with Toggle and Refresh */}
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-heading font-bold text-white">Payment Breakdown</h2>
-        <button
-          onClick={handleRefresh}
-          disabled={refreshing}
-          className="p-2 hover:bg-background-elevated rounded-lg transition-colors"
-        >
-          <RefreshCw className={`w-4 h-4 text-primary ${refreshing ? 'animate-spin' : ''}`} />
-        </button>
+        <div className="flex items-center gap-3">
+          {/* DPW Data Toggle */}
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-foreground-subtle">Regular</span>
+            <button
+              onClick={() => setShowDPWData(!showDPWData)}
+              className="flex-shrink-0"
+            >
+              {showDPWData ? (
+                <ToggleRight className="w-6 h-6 text-primary" />
+              ) : (
+                <ToggleLeft className="w-6 h-6 text-foreground-muted" />
+              )}
+            </button>
+            <span className="text-xs text-foreground-subtle">DPW</span>
+          </div>
+          
+          {/* Refresh Button */}
+          <button
+            onClick={handleRefresh}
+            disabled={refreshing}
+            className="p-2 hover:bg-background-elevated rounded-lg transition-colors"
+          >
+            <RefreshCw className={`w-4 h-4 text-primary ${refreshing ? 'animate-spin' : ''}`} />
+          </button>
+        </div>
       </div>
+
+      {/* Period Display for DPW Data */}
+      {showDPWData && paymentData?.period && (
+        <div className="bg-primary/10 border border-primary/30 rounded-lg p-3">
+          <div className="flex items-center gap-2">
+            <Calendar className="w-4 h-4 text-primary" />
+            <span className="text-sm font-semibold text-white">Payment Period: {paymentData.period}</span>
+          </div>
+          {paymentData.overall_quality_score !== undefined && (
+            <p className="text-xs text-foreground-subtle mt-1">
+              Overall Quality Score: <span className="text-white font-semibold">{paymentData.overall_quality_score}%</span>
+            </p>
+          )}
+        </div>
+      )}
 
       {/* Last Updated */}
       {paymentData.last_updated && (
@@ -184,7 +232,7 @@ export default function PaymentTab() {
           {formatCurrency(paymentData.total_earnings)}
         </div>
         <p className="text-foreground-subtle text-xs">
-          {paymentData.work_days_completed} work {paymentData.work_days_completed === 1 ? 'day' : 'days'} completed
+          {(paymentData.work_days_completed || paymentData.total_days_worked || 0)} work {(paymentData.work_days_completed || paymentData.total_days_worked || 0) === 1 ? 'day' : 'days'} completed
         </p>
       </div>
 
@@ -258,10 +306,27 @@ export default function PaymentTab() {
                   </div>
                   
                   <div className="grid grid-cols-2 gap-2 text-xs">
-                    <div>
-                      <span className="text-foreground-subtle">POIs Submitted</span>
-                      <p className="text-white font-semibold">{day.pois_submitted}</p>
-                    </div>
+                    {/* Show POIs for regular data, Work Type for DPW data */}
+                    {day.pois_submitted !== undefined ? (
+                      <div>
+                        <span className="text-foreground-subtle">POIs Submitted</span>
+                        <p className="text-white font-semibold">{day.pois_submitted}</p>
+                      </div>
+                    ) : (
+                      <div>
+                        <span className="text-foreground-subtle">Work Type</span>
+                        <p className="text-white font-semibold">{day.work_type || 'DPW'}</p>
+                      </div>
+                    )}
+                    
+                    {/* Days Worked for DPW data */}
+                    {day.days_worked !== undefined && (
+                      <div>
+                        <span className="text-foreground-subtle">Days Worked</span>
+                        <p className="text-white font-semibold">{day.days_worked}</p>
+                      </div>
+                    )}
+                    
                     <div>
                       <span className="text-foreground-subtle">Quality Score</span>
                       <p className={`font-semibold ${qualityTier.color}`}>
@@ -273,8 +338,15 @@ export default function PaymentTab() {
                   </div>
                   
                   <div className="mt-2 pt-2 border-t border-border flex justify-between text-xs">
-                    <span className="text-foreground-subtle">Base Pay</span>
-                    <span className="text-white">{formatCurrency(day.base_pay)}</span>
+                    <span className="text-foreground-subtle">
+                      {day.base_pay !== undefined ? 'Base Pay' : 'Base Rate'}
+                    </span>
+                    <span className="text-white">
+                      {day.base_pay !== undefined 
+                        ? formatCurrency(day.base_pay) 
+                        : `${day.base_rate ? formatCurrency(day.base_rate) : 'N/A'} per day`
+                      }
+                    </span>
                   </div>
                   {day.quality_bonus > 0 && (
                     <div className="flex justify-between text-xs mt-1">

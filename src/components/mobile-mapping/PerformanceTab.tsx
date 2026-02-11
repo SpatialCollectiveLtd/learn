@@ -9,40 +9,59 @@ import {
   AlertCircle,
   RefreshCw,
   Crown,
-  Award
+  Award,
+  ToggleLeft,
+  ToggleRight
 } from 'lucide-react';
 
 interface PersonalMetrics {
   quality_score: number;
   attendance_rate: number;
-  total_pois_submitted: number;
-  avg_pois_per_day: number;
-  overall_score: number;
+  total_pois_submitted?: number;
+  total_earnings?: number;
+  total_days_worked?: number;
+  avg_pois_per_day?: number;
+  overall_score?: number;
 }
 
 interface LeaderboardEntry {
-  rank: number;
+  rank?: number;
   youth_id: string;
-  overall_score: number;
+  name?: string;
+  settlement?: string;
+  overall_score?: number;
   quality_score: number;
-  attendance_rate: number;
-  total_pois: number;
+  attendance_rate?: number;
+  total_pois?: number;
+  total_earnings?: number;
+  total_days?: number;
 }
 
 interface SettlementRanking {
   settlement: string;
-  total_participants: number;
-  youth_rank: number;
-  top_10: LeaderboardEntry[];
+  participants?: number;
+  total_participants?: number;
+  avg_quality_score?: number;
+  avg_earnings?: number;
+  total_days_worked?: number;
+  youth_rank?: number;
+  top_10?: LeaderboardEntry[];
 }
 
 interface PerformanceData {
   youth_id: string;
-  settlement: string;
+  settlement?: string;
+  period?: string;
   personal_metrics: PersonalMetrics;
-  settlement_ranking: SettlementRanking;
-  last_updated: string;
-  sync_status: string;
+  settlement_ranking?: SettlementRanking[];
+  leaderboard?: LeaderboardEntry[];
+  user_ranking?: {
+    quality_rank: number;
+    settlement_rank: number;
+  };
+  last_updated?: string;
+  sync_status?: string;
+  message?: string;
 }
 
 export default function PerformanceTab() {
@@ -50,6 +69,7 @@ export default function PerformanceTab() {
   const [refreshing, setRefreshing] = useState(false);
   const [performanceData, setPerformanceData] = useState<PerformanceData | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showDPWData, setShowDPWData] = useState(true); // Default to DPW data
 
   const safeNumber = (value: number | undefined | null, decimals: number = 1): string => {
     if (value === undefined || value === null || isNaN(value)) return '0';
@@ -58,7 +78,7 @@ export default function PerformanceTab() {
 
   useEffect(() => {
     fetchPerformanceData();
-  }, []);
+  }, [showDPWData]);
 
   const fetchPerformanceData = async () => {
     try {
@@ -69,16 +89,21 @@ export default function PerformanceTab() {
         return;
       }
 
-      const response = await fetch('/api/youth/performance', {
+      // Choose endpoint based on toggle
+      const endpoint = showDPWData 
+        ? '/api/youth/performance/dpw' 
+        : '/api/youth/performance';
+
+      const response = await fetch(endpoint, {
         headers: { 'Authorization': `Bearer ${token}` },
       });
 
       const result = await response.json();
 
-      if (result.success) {
-        setPerformanceData(result.data);
+      if (response.ok) {
+        setPerformanceData(result);
       } else {
-        setError(result.error?.message || 'Failed to load performance data');
+        setError(result.error?.message || result.message || 'Failed to load performance data');
       }
     } catch (err: any) {
       console.error('Performance fetch error:', err);
@@ -144,22 +169,63 @@ export default function PerformanceTab() {
     );
   }
 
-  const { personal_metrics, settlement_ranking } = performanceData;
-  const isTopPerformer = settlement_ranking.youth_rank <= 10;
+  if (!performanceData) {
+    return (
+      <div className="p-6 text-center">
+        <p className="text-foreground-subtle">No performance data available</p>
+      </div>
+    );
+  }
+
+  const { personal_metrics, settlement_ranking = [], leaderboard = [] } = performanceData;
+  
+  // For DPW data, use different structure
+  const isTopPerformer = showDPWData 
+    ? (performanceData.user_ranking?.quality_rank || 100) <= 10
+    : (settlement_ranking[0]?.youth_rank || 100) <= 10;
 
   return (
     <div className="p-4 space-y-4">
-      {/* Header with Refresh */}
+      {/* Header with Toggle and Refresh */}
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-heading font-bold text-white">Performance Metrics</h2>
-        <button
-          onClick={handleRefresh}
-          disabled={refreshing}
-          className="p-2 hover:bg-background-elevated rounded-lg transition-colors"
-        >
-          <RefreshCw className={`w-4 h-4 text-primary ${refreshing ? 'animate-spin' : ''}`} />
-        </button>
+        <div className="flex items-center gap-3">
+          {/* DPW Data Toggle */}
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-foreground-subtle">Regular</span>
+            <button
+              onClick={() => setShowDPWData(!showDPWData)}
+              className="flex-shrink-0"
+            >
+              {showDPWData ? (
+                <ToggleRight className="w-6 h-6 text-primary" />
+              ) : (
+                <ToggleLeft className="w-6 h-6 text-foreground-muted" />
+              )}
+            </button>
+            <span className="text-xs text-foreground-subtle">DPW</span>
+          </div>
+          
+          {/* Refresh Button */}
+          <button
+            onClick={handleRefresh}
+            disabled={refreshing}
+            className="p-2 hover:bg-background-elevated rounded-lg transition-colors"
+          >
+            <RefreshCw className={`w-4 h-4 text-primary ${refreshing ? 'animate-spin' : ''}`} />
+          </button>
+        </div>
       </div>
+
+      {/* Period Display for DPW Data */}
+      {showDPWData && performanceData?.period && (
+        <div className="bg-primary/10 border border-primary/30 rounded-lg p-3">
+          <div className="flex items-center gap-2">
+            <Target className="w-4 h-4 text-primary" />
+            <span className="text-sm font-semibold text-white">Performance Period: {performanceData.period}</span>
+          </div>
+        </div>
+      )}
 
       {/* Your Rank Card */}
       <div className={`
@@ -170,30 +236,36 @@ export default function PerformanceTab() {
         }
       `}>
         <div className="flex items-center justify-center gap-2 mb-2">
-          {getRankIcon(settlement_ranking.youth_rank)}
-          <p className="text-foreground-subtle text-sm">Your Rank in {settlement_ranking.settlement}</p>
+          {getRankIcon(showDPWData ? (performanceData.user_ranking?.quality_rank || 0) : (settlement_ranking[0]?.youth_rank || 0))}
+          <p className="text-foreground-subtle text-sm">
+            {showDPWData ? 'Your Quality Rank' : `Your Rank in ${settlement_ranking[0]?.settlement || 'Settlement'}`}
+          </p>
         </div>
-        <div className={`text-5xl font-heading font-bold mb-1 ${getRankColor(settlement_ranking.youth_rank)}`}>
-          #{settlement_ranking.youth_rank}
+        <div className={`text-5xl font-heading font-bold mb-1 ${getRankColor(showDPWData ? (performanceData.user_ranking?.quality_rank || 0) : (settlement_ranking[0]?.youth_rank || 0))}`}>
+          #{showDPWData ? (performanceData.user_ranking?.quality_rank || '--') : (settlement_ranking[0]?.youth_rank || '--')}
         </div>
         <p className="text-foreground-subtle text-xs">
-          Out of {settlement_ranking.total_participants} participants
+          {showDPWData 
+            ? `Out of ${leaderboard.length} participants` 
+            : `Out of ${settlement_ranking[0]?.total_participants || settlement_ranking[0]?.participants || '0'} participants`
+          }
         </p>
       </div>
 
       {/* Personal Metrics Grid */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="bg-background-elevated border border-border rounded-lg p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Target className="w-4 h-4 text-success" />
-            <span className="text-xs text-foreground-subtle">Overall Score</span>
+        {/* Show Overall Score only for regular data */}
+        {!showDPWData && personal_metrics?.overall_score !== undefined && (
+          <div className="bg-background-elevated border border-border rounded-lg p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <Target className="w-4 h-4 text-success" />
+              <span className="text-xs text-foreground-subtle">Overall Score</span>
+            </div>
+            <p className="text-2xl font-bold text-white">
+              {safeNumber(personal_metrics.overall_score, 1)}%
+            </p>
           </div>
-          <p className="text-2xl font-bold text-white">
-            {(personal_metrics?.overall_score !== undefined && personal_metrics?.overall_score !== null && !isNaN(personal_metrics.overall_score)) 
-              ? personal_metrics.overall_score.toFixed(1) 
-              : '0.0'}%
-          </p>
-        </div>
+        )}
         
         <div className="bg-background-elevated border border-border rounded-lg p-4">
           <div className="flex items-center gap-2 mb-2">
@@ -201,31 +273,59 @@ export default function PerformanceTab() {
             <span className="text-xs text-foreground-subtle">Quality Score</span>
           </div>
           <p className="text-2xl font-bold text-white">
-            {(personal_metrics?.quality_score !== undefined && personal_metrics?.quality_score !== null && !isNaN(personal_metrics.quality_score)) 
-              ? personal_metrics.quality_score.toFixed(1) 
-              : '0.0'}%
+            {safeNumber(personal_metrics?.quality_score, 1)}%
           </p>
         </div>
         
+        {/* Attendance Rate */}
         <div className="bg-background-elevated border border-border rounded-lg p-4">
           <div className="flex items-center gap-2 mb-2">
             <TrendingUp className="w-4 h-4 text-primary" />
-            <span className="text-xs text-foreground-subtle">Total POIs</span>
-          </div>
-          <p className="text-2xl font-bold text-white">{personal_metrics.total_pois_submitted}</p>
-        </div>
-        
-        <div className="bg-background-elevated border border-border rounded-lg p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Trophy className="w-4 h-4 text-warning" />
-            <span className="text-xs text-foreground-subtle">Avg Per Day</span>
+            <span className="text-xs text-foreground-subtle">Attendance Rate</span>
           </div>
           <p className="text-2xl font-bold text-white">
-            {(personal_metrics?.avg_pois_per_day !== undefined && personal_metrics?.avg_pois_per_day !== null && !isNaN(personal_metrics.avg_pois_per_day)) 
-              ? personal_metrics.avg_pois_per_day.toFixed(0) 
-              : '0'}
+            {safeNumber(personal_metrics?.attendance_rate, 0)}%
           </p>
         </div>
+        
+        {/* Show POIs for regular data, Earnings for DPW */}
+        {showDPWData && personal_metrics?.total_earnings !== undefined ? (
+          <div className="bg-background-elevated border border-border rounded-lg p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <Trophy className="w-4 h-4 text-warning" />
+              <span className="text-xs text-foreground-subtle">Total Earnings</span>
+            </div>
+            <p className="text-lg font-bold text-white">
+              KES {(personal_metrics.total_earnings || 0).toLocaleString()}
+            </p>
+          </div>
+        ) : (
+          <div className="bg-background-elevated border border-border rounded-lg p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <Trophy className="w-4 h-4 text-warning" />
+              <span className="text-xs text-foreground-subtle">{showDPWData ? 'Total Days' : 'Total POIs'}</span>
+            </div>
+            <p className="text-2xl font-bold text-white">
+              {showDPWData 
+                ? (personal_metrics?.total_days_worked || 0)
+                : (personal_metrics?.total_pois_submitted || 0)
+              }
+            </p>
+          </div>
+        )}
+        
+        {/* Show Avg POIs per day only for regular data */}
+        {!showDPWData && personal_metrics?.avg_pois_per_day !== undefined && (
+          <div className="bg-background-elevated border border-border rounded-lg p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <Target className="w-4 h-4 text-success" />
+              <span className="text-xs text-foreground-subtle">Avg Per Day</span>
+            </div>
+            <p className="text-2xl font-bold text-white">
+              {safeNumber(personal_metrics.avg_pois_per_day, 0)}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Score Breakdown */}
@@ -270,59 +370,95 @@ export default function PerformanceTab() {
       </div>
 
       {/* Leaderboard */}
-      <div className="space-y-3">
-        <h3 className="text-sm font-subheading font-semibold text-white flex items-center gap-2">
-          <Trophy className="w-4 h-4 text-primary" />
-          Top 10 - {settlement_ranking.settlement}
-        </h3>
-        
-        <div className="bg-background-elevated border border-border rounded-lg overflow-hidden">
-          <div className="divide-y divide-border">
-            {settlement_ranking.top_10.map((entry, index) => {
-              const isCurrentUser = entry.youth_id === performanceData.youth_id;
-              
-              return (
-                <div
-                  key={index}
-                  className={`
-                    p-3 flex items-center gap-3 transition-colors
-                    ${isCurrentUser ? 'bg-primary/10 border-l-4 border-primary' : 'hover:bg-background'}
-                  `}
-                >
-                  <div className="w-8 flex-shrink-0 text-center">
-                    {getRankIcon(entry.rank)}
+      {((showDPWData && leaderboard && leaderboard.length > 0) || (!showDPWData && settlement_ranking[0]?.top_10 && settlement_ranking[0].top_10.length > 0)) && (
+        <div className="space-y-3">
+          <h3 className="text-sm font-subheading font-semibold text-white flex items-center gap-2">
+            <Trophy className="w-4 h-4 text-primary" />
+            {showDPWData ? 'Top 10 Quality Leaders' : `Top 10 - ${settlement_ranking[0]?.settlement || 'Settlement'}`}
+          </h3>
+          
+          <div className="bg-background-elevated border border-border rounded-lg overflow-hidden">
+            <div className="divide-y divide-border">
+              {(showDPWData ? (leaderboard || []) : (settlement_ranking[0]?.top_10 || [])).map((entry, index) => {
+                const isCurrentUser = entry.youth_id === performanceData.youth_id;
+                
+                return (
+                  <div
+                    key={index}
+                    className={`
+                      p-3 flex items-center gap-3 transition-colors
+                      ${isCurrentUser ? 'bg-primary/10 border-l-4 border-primary' : 'hover:bg-background'}
+                    `}
+                  >
+                    <div className="w-8 flex-shrink-0 text-center">
+                      {getRankIcon(showDPWData ? (index + 1) : (entry.rank || index + 1))}
+                    </div>
+                    
+                    <div className="flex-1 min-w-0">
+                      <p className={`text-sm font-semibold truncate ${isCurrentUser ? 'text-primary' : 'text-white'}`}>
+                        {isCurrentUser ? 'You' : (showDPWData && entry.name ? entry.name : entry.youth_id)}
+                      </p>
+                      <p className="text-xs text-foreground-subtle">
+                        {showDPWData ? (
+                          <>
+                            KES {(entry.total_earnings || 0).toLocaleString()} • {entry.total_days || 0} days • {safeNumber(entry.quality_score, 1)}% quality
+                          </>
+                        ) : (
+                          <>
+                            {entry.total_pois || 0} POIs • {safeNumber(entry.quality_score, 1)}% quality
+                          </>
+                        )}
+                      </p>
+                    </div>
                   </div>
-                  
-                  <div className="flex-1 min-w-0">
-                    <p className={`text-sm font-semibold truncate ${isCurrentUser ? 'text-primary' : 'text-white'}`}>
-                      {isCurrentUser ? 'You' : entry.youth_id}
-                    </p>
-                    <p className="text-xs text-foreground-subtle">
-                      {entry.total_pois} POIs • {(entry?.quality_score !== undefined && entry?.quality_score !== null && !isNaN(entry.quality_score)) 
-                        ? entry.quality_score.toFixed(1) 
-                        : '0.0'}% quality
-                    </p>
-                  </div>
-                  
-                  <div className="text-right">
-                    <p className={`text-sm font-bold ${getRankColor(entry.rank)}`}>
-                      {(entry?.overall_score !== undefined && entry?.overall_score !== null && !isNaN(entry.overall_score)) 
-                        ? entry.overall_score.toFixed(1) 
-                        : '0.0'}%
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {/* Settlement Rankings for DPW Data */}
+      {showDPWData && settlement_ranking && settlement_ranking.length > 0 && (
+        <div className="space-y-3">
+          <h3 className="text-sm font-subheading font-semibold text-white flex items-center gap-2">
+            <TrendingUp className="w-4 h-4 text-primary" />
+            Settlement Rankings
+          </h3>
+          
+          <div className="bg-background-elevated border border-border rounded-lg overflow-hidden">
+            <div className="divide-y divide-border">
+              {settlement_ranking.map((settlement, index) => (
+                <div
+                  key={index}
+                  className="p-3 flex items-center justify-between"
+                >
+                  <div>
+                    <p className="text-sm font-semibold text-white">{settlement.settlement}</p>
+                    <p className="text-xs text-foreground-subtle">
+                      {settlement.participants || 0} participants • Avg Quality: {settlement.avg_quality_score || 0}%
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm font-bold text-white">
+                      KES {(settlement.avg_earnings || 0).toLocaleString()}
+                    </p>
+                    <p className="text-xs text-foreground-subtle">Avg Earnings</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Info Note */}
       <div className="bg-info/10 border border-info/30 rounded-lg p-3">
         <p className="text-xs text-foreground-muted">
-          <strong>Note:</strong> Overall score = (Quality × 70%) + (Attendance × 30%). 
-          Rankings are settlement-specific and updated daily.
+          <strong>Note:</strong> {showDPWData 
+            ? 'DPW performance data covers Jan 7 - Feb 6, 2025. Quality scores based on work evaluation.' 
+            : 'Overall score = (Quality × 70%) + (Attendance × 30%). Rankings are settlement-specific and updated daily.'
+          }
         </p>
       </div>
     </div>

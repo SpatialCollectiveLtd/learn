@@ -1,0 +1,63 @@
+{
+  "table": "settlement_work_config",
+  "rowCount": 4,
+  "timestamp": "2026-02-03T14:14:24.402Z",
+  "data": [
+    {
+      "config_id": "688b2123-db57-4a2c-bff6-8b21dfa6ef57",
+      "settlement": "Mji wa Huruma",
+      "program_type": "digitization",
+      "start_date": "2026-01-06T21:00:00.000Z",
+      "end_date": null,
+      "total_work_days": 20,
+      "daily_target": 200,
+      "project_hashtag": "#DPW2025",
+      "timezone": "Africa/Nairobi",
+      "is_active": true,
+      "created_at": "2026-01-06T07:28:58.246Z",
+      "updated_at": "2026-01-26T12:26:23.283Z"
+    },
+    {
+      "config_id": "9735bbf4-9c04-4b5d-855e-45b41b4800b3",
+      "settlement": "Kayole Soweto",
+      "program_type": "mobile_mapping",
+      "start_date": "2026-01-14T21:00:00.000Z",
+      "end_date": null,
+      "total_work_days": 20,
+      "daily_target": 10,
+      "project_hashtag": "#DPW2025",
+      "timezone": "Africa/Nairobi",
+      "is_active": true,
+      "created_at": "2026-01-13T14:56:54.956Z",
+      "updated_at": "2026-01-15T08:20:21.979Z"
+    },
+    {
+      "config_id": "b461ea89-8406-46e3-95d0-5db27be9fdc3",
+      "settlement": "Kariobangi Machakos",
+      "program_type": "digitization",
+      "start_date": "2026-01-06T21:00:00.000Z",
+      "end_date": null,
+      "total_work_days": 20,
+      "daily_target": 200,
+      "project_hashtag": "#DPW2025",
+      "timezone": "Africa/Nairobi",
+      "is_active": true,
+      "created_at": "2026-01-06T07:28:58.246Z",
+      "updated_at": "2026-01-26T12:26:23.283Z"
+    },
+    {
+      "config_id": "f14c2997-c180-406f-ba17-bb0d9ebad6d8",
+      "settlement": "Kayole",
+      "program_type": "digitization",
+      "start_date": "2026-01-06T21:00:00.000Z",
+      "end_date": "2026-01-21T21:00:00.000Z",
+      "total_work_days": 20,
+      "daily_target": 200,
+      "project_hashtag": "#DPW2025",
+      "timezone": "Africa/Nairobi",
+      "is_active": true,
+      "created_at": "2026-01-06T07:28:58.246Z",
+      "updated_at": "2026-01-26T12:26:23.283Z"
+    }
+  ]
+}
