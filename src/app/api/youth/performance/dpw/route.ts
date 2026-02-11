@@ -92,8 +92,8 @@ export async function GET(request: NextRequest) {
         total_days_worked: userPayment.total_days
       };
 
-      // Create leaderboard from all participants, ranked by total earnings
-      const leaderboard: LeaderboardEntry[] = Object.values(paymentData.data)
+      // Create full participant list ranked by total earnings 
+      const allParticipants: LeaderboardEntry[] = Object.values(paymentData.data)
         .map(participant => ({
           youth_id: participant.youth_id,
           name: participant.name,
@@ -102,16 +102,23 @@ export async function GET(request: NextRequest) {
           total_earnings: participant.total_payment,
           total_days: participant.total_days
         }))
-        .sort((a, b) => b.total_earnings - a.total_earnings) // Sort by total earnings
-        .slice(0, 20); // Top 20
+        .sort((a, b) => b.total_earnings - a.total_earnings); // Sort by total earnings
+
+      // Calculate user rank from all participants
+      const userRankIndex = allParticipants.findIndex(entry => entry.youth_id === youth_id);
+      const userRank = userRankIndex >= 0 ? userRankIndex + 1 : 0;
+      
+      // Get top 20 for leaderboard display
+      const leaderboard = allParticipants.slice(0, 20);
 
       return NextResponse.json({
         period: 'Jan 7 - Feb 6, 2026',
         personal_metrics: personalMetrics,
         leaderboard: leaderboard,
+        all_participants: allParticipants.length, // For pagination
         user_ranking: {
-          earnings_rank: leaderboard.findIndex(entry => entry.youth_id === youth_id) + 1,
-          total_participants: Object.keys(paymentData.data).length
+          earnings_rank: userRank,
+          total_participants: allParticipants.length
         }
       });
 
