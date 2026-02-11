@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { 
   TrendingUp,
-  Trophy,
   Medal,
   Target,
   AlertCircle,
@@ -11,9 +10,7 @@ import {
   Crown,
   Award,
   ToggleLeft,
-  ToggleRight,
-  ChevronLeft,
-  ChevronRight
+  ToggleRight
 } from 'lucide-react';
 
 interface PersonalMetrics {
@@ -37,12 +34,6 @@ interface LeaderboardEntry {
   total_pois?: number;
   total_earnings?: number;
   total_days?: number;
-}
-
-interface PaginationState {
-  currentPage: number;
-  itemsPerPage: number;
-  totalItems: number;
 }
 
 interface SettlementRanking {
@@ -78,11 +69,6 @@ export default function PerformanceTab() {
   const [performanceData, setPerformanceData] = useState<PerformanceData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showDPWData, setShowDPWData] = useState(true); // Default to DPW data
-  const [pagination, setPagination] = useState<PaginationState>({
-    currentPage: 1,
-    itemsPerPage: 10,
-    totalItems: 0
-  });
 
   const safeNumber = (value: number | undefined | null, decimals: number = 1): string => {
     if (value === undefined || value === null || isNaN(value)) return '0';
@@ -136,7 +122,7 @@ export default function PerformanceTab() {
     if (rank === 1) return <Crown className="w-5 h-5 text-yellow-500" />;
     if (rank === 2) return <Medal className="w-5 h-5 text-gray-400" />;
     if (rank === 3) return <Medal className="w-5 h-5 text-amber-700" />;
-    return <Trophy className="w-4 h-4 text-foreground-subtle" />;
+    return <Award className="w-4 h-4 text-foreground-subtle" />;
   };
 
   const getRankColor = (rank: number) => {
@@ -310,7 +296,7 @@ export default function PerformanceTab() {
         {showDPWData && personal_metrics?.total_earnings !== undefined ? (
           <div className="bg-background-elevated border border-border rounded-lg p-4">
             <div className="flex items-center gap-2 mb-2">
-              <Trophy className="w-4 h-4 text-warning" />
+              <Award className="w-4 h-4 text-warning" />
               <span className="text-xs text-foreground-subtle">Total Earnings</span>
             </div>
             <p className="text-lg font-bold text-white">
@@ -320,7 +306,7 @@ export default function PerformanceTab() {
         ) : (
           <div className="bg-background-elevated border border-border rounded-lg p-4">
             <div className="flex items-center gap-2 mb-2">
-              <Trophy className="w-4 h-4 text-warning" />
+              <Award className="w-4 h-4 text-warning" />
               <span className="text-xs text-foreground-subtle">{showDPWData ? 'Total Days' : 'Total POIs'}</span>
             </div>
             <p className="text-2xl font-bold text-white">
@@ -386,100 +372,6 @@ export default function PerformanceTab() {
           </div>
         </div>
       </div>
-
-      {/* Leaderboard */}
-      {((showDPWData && leaderboard && leaderboard.length > 0) || (!showDPWData && settlement_ranking[0]?.top_10 && settlement_ranking[0].top_10.length > 0)) && (
-        <div className="space-y-3">
-          <h3 className="text-sm font-subheading font-semibold text-white flex items-center gap-2">
-            <Trophy className="w-4 h-4 text-primary" />
-            {showDPWData ? 'Top Earners' : `Top 10 - ${settlement_ranking[0]?.settlement || 'Settlement'}`}
-          </h3>
-          
-          <div className="bg-background-elevated border border-border rounded-lg overflow-hidden">
-            <div className="divide-y divide-border">
-              {(() => {
-                const currentLeaderboard = showDPWData ? (leaderboard || []) : (settlement_ranking[0]?.top_10 || []);
-                const startIndex = (pagination.currentPage - 1) * pagination.itemsPerPage;
-                const endIndex = startIndex + pagination.itemsPerPage;
-                const paginatedEntries = currentLeaderboard.slice(startIndex, endIndex);
-                
-                // Update pagination total when data changes
-                if (pagination.totalItems !== currentLeaderboard.length) {
-                  setPagination(prev => ({ ...prev, totalItems: currentLeaderboard.length }));
-                }
-                
-                return paginatedEntries.map((entry: LeaderboardEntry, index: number) => {
-                  const isCurrentUser = entry.youth_id === performanceData.youth_id;
-                  
-                  return (
-                    <div
-                      key={index}
-                      className={`
-                        p-3 flex items-center gap-3 transition-colors
-                        ${isCurrentUser ? 'bg-primary/10 border-l-4 border-primary' : 'hover:bg-background'}
-                      `}
-                    >
-                      <div className="w-8 flex-shrink-0 text-center">
-                        {getRankIcon(showDPWData ? (startIndex + index + 1) : (entry.rank || index + 1))}
-                      </div>
-                      
-                      <div className="flex-1 min-w-0">
-                        <p className={`text-sm font-semibold truncate ${isCurrentUser ? 'text-primary' : 'text-white'}`}>
-                          {isCurrentUser ? 'You' : (showDPWData && entry.name ? entry.name : entry.youth_id)}
-                        </p>
-                        <p className="text-xs text-foreground-subtle">
-                          {showDPWData ? (
-                            <>
-                              KES {(entry.total_earnings || 0).toLocaleString()} • {entry.total_days || 0} days • {safeNumber(entry.quality_score, 1)}% quality
-                            </>
-                          ) : (
-                            <>
-                              {entry.total_pois || 0} POIs • {safeNumber(entry.quality_score, 1)}% quality
-                            </>
-                          )}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                });
-              })()}
-            </div>
-          </div>
-          
-          {/* Pagination Controls */}
-          {pagination.totalItems > pagination.itemsPerPage && (
-            <div className="flex items-center justify-between mt-4 text-sm">
-              <span className="text-foreground-muted">
-                Showing {((pagination.currentPage - 1) * pagination.itemsPerPage) + 1}-{Math.min(pagination.currentPage * pagination.itemsPerPage, pagination.totalItems)} of {pagination.totalItems} participants
-              </span>
-              
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setPagination(prev => ({ ...prev, currentPage: Math.max(1, prev.currentPage - 1) }))}
-                  disabled={pagination.currentPage === 1}
-                  className="flex items-center gap-1 px-3 py-1 bg-background-elevated border border-border rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-background transition-colors"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                  Previous
-                </button>
-                
-                <span className="px-3 py-1 bg-primary/20 border border-primary/30 rounded-lg text-primary font-medium">
-                  {pagination.currentPage} of {Math.ceil(pagination.totalItems / pagination.itemsPerPage)}
-                </span>
-                
-                <button
-                  onClick={() => setPagination(prev => ({ ...prev, currentPage: Math.min(Math.ceil(prev.totalItems / prev.itemsPerPage), prev.currentPage + 1) }))}
-                  disabled={pagination.currentPage >= Math.ceil(pagination.totalItems / pagination.itemsPerPage)}
-                  className="flex items-center gap-1 px-3 py-1 bg-background-elevated border border-border rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-background transition-colors"
-                >
-                  Next
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
 
       {/* Info Note */}
       <div className="bg-info/10 border border-info/30 rounded-lg p-3">
