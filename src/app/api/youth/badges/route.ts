@@ -1,63 +1,62 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyYouthToken } from '@/app/api/_lib/auth';
+import fs from 'fs/promises';
+import path from 'path';
 
 /**
  * Badges API - Client-Side Badge System
  * 
  * GET /api/youth/badges
- * Returns badge status calculated from Performance + Payment API data
- * NOTE: This is NOT a proxy - Learn Platform calculates badges locally
+ * Returns badge status calculated from local DPW payment data
+ * NOTE: This calculates badges locally from DPW Excel data
  * 
  * Auth: Bearer token (youth JWT)
  * Response: Badge status with earned/locked states and progress
  */
 
-const DPW_BASE_URL = process.env.DPW_MANAGER_BASE_URL || 'https://digital-chi-six.vercel.app/api/v1';
-const DPW_API_KEY = process.env.DPW_MANAGER_API_KEY || '806920718fb09a005ce0672fb9cf202995ef4c42e4b7582db7c5e15881d29bd3';
-
-// Badge definitions
+// Badge definitions updated for DPW cycles
 const BADGE_CRITERIA = {
   first_submission: {
     name: 'First Steps',
-    description: 'Submit your first POI',
+    description: 'Complete your first work cycle',
     tiers: [
       { tier: 'bronze', requirement: 1, icon: '🥉' },
     ],
   },
   consistency: {
-    name: 'Consistent Contributor',
-    description: 'Submit data on consecutive days',
+    name: 'Consistent Worker',
+    description: 'Work consecutive days in a cycle',
     tiers: [
       { tier: 'bronze', requirement: 3, icon: '🥉' },
       { tier: 'silver', requirement: 5, icon: '🥈' },
-      { tier: 'gold', requirement: 7, icon: '🥇' },
+      { tier: 'gold', requirement: 10, icon: '🥇' },
     ],
   },
   quality_master: {
     name: 'Quality Master',
     description: 'Maintain high quality scores',
     tiers: [
-      { tier: 'bronze', requirement: 70, icon: '🥉' }, // 70%+ avg quality
-      { tier: 'silver', requirement: 85, icon: '🥈' }, // 85%+
-      { tier: 'gold', requirement: 95, icon: '🥇' }, // 95%+
+      { tier: 'bronze', requirement: 60, icon: '🥉' }, // 60%+ avg quality
+      { tier: 'silver', requirement: 80, icon: '🥈' }, // 80%+
+      { tier: 'gold', requirement: 90, icon: '🥇' }, // 90%+
     ],
   },
-  volume_champion: {
-    name: 'Volume Champion',
-    description: 'Submit large number of POIs',
+  earning_champion: {
+    name: 'Earning Champion',
+    description: 'Earn significant amounts through quality work',
     tiers: [
-      { tier: 'bronze', requirement: 100, icon: '🥉' },
-      { tier: 'silver', requirement: 300, icon: '🥈' },
-      { tier: 'gold', requirement: 500, icon: '🥇' },
+      { tier: 'bronze', requirement: 5000, icon: '🥉' }, // KES 5,000
+      { tier: 'silver', requirement: 10000, icon: '🥈' }, // KES 10,000  
+      { tier: 'gold', requirement: 15000, icon: '🥇' }, // KES 15,000
     ],
   },
   top_performer: {
     name: 'Top Performer',
-    description: 'Rank in top positions on leaderboard',
+    description: 'Rank in top positions by total earnings',
     tiers: [
-      { tier: 'bronze', requirement: 10, icon: '🥉' }, // Top 10
-      { tier: 'silver', requirement: 5, icon: '🥈' }, // Top 5
-      { tier: 'gold', requirement: 1, icon: '🥇' }, // #1 rank
+      { tier: 'bronze', requirement: 20, icon: '🥉' }, // Top 20
+      { tier: 'silver', requirement: 10, icon: '🥈' }, // Top 10
+      { tier: 'gold', requirement: 5, icon: '🥇' }, // Top 5
     ],
   },
 };
@@ -66,7 +65,7 @@ export async function GET(request: NextRequest) {
   const startTime = Date.now();
   const requestId = crypto.randomUUID();
   
-  console.log(`[Badges-API ${requestId}] Route accessed, DPW_BASE_URL: ${DPW_BASE_URL}`);
+  console.log(`[Badges-API ${requestId}] Route accessed - calculating badges from local DPW data`);
   
   try {
     // Verify youth authentication
@@ -93,54 +92,85 @@ export async function GET(request: NextRequest) {
 
     console.log(`[Badges-API ${requestId}] Request for youth: ${youthId}`);
 
-    // Fetch performance data from DPW
-    const performanceUrl = `${DPW_BASE_URL}/youth/${youthId}/performance`;
-    const paymentUrl = `${DPW_BASE_URL}/youth/${youthId}/payment/breakdown`;
+    // Load DPW payment data
+    const dataPath = path.join(process.cwd(), 'data', 'dpw-payment-data.json');
     
-    const [performanceRes, paymentRes] = await Promise.all([
-      fetch(performanceUrl, {
-        headers: { 'X-API-Key': DPW_API_KEY },
-        signal: AbortSignal.timeout(10000),
-      }),
-      fetch(paymentUrl, {
-        headers: { 'X-API-Key': DPW_API_KEY },
-        signal: AbortSignal.timeout(10000),
-      }),
-    ]);
+    try {
+      const fileContent = await fs.readFile(dataPath, 'utf-8');
+      const paymentData = JSON.parse(fileContent);
+      
+      const userPayment = paymentData.data[youthId];
+      
+      if (!userPayment) {
+        return NextResponse.json({
+          success: true,
+          data: {
+            youth_id: youthId,
+            total_badges: 0,
+            earned_badges: 0,
+            badges: [],
+            metrics: {
+              totalEarnings: 0,
+              workDays: 0,
+              avgQuality: 0,
+              rank: 0,
+              totalCycles: 0
+            }
+          }
+        });
+      }
 
-    if (!performanceRes.ok || !paymentRes.ok) {
-      throw new Error('Failed to fetch data from DPW API');
+      // Calculate metrics from DPW data
+      const adjustedQuality = Math.max(userPayment.overall_quality_percentage, 60);
+      
+      // Calculate rank by earnings
+      const allParticipants = Object.values(paymentData.data)
+        .sort((a: any, b: any) => b.total_payment - a.total_payment);
+      const userRank = allParticipants.findIndex((p: any) => p.youth_id === youthId) + 1;
+      
+      const cycleCount = (userPayment.cycle2 ? 1 : 0) + (userPayment.cycle3 ? 1 : 0);
+      
+      const metrics = {
+        totalEarnings: userPayment.total_payment,
+        workDays: userPayment.total_days,
+        avgQuality: adjustedQuality,
+        rank: userRank,
+        totalCycles: cycleCount
+      };
+
+      // Calculate badge status
+      const badges = calculateBadges(metrics);
+      const duration = Date.now() - startTime;
+      
+      console.log(`[Badges-API ${requestId}] Success (${duration}ms) - ${badges.filter((b: any) => b.earned).length} badges earned`);
+
+      return NextResponse.json({
+        success: true,
+        data: {
+          youth_id: youthId,
+          total_badges: badges.length,
+          earned_badges: badges.filter((b: any) => b.earned).length,
+          badges,
+          metrics,
+          last_updated: new Date().toISOString(),
+        },
+      });
+      
+    } catch (fileError: any) {
+      console.error(`[Badges-API ${requestId}] Failed to read DPW data:`, fileError);
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: {
+            code: 'DATA_ERROR',
+            message: 'Failed to load DPW payment data',
+            details: fileError.message,
+            timestamp: new Date().toISOString(),
+          }
+        },
+        { status: 500 }
+      );
     }
-
-    const performanceData = await performanceRes.json();
-    const paymentData = await paymentRes.json();
-
-    // Extract metrics
-    const metrics = {
-      totalPois: paymentData.data?.daily_breakdown?.reduce((sum: number, day: any) => sum + day.pois_submitted, 0) || 0,
-      workDays: paymentData.data?.work_days_completed || 0,
-      avgQuality: performanceData.data?.personal_metrics?.quality_score || 0,
-      rank: performanceData.data?.settlement_ranking?.youth_rank || 999,
-      consecutiveDays: calculateConsecutiveDays(paymentData.data?.daily_breakdown || []),
-    };
-
-    // Calculate badge status
-    const badges = calculateBadges(metrics);
-    const duration = Date.now() - startTime;
-    
-    console.log(`[Badges-API ${requestId}] Success (${duration}ms) - ${badges.filter((b: any) => b.earned).length} badges earned`);
-
-    return NextResponse.json({
-      success: true,
-      data: {
-        youth_id: youthId,
-        total_badges: badges.length,
-        earned_badges: badges.filter((b: any) => b.earned).length,
-        badges,
-        metrics,
-        last_updated: new Date().toISOString(),
-      },
-    });
 
   } catch (error: any) {
     const duration = Date.now() - startTime;
@@ -185,42 +215,42 @@ function calculateConsecutiveDays(dailyBreakdown: any[]): number {
   return maxStreak;
 }
 
-// Helper: Calculate badge status
+// Helper: Calculate badge status for DPW data
 function calculateBadges(metrics: any) {
   const badges = [];
   
   for (const [badgeId, criteria] of Object.entries(BADGE_CRITERIA)) {
-    for (const tier of criteria.tiers) {
+    for (const tier of (criteria as any).tiers) {
       let progress = 0;
       let earned = false;
       
       switch (badgeId) {
         case 'first_submission':
-          progress = metrics.totalPois >= 1 ? 100 : 0;
-          earned = metrics.totalPois >= 1;
+          progress = metrics.totalCycles >= 1 ? 100 : 0;
+          earned = metrics.totalCycles >= 1;
           break;
         case 'consistency':
-          progress = Math.min((metrics.consecutiveDays / tier.requirement) * 100, 100);
-          earned = metrics.consecutiveDays >= tier.requirement;
+          progress = Math.min((metrics.workDays / tier.requirement) * 100, 100);
+          earned = metrics.workDays >= tier.requirement;
           break;
         case 'quality_master':
           progress = Math.min((metrics.avgQuality / tier.requirement) * 100, 100);
           earned = metrics.avgQuality >= tier.requirement;
           break;
-        case 'volume_champion':
-          progress = Math.min((metrics.totalPois / tier.requirement) * 100, 100);
-          earned = metrics.totalPois >= tier.requirement;
+        case 'earning_champion':
+          progress = Math.min((metrics.totalEarnings / tier.requirement) * 100, 100);
+          earned = metrics.totalEarnings >= tier.requirement;
           break;
         case 'top_performer':
           progress = metrics.rank <= tier.requirement ? 100 : 0;
-          earned = metrics.rank <= tier.requirement;
+          earned = metrics.rank <= tier.requirement && metrics.rank > 0;
           break;
       }
       
       badges.push({
         badge_id: `${badgeId}_${tier.tier}`,
-        name: `${criteria.name} - ${tier.tier.charAt(0).toUpperCase() + tier.tier.slice(1)}`,
-        description: criteria.description,
+        name: `${(criteria as any).name} - ${tier.tier.charAt(0).toUpperCase() + tier.tier.slice(1)}`,
+        description: (criteria as any).description,
         tier: tier.tier,
         icon: tier.icon,
         earned,

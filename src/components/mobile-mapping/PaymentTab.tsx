@@ -13,16 +13,17 @@ import {
   ToggleRight
 } from 'lucide-react';
 
-interface DailyBreakdown {
-  date: string;
-  pois_submitted?: number;
+interface CycleBreakdown {
+  cycle: string;
+  period: string;
   work_type?: string;
   days_worked?: number;
+  pois_submitted?: number;
   quality_score: number;
   base_pay?: number;
   base_rate?: number;
   quality_bonus: number;
-  earnings: number;
+  total_earnings: number;
 }
 
 interface PaymentFormula {
@@ -41,7 +42,8 @@ interface PaymentData {
   total_earnings: number;
   work_days_completed?: number;
   total_days_worked?: number;
-  daily_breakdown: DailyBreakdown[];
+  daily_breakdown: CycleBreakdown[];
+  cycle_breakdown?: CycleBreakdown[];  // Add cycle_breakdown property
   payment_formula?: PaymentFormula;
   period?: string;
   overall_quality_score?: number;
@@ -281,17 +283,17 @@ export default function PaymentTab() {
         </div>
       )}
 
-      {/* Daily Breakdown */}
-      {hasWorkData && paymentData.daily_breakdown && paymentData.daily_breakdown.length > 0 && (
+      {/* Cycle Breakdown */}
+      {hasWorkData && (paymentData.daily_breakdown || paymentData.cycle_breakdown) && ((paymentData.daily_breakdown && paymentData.daily_breakdown.length > 0) || (paymentData.cycle_breakdown && paymentData.cycle_breakdown.length > 0)) && (
         <div className="space-y-3">
           <h3 className="text-sm font-subheading font-semibold text-white flex items-center gap-2">
             <Calendar className="w-4 h-4 text-primary" />
-            Daily Breakdown
+            {showDPWData ? 'Cycle Breakdown' : 'Daily Breakdown'}
           </h3>
           
           <div className="space-y-2">
-            {paymentData.daily_breakdown.map((day, index) => {
-              const qualityTier = getQualityTier(day.quality_score);
+            {(showDPWData ? (paymentData.cycle_breakdown || []) : (paymentData.daily_breakdown || [])).map((item, index) => {
+              const qualityTier = getQualityTier(item.quality_score);
               return (
                 <div
                   key={index}
@@ -300,38 +302,45 @@ export default function PaymentTab() {
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4 text-success" />
-                      <span className="text-sm font-semibold text-white">{formatDate(day.date)}</span>
+                      <span className="text-sm font-semibold text-white">
+                        {item.cycle}
+                      </span>
+                      {showDPWData && item.period && (
+                        <span className="text-xs text-foreground-subtle">({item.period})</span>
+                      )}
                     </div>
-                    <span className="text-sm font-bold text-primary">{formatCurrency(day.earnings)}</span>
+                    <span className="text-sm font-bold text-primary">
+                      {formatCurrency(item.total_earnings)}
+                    </span>
                   </div>
                   
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     {/* Show POIs for regular data, Work Type for DPW data */}
-                    {day.pois_submitted !== undefined ? (
+                    {item.pois_submitted !== undefined ? (
                       <div>
                         <span className="text-foreground-subtle">POIs Submitted</span>
-                        <p className="text-white font-semibold">{day.pois_submitted}</p>
+                        <p className="text-white font-semibold">{item.pois_submitted}</p>
                       </div>
                     ) : (
                       <div>
                         <span className="text-foreground-subtle">Work Type</span>
-                        <p className="text-white font-semibold">{day.work_type || 'DPW'}</p>
+                        <p className="text-white font-semibold">{item.work_type || 'DPW'}</p>
                       </div>
                     )}
                     
                     {/* Days Worked for DPW data */}
-                    {day.days_worked !== undefined && (
+                    {item.days_worked !== undefined && (
                       <div>
                         <span className="text-foreground-subtle">Days Worked</span>
-                        <p className="text-white font-semibold">{day.days_worked}</p>
+                        <p className="text-white font-semibold">{item.days_worked}</p>
                       </div>
                     )}
                     
                     <div>
                       <span className="text-foreground-subtle">Quality Score</span>
                       <p className={`font-semibold ${qualityTier.color}`}>
-                        {(day?.quality_score !== undefined && day?.quality_score !== null && !isNaN(day.quality_score)) 
-                          ? day.quality_score.toFixed(1) 
+                        {(item?.quality_score !== undefined && item?.quality_score !== null && !isNaN(item.quality_score)) 
+                          ? item.quality_score.toFixed(1) 
                           : '0.0'}% • {qualityTier.label}
                       </p>
                     </div>
@@ -339,19 +348,19 @@ export default function PaymentTab() {
                   
                   <div className="mt-2 pt-2 border-t border-border flex justify-between text-xs">
                     <span className="text-foreground-subtle">
-                      {day.base_pay !== undefined ? 'Base Pay' : 'Base Rate'}
+                      {item.base_pay !== undefined ? 'Base Pay' : 'Base Rate'}
                     </span>
                     <span className="text-white">
-                      {day.base_pay !== undefined 
-                        ? formatCurrency(day.base_pay) 
-                        : `${day.base_rate ? formatCurrency(day.base_rate) : 'N/A'} per day`
+                      {item.base_pay !== undefined 
+                        ? formatCurrency(item.base_pay) 
+                        : `${item.base_rate ? formatCurrency(item.base_rate) : 'N/A'} per day`
                       }
                     </span>
                   </div>
-                  {day.quality_bonus > 0 && (
+                  {item.quality_bonus > 0 && (
                     <div className="flex justify-between text-xs mt-1">
                       <span className="text-foreground-subtle">Quality Bonus</span>
-                      <span className="text-success font-semibold">+{formatCurrency(day.quality_bonus)}</span>
+                      <span className="text-success font-semibold">+{formatCurrency(item.quality_bonus)}</span>
                     </div>
                   )}
                 </div>

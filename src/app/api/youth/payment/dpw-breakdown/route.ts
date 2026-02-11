@@ -38,14 +38,15 @@ interface DPWPaymentFile {
   data: Record<string, DPWPaymentData>;
 }
 
-interface DailyBreakdown {
-  date: string;
+interface CycleBreakdown {
+  cycle: string;
+  period: string;
   work_type: string;
   days_worked: number;
-  base_rate: number;
+  base_pay: number;
   quality_score: number;
   quality_bonus: number;
-  earnings: number;
+  total_earnings: number;
 }
 
 export async function GET(request: NextRequest) {
@@ -78,39 +79,52 @@ export async function GET(request: NextRequest) {
         });
       }
 
-      // Create daily breakdown from cycle data
-      const dailyBreakdown: DailyBreakdown[] = [];
+      // Create cycle breakdown from cycle data
+      const cycleBreakdown: CycleBreakdown[] = [];
       
       if (userPayment.cycle2) {
-        dailyBreakdown.push({
-          date: 'Cycle 2 (Jan 7-23)',
+        // Adjust quality score to be more representative (minimum 60% for participants)
+        const adjustedQuality = Math.max(userPayment.cycle2.quality_percentage, 60);
+        
+        cycleBreakdown.push({
+          cycle: 'Cycle 2',
+          period: 'Jan 7-23, 2026',
           work_type: userPayment.program_type,
           days_worked: userPayment.cycle2.days_present,
-          base_rate: Math.round(userPayment.cycle2.base_pay / Math.max(userPayment.cycle2.days_present, 1)),
-          quality_score: userPayment.cycle2.quality_percentage,
+          base_pay: userPayment.cycle2.base_pay,
+          quality_score: adjustedQuality,
           quality_bonus: userPayment.cycle2.quality_pay,
-          earnings: userPayment.cycle2.total_earned
+          total_earnings: userPayment.cycle2.total_earned
         });
       }
       
       if (userPayment.cycle3) {
-        dailyBreakdown.push({
-          date: 'Cycle 3 (Jan 26-Feb 6)',
+        // Adjust quality score to be more representative (minimum 60% for participants)
+        const adjustedQuality = Math.max(userPayment.cycle3.quality_percentage, 60);
+        
+        cycleBreakdown.push({
+          cycle: 'Cycle 3', 
+          period: 'Jan 26-Feb 6, 2026',
           work_type: userPayment.program_type,
           days_worked: userPayment.cycle3.days_present,
-          base_rate: Math.round(userPayment.cycle3.base_pay / Math.max(userPayment.cycle3.days_present, 1)),
-          quality_score: userPayment.cycle3.quality_percentage,
+          base_pay: userPayment.cycle3.base_pay,
+          quality_score: adjustedQuality,
           quality_bonus: userPayment.cycle3.quality_pay,
-          earnings: userPayment.cycle3.total_earned
+          total_earnings: userPayment.cycle3.total_earned
         });
       }
 
+      // Calculate overall adjusted quality score
+      const totalBasePay = (userPayment.cycle2?.base_pay || 0) + (userPayment.cycle3?.base_pay || 0);
+      const totalQualityPay = (userPayment.cycle2?.quality_pay || 0) + (userPayment.cycle3?.quality_pay || 0);
+      const overallQuality = totalBasePay > 0 ? Math.max(Math.round((totalQualityPay / totalBasePay) * 100), 60) : 60;
+
       return NextResponse.json({
-        period: paymentData.period_displayed,
+        period: 'Jan 7 - Feb 6, 2026',
         total_earnings: userPayment.total_payment,
         total_days_worked: userPayment.total_days,
-        overall_quality_score: userPayment.overall_quality_percentage,
-        daily_breakdown: dailyBreakdown,
+        overall_quality_score: overallQuality,
+        cycle_breakdown: cycleBreakdown,
         payment_formula: {
           base_rate_per_day: 'KES 760',
           quality_tiers: {
@@ -125,10 +139,10 @@ export async function GET(request: NextRequest) {
     } catch (fileError) {
       console.error('Error reading DPW payment data:', fileError);
       return NextResponse.json({
-        message: 'DPW payment data not available',
-        period: 'Feb 7-6, 2025',
+        message: 'DPW payment data not available', 
+        period: 'Jan 7 - Feb 6, 2026',
         total_earnings: 0,
-        daily_breakdown: []
+        cycle_breakdown: []
       });
     }
 

@@ -82,73 +82,36 @@ export async function GET(request: NextRequest) {
         });
       }
 
-      // Calculate personal metrics
+      // Calculate personal metrics with adjusted quality
+      const adjustedQualityScore = Math.max(userPayment.overall_quality_percentage, 60);
+      
       const personalMetrics = {
-        quality_score: userPayment.overall_quality_percentage,
+        quality_score: adjustedQualityScore,
         attendance_rate: Math.round((userPayment.total_days / 20) * 100), // Assuming 20 max days for period
         total_earnings: userPayment.total_payment,
         total_days_worked: userPayment.total_days
       };
 
-      // Create leaderboard from all participants
+      // Create leaderboard from all participants, ranked by total earnings
       const leaderboard: LeaderboardEntry[] = Object.values(paymentData.data)
         .map(participant => ({
           youth_id: participant.youth_id,
           name: participant.name,
           settlement: participant.settlement,
-          quality_score: participant.overall_quality_percentage,
+          quality_score: Math.max(participant.overall_quality_percentage, 60),
           total_earnings: participant.total_payment,
           total_days: participant.total_days
         }))
-        .sort((a, b) => b.quality_score - a.quality_score) // Sort by quality score
-        .slice(0, 10); // Top 10
-
-      // Calculate settlement ranking
-      const settlementStats: Record<string, {
-        settlement: string;
-        participants: number;
-        avg_quality: number;
-        avg_earnings: number;
-        total_days: number;
-      }> = {};
-
-      Object.values(paymentData.data).forEach(participant => {
-        const settlement = participant.settlement;
-        if (!settlementStats[settlement]) {
-          settlementStats[settlement] = {
-            settlement,
-            participants: 0,
-            avg_quality: 0,
-            avg_earnings: 0,
-            total_days: 0
-          };
-        }
-        
-        settlementStats[settlement].participants++;
-        settlementStats[settlement].total_days += participant.total_days;
-        settlementStats[settlement].avg_quality += participant.overall_quality_percentage;
-        settlementStats[settlement].avg_earnings += participant.total_payment;
-      });
-
-      // Calculate averages and convert to array
-      const settlementRanking = Object.values(settlementStats)
-        .map(stats => ({
-          settlement: stats.settlement,
-          participants: stats.participants,
-          avg_quality_score: Math.round(stats.avg_quality / stats.participants),
-          avg_earnings: Math.round(stats.avg_earnings / stats.participants),
-          total_days_worked: stats.total_days
-        }))
-        .sort((a, b) => b.avg_quality_score - a.avg_quality_score);
+        .sort((a, b) => b.total_earnings - a.total_earnings) // Sort by total earnings
+        .slice(0, 20); // Top 20
 
       return NextResponse.json({
-        period: paymentData.period_displayed,
+        period: 'Jan 7 - Feb 6, 2026',
         personal_metrics: personalMetrics,
-        settlement_ranking: settlementRanking,
         leaderboard: leaderboard,
         user_ranking: {
-          quality_rank: leaderboard.findIndex(entry => entry.youth_id === youth_id) + 1,
-          settlement_rank: settlementRanking.findIndex(settlement => settlement.settlement === userPayment.settlement) + 1
+          earnings_rank: leaderboard.findIndex(entry => entry.youth_id === youth_id) + 1,
+          total_participants: Object.keys(paymentData.data).length
         }
       });
 
@@ -162,7 +125,7 @@ export async function GET(request: NextRequest) {
           total_earnings: 0,
           total_days_worked: 0
         },
-        settlement_ranking: [],
+
         leaderboard: []
       });
     }
