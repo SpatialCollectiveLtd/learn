@@ -203,90 +203,92 @@ export default function DashboardSelection() {
             )}
           </button>
 
-          {/* Work Dashboard Card */}
-          <button
-            onClick={handleWorkClick}
-            disabled={!canAccessWorkDashboard}
-            className={`bg-background-card rounded-2xl shadow-lg p-6 text-left transition-all border ${
-              canAccessWorkDashboard
-                ? 'hover:shadow-2xl hover:shadow-primary/20 transform hover:-translate-y-1 border-[#262626] hover:border-primary cursor-pointer'
-                : 'opacity-60 cursor-not-allowed border-[#262626]'
-            }`}
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className={`p-3 rounded-xl border ${
-                canAccessWorkDashboard 
-                  ? 'bg-primary/20 border-primary/30' 
-                  : 'bg-[#1a1a1a] border-border'
-              }`}>
+          {/* Work Dashboard Card - Hidden for microtasking users */}
+          {status.programType !== 'microtasking' && (
+            <button
+              onClick={handleWorkClick}
+              disabled={!canAccessWorkDashboard}
+              className={`bg-background-card rounded-2xl shadow-lg p-6 text-left transition-all border ${
+                canAccessWorkDashboard
+                  ? 'hover:shadow-2xl hover:shadow-primary/20 transform hover:-translate-y-1 border-[#262626] hover:border-primary cursor-pointer'
+                  : 'opacity-60 cursor-not-allowed border-[#262626]'
+              }`}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className={`p-3 rounded-xl border ${
+                  canAccessWorkDashboard 
+                    ? 'bg-primary/20 border-primary/30' 
+                    : 'bg-[#1a1a1a] border-border'
+                }`}>
+                  {canAccessWorkDashboard ? (
+                    <Briefcase className="w-7 h-7 text-primary" />
+                  ) : (
+                    <Lock className="w-7 h-7 text-foreground-subtle" />
+                  )}
+                </div>
                 {canAccessWorkDashboard ? (
-                  <Briefcase className="w-7 h-7 text-primary" />
+                  <span className="text-sm font-subheading font-medium text-white bg-primary-dark px-3 py-1 rounded-full border border-primary">
+                    Unlocked
+                  </span>
                 ) : (
-                  <Lock className="w-7 h-7 text-foreground-subtle" />
+                  <span className="text-sm font-subheading font-medium text-foreground-subtle bg-background-elevated px-3 py-1 rounded-full border border-border">
+                    Locked
+                  </span>
                 )}
               </div>
+              
+              <h2 className="text-xl font-heading font-bold text-white mb-2">
+                Work Dashboard
+              </h2>
+              
               {canAccessWorkDashboard ? (
-                <span className="text-sm font-subheading font-medium text-white bg-primary-dark px-3 py-1 rounded-full border border-primary">
-                  Unlocked
-                </span>
+                <>
+                  <p className="text-sm text-foreground-subtle mb-3">
+                    Track your daily mapping work, view building counts, and monitor your 20-day work period.
+                  </p>
+                  <div className="bg-primary-dark/50 border border-primary rounded-lg p-4">
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                      <div className="text-sm">
+                        <p className="font-subheading font-medium text-primary-light mb-1">You're ready to start working!</p>
+                        <p className="text-foreground-muted">
+                          All training steps completed. Click to view your work dashboard.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </>
               ) : (
-                <span className="text-sm font-subheading font-medium text-foreground-subtle bg-background-elevated px-3 py-1 rounded-full border border-border">
-                  Locked
-                </span>
+                <>
+                  <p className="text-sm text-foreground-subtle mb-3">
+                    Track your daily mapping work, view building counts, and monitor your 20-day work period.
+                  </p>
+                  <div className="bg-warning/10 border border-warning/30 rounded-lg p-4">
+                    <div className="flex items-start gap-2">
+                      <AlertCircle className="w-5 h-5 text-warning mt-0.5 flex-shrink-0" />
+                      <div className="text-sm">
+                        <p className="font-subheading font-medium text-warning mb-2">Requirements to unlock:</p>
+                        <ul className="space-y-1 text-foreground-muted">
+                          {!trainingCompleted && (
+                            <li className="flex items-center gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-warning"></span>
+                              Complete all {progress.total} training steps ({progress.missingSteps.length} remaining)
+                            </li>
+                          )}
+                          {requiresOsmUsername && !hasOsmUsername && (
+                            <li className="flex items-center gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-warning"></span>
+                              Add your OpenStreetMap username in training
+                            </li>
+                          )}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </>
               )}
-            </div>
-            
-            <h2 className="text-xl font-heading font-bold text-white mb-2">
-              Work Dashboard
-            </h2>
-            
-            {canAccessWorkDashboard ? (
-              <>
-                <p className="text-sm text-foreground-subtle mb-3">
-                  Track your daily mapping work, view building counts, and monitor your 20-day work period.
-                </p>
-                <div className="bg-primary-dark/50 border border-primary rounded-lg p-4">
-                  <div className="flex items-start gap-2">
-                    <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <div className="text-sm">
-                      <p className="font-subheading font-medium text-primary-light mb-1">You're ready to start working!</p>
-                      <p className="text-foreground-muted">
-                        All training steps completed. Click to view your work dashboard.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </>
-            ) : (
-              <>
-                <p className="text-sm text-foreground-subtle mb-3">
-                  Track your daily mapping work, view building counts, and monitor your 20-day work period.
-                </p>
-                <div className="bg-warning/10 border border-warning/30 rounded-lg p-4">
-                  <div className="flex items-start gap-2">
-                    <AlertCircle className="w-5 h-5 text-warning mt-0.5 flex-shrink-0" />
-                    <div className="text-sm">
-                      <p className="font-subheading font-medium text-warning mb-2">Requirements to unlock:</p>
-                      <ul className="space-y-1 text-foreground-muted">
-                        {!trainingCompleted && (
-                          <li className="flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-warning"></span>
-                            Complete all {progress.total} training steps ({progress.missingSteps.length} remaining)
-                          </li>
-                        )}
-                        {requiresOsmUsername && !hasOsmUsername && (
-                          <li className="flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-warning"></span>
-                            Add your OpenStreetMap username in training
-                          </li>
-                        )}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
-          </button>
+            </button>
+          )}
 
           {/* Messages Card - Only for digitization users */}
           {status.programType === 'digitization' && (

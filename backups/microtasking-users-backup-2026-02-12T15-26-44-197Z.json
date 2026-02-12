@@ -1,0 +1,232 @@
+{
+  "timestamp": "2026-02-12T15:26:44.223Z",
+  "description": "25 users before converting from mobile_mapping to microtasking",
+  "csvFile": "The 25 moved to Microtasking from Mobile Mapping - 9-02-2026 The 14.csv",
+  "users": [
+    {
+      "youth_id": "KAY1042KM",
+      "full_name": "Keziah Maina",
+      "program_type": "mobile_mapping",
+      "module_assignment": null,
+      "settlement": "Kayole Soweto",
+      "created_at": "2026-01-13T14:56:54.956Z",
+      "updated_at": "2026-02-12T14:26:49.980Z"
+    },
+    {
+      "youth_id": "KAY1143IM",
+      "full_name": "Ivor Mwangi",
+      "program_type": "mobile_mapping",
+      "module_assignment": null,
+      "settlement": "Kayole Soweto",
+      "created_at": "2026-01-13T14:56:54.956Z",
+      "updated_at": "2026-02-12T13:36:56.730Z"
+    },
+    {
+      "youth_id": "KAY1223AK",
+      "full_name": "Annah Kimakiru",
+      "program_type": "mobile_mapping",
+      "module_assignment": null,
+      "settlement": "Kayole Soweto",
+      "created_at": "2026-01-13T14:56:54.956Z",
+      "updated_at": "2026-02-12T13:36:56.730Z"
+    },
+    {
+      "youth_id": "KAY1604FA",
+      "full_name": "Fidelis Wanjiru",
+      "program_type": "mobile_mapping",
+      "module_assignment": null,
+      "settlement": "Kayole Soweto",
+      "created_at": "2026-01-13T14:56:54.956Z",
+      "updated_at": "2026-02-12T13:36:56.730Z"
+    },
+    {
+      "youth_id": "KAY1640JM",
+      "full_name": "Joab Mandu",
+      "program_type": "mobile_mapping",
+      "module_assignment": null,
+      "settlement": "Kayole Soweto",
+      "created_at": "2026-01-13T14:56:54.956Z",
+      "updated_at": "2026-02-12T13:36:56.730Z"
+    },
+    {
+      "youth_id": "KAY1681JM",
+      "full_name": "Joyce Motaroki",
+      "program_type": "mobile_mapping",
+      "module_assignment": null,
+      "settlement": "Kayole Soweto",
+      "created_at": "2026-01-13T14:56:54.956Z",
+      "updated_at": "2026-02-12T13:36:56.730Z"
+    },
+    {
+      "youth_id": "KAY1726RN",
+      "full_name": "Reuben Nyangweso",
+      "program_type": "mobile_mapping",
+      "module_assignment": null,
+      "settlement": "Kayole Soweto",
+      "created_at": "2026-01-13T14:56:54.956Z",
+      "updated_at": "2026-02-12T13:36:56.730Z"
+    },
+    {
+      "youth_id": "KAY1731EM",
+      "full_name": "Esther Maina",
+      "program_type": "mobile_mapping",
+      "module_assignment": null,
+      "settlement": "Kayole Soweto",
+      "created_at": "2026-01-13T14:56:54.956Z",
+      "updated_at": "2026-02-12T13:36:56.730Z"
+    },
+    {
+      "youth_id": "KAY2031KM",
+      "full_name": "Kelly Muigai",
+      "program_type": "mobile_mapping",
+      "module_assignment": null,
+      "settlement": "Kayole Soweto",
+      "created_at": "2026-01-13T14:56:54.956Z",
+      "updated_at": "2026-02-12T13:36:56.730Z"
+    },
+    {
+      "youth_id": "KAY2070EM",
+      "full_name": "Emily Munywoki",
+      "program_type": "mobile_mapping",
+      "module_assignment": null,
+      "settlement": "Kayole Soweto",
+      "created_at": "2026-01-13T14:56:54.956Z",
+      "updated_at": "2026-02-12T13:36:56.730Z"
+    },
+    {
+      "youth_id": "KAY2085SB",
+      "full_name": "Samuel Bogonko",
+      "program_type": "mobile_mapping",
+      "module_assignment": null,
+      "settlement": "Kayole Soweto",
+      "created_at": "2026-01-13T14:56:54.956Z",
+      "updated_at": "2026-02-12T13:36:56.730Z"
+    },
+    {
+      "youth_id": "KAY2239NW",
+      "full_name": "Wanjiku Waithera",
+      "program_type": "mobile_mapping",
+      "module_assignment": null,
+      "settlement": "Kayole Soweto",
+      "created_at": "2026-01-13T14:56:54.956Z",
+      "updated_at": "2026-02-12T13:36:56.730Z"
+    },
+    {
+      "youth_id": "KAY2301SA",
+      "full_name": "Solomon Ashiono",
+      "program_type": "mobile_mapping",
+      "module_assignment": null,
+      "settlement": "Kayole Soweto",
+      "created_at": "2026-01-13T14:56:54.956Z",
+      "updated_at": "2026-02-12T13:36:56.730Z"
+    },
+    {
+      "youth_id": "KAY237FM",
+      "full_name": "Faith Mutua",
+      "program_type": "mobile_mapping",
+      "module_assignment": null,
+      "settlement": "Kayole Soweto",
+      "created_at": "2026-01-13T14:56:54.956Z",
+      "updated_at": "2026-02-12T13:36:56.730Z"
+    },
+    {
+      "youth_id": "KAY2490AM",
+      "full_name": "Agnes Mutuku",
+      "program_type": "mobile_mapping",
+      "module_assignment": null,
+      "settlement": "Kayole Soweto",
+      "created_at": "2026-01-13T14:56:54.956Z",
+      "updated_at": "2026-02-12T13:36:56.730Z"
+    },
+    {
+      "youth_id": "KAY2587RM",
+      "full_name": "Rooney Masila",
+      "program_type": "mobile_mapping",
+      "module_assignment": null,
+      "settlement": "Kayole Soweto",
+      "created_at": "2026-01-13T14:56:54.956Z",
+      "updated_at": "2026-02-12T13:36:56.730Z"
+    },
+    {
+      "youth_id": "KAY264EM",
+      "full_name": "Esther Mwangi",
+      "program_type": "mobile_mapping",
+      "module_assignment": null,
+      "settlement": "Kayole Soweto",
+      "created_at": "2026-01-13T14:56:54.956Z",
+      "updated_at": "2026-02-12T13:36:56.730Z"
+    },
+    {
+      "youth_id": "KAY269JW",
+      "full_name": "Josephine Wambua",
+      "program_type": "mobile_mapping",
+      "module_assignment": null,
+      "settlement": "Kayole Soweto",
+      "created_at": "2025-12-08T06:30:53.741Z",
+      "updated_at": "2026-02-12T13:36:56.730Z"
+    },
+    {
+      "youth_id": "KAY2802NM",
+      "full_name": "Naffert Mburu",
+      "program_type": "mobile_mapping",
+      "module_assignment": null,
+      "settlement": "Kayole Soweto",
+      "created_at": "2026-01-13T14:56:54.956Z",
+      "updated_at": "2026-02-12T13:36:56.730Z"
+    },
+    {
+      "youth_id": "KAY461VO",
+      "full_name": "Valary Ochieng'",
+      "program_type": "mobile_mapping",
+      "module_assignment": null,
+      "settlement": "Kayole Soweto",
+      "created_at": "2026-01-13T14:56:54.956Z",
+      "updated_at": "2026-02-12T13:36:56.730Z"
+    },
+    {
+      "youth_id": "KAY465DO",
+      "full_name": "David Omondi",
+      "program_type": "mobile_mapping",
+      "module_assignment": null,
+      "settlement": "Kayole Soweto",
+      "created_at": "2026-01-13T14:56:54.956Z",
+      "updated_at": "2026-02-12T13:36:56.730Z"
+    },
+    {
+      "youth_id": "KAY498AW",
+      "full_name": "Anne Wainaina",
+      "program_type": "mobile_mapping",
+      "module_assignment": null,
+      "settlement": "Kayole Soweto",
+      "created_at": "2026-01-13T14:56:54.956Z",
+      "updated_at": "2026-02-12T13:36:56.730Z"
+    },
+    {
+      "youth_id": "KAY574GK",
+      "full_name": "Getrude Kamau",
+      "program_type": "mobile_mapping",
+      "module_assignment": null,
+      "settlement": "Kayole Soweto",
+      "created_at": "2026-01-13T14:56:54.956Z",
+      "updated_at": "2026-02-12T13:36:56.730Z"
+    },
+    {
+      "youth_id": "KAY868JN",
+      "full_name": "Joy Nzomo",
+      "program_type": "mobile_mapping",
+      "module_assignment": null,
+      "settlement": "Kayole Soweto",
+      "created_at": "2026-01-13T14:56:54.956Z",
+      "updated_at": "2026-02-12T13:36:56.730Z"
+    },
+    {
+      "youth_id": "KAY924LO",
+      "full_name": "Lilian Ondieki",
+      "program_type": "mobile_mapping",
+      "module_assignment": null,
+      "settlement": "Kayole Soweto",
+      "created_at": "2026-01-13T14:56:54.956Z",
+      "updated_at": "2026-02-12T13:36:56.730Z"
+    }
+  ]
+}
