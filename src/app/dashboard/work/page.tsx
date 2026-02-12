@@ -79,8 +79,17 @@ export default function WorkDashboard() {
 
       const data = await response.json();
 
-      if (data.success && !data.data.canAccessWorkDashboard) {
-        router.push('/dashboard');
+      if (data.success) {
+        // Redirect microtasking users to their training dashboard
+        if (data.data.programType === 'microtasking') {
+          router.push('/microtasking');
+          return;
+        }
+        
+        // Redirect users who haven't completed training
+        if (!data.data.canAccessWorkDashboard) {
+          router.push('/dashboard');
+        }
       }
     } catch (err) {
       console.error('Access check failed:', err);

@@ -194,10 +194,10 @@ export default function MicrotaskingOverviewPage() {
 
           {/* Platform Information Card */}
           <div className="mt-8">
-            <CometCard className="p-6 bg-blue-900/20 border-blue-500/30">
-              <div className="flex items-start gap-4">
-                <Smartphone className="w-8 h-8 text-blue-400 flex-shrink-0 mt-1" />
-                <div>
+            <CometCard className="p-4 sm:p-6 bg-blue-900/20 border-blue-500/30">
+              <div className="flex flex-col sm:flex-row items-start gap-4">
+                <Smartphone className="w-8 h-8 text-blue-400 flex-shrink-0 mt-1 mx-auto sm:mx-0" />
+                <div className="flex-1 w-full text-center sm:text-left">
                   <h3 className="text-lg font-bold text-white mb-2">
                     About the Microtasking Platform
                   </h3>
@@ -205,14 +205,16 @@ export default function MicrotaskingOverviewPage() {
                     You'll be working on a web-based platform accessible from any smartphone browser. 
                     No app installation required - just visit the website and login with your phone number.
                   </p>
-                  <div className="flex items-center gap-2 text-sm">
-                    <ExternalLink className="w-4 h-4 text-blue-400" />
-                    <span className="text-[#a3a3a3]">Platform URL:</span>
+                  <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2 text-sm">
+                    <div className="flex items-center gap-2">
+                      <ExternalLink className="w-4 h-4 text-blue-400" />
+                      <span className="text-[#a3a3a3]">Platform URL:</span>
+                    </div>
                     <a 
                       href={MICROTASKING_PLATFORM_URL}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-400 hover:text-blue-300 underline"
+                      className="text-blue-400 hover:text-blue-300 underline break-all"
                     >
                       {MICROTASKING_PLATFORM_URL}
                     </a>
