@@ -7,7 +7,7 @@ import crypto from 'crypto';
  * POST /api/mobile/biometric-attend - Verify biometric and record attendance
  */
 export async function POST(request: NextRequest) {
-  const trx = await Database.getClient();
+  const trx = await Database.getConnection();
   
   try {
     // Start transaction
@@ -225,7 +225,7 @@ export async function POST(request: NextRequest) {
         challenge_id: challengeId,
         verification_timestamp: new Date().toISOString(),
         user_agent: request.headers.get('user-agent'),
-        ip_address: request.ip || request.headers.get('x-forwarded-for')
+        ip_address: request.headers.get('x-forwarded-for') || 'unknown'
       })
     ]);
 

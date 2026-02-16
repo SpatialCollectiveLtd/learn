@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
     }
 
     // For authentication, check if youth has registered biometric
-    let allowedCredentials = [];
+    let allowedCredentials: any[] = [];
     if (action === 'authenticate') {
       const credentialsCheck = await Database.query(`
         SELECT credential_id, public_key 
@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
       decoded.staffId
     ]);
 
-    const response = {
+    const response: any = {
       success: true,
       challengeId,
       challenge: Array.from(challenge), // Convert to array for frontend
@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
       response.allowedCredentials = allowedCredentials.map(cred => ({
         id: Array.from(cred.id),
         type: cred.type,
-        transports: cred.transports
+        transports: cred.transports  
       }));
     }
 

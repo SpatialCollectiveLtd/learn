@@ -222,8 +222,8 @@ export default function BiometricAttendancePage() {
           userVerification: "required",
         },
         timeout: 60000,
-        attestation: "direct"
-      };
+        attestation: "direct" as AttestationConveyancePreference
+      } as PublicKeyCredentialCreationOptions;
 
       const credential = await navigator.credentials.create({
         publicKey: publicKeyCredentialCreationOptions
@@ -300,9 +300,9 @@ export default function BiometricAttendancePage() {
           type: 'public-key',
           transports: ['internal'],
         })),
-        userVerification: "required",
+        userVerification: "required" as UserVerificationRequirement,
         timeout: 60000,
-      };
+      } as PublicKeyCredentialRequestOptions;
 
       const assertion = await navigator.credentials.get({
         publicKey: publicKeyCredentialRequestOptions

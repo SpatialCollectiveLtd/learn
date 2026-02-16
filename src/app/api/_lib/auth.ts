@@ -31,3 +31,17 @@ export function verifyStaffToken(token: string): { staffId: string; role: string
     throw new Error('Invalid or expired token');
   }
 }
+
+/**
+ * Sign and create a JWT token
+ * @param payload - Token payload object
+ * @param expiresIn - Token expiration (default: 24h)  
+ * @returns Signed JWT token string
+ */
+export function signToken(payload: string | object | Buffer, expiresIn: string = '24h'): string {
+  try {
+    return jwt.sign(payload, JWT_SECRET, { expiresIn } as jwt.SignOptions);
+  } catch (error) {
+    throw new Error('Failed to sign token');
+  }
+}

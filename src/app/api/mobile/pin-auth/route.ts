@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Rate limiting check (10 attempts per hour per IP)
-    const clientIp = request.ip || request.headers.get('x-forwarded-for') || 'unknown';
+    const clientIp = request.headers.get('x-forwarded-for') || 'unknown';
     const hourAgo = new Date(Date.now() - 60 * 60 * 1000);
 
     const rateLimitCheck = await Database.query(`
@@ -122,11 +122,10 @@ export async function POST(request: NextRequest) {
       staffId: staff.staff_id,
       role: staff.role,
       email: staff.email,
-      mobile: true, // Flag to indicate mobile session
-      exp: Math.floor(Date.now() / 1000) + (8 * 60 * 60) // 8 hours
+      mobile: true // Flag to indicate mobile session
     };
 
-    const token = signToken(tokenPayload);
+    const token = signToken(tokenPayload, '8h');
 
     // Update last login timestamp
     await Database.query(`
@@ -249,7 +248,7 @@ export async function PUT(request: NextRequest) {
     `, [hashedPin, salt, staff_id.toUpperCase()]);
 
     // Log PIN update
-    const clientIp = request.ip || request.headers.get('x-forwarded-for') || 'unknown';
+    const clientIp = request.headers.get('x-forwarded-for') || 'unknown';
     await Database.query(`
       INSERT INTO auth_logs (
         user_id, user_type, action, ip_address, user_agent, success, created_at
