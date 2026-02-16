@@ -98,23 +98,7 @@ export async function GET(request: NextRequest) {
           )
           FROM youth_work_summary
           WHERE youth_id = yp.youth_id
-        ) as work_summary,        
-        -- Individual work history (detailed work days)
-        COALESCE((
-          SELECT json_agg(
-            json_build_object(
-              'work_date', work_date::text,
-              'buildings_count', buildings_count,
-              'daily_target', daily_target,
-              'status', status,
-              'target_met', target_met,
-              'notes', notes,
-              'created_at', created_at
-            ) ORDER BY work_date DESC
-          )
-          FROM youth_work_days
-          WHERE youth_id = yp.youth_id
-        ), '[]'::json) as work_history,
+        ) as work_summary,
         
         -- Attendance records (fixed to return array instead of null)
         COALESCE((
