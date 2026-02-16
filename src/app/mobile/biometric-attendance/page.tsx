@@ -39,9 +39,10 @@ export default function BiometricAttendancePage() {
   const [staffId, setStaffId] = useState('');
   
   // PIN authentication
-  const [showPinAuth, setShowPinAuth] = useState(false);
+  const [showPinAuth, setShowPinAuth] = useState(true); // Start with PIN auth visible
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState('');
+  const [authStaffId, setAuthStaffId] = useState(''); // For initial authentication
   
   // Youth lookup state
   const [youthId, setYouthId] = useState('');
@@ -74,14 +75,17 @@ export default function BiometricAttendancePage() {
         setStaffName(staff.full_name);
         setStaffId(staff.staff_id);
         setIsAuthenticated(true);
+        setShowPinAuth(false);
       } catch (error) {
         console.error('Error parsing staff data:', error);
         localStorage.removeItem('staffToken');
         localStorage.removeItem('staffData');
-        router.push('/');
+        // Don't redirect - allow mobile authentication
+        setShowPinAuth(true);
       }
     } else {
-      router.push('/');
+      // Don't redirect - allow mobile authentication
+      setShowPinAuth(true);
     }
   };
 
@@ -103,6 +107,11 @@ export default function BiometricAttendancePage() {
   };
 
   const handlePinAuth = async () => {
+    if (!authStaffId.trim()) {
+      setPinError('Staff ID is required');
+      return;
+    }
+    
     if (pin.length !== 4) {
       setPinError('PIN must be 4 digits');
       return;
@@ -112,21 +121,33 @@ export default function BiometricAttendancePage() {
       const response = await fetch('/api/mobile/pin-auth', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('staffToken')}`
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ pin })
+        body: JSON.stringify({ 
+          staff_id: authStaffId.toUpperCase(), 
+          pin 
+        })
       });
 
       const data = await response.json();
 
       if (data.success) {
+        // Store authentication data
+        localStorage.setItem('staffToken', data.data.token);
+        localStorage.setItem('staffData', JSON.stringify(data.data.staff));
+        
+        // Update state
+        setStaffName(data.data.staff.full_name);
+        setStaffId(data.data.staff.staff_id);
+        setIsAuthenticated(true);
         setShowPinAuth(false);
         setPin('');
+        setAuthStaffId('');
         setPinError('');
+        
         fetchRecentAttendance();
       } else {
-        setPinError(data.message || 'Invalid PIN');
+        setPinError(data.message || 'Invalid credentials');
       }
     } catch (error) {
       console.error('PIN authentication error:', error);
@@ -401,6 +422,21 @@ export default function BiometricAttendancePage() {
 
           <div className="space-y-4">
             <div>
+              <label className="block text-foreground font-medium mb-2">Staff ID:</label>
+              <input
+                type="text"
+                value={authStaffId}
+                onChange={(e) => {
+                  setAuthStaffId(e.target.value.toUpperCase());
+                  setPinError('');
+                }}
+                placeholder="Enter Staff ID (e.g. SFEA4111T)"
+                className="w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:border-primary"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-foreground font-medium mb-2">PIN:</label>
               <input
                 type="password"
                 value={pin}
@@ -420,7 +456,7 @@ export default function BiometricAttendancePage() {
 
             <button
               onClick={handlePinAuth}
-              disabled={pin.length !== 4}
+              disabled={!authStaffId.trim() || pin.length !== 4}
               className="w-full py-3 bg-primary hover:bg-primary-hover disabled:bg-primary/50 text-white rounded-lg font-subheading font-semibold text-lg transition-colors"
             >
               Authenticate
