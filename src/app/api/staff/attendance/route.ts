@@ -44,13 +44,13 @@ export async function POST(request: NextRequest) {
       }, { status: 404 });
     }
 
-    // Insert attendance record
+    // Insert attendance record with current program type
     try {
       const result = await Database.query(`
-        INSERT INTO attendance_records (youth_id, attendance_date, submitted_by, notes)
-        VALUES ($1, $2, $3, $4)
+        INSERT INTO attendance_records (youth_id, attendance_date, submitted_by, notes, program_type_at_attendance)
+        VALUES ($1, $2, $3, $4, $5)
         RETURNING id, youth_id, attendance_date, submitted_at
-      `, [youth_id.toUpperCase(), attendance_date, decoded.staffId, notes || null]);
+      `, [youth_id.toUpperCase(), attendance_date, decoded.staffId, notes || null, youthCheck.rows[0].program_type]);
 
       return NextResponse.json({
         success: true,
@@ -114,38 +114,38 @@ export async function GET(request: NextRequest) {
     let params: (string | undefined)[];
 
     if (date) {
-      // Get attendance for specific date and module
+      // Get attendance for specific date and module - USE HISTORICAL PROGRAM TYPE
       query = `
         SELECT 
           ar.id,
           ar.youth_id,
           yp.full_name,
-          yp.program_type,
+          ar.program_type_at_attendance as program_type,
           ar.attendance_date,
           ar.submitted_at,
           ar.submitted_by,
           ar.notes
         FROM attendance_records ar
         JOIN youth_participants yp ON ar.youth_id = yp.youth_id
-        WHERE ar.attendance_date = $1 AND yp.program_type = $2
+        WHERE ar.attendance_date = $1 AND ar.program_type_at_attendance = $2
         ORDER BY ar.submitted_at DESC
       `;
       params = [date, module];
     } else {
-      // Get today's attendance for module
+      // Get today's attendance for module - USE HISTORICAL PROGRAM TYPE  
       query = `
         SELECT 
           ar.id,
           ar.youth_id,
           yp.full_name,
-          yp.program_type,
+          ar.program_type_at_attendance as program_type,
           ar.attendance_date,
           ar.submitted_at,
           ar.submitted_by,
           ar.notes
         FROM attendance_records ar
         JOIN youth_participants yp ON ar.youth_id = yp.youth_id
-        WHERE ar.attendance_date = CURRENT_DATE AND yp.program_type = $1
+        WHERE ar.attendance_date = CURRENT_DATE AND ar.program_type_at_attendance = $1
         ORDER BY ar.submitted_at DESC
       `;
       params = [module];
