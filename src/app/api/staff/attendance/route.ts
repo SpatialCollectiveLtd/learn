@@ -153,10 +153,10 @@ export async function GET(request: NextRequest) {
 
     const result = await Database.query(query, params);
 
-    // Get total count for the date and module
+    // Get total count for the date and module - USE HISTORICAL PROGRAM TYPE
     const countQuery = date 
-      ? `SELECT COUNT(*) as total FROM attendance_records ar JOIN youth_participants yp ON ar.youth_id = yp.youth_id WHERE ar.attendance_date = $1 AND yp.program_type = $2`
-      : `SELECT COUNT(*) as total FROM attendance_records ar JOIN youth_participants yp ON ar.youth_id = yp.youth_id WHERE ar.attendance_date = CURRENT_DATE AND yp.program_type = $1`;
+      ? `SELECT COUNT(*) as total FROM attendance_records ar WHERE ar.attendance_date = $1 AND ar.program_type_at_attendance = $2`
+      : `SELECT COUNT(*) as total FROM attendance_records ar WHERE ar.attendance_date = CURRENT_DATE AND ar.program_type_at_attendance = $1`;
     const countParams = date ? [date, module] : [module];
     const countResult = await Database.query(countQuery, countParams);
 
