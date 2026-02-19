@@ -6,7 +6,7 @@ const JWT_SECRET = process.env.learn_STACK_SECRET_SERVER_KEY || process.env.JWT_
 
 export async function GET(request: NextRequest) {
   try {
-    // Get authorization header
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return NextResponse.json(
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
 
     const token = authHeader.substring(7);
     
-    // Verify JWT token
+    
     let decoded: any;
     try {
       decoded = jwt.verify(token, JWT_SECRET);
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Check if user is admin or superadmin
+    
     if (decoded.role !== 'admin' && decoded.role !== 'superadmin') {
       return NextResponse.json(
         { success: false, message: 'Forbidden - Admin access required' },
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Fetch all youth participants with contract status
+    
     const result = await Database.query(`
       SELECT 
         yp.youth_id,
@@ -66,13 +66,6 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error: any) {
-    console.error('Fetch youth error:', error);
-    console.error('Error details:', {
-      message: error?.message,
-      code: error?.code,
-      detail: error?.detail,
-      stack: error?.stack?.substring(0, 500)
-    });
     return NextResponse.json(
       { 
         success: false, 

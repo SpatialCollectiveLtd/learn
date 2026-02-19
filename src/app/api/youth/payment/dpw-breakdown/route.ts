@@ -51,7 +51,7 @@ interface CycleBreakdown {
 
 export async function GET(request: NextRequest) {
   try {
-    // Get token from Authorization header
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -61,7 +61,7 @@ export async function GET(request: NextRequest) {
     const decoded = verifyYouthToken(token);
     const youth_id = decoded.youthId;
 
-    // Load DPW payment data
+    
     const dataPath = path.join(process.cwd(), 'data', 'dpw-payment-data.json');
     
     try {
@@ -79,11 +79,11 @@ export async function GET(request: NextRequest) {
         });
       }
 
-      // Create cycle breakdown from cycle data
+      
       const cycleBreakdown: CycleBreakdown[] = [];
       
       if (userPayment.cycle2) {
-        // Adjust quality score to be more representative (minimum 60% for participants)
+        
         const adjustedQuality = Math.max(userPayment.cycle2.quality_percentage, 60);
         
         cycleBreakdown.push({
@@ -99,7 +99,7 @@ export async function GET(request: NextRequest) {
       }
       
       if (userPayment.cycle3) {
-        // Adjust quality score to be more representative (minimum 60% for participants)
+        
         const adjustedQuality = Math.max(userPayment.cycle3.quality_percentage, 60);
         
         cycleBreakdown.push({
@@ -114,7 +114,7 @@ export async function GET(request: NextRequest) {
         });
       }
 
-      // Calculate overall adjusted quality score
+      
       const totalBasePay = (userPayment.cycle2?.base_pay || 0) + (userPayment.cycle3?.base_pay || 0);
       const totalQualityPay = (userPayment.cycle2?.quality_pay || 0) + (userPayment.cycle3?.quality_pay || 0);
       const overallQuality = totalBasePay > 0 ? Math.max(Math.round((totalQualityPay / totalBasePay) * 100), 60) : 60;
@@ -137,7 +137,7 @@ export async function GET(request: NextRequest) {
       });
 
     } catch (fileError) {
-      console.error('Error reading DPW payment data:', fileError);
+      
       return NextResponse.json({
         message: 'DPW payment data not available', 
         period: 'Jan 7 - Feb 6, 2026',
@@ -147,7 +147,7 @@ export async function GET(request: NextRequest) {
     }
 
   } catch (error) {
-    console.error('Error fetching DPW payment breakdown:', error);
+    
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

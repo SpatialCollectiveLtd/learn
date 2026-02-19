@@ -43,7 +43,7 @@ interface PaymentData {
   work_days_completed?: number;
   total_days_worked?: number;
   daily_breakdown: CycleBreakdown[];
-  cycle_breakdown?: CycleBreakdown[];  // Add cycle_breakdown property
+  cycle_breakdown?: CycleBreakdown[];  
   payment_formula?: PaymentFormula;
   period?: string;
   overall_quality_score?: number;
@@ -57,7 +57,7 @@ export default function PaymentTab() {
   const [refreshing, setRefreshing] = useState(false);
   const [paymentData, setPaymentData] = useState<PaymentData | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [showDPWData, setShowDPWData] = useState(true); // Default to DPW data
+  const [showDPWData, setShowDPWData] = useState(true); 
 
   useEffect(() => {
     fetchPaymentData();
@@ -72,7 +72,7 @@ export default function PaymentTab() {
         return;
       }
 
-      // Choose endpoint based on toggle
+      
       const endpoint = showDPWData 
         ? '/api/youth/payment/dpw-breakdown' 
         : '/api/youth/payment/breakdown';
@@ -89,7 +89,7 @@ export default function PaymentTab() {
         setError(result.error?.message || result.message || 'Failed to load payment data');
       }
     } catch (err: any) {
-      console.error('Payment fetch error:', err);
+      
       setError(err.message || 'Network error');
     } finally {
       setLoading(false);
@@ -168,11 +168,11 @@ export default function PaymentTab() {
 
   return (
     <div className="p-4 space-y-4">
-      {/* Header with Toggle and Refresh */}
+      {}
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-heading font-bold text-white">Payment Breakdown</h2>
         <div className="flex items-center gap-3">
-          {/* DPW Data Toggle */}
+          {}
           <div className="flex items-center gap-2">
             <span className="text-xs text-foreground-subtle">Regular</span>
             <button
@@ -188,7 +188,7 @@ export default function PaymentTab() {
             <span className="text-xs text-foreground-subtle">DPW</span>
           </div>
           
-          {/* Refresh Button */}
+          {}
           <button
             onClick={handleRefresh}
             disabled={refreshing}
@@ -199,7 +199,7 @@ export default function PaymentTab() {
         </div>
       </div>
 
-      {/* Period Display for DPW Data */}
+      {}
       {showDPWData && paymentData?.period && (
         <div className="bg-primary/10 border border-primary/30 rounded-lg p-3">
           <div className="flex items-center gap-2">
@@ -214,7 +214,7 @@ export default function PaymentTab() {
         </div>
       )}
 
-      {/* Last Updated */}
+      {}
       {paymentData.last_updated && (
         <div className="flex items-center gap-2 text-xs text-foreground-subtle">
           <Info className="w-3 h-3" />
@@ -227,7 +227,7 @@ export default function PaymentTab() {
         </div>
       )}
 
-      {/* Total Earnings Card */}
+      {}
       <div className="bg-gradient-to-br from-primary/20 to-primary-dark/20 border border-primary/30 rounded-xl p-6 text-center">
         <p className="text-foreground-subtle text-sm mb-2">Total Earnings</p>
         <div className="text-4xl font-heading font-bold text-white mb-1">
@@ -238,7 +238,7 @@ export default function PaymentTab() {
         </p>
       </div>
 
-      {/* No Work Data Message */}
+      {}
       {!hasWorkData && paymentData.message && (
         <div className="bg-info/10 border border-info/30 rounded-lg p-4">
           <div className="flex items-start gap-3">
@@ -246,7 +246,7 @@ export default function PaymentTab() {
             <div>
               <p className="text-sm font-semibold text-white mb-2">{paymentData.message}</p>
               
-              {/* Payment Formula */}
+              {}
               {paymentData.payment_formula && (
                 <div className="mt-3 space-y-2">
                   <p className="text-xs font-semibold text-foreground-subtle">What You Can Earn:</p>
@@ -283,7 +283,7 @@ export default function PaymentTab() {
         </div>
       )}
 
-      {/* Cycle Breakdown */}
+      {}
       {hasWorkData && (paymentData.daily_breakdown || paymentData.cycle_breakdown) && ((paymentData.daily_breakdown && paymentData.daily_breakdown.length > 0) || (paymentData.cycle_breakdown && paymentData.cycle_breakdown.length > 0)) && (
         <div className="space-y-3">
           <h3 className="text-sm font-subheading font-semibold text-white flex items-center gap-2">
@@ -315,7 +315,7 @@ export default function PaymentTab() {
                   </div>
                   
                   <div className="grid grid-cols-2 gap-2 text-xs">
-                    {/* Show POIs for regular data, Work Type for DPW data */}
+                    {}
                     {item.pois_submitted !== undefined ? (
                       <div>
                         <span className="text-foreground-subtle">POIs Submitted</span>
@@ -328,7 +328,7 @@ export default function PaymentTab() {
                       </div>
                     )}
                     
-                    {/* Days Worked for DPW data */}
+                    {}
                     {item.days_worked !== undefined && (
                       <div>
                         <span className="text-foreground-subtle">Days Worked</span>

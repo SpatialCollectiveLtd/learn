@@ -14,7 +14,7 @@ export const ValidatorTrainingWrapper: React.FC<ValidatorTrainingWrapperProps> =
   const [staffRole, setStaffRole] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check if user is already authenticated via JWT token
+  
   useEffect(() => {
     const storedToken = localStorage.getItem('staffToken');
     const storedStaffId = localStorage.getItem('staffId');
@@ -32,7 +32,7 @@ export const ValidatorTrainingWrapper: React.FC<ValidatorTrainingWrapperProps> =
   }, []);
 
   const handleAuthenticated = (data: { token: string; staff: { staffId: string; fullName: string; role: string } }) => {
-    // Store JWT and staff info in localStorage
+    
     localStorage.setItem('staffToken', data.token);
     localStorage.setItem('staffId', data.staff.staffId);
     localStorage.setItem('staffName', data.staff.fullName);
@@ -55,7 +55,7 @@ export const ValidatorTrainingWrapper: React.FC<ValidatorTrainingWrapperProps> =
     setIsAuthenticated(false);
   };
 
-  // Loading state
+  
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -67,15 +67,15 @@ export const ValidatorTrainingWrapper: React.FC<ValidatorTrainingWrapperProps> =
     );
   }
 
-  // Show authentication screen if not authenticated
+  
   if (!isAuthenticated) {
     return <StaffAuthentication onAuthenticated={handleAuthenticated} />;
   }
 
-  // Show training content with logout option
+  
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Staff Info Bar */}
+      {}
       <div className="bg-indigo-600 text-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center justify-between">
@@ -125,12 +125,12 @@ export const ValidatorTrainingWrapper: React.FC<ValidatorTrainingWrapperProps> =
         </div>
       </div>
 
-      {/* Training Content */}
+      {}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {children}
       </div>
 
-      {/* Restricted Access Footer */}
+      {}
       <div className="border-t border-gray-200 bg-white mt-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <p className="text-center text-xs text-gray-500">

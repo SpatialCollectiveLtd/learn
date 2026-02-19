@@ -1,27 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyYouthToken } from '@/app/api/_lib/auth';
 
-/**
- * Query List API - Proxy to DPW Manager
- * 
- * GET /api/youth/queries
- * Returns all queries submitted by authenticated youth
- * 
- * Auth: Bearer token (youth JWT)
- * Response: List of queries with status, responses, and history
- */
 
-const DPW_BASE_URL = process.env.DPW_MANAGER_BASE_URL || 'https://digital-chi-six.vercel.app/api/v1';
+const DPW_BASE_URL = process.env.DPW_MANAGER_BASE_URL || 'https://app.spatialcollective.com';
 const DPW_API_KEY = process.env.DPW_MANAGER_API_KEY || '806920718fb09a005ce0672fb9cf202995ef4c42e4b7582db7c5e15881d29bd3';
 
 export async function GET(request: NextRequest) {
   const startTime = Date.now();
   const requestId = crypto.randomUUID();
   
-  console.log(`[Queries-API ${requestId}] Route accessed, DPW_BASE_URL: ${DPW_BASE_URL}`);
   
   try {
-    // Verify youth authentication
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return NextResponse.json(
@@ -43,14 +33,14 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Parse query parameters
+    
     const { searchParams } = new URL(request.url);
-    const status = searchParams.get('status'); // pending, in_progress, resolved
+    const status = searchParams.get('status'); 
     const limit = searchParams.get('limit') || '50';
 
-    console.log(`[Query-List ${requestId}] Request for youth: ${youthId} (status: ${status || 'all'})`);
+    
 
-    // Call DPW Manager API
+    
     const dpwUrl = new URL(`${DPW_BASE_URL}/youth/${youthId}/queries`);
     if (status) dpwUrl.searchParams.set('status', status);
     dpwUrl.searchParams.set('limit', limit);
@@ -66,7 +56,6 @@ export async function GET(request: NextRequest) {
 
     if (!dpwResponse.ok) {
       const errorData = await dpwResponse.json().catch(() => ({ error: 'Unknown error' }));
-      console.error(`[Query-List ${requestId}] DPW API error:`, dpwResponse.status, errorData);
       
       return NextResponse.json(
         { 
@@ -85,13 +74,13 @@ export async function GET(request: NextRequest) {
     const duration = Date.now() - startTime;
     
     const totalQueries = queriesData.data?.queries?.length || 0;
-    console.log(`[Query-List ${requestId}] Success (${duration}ms) - ${totalQueries} queries`);
+    
 
     return NextResponse.json(queriesData);
 
   } catch (error: any) {
     const duration = Date.now() - startTime;
-    console.error(`[Query-List ${requestId}] Error (${duration}ms):`, error);
+    
     
     return NextResponse.json(
       { 

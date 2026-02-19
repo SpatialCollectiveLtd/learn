@@ -3,18 +3,9 @@ import { verifyYouthToken } from '@/app/api/_lib/auth';
 import fs from 'fs/promises';
 import path from 'path';
 
-/**
- * Badges API - Client-Side Badge System
- * 
- * GET /api/youth/badges
- * Returns badge status calculated from local DPW payment data
- * NOTE: This calculates badges locally from DPW Excel data
- * 
- * Auth: Bearer token (youth JWT)
- * Response: Badge status with earned/locked states and progress
- */
 
-// Badge definitions updated for DPW cycles
+
+
 const BADGE_CRITERIA = {
   first_submission: {
     name: 'First Steps',
@@ -36,27 +27,27 @@ const BADGE_CRITERIA = {
     name: 'Quality Master',
     description: 'Maintain high quality scores',
     tiers: [
-      { tier: 'bronze', requirement: 60, icon: '🥉' }, // 60%+ avg quality
-      { tier: 'silver', requirement: 80, icon: '🥈' }, // 80%+
-      { tier: 'gold', requirement: 90, icon: '🥇' }, // 90%+
+      { tier: 'bronze', requirement: 60, icon: '🥉' }, 
+      { tier: 'silver', requirement: 80, icon: '🥈' }, 
+      { tier: 'gold', requirement: 90, icon: '🥇' }, 
     ],
   },
   earning_champion: {
     name: 'Earning Champion',
     description: 'Earn significant amounts through quality work',
     tiers: [
-      { tier: 'bronze', requirement: 5000, icon: '🥉' }, // KES 5,000
-      { tier: 'silver', requirement: 10000, icon: '🥈' }, // KES 10,000  
-      { tier: 'gold', requirement: 15000, icon: '🥇' }, // KES 15,000
+      { tier: 'bronze', requirement: 5000, icon: '🥉' }, 
+      { tier: 'silver', requirement: 10000, icon: '🥈' }, 
+      { tier: 'gold', requirement: 15000, icon: '🥇' }, 
     ],
   },
   top_performer: {
     name: 'Top Performer',
     description: 'Rank in top positions by total earnings',
     tiers: [
-      { tier: 'bronze', requirement: 20, icon: '🥉' }, // Top 20
-      { tier: 'silver', requirement: 10, icon: '🥈' }, // Top 10
-      { tier: 'gold', requirement: 5, icon: '🥇' }, // Top 5
+      { tier: 'bronze', requirement: 20, icon: '🥉' }, 
+      { tier: 'silver', requirement: 10, icon: '🥈' }, 
+      { tier: 'gold', requirement: 5, icon: '🥇' }, 
     ],
   },
 };
@@ -65,10 +56,9 @@ export async function GET(request: NextRequest) {
   const startTime = Date.now();
   const requestId = crypto.randomUUID();
   
-  console.log(`[Badges-API ${requestId}] Route accessed - calculating badges from local DPW data`);
   
   try {
-    // Verify youth authentication
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return NextResponse.json(
@@ -90,9 +80,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    console.log(`[Badges-API ${requestId}] Request for youth: ${youthId}`);
-
-    // Load DPW payment data
+    
     const dataPath = path.join(process.cwd(), 'data', 'dpw-payment-data.json');
     
     try {
@@ -120,10 +108,10 @@ export async function GET(request: NextRequest) {
         });
       }
 
-      // Calculate metrics from DPW data
+      
       const adjustedQuality = Math.max(userPayment.overall_quality_percentage, 60);
       
-      // Calculate rank by earnings
+      
       const allParticipants = Object.values(paymentData.data)
         .sort((a: any, b: any) => b.total_payment - a.total_payment);
       const userRank = allParticipants.findIndex((p: any) => p.youth_id === youthId) + 1;
@@ -138,11 +126,11 @@ export async function GET(request: NextRequest) {
         totalCycles: cycleCount
       };
 
-      // Calculate badge status
+      
       const badges = calculateBadges(metrics);
       const duration = Date.now() - startTime;
       
-      console.log(`[Badges-API ${requestId}] Success (${duration}ms) - ${badges.filter((b: any) => b.earned).length} badges earned`);
+      
 
       return NextResponse.json({
         success: true,
@@ -157,7 +145,7 @@ export async function GET(request: NextRequest) {
       });
       
     } catch (fileError: any) {
-      console.error(`[Badges-API ${requestId}] Failed to read DPW data:`, fileError);
+      
       return NextResponse.json(
         { 
           success: false, 
@@ -174,7 +162,7 @@ export async function GET(request: NextRequest) {
 
   } catch (error: any) {
     const duration = Date.now() - startTime;
-    console.error(`[Badges-API ${requestId}] Error (${duration}ms):`, error);
+    
     
     return NextResponse.json(
       { 
@@ -191,7 +179,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// Helper: Calculate consecutive work days
+
 function calculateConsecutiveDays(dailyBreakdown: any[]): number {
   if (!dailyBreakdown || dailyBreakdown.length === 0) return 0;
   
@@ -215,7 +203,7 @@ function calculateConsecutiveDays(dailyBreakdown: any[]): number {
   return maxStreak;
 }
 
-// Helper: Calculate badge status for DPW data
+
 function calculateBadges(metrics: any) {
   const badges = [];
   

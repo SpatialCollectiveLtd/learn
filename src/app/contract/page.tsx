@@ -8,7 +8,7 @@ import SignatureCanvas from "react-signature-canvas";
 import { ErrorModal } from "@/components/ui/error-modal";
 import axios from "axios";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
 export default function ContractPage() {
   const router = useRouter();
@@ -22,7 +22,7 @@ export default function ContractPage() {
 
   useEffect(() => {
     const fetchContractTemplate = async () => {
-      // Check if user is authenticated as youth
+      
       const userType = localStorage.getItem('userType');
       const storedYouthData = localStorage.getItem('youthData');
       const token = localStorage.getItem('youthToken');
@@ -36,7 +36,7 @@ export default function ContractPage() {
         const parsed = JSON.parse(storedYouthData);
         setYouthData(parsed);
 
-        // Fetch contract template from API
+        
         const response = await axios.get(
           `${API_URL}/api/contracts/template`,
           {
@@ -50,7 +50,7 @@ export default function ContractPage() {
           setTemplateData(response.data.data);
         }
       } catch (error: any) {
-        console.error('Failed to fetch template:', error);
+        
         setErrorModal({
           isOpen: true,
           message: error.response?.data?.message || 'Failed to load contract template'
@@ -97,13 +97,13 @@ export default function ContractPage() {
     setIsSigning(true);
 
     try {
-      // Get signature as base64
+      
       const signatureData = digitalSignatureRef.current.toDataURL();
 
-      // Get youth token
+      
       const token = localStorage.getItem('youthToken');
 
-      // Call API to save signed contract
+      
       const response = await axios.post(
         `${API_URL}/api/contracts/sign`,
         {
@@ -118,21 +118,21 @@ export default function ContractPage() {
       );
 
       if (response.data.success) {
-        // Store agreement acceptance locally as well
+        
         localStorage.setItem(`agreement-accepted-${youthData.youthId}`, 'true');
         localStorage.setItem(`agreement-date-${youthData.youthId}`, new Date().toISOString());
 
-        // Update youth data to reflect contract signing
+        
         const updatedYouthData = { ...youthData, hasSignedContract: true };
         localStorage.setItem('youthData', JSON.stringify(updatedYouthData));
 
-        // Redirect to youth dashboard
+        
         setTimeout(() => {
           router.push('/dashboard/youth');
         }, 1000);
       }
     } catch (error: any) {
-      console.error('Failed to save signature:', error);
+      
       setErrorModal({
         isOpen: true,
         message: error.response?.data?.message || 'Failed to save your signature. Please try again.'
@@ -158,7 +158,7 @@ export default function ContractPage() {
 
       <div className="relative z-10 py-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
-          {/* Header */}
+          {}
           <div className="text-center mb-6 sm:mb-8">
             <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-[#dc2626]/10 border border-[#dc2626]/30 rounded-full mb-3 sm:mb-4">
               <FileText className="w-6 h-6 sm:w-8 sm:h-8 text-[#dc2626]" />
@@ -171,9 +171,9 @@ export default function ContractPage() {
             </p>
           </div>
 
-          {/* Contract Document */}
+          {}
           <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-xl shadow-2xl overflow-hidden mb-8">
-            {/* Contract Header */}
+            {}
             <div className="bg-[#dc2626] text-white p-4 sm:p-6">
               <h2 className="text-xl sm:text-2xl font-heading font-bold mb-1 sm:mb-2">
                 SPATIAL COLLECTIVE LIMITED
@@ -181,9 +181,9 @@ export default function ContractPage() {
               <p className="text-sm sm:text-base text-red-100">Youth Training Program - Employment Contract</p>
             </div>
 
-            {/* Contract Content */}
+            {}
             <div className="p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6 max-h-[500px] overflow-y-auto">
-              {/* Participant Info */}
+              {}
               <div className="bg-black/40 border border-[#2a2a2a] rounded-lg p-4 sm:p-5">
                 <h3 className="text-base sm:text-lg font-semibold text-white mb-3">Participant Information</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
@@ -206,7 +206,7 @@ export default function ContractPage() {
                 </div>
               </div>
 
-              {/* Contract Terms */}
+              {}
               <div className="space-y-3 sm:space-y-4">
                 <h3 className="text-base sm:text-lg font-semibold text-white">Terms and Conditions</h3>
 
@@ -282,7 +282,7 @@ export default function ContractPage() {
               </div>
             </div>
 
-            {/* Agreement Checkbox */}
+            {}
             <div className="px-4 sm:px-6 lg:px-8 pb-6">
               <label className="flex items-start gap-2 sm:gap-3 cursor-pointer">
                 <input
@@ -298,9 +298,9 @@ export default function ContractPage() {
             </div>
           </div>
 
-          {/* Signature Sections */}
+          {}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            {/* Digital Signature */}
+            {}
             <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-xl p-6">
               <div className="flex items-center gap-2 mb-4">
                 <User className="w-5 h-5 text-[#dc2626]" />
@@ -327,7 +327,7 @@ export default function ContractPage() {
               </p>
             </div>
 
-            {/* Handwritten Signature (Empty) */}
+            {}
             <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-xl p-6">
               <div className="flex items-center gap-2 mb-4">
                 <FileText className="w-5 h-5 text-[#737373]" />
@@ -341,7 +341,7 @@ export default function ContractPage() {
               </p>
             </div>
 
-            {/* SC Admin Signature */}
+            {}
             <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-xl p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Shield className="w-5 h-5 text-[#dc2626]" />
@@ -360,7 +360,7 @@ export default function ContractPage() {
             </div>
           </div>
 
-          {/* Submit Button */}
+          {}
           <div className="flex justify-center">
             <button
               onClick={handleSubmit}
@@ -377,7 +377,7 @@ export default function ContractPage() {
         </div>
       </div>
 
-      {/* Error Modal */}
+      {}
       <ErrorModal
         isOpen={errorModal.isOpen}
         onClose={() => setErrorModal({ isOpen: false, message: '' })}

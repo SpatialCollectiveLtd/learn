@@ -1,7 +1,3 @@
-// GET /api/youth/odk-config
-// Returns the ODK Central configuration for a mobile mapping youth
-// Used to display QR code in their dashboard
-
 import { NextRequest, NextResponse } from 'next/server';
 import { Database } from '@/app/api/_lib/database';
 import jwt from 'jsonwebtoken';
@@ -14,7 +10,7 @@ function getJwtSecret(): string {
   return secret;
 }
 
-// ODK Central configuration
+
 const ODK_CONFIG = {
   baseUrl: process.env.ODK_CENTRAL_URL || 'https://collector.kesmis.go.ke',
   projectId: parseInt(process.env.ODK_PROJECT_ID || '41'),
@@ -22,7 +18,7 @@ const ODK_CONFIG = {
 
 export async function GET(request: NextRequest) {
   try {
-    // Verify JWT authentication
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader?.startsWith('Bearer ')) {
       return NextResponse.json(
@@ -45,7 +41,7 @@ export async function GET(request: NextRequest) {
 
     const youthId = decoded.youthId;
 
-    // Get youth's ODK configuration
+    
     const result = await Database.query(`
       SELECT 
         youth_id,
@@ -67,12 +63,12 @@ export async function GET(request: NextRequest) {
 
     const youth = result.rows[0];
     
-    // Parse full_name into parts for display
+    
     const nameParts = youth.full_name.split(' ');
     const firstName = nameParts[0] || '';
     const lastName = nameParts.slice(1).join(' ') || '';
 
-    // Only mobile_mapping users have ODK config
+    
     if (youth.program_type !== 'mobile_mapping') {
       return NextResponse.json({
         success: false,
@@ -80,7 +76,7 @@ export async function GET(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Check if ODK is configured
+    
     if (!youth.odk_token) {
       return NextResponse.json({
         success: true,
@@ -91,12 +87,12 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // Build the ODK Collect configuration URL
-    // This URL can be used directly or converted to QR code
+    
+    
     const configUrl = `${ODK_CONFIG.baseUrl}/v1/key/${youth.odk_token}/projects/${ODK_CONFIG.projectId}`;
 
-    // Build QR code data object (what ODK Collect expects)
-    // ODK Collect can scan either the URL or a JSON object
+    
+    
     const qrData = {
       general: {
         server_url: configUrl,
@@ -112,7 +108,7 @@ export async function GET(request: NextRequest) {
         configUrl: configUrl,
         qrData: qrData,
         configuredAt: youth.odk_configured_at,
-        // Instructions for the user
+        
         instructions: [
           'Open ODK Collect on your phone',
           'Tap the menu icon (three dots) in the top right',
@@ -124,7 +120,6 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error: any) {
-    console.error('[API] Error fetching ODK config:', error);
     
     return NextResponse.json(
       {

@@ -49,15 +49,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
+      {}
       <div
         className="absolute inset-0 bg-black/80 backdrop-blur-sm"
         onClick={onClose}
       />
 
-      {/* Modal */}
+      {}
       <div className="relative bg-[#1F2121] border border-[#2a2a2a] rounded-xl shadow-2xl max-w-md w-full p-8">
-        {/* Close button */}
+        {}
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-[#e5e5e5] hover:text-white transition-colors"
@@ -65,7 +65,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           <X className="w-5 h-5" />
         </button>
 
-        {/* Header */}
+        {}
         <div className="text-center mb-6">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-[#dc2626]/10 rounded-full mb-4">
             <Shield className="w-8 h-8 text-[#dc2626]" />
@@ -78,7 +78,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           </p>
         </div>
 
-        {/* Form */}
+        {}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label

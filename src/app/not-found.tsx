@@ -8,7 +8,7 @@ export default function NotFound() {
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4">
       <div className="max-w-md w-full text-center">
-        {/* Logo */}
+        {}
         <div className="mb-8 flex justify-center">
           <div className="relative w-32 h-32">
             <Image
@@ -20,12 +20,12 @@ export default function NotFound() {
           </div>
         </div>
 
-        {/* 404 Number */}
+        {}
         <div className="mb-6">
           <h1 className="text-9xl font-bold text-red-600">404</h1>
         </div>
 
-        {/* Content */}
+        {}
         <h2 className="text-3xl font-bold text-white mb-4">
           Page Not Found
         </h2>
@@ -34,7 +34,7 @@ export default function NotFound() {
           The page you're looking for doesn't exist or has been moved.
         </p>
 
-        {/* Action Buttons */}
+        {}
         <div className="space-y-3">
           <Link
             href="/"
@@ -51,7 +51,7 @@ export default function NotFound() {
           </button>
         </div>
 
-        {/* Quick Links */}
+        {}
         <div className="mt-12 bg-gray-900 border border-gray-800 rounded-lg p-6">
           <h3 className="text-white font-semibold mb-4">Quick Links</h3>
           <div className="space-y-2 text-sm">
@@ -67,7 +67,7 @@ export default function NotFound() {
           </div>
         </div>
 
-        {/* Footer */}
+        {}
         <div className="mt-8 text-gray-500 text-sm">
           <p>Spatial Collective Learning Platform</p>
           <p className="mt-1">Need help? Contact: info@spatialcollective.co.ke</p>

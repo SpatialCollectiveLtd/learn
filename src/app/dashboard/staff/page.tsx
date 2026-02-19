@@ -13,21 +13,21 @@ export default function StaffDashboard() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is authenticated as staff
+    
     const token = localStorage.getItem('staffToken');
     const staff = localStorage.getItem('staffData');
 
     if (!token || !staff) {
-      // Not authenticated
+      
       router.push('/');
       return;
     }
 
     const staffInfo = JSON.parse(staff);
     
-    // Only superadmin can access this page
+    
     if (staffInfo.role !== 'superadmin') {
-      // Redirect to appropriate dashboard
+      
       if (staffInfo.role === 'trainer') {
         router.push('/dashboard/trainer');
       } else if (staffInfo.role === 'admin') {
@@ -99,7 +99,7 @@ export default function StaffDashboard() {
       <BackgroundBeams className="opacity-30" />
 
       <div className="relative z-10">
-        {/* Header */}
+        {}
         <header className="bg-[#1F2121]/80 backdrop-blur-sm border-b border-[#2a2a2a] sticky top-0 z-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center justify-between">
@@ -135,9 +135,9 @@ export default function StaffDashboard() {
           </div>
         </header>
 
-        {/* Main Content */}
+        {}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          {/* Welcome Section */}
+          {}
           <div className="max-w-4xl mx-auto mb-12">
             <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-2xl shadow-lg p-8">
               <div className="flex items-start gap-4">
@@ -172,7 +172,7 @@ export default function StaffDashboard() {
             </div>
           </div>
 
-          {/* Training Modules */}
+          {}
           <div className="max-w-5xl mx-auto">
             <h3 className="text-2xl font-heading font-bold text-white mb-6">
               All Training Modules
@@ -208,7 +208,7 @@ export default function StaffDashboard() {
             </div>
           </div>
 
-          {/* Admin Resources */}
+          {}
           <div className="max-w-5xl mx-auto mt-12">
             <h3 className="text-xl font-heading font-bold text-white mb-6">
               Admin Resources
@@ -254,7 +254,7 @@ export default function StaffDashboard() {
           </div>
         </div>
 
-        {/* Footer */}
+        {}
         <footer className="border-t border-[#2a2a2a] mt-12 bg-black/20">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <p className="text-center text-sm text-[#737373]">

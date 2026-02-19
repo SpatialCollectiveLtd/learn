@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { ArrowLeft, Users, Search, Filter, UserCheck, MapPin } from "lucide-react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
 export default function YouthManagementPage() {
   const router = useRouter();
@@ -43,7 +43,7 @@ export default function YouthManagementPage() {
           setYouthData(response.data.data.youth);
         }
       } catch (error) {
-        console.error('Error fetching youth data:', error);
+        
       } finally {
         setIsLoading(false);
       }
@@ -101,7 +101,7 @@ export default function YouthManagementPage() {
         </header>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Stats */}
+          {}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
             <div className="bg-[#1F2121]/50 backdrop-blur-sm border border-[#2a2a2a] rounded-lg p-6">
               <Users className="w-8 h-8 text-blue-500 mb-2" />
@@ -120,7 +120,7 @@ export default function YouthManagementPage() {
             </div>
           </div>
 
-          {/* Search and Filter */}
+          {}
           <div className="mb-6 flex flex-col sm:flex-row gap-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#737373]" />
@@ -138,7 +138,7 @@ export default function YouthManagementPage() {
             </button>
           </div>
 
-          {/* Youth Table */}
+          {}
           <div className="bg-[#1F2121]/50 backdrop-blur-sm border border-[#2a2a2a] rounded-lg overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">

@@ -6,7 +6,7 @@ const JWT_SECRET = process.env.learn_STACK_SECRET_SERVER_KEY || process.env.JWT_
 
 export async function GET(request: NextRequest) {
   try {
-    // Get authorization header
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return NextResponse.json(
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
 
     const token = authHeader.substring(7);
     
-    // Verify JWT token
+    
     let decoded: any;
     try {
       decoded = jwt.verify(token, JWT_SECRET);
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Check if user is trainer
+    
     if (decoded.role !== 'trainer') {
       return NextResponse.json(
         { success: false, message: 'Forbidden - Trainer access required' },
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get recent activity - last logins, registrations
+    
     const recentLogins = await Database.query(`
       SELECT 
         youth_id,
@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
       LIMIT 5
     `);
 
-    // Format activities
+    
     const activities: Array<{
       type: string;
       icon: string;
@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
       timestamp: string;
     }> = [];
 
-    // Add recent completions (based on last_login as a proxy for activity)
+    
     recentLogins.rows.slice(0, 3).forEach((youth: any) => {
       if (youth.last_login) {
         activities.push({
@@ -82,7 +82,7 @@ export async function GET(request: NextRequest) {
       }
     });
 
-    // Add recent registrations
+    
     recentRegistrations.rows.forEach((youth: any) => {
       const isNew = new Date(youth.created_at) > new Date(Date.now() - 24 * 60 * 60 * 1000);
       if (isNew) {
@@ -96,18 +96,18 @@ export async function GET(request: NextRequest) {
       }
     });
 
-    // Sort by timestamp
+    
     activities.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
     return NextResponse.json({
       success: true,
       data: {
-        activities: activities.slice(0, 5), // Return top 5 most recent
+        activities: activities.slice(0, 5), 
       }
     });
 
   } catch (error: any) {
-    console.error('Error fetching activity:', error);
+    
     return NextResponse.json(
       { success: false, message: 'Failed to fetch activity data', error: error.message },
       { status: 500 }

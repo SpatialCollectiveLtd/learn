@@ -8,7 +8,7 @@ export function OsmUsernameNotification() {
   const [needsOsmUsername, setNeedsOsmUsername] = useState(false);
 
   useEffect(() => {
-    // Check if youth needs to set OSM username
+    
     const checkOsmUsername = async () => {
       const youthData = localStorage.getItem('youthData');
       if (!youthData) return;
@@ -16,13 +16,13 @@ export function OsmUsernameNotification() {
       try {
         const youth = JSON.parse(youthData);
         
-        // First check localStorage for recent updates
+        
         if (youth.osmUsername) {
           setNeedsOsmUsername(false);
           return;
         }
         
-        // Check if OSM username is missing from API
+        
         const token = localStorage.getItem('youthToken');
         if (token) {
           const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/youth/profile`, {
@@ -30,30 +30,30 @@ export function OsmUsernameNotification() {
           });
           
           const data = await response.json();
-          // API returns osmUsername (camelCase), not osm_username
+          
           const hasUsername = data.success && (data.data.osmUsername || data.data.osm_username);
           
           if (!hasUsername) {
             setNeedsOsmUsername(true);
             
-            // Check if notification was dismissed recently
+            
             const dismissed = localStorage.getItem('osm-notification-dismissed');
             const dismissedTime = dismissed ? parseInt(dismissed) : 0;
             const oneDayAgo = Date.now() - (24 * 60 * 60 * 1000);
             
-            // Show notification if not dismissed or if dismissed more than 1 day ago
+            
             if (dismissedTime < oneDayAgo) {
-              setTimeout(() => setShow(true), 1000); // Show after 1 second
+              setTimeout(() => setShow(true), 1000); 
             }
           } else {
-            // Update localStorage if username was found
+            
             youth.osmUsername = data.data.osmUsername || data.data.osm_username;
             localStorage.setItem('youthData', JSON.stringify(youth));
             setNeedsOsmUsername(false);
           }
         }
       } catch (error) {
-        console.error('Error checking OSM username:', error);
+        
       }
     };
 
@@ -66,7 +66,7 @@ export function OsmUsernameNotification() {
   };
 
   const handleGoToTraining = () => {
-    localStorage.removeItem('osm-notification-dismissed'); // Clear dismissal when taking action
+    localStorage.removeItem('osm-notification-dismissed'); 
     window.location.href = '/digitization/mapper/2';
   };
 
@@ -75,7 +75,7 @@ export function OsmUsernameNotification() {
   return (
     <div className="fixed bottom-4 right-4 z-50 max-w-md animate-slide-up">
       <div className="bg-gradient-to-r from-[#dc2626] to-[#ef4444] rounded-lg shadow-2xl border border-[#dc2626]/50 overflow-hidden">
-        {/* Header */}
+        {}
         <div className="flex items-start justify-between p-4 pb-3">
           <div className="flex items-start gap-3 flex-1">
             <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
@@ -99,7 +99,7 @@ export function OsmUsernameNotification() {
           </button>
         </div>
 
-        {/* Body */}
+        {}
         <div className="px-4 pb-4">
           <div className="bg-white/10 backdrop-blur-sm rounded-md p-3 mb-3">
             <p className="text-white/95 text-xs mb-2">

@@ -1,4 +1,3 @@
-// Mapper training steps data structure
 export interface TrainingStep {
   id: number;
   title: string;
@@ -88,7 +87,7 @@ export const mapperTrainingSteps: TrainingStep[] = [
           type: 'list',
           title: "Gmail Setup Process",
           content: [
-            "Navigate to https://gmail.com in your web browser",
+            "Navigate to https://accounts.google.com/signup",
             "Click 'Create account' and select 'For myself'",
             "Fill in your first and last name",
             "Choose a unique email address (this will be your username)",
@@ -117,7 +116,7 @@ export const mapperTrainingSteps: TrainingStep[] = [
           type: 'list',
           title: "OSM Registration Steps",
           content: [
-            "Visit https://www.openstreetmap.org in your browser",
+            "Visit https://www.openstreetmap.org/user/new",
             "Click the 'Sign Up' button in the top-right corner",
             "Enter your email address (use your Gmail from Step 1)",
             "Create a display name (this will be publicly visible on all your edits)",
@@ -229,7 +228,7 @@ export const mapperTrainingSteps: TrainingStep[] = [
           type: 'list',
           title: "Installing Java",
           content: [
-            "Visit https://www.java.com/download in your browser",
+            "Visit https://www.java.com/download",
             "Click the 'Download Java' button for your operating system",
             "Run the downloaded installer file",
             "Follow the installation wizard (accept default settings)",

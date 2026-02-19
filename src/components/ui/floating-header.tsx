@@ -18,7 +18,7 @@ export function FloatingHeader({ showBackButton = false, backHref = "/", classNa
   const [homeHref, setHomeHref] = useState("/");
 
   useEffect(() => {
-    // Determine the appropriate home link based on user type
+    
     const userType = localStorage.getItem('userType');
     if (userType === 'youth') {
       setHomeHref('/dashboard/youth');
@@ -37,7 +37,7 @@ export function FloatingHeader({ showBackButton = false, backHref = "/", classNa
     )}>
       <div className="backdrop-blur-md bg-black/60 border border-[#262626]/50 rounded-2xl shadow-2xl">
         <div className="px-4 py-2.5 flex items-center justify-between">
-          {/* Left - Back Button or Logo */}
+          {}
           {showBackButton ? (
             <Link
               href={backHref}
@@ -52,7 +52,7 @@ export function FloatingHeader({ showBackButton = false, backHref = "/", classNa
             </div>
           )}
 
-          {/* Center - Logo */}
+          {}
           <Link href={homeHref} className="flex items-center gap-2">
             <div className="text-[#dc2626] text-xl font-bold font-heading">SC</div>
             <div className="hidden sm:block">
@@ -60,7 +60,7 @@ export function FloatingHeader({ showBackButton = false, backHref = "/", classNa
             </div>
           </Link>
 
-          {/* Right - Spacer for balance */}
+          {}
           <div className="w-12"></div>
         </div>
       </div>

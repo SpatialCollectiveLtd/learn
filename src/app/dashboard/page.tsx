@@ -6,7 +6,7 @@ import { BookOpen, Briefcase, CheckCircle, Lock, AlertCircle, Mail } from 'lucid
 
 interface TrainingStatus {
   programType: string;
-  moduleAssignment?: string;  // 'mapper' or 'validator' for digitization
+  moduleAssignment?: string;  
   settlement: string;
   trainingCompleted: boolean;
   hasOsmUsername: boolean;
@@ -56,7 +56,7 @@ export default function DashboardSelection() {
         setError(data.message);
       }
     } catch (err: any) {
-      console.error('Error fetching training status:', err);
+      
       setError(err.message || 'Failed to load dashboard options');
     } finally {
       setLoading(false);
@@ -66,16 +66,16 @@ export default function DashboardSelection() {
   const handleTrainingClick = () => {
     if (!status) return;
     
-    // Smart routing: For digitization, redirect based on module_assignment
+    
     if (status.programType === 'digitization') {
       const targetRoute = status.moduleAssignment === 'validator'
         ? '/digitization/validator'
-        : '/digitization/mapper';  // Default to mapper if not specified
+        : '/digitization/mapper';  
       router.push(targetRoute);
       return;
     }
     
-    // For other programs, use direct mapping
+    
     const routes: Record<string, string> = {
       mobile_mapping: '/mobile-mapping',
       household_survey: '/household-survey',
@@ -88,10 +88,10 @@ export default function DashboardSelection() {
 
   const handleWorkClick = () => {
     if (!status?.canAccessWorkDashboard) {
-      return; // Button should be disabled
+      return; 
     }
 
-    // Route to appropriate work dashboard based on program type
+    
     if (status.programType === 'mobile_mapping') {
       router.push('/mobile-mapping/work');
     } else {
@@ -135,7 +135,7 @@ export default function DashboardSelection() {
   return (
     <div className="min-h-screen bg-black py-12 px-4">
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
+        {}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-heading font-bold text-white mb-4">
             Welcome to <span className="text-primary">SC</span> Training Hub
@@ -156,9 +156,9 @@ export default function DashboardSelection() {
           </div>
         </div>
 
-        {/* Dashboard Cards */}
+        {}
         <div className={`grid gap-6 ${status.programType === 'digitization' ? 'md:grid-cols-3' : 'md:grid-cols-2'}`}>
-          {/* Training Dashboard Card */}
+          {}
           <button
             onClick={handleTrainingClick}
             className="bg-background-card rounded-2xl shadow-lg shadow-primary/10 p-6 text-left hover:shadow-2xl hover:shadow-primary/20 transition-all transform hover:-translate-y-1 border border-[#262626] hover:border-primary"
@@ -203,7 +203,7 @@ export default function DashboardSelection() {
             )}
           </button>
 
-          {/* Work Dashboard Card - Hidden for microtasking users */}
+          {}
           {status.programType !== 'microtasking' && (
             <button
               onClick={handleWorkClick}
@@ -290,7 +290,7 @@ export default function DashboardSelection() {
             </button>
           )}
 
-          {/* Messages Card - Only for digitization users */}
+          {}
           {status.programType === 'digitization' && (
             <button
               onClick={() => router.push('/dashboard/messages')}
@@ -330,7 +330,7 @@ export default function DashboardSelection() {
           )}
         </div>
 
-        {/* Help Text */}
+        {}
         <div className="text-center mt-8 text-sm text-foreground-subtle">
           <p>Need help? Contact your training coordinator.</p>
         </div>

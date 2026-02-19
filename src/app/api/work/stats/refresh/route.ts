@@ -1,13 +1,9 @@
-// POST /api/work/stats/refresh
-// Forces a fresh fetch from OSM API (bypasses cache)
-// Used when user clicks "Refresh Stats" button
-
 import { NextRequest, NextResponse } from 'next/server';
 import { Database } from '@/app/api/_lib/database';
 import { getTodayBuildingCount, invalidateCache } from '@/lib/osm-service';
 import jwt from 'jsonwebtoken';
 
-// Get JWT secret at runtime, not module load time (for Vercel compatibility)
+
 function getJwtSecret(): string {
   const secret = process.env.learn_STACK_SECRET_SERVER_KEY || process.env.JWT_SECRET || '';
   if (!secret || secret.length < 32) {
@@ -18,7 +14,7 @@ function getJwtSecret(): string {
 
 export async function POST(request: NextRequest) {
   try {
-    // Verify JWT authentication
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader?.startsWith('Bearer ')) {
       return NextResponse.json(
@@ -41,7 +37,7 @@ export async function POST(request: NextRequest) {
 
     const youthId = decoded.youthId;
 
-    // Get youth data
+    
     const youthResult = await Database.query(`
       SELECT 
         yp.youth_id,
@@ -69,7 +65,7 @@ export async function POST(request: NextRequest) {
 
     const youth = youthResult.rows[0];
 
-    // Check OSM username
+    
     if (youth.program_type === 'digitization' && !youth.osm_username) {
       return NextResponse.json({
         success: false,
@@ -78,7 +74,7 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Only digitization module supports OSM tracking
+    
     if (youth.program_type !== 'digitization') {
       return NextResponse.json({
         success: false,
@@ -87,19 +83,19 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Invalidate existing cache
+    
     await invalidateCache(youth.osm_username);
 
-    // Force fresh fetch from OSM API
+    
     const stats = await getTodayBuildingCount(
       youth.osm_username,
       youth.project_hashtag || '#DPW2025',
       youth.timezone || 'Africa/Nairobi',
-      true, // Force refresh = true
-      youth.exception_hashtags || [] // Exception hashtags for this user
+      true, 
+      youth.exception_hashtags || [] 
     );
 
-    // Get today's date in settlement timezone
+    
     const timezone = youth.timezone || 'Africa/Nairobi';
     const offset = timezone === 'Africa/Nairobi' ? 3 : 0;
     const now = new Date();
@@ -130,7 +126,7 @@ export async function POST(request: NextRequest) {
     const dailyTarget = youth.daily_target || 200;
     const percentage = Math.round((stats.totalBuildings / dailyTarget) * 100);
 
-    // Auto-sync work day (create/update and auto-approve)
+    
     if (stats.totalBuildings > 0) {
       const targetMet = stats.totalBuildings >= dailyTarget;
       await Database.query(`
@@ -166,9 +162,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error: any) {
-    console.error('[API] Error refreshing stats:', error);
     
-    // Handle OSM API errors
     if (error.message?.includes('Failed to fetch changesets')) {
       return NextResponse.json(
         {
@@ -191,7 +185,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// OPTIONS handler for CORS
+
 export async function OPTIONS(request: NextRequest) {
   return new NextResponse(null, {
     status: 200,

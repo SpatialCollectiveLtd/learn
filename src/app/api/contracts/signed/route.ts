@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.learn_STACK_SECRET_SERVER_KEY || process.env.JWT_SECRET || 'your-secret-key';
 
-// Handle CORS preflight requests
+
 export async function OPTIONS(request: NextRequest) {
   return new NextResponse(null, {
     status: 200,
@@ -18,7 +18,7 @@ export async function OPTIONS(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    // Get authorization header
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return NextResponse.json(
@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
 
     const token = authHeader.substring(7);
     
-    // Verify JWT token
+    
     let decoded: any;
     try {
       decoded = jwt.verify(token, JWT_SECRET);
@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get youth ID from token
+    
     const youthId = decoded.youthId;
     if (!youthId) {
       return NextResponse.json(
@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Fetch signed contract
+    
     const signedContract = await ContractModel.getSignedContractByYouthId(youthId);
     
     if (!signedContract) {
@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error fetching signed contract:', error);
+    
     return NextResponse.json(
       { 
         success: false, 

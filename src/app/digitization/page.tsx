@@ -20,7 +20,7 @@ export default function DigitizationPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Auto-redirect youth to their specific role page (mapper or validator)
+    
     const userType = localStorage.getItem('userType');
     
     if (userType === 'youth') {
@@ -30,25 +30,25 @@ export default function DigitizationPage() {
         try {
           const youthData = JSON.parse(youthDataStr);
           
-          // For digitization program, redirect to specific role page
+          
           if (youthData.programType === 'digitization') {
             const targetRoute = youthData.moduleAssignment === 'validator'
               ? '/digitization/validator'
               : '/digitization/mapper';
             
-            console.log('[DIGITIZATION] Auto-redirecting to:', targetRoute);
+            
             router.push(targetRoute);
             return;
           }
         } catch (error) {
-          console.error('[DIGITIZATION] Error parsing youth data:', error);
+          
         }
       }
       
       setBackHref('/dashboard');
       setIsYouth(true);
       
-      // Fetch training progress for youth
+      
       const fetchProgress = async () => {
         const token = localStorage.getItem('youthToken');
         if (!token) return;
@@ -62,7 +62,7 @@ export default function DigitizationPage() {
             setMapperProgress(response.data.data.progress.mapper);
           }
         } catch (error) {
-          console.error('Error fetching progress:', error);
+          
         }
       };
 
@@ -80,7 +80,7 @@ export default function DigitizationPage() {
       description: "Learn digital mapping, building digitization, JOSM setup, and complete task workflows from start to finish.",
       link: "/digitization/mapper",
       icon: <IconPencil className="w-16 h-16" />,
-      image: "https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1287&auto=format&fit=crop",
+      image: "https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?q=80&w=1000",
       code: "MAP1",
       totalSteps: 7,
       completedSteps: isYouth ? mapperProgress.length : 0,
@@ -90,10 +90,10 @@ export default function DigitizationPage() {
       description: "Master data validation techniques, quality assurance processes, and ensure mapping accuracy and completeness.",
       link: "/digitization/validator",
       icon: <IconCircleCheck className="w-16 h-16" />,
-      image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1287&auto=format&fit=crop",
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000",
       code: "VAL2",
       totalSteps: 7,
-      completedSteps: 0, // Validator is staff-only
+      completedSteps: 0, 
     },
   ];
 
@@ -101,11 +101,11 @@ export default function DigitizationPage() {
     <main className="min-h-screen bg-black relative overflow-hidden">
       <BackgroundBeams className="opacity-30" />
 
-      {/* Floating Header */}
+      {}
       <FloatingHeader showBackButton backHref={backHref} />
 
       <div className="relative z-10 pt-20">
-        {/* Content */}
+        {}
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <div className="text-center max-w-4xl mx-auto mb-16">
             <div className="text-6xl mb-6 flex items-center justify-center">
@@ -150,7 +150,7 @@ export default function DigitizationPage() {
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                           
-                          {/* Progress Badge */}
+                          {}
                           {isYouth && role.completedSteps > 0 && (
                             <div className="absolute top-2 right-2 bg-[#22c55e]/90 backdrop-blur-sm px-2 py-1 rounded-md flex items-center gap-1" style={{ transform: "translateZ(100px)" }}>
                               <CheckCircle2 className="w-3 h-3 text-white" />
@@ -171,7 +171,7 @@ export default function DigitizationPage() {
                               {role.description}
                             </p>
                             
-                            {/* Progress Bar */}
+                            {}
                             {isYouth && role.completedSteps > 0 && (
                               <div className="mt-2 w-full bg-[#262626] rounded-full h-1.5 overflow-hidden">
                                 <div 
@@ -196,7 +196,7 @@ export default function DigitizationPage() {
         </section>
       </div>
 
-      {/* OSM Username Notification */}
+      {}
       <OsmUsernameNotification />
     </main>
   );

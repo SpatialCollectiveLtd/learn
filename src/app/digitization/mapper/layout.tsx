@@ -11,7 +11,7 @@ export default function MapperLayout({
   const router = useRouter();
 
   useEffect(() => {
-    // Role-based access control: Only mapper role can access this route
+    
     const youthDataStr = localStorage.getItem('youthData');
     
     if (!youthDataStr) {
@@ -22,16 +22,15 @@ export default function MapperLayout({
     try {
       const youthData = JSON.parse(youthDataStr);
       
-      // Check if user is digitization program
+      
       if (youthData.programType !== 'digitization') {
         router.push('/dashboard');
         return;
       }
 
-      // Check if user has mapper role
+      
       if (youthData.moduleAssignment !== 'mapper') {
-        console.warn('[MAPPER LAYOUT] Access denied: User is not a mapper');
-        // Redirect validators to their training page
+        
         if (youthData.moduleAssignment === 'validator') {
           router.push('/digitization/validator');
         } else {
@@ -39,7 +38,7 @@ export default function MapperLayout({
         }
       }
     } catch (error) {
-      console.error('[MAPPER LAYOUT] Error checking role:', error);
+      
       router.push('/');
     }
   }, [router]);

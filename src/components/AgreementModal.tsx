@@ -20,15 +20,15 @@ export const AgreementModal: React.FC<AgreementModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
+      {}
       <div
         className="absolute inset-0 bg-black/80 backdrop-blur-sm"
         onClick={onClose}
       />
 
-      {/* Modal */}
+      {}
       <div className="relative bg-[#1F2121] border border-[#2a2a2a] rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col">
-        {/* Header */}
+        {}
         <div className="p-6 border-b border-[#2a2a2a]">
           <button
             onClick={onClose}
@@ -52,7 +52,7 @@ export const AgreementModal: React.FC<AgreementModalProps> = ({
           </div>
         </div>
 
-        {/* Content */}
+        {}
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           <div className="bg-black/40 border border-[#2a2a2a] rounded-lg p-5">
             <h3 className="text-lg font-semibold text-white mb-3">
@@ -122,7 +122,7 @@ export const AgreementModal: React.FC<AgreementModalProps> = ({
           </div>
         </div>
 
-        {/* Footer */}
+        {}
         <div className="p-6 border-t border-[#2a2a2a] bg-black/20">
           <div className="flex items-center justify-end space-x-3">
             <button

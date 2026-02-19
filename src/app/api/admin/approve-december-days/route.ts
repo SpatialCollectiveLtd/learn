@@ -1,12 +1,9 @@
-// API endpoint to approve December work days
-// POST /api/admin/approve-december-days
-
 import { NextRequest, NextResponse } from 'next/server';
 import { Database } from '@/app/api/_lib/database';
 
 export async function POST(request: NextRequest) {
   try {
-    // Approve all December work days
+    
     const approveResult = await Database.query(`
       UPDATE youth_work_days
       SET status = 'approved'
@@ -16,7 +13,7 @@ export async function POST(request: NextRequest) {
       RETURNING *
     `);
 
-    // Get summary
+    
     const summaryResult = await Database.query(`
       SELECT 
         yp.settlement,
@@ -40,7 +37,6 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error: any) {
-    console.error('[API] Error approving work days:', error);
     
     return NextResponse.json(
       {

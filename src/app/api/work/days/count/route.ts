@@ -1,11 +1,8 @@
-// GET /api/work/days/count
-// Returns the number of approved work days out of maximum (20)
-
 import { NextRequest, NextResponse } from 'next/server';
 import { Database } from '@/app/api/_lib/database';
 import jwt from 'jsonwebtoken';
 
-// Get JWT secret at runtime, not module load time (for Vercel compatibility)
+
 function getJwtSecret(): string {
   const secret = process.env.learn_STACK_SECRET_SERVER_KEY || process.env.JWT_SECRET || '';
   if (!secret || secret.length < 32) {
@@ -16,7 +13,7 @@ function getJwtSecret(): string {
 
 export async function GET(request: NextRequest) {
   try {
-    // Verify JWT authentication
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader?.startsWith('Bearer ')) {
       return NextResponse.json(
@@ -39,7 +36,7 @@ export async function GET(request: NextRequest) {
 
     const youthId = decoded.youthId;
 
-    // Get settlement config to know total allowed days
+    
     const configResult = await Database.query(`
       SELECT swc.total_work_days, swc.start_date
       FROM youth_participants yp
@@ -53,7 +50,7 @@ export async function GET(request: NextRequest) {
     const totalDays = configResult.rows[0]?.total_work_days || 20;
     const startDate = configResult.rows[0]?.start_date;
 
-    // Count approved work days - separate 2025 and 2026
+    
     const approvedResult = await Database.query(`
       SELECT 
         COUNT(*)::INTEGER as days_worked,
@@ -66,7 +63,7 @@ export async function GET(request: NextRequest) {
       AND status = 'approved'
     `, [youthId]);
 
-    // Count pending work days
+    
     const pendingResult = await Database.query(`
       SELECT COUNT(*)::INTEGER as pending_days
       FROM youth_work_days
@@ -102,7 +99,6 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error: any) {
-    console.error('[API] Error fetching work days:', error);
     
     return NextResponse.json(
       {
@@ -115,7 +111,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// OPTIONS handler for CORS
+
 export async function OPTIONS(request: NextRequest) {
   return new NextResponse(null, {
     status: 200,

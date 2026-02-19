@@ -33,33 +33,33 @@ interface BiometricCredential {
 export default function BiometricAttendancePage() {
   const router = useRouter();
   
-  // Authentication state
+  
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [staffName, setStaffName] = useState('');
   const [staffId, setStaffId] = useState('');
   
-  // PIN authentication
-  const [showPinAuth, setShowPinAuth] = useState(true); // Start with PIN auth visible
+  
+  const [showPinAuth, setShowPinAuth] = useState(true); 
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState('');
-  const [authStaffId, setAuthStaffId] = useState(''); // For initial authentication
+  const [authStaffId, setAuthStaffId] = useState(''); 
   
-  // Youth lookup state
+  
   const [youthId, setYouthId] = useState('');
   const [selectedYouth, setSelectedYouth] = useState<Youth | null>(null);
   const [searchResults, setSearchResults] = useState<Youth[]>([]);
   const [loading, setLoading] = useState(false);
   
-  // Biometric state
+  
   const [biometricSupported, setBiometricSupported] = useState<boolean | null>(null);
   const [biometricInProgress, setBiometricInProgress] = useState(false);
   const [biometricResult, setBiometricResult] = useState<string | null>(null);
   const [currentAction, setCurrentAction] = useState<'register' | 'attend' | null>(null);
   
-  // Recent attendance
+  
   const [recentAttendance, setRecentAttendance] = useState<any[]>([]);
 
-  // Check authentication on load
+  
   useEffect(() => {
     checkAuthentication();
     checkBiometricSupport();
@@ -77,31 +77,31 @@ export default function BiometricAttendancePage() {
         setIsAuthenticated(true);
         setShowPinAuth(false);
       } catch (error) {
-        console.error('Error parsing staff data:', error);
+        
         localStorage.removeItem('staffToken');
         localStorage.removeItem('staffData');
-        // Don't redirect - allow mobile authentication
+        
         setShowPinAuth(true);
       }
     } else {
-      // Don't redirect - allow mobile authentication
+      
       setShowPinAuth(true);
     }
   };
 
   const checkBiometricSupport = async () => {
     try {
-      // Check if WebAuthn is supported
+      
       if (!window.PublicKeyCredential) {
         setBiometricSupported(false);
         return;
       }
 
-      // Check if platform authenticator is available (TouchID/FaceID)
+      
       const available = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
       setBiometricSupported(available);
     } catch (error) {
-      console.error('Error checking biometric support:', error);
+      
       setBiometricSupported(false);
     }
   };
@@ -132,11 +132,11 @@ export default function BiometricAttendancePage() {
       const data = await response.json();
 
       if (data.success) {
-        // Store authentication data
+        
         localStorage.setItem('staffToken', data.data.token);
         localStorage.setItem('staffData', JSON.stringify(data.data.staff));
         
-        // Update state
+        
         setStaffName(data.data.staff.full_name);
         setStaffId(data.data.staff.staff_id);
         setIsAuthenticated(true);
@@ -150,7 +150,7 @@ export default function BiometricAttendancePage() {
         setPinError(data.message || 'Invalid credentials');
       }
     } catch (error) {
-      console.error('PIN authentication error:', error);
+      
       setPinError('Authentication failed. Please try again.');
     }
   };
@@ -174,7 +174,7 @@ export default function BiometricAttendancePage() {
         setSearchResults(data.data);
       }
     } catch (error) {
-      console.error('Youth search error:', error);
+      
     } finally {
       setLoading(false);
     }
@@ -185,7 +185,7 @@ export default function BiometricAttendancePage() {
     setSearchResults([]);
     setYouthId(youth.youth_id);
     
-    // Check if youth has biometric registered
+    
     try {
       const response = await fetch(`/api/mobile/biometric-status?youth_id=${youth.youth_id}`, {
         headers: {
@@ -198,7 +198,7 @@ export default function BiometricAttendancePage() {
         setSelectedYouth(prev => prev ? {...prev, biometric_registered: data.registered} : null);
       }
     } catch (error) {
-      console.error('Failed to check biometric status:', error);
+      
     }
   };
 
@@ -210,7 +210,7 @@ export default function BiometricAttendancePage() {
     setBiometricResult(null);
 
     try {
-      // Generate challenge from server
+      
       const challengeResponse = await fetch('/api/mobile/biometric-challenge', {
         method: 'POST',
         headers: {
@@ -225,7 +225,7 @@ export default function BiometricAttendancePage() {
         throw new Error(challengeData.message);
       }
 
-      // Create WebAuthn credential
+      
       const publicKeyCredentialCreationOptions = {
         challenge: new Uint8Array(challengeData.challenge),
         rp: {
@@ -250,7 +250,7 @@ export default function BiometricAttendancePage() {
         publicKey: publicKeyCredentialCreationOptions
       });
 
-      // Send credential to server
+      
       const registrationResponse = await fetch('/api/mobile/biometric-register', {
         method: 'POST',
         headers: {
@@ -282,7 +282,7 @@ export default function BiometricAttendancePage() {
       }
 
     } catch (error: any) {
-      console.error('Biometric registration error:', error);
+      
       setBiometricResult(error.message || 'Biometric registration failed. Please try again.');
     } finally {
       setBiometricInProgress(false);
@@ -298,7 +298,7 @@ export default function BiometricAttendancePage() {
     setBiometricResult(null);
 
     try {
-      // Generate challenge from server
+      
       const challengeResponse = await fetch('/api/mobile/biometric-challenge', {
         method: 'POST',
         headers: {
@@ -313,7 +313,7 @@ export default function BiometricAttendancePage() {
         throw new Error(challengeData.message);
       }
 
-      // Get WebAuthn assertion
+      
       const publicKeyCredentialRequestOptions = {
         challenge: new Uint8Array(challengeData.challenge),
         allowCredentials: challengeData.allowedCredentials.map((cred: any) => ({
@@ -329,7 +329,7 @@ export default function BiometricAttendancePage() {
         publicKey: publicKeyCredentialRequestOptions
       });
 
-      // Send assertion to server for verification and attendance recording
+      
       const attendanceResponse = await fetch('/api/mobile/biometric-attend', {
         method: 'POST',
         headers: {
@@ -358,7 +358,7 @@ export default function BiometricAttendancePage() {
       if (attendanceData.success) {
         setBiometricResult('Attendance recorded successfully!');
         fetchRecentAttendance();
-        // Clear selection after successful attendance
+        
         setTimeout(() => {
           setSelectedYouth(null);
           setYouthId('');
@@ -369,7 +369,7 @@ export default function BiometricAttendancePage() {
       }
 
     } catch (error: any) {
-      console.error('Biometric attendance error:', error);
+      
       setBiometricResult(error.message || 'Biometric verification failed. Please try again.');
     } finally {
       setBiometricInProgress(false);
@@ -390,11 +390,11 @@ export default function BiometricAttendancePage() {
         setRecentAttendance(data.data);
       }
     } catch (error) {
-      console.error('Failed to fetch recent attendance:', error);
+      
     }
   };
 
-  // Show PIN authentication if not yet verified
+  
   if (isAuthenticated && !showPinAuth && recentAttendance.length === 0) {
     setShowPinAuth(true);
   }
@@ -469,7 +469,7 @@ export default function BiometricAttendancePage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
+      {}
       <div className="bg-background-card border-b border-border p-4">
         <div className="flex items-center justify-between">
           <button
@@ -482,7 +482,7 @@ export default function BiometricAttendancePage() {
             <h1 className="text-xl font-heading text-foreground">LEARN PLATFORM</h1>
             <p className="text-sm text-foreground-subtle">Biometric Attendance</p>
           </div>
-          <div className="w-10" /> {/* Spacer */}
+          <div className="w-10" /> {}
         </div>
         
         <div className="mt-4 text-center">
@@ -491,7 +491,7 @@ export default function BiometricAttendancePage() {
         </div>
       </div>
 
-      {/* Biometric Support Status */}
+      {}
       {biometricSupported === false && (
         <div className="bg-error/10 border border-error/20 p-4 m-4 rounded-lg">
           <div className="flex items-center gap-3">
@@ -504,7 +504,7 @@ export default function BiometricAttendancePage() {
         </div>
       )}
 
-      {/* Youth Search */}
+      {}
       <div className="p-4">
         <div className="space-y-4">
           <div>
@@ -523,7 +523,7 @@ export default function BiometricAttendancePage() {
             />
           </div>
 
-          {/* Search Results */}
+          {}
           {searchResults.length > 0 && (
             <div className="bg-background-card border border-border rounded-lg">
               {searchResults.slice(0, 5).map((youth) => (
@@ -548,7 +548,7 @@ export default function BiometricAttendancePage() {
             </div>
           )}
 
-          {/* Selected Youth */}
+          {}
           {selectedYouth && (
             <div className="bg-background-card border border-border rounded-lg p-4">
               <div className="flex items-start justify-between mb-4">
@@ -582,7 +582,7 @@ export default function BiometricAttendancePage() {
                 </div>
               </div>
 
-              {/* Biometric Actions */}
+              {}
               {biometricSupported && (
                 <div className="space-y-3">
                   {!selectedYouth.biometric_registered ? (
@@ -636,7 +636,7 @@ export default function BiometricAttendancePage() {
                 </div>
               )}
 
-              {/* Biometric Result */}
+              {}
               {biometricResult && (
                 <div className={`mt-4 p-3 rounded-lg ${
                   biometricResult.includes('successfully') 
@@ -649,7 +649,7 @@ export default function BiometricAttendancePage() {
             </div>
           )}
 
-          {/* Recent Attendance */}
+          {}
           {recentAttendance.length > 0 && (
             <div className="bg-background-card border border-border rounded-lg p-4">
               <h3 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">

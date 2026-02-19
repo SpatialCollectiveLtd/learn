@@ -3,9 +3,7 @@ import { Database } from '@/app/api/_lib/database';
 import { signToken } from '@/app/api/_lib/auth';
 import crypto from 'crypto';
 
-/**
- * POST /api/mobile/pin-auth - Authenticate trainer with PIN
- */
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -18,7 +16,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Rate limiting check (10 attempts per hour per IP)
+    
     const clientIp = request.headers.get('x-forwarded-for') || 'unknown';
     const hourAgo = new Date(Date.now() - 60 * 60 * 1000);
 
@@ -33,7 +31,7 @@ export async function POST(request: NextRequest) {
 
     const attempts = parseInt(rateLimitCheck.rows[0]?.attempts || '0');
     if (attempts >= 10) {
-      // Log rate limit violation
+      
       await Database.query(`
         INSERT INTO auth_logs (
           user_id, user_type, action, ip_address, user_agent, success, error_message, created_at
@@ -46,7 +44,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get staff member details
+    
     const staffResult = await Database.query(`
       SELECT 
         staff_id,
@@ -62,7 +60,7 @@ export async function POST(request: NextRequest) {
     `, [staff_id.toUpperCase()]);
 
     if (staffResult.rows.length === 0) {
-      // Log failed attempt
+      
       await Database.query(`
         INSERT INTO auth_logs (
           user_id, user_type, action, ip_address, user_agent, success, error_message, created_at
@@ -77,7 +75,7 @@ export async function POST(request: NextRequest) {
 
     const staff = staffResult.rows[0];
 
-    // Check if staff has mobile attendance permission
+    
     if (!staff.can_mobile_attend) {
       await Database.query(`
         INSERT INTO auth_logs (
@@ -91,11 +89,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verify PIN
+    
     let pinValid = false;
 
     if (staff.mobile_pin_hash && staff.mobile_pin_salt) {
-      // Hash provided PIN with stored salt
+      
       const hashedPin = crypto
         .pbkdf2Sync(pin, staff.mobile_pin_salt, 100000, 32, 'sha256')
         .toString('hex');
@@ -104,7 +102,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!pinValid) {
-      // Log failed authentication
+      
       await Database.query(`
         INSERT INTO auth_logs (
           user_id, user_type, action, ip_address, user_agent, success, error_message, created_at
@@ -117,17 +115,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate JWT token (expires in 8 hours for mobile sessions)
+    
     const tokenPayload = {
       staffId: staff.staff_id,
       role: staff.role,
       email: staff.email,
-      mobile: true // Flag to indicate mobile session
+      mobile: true 
     };
 
     const token = signToken(tokenPayload, '8h');
 
-    // Update last login timestamp
+    
     await Database.query(`
       UPDATE staff_members 
       SET 
@@ -136,14 +134,14 @@ export async function POST(request: NextRequest) {
       WHERE staff_id = $1
     `, [staff.staff_id]);
 
-    // Log successful authentication  
+    
     await Database.query(`
       INSERT INTO auth_logs (
         user_id, user_type, action, ip_address, user_agent, success, created_at
       ) VALUES ($1, 'staff', 'mobile_pin_auth', $2, $3, TRUE, NOW())
     `, [staff.staff_id, clientIp, request.headers.get('user-agent')]);
 
-    // Get staff stats for mobile dashboard
+    
     const statsResult = await Database.query(`
       SELECT 
         COUNT(*) as total_attendances_today,
@@ -178,7 +176,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error: unknown) {
-    console.error('Mobile PIN authentication error:', error);
+    
     return NextResponse.json(
       { success: false, message: 'Authentication server error' },
       { status: 500 }
@@ -186,18 +184,16 @@ export async function POST(request: NextRequest) {
   }
 }
 
-/**
- * PUT /api/mobile/pin-auth - Set/Update mobile PIN
- */
+
 export async function PUT(request: NextRequest) {
   try {
-    // This endpoint requires existing authentication via email/password
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader?.startsWith('Bearer ')) {
       return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
     }
 
-    // Use existing auth verification (assumes staff can set PIN via web interface)
+    
     const body = await request.json();
     const { staff_id, new_pin, current_password } = body;
 
@@ -208,7 +204,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Validate PIN format (4-6 digits)
+    
     if (!/^\d{4,6}$/.test(new_pin)) {
       return NextResponse.json(
         { success: false, message: 'PIN must be 4-6 digits' },
@@ -216,7 +212,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Verify current password (simplified - in production verify against stored password)
+    
     const staffResult = await Database.query(`
       SELECT staff_id, full_name, is_active
       FROM staff_members 
@@ -230,13 +226,13 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Generate salt and hash PIN
+    
     const salt = crypto.randomBytes(32).toString('hex');
     const hashedPin = crypto
       .pbkdf2Sync(new_pin, salt, 100000, 32, 'sha256')
       .toString('hex');
 
-    // Update staff record with new PIN
+    
     await Database.query(`
       UPDATE staff_members 
       SET 
@@ -247,7 +243,7 @@ export async function PUT(request: NextRequest) {
       WHERE staff_id = $3
     `, [hashedPin, salt, staff_id.toUpperCase()]);
 
-    // Log PIN update
+    
     const clientIp = request.headers.get('x-forwarded-for') || 'unknown';
     await Database.query(`
       INSERT INTO auth_logs (
@@ -261,7 +257,7 @@ export async function PUT(request: NextRequest) {
     });
 
   } catch (error: unknown) {
-    console.error('Mobile PIN update error:', error);
+    
     return NextResponse.json(
       { success: false, message: 'Server error updating PIN' },
       { status: 500 }

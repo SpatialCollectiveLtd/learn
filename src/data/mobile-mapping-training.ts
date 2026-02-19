@@ -1,6 +1,3 @@
-// Mobile Mapping training steps data structure
-// Simple training on ODK Collect app for field data collection
-
 export const DEFAULT_SETTLEMENT_NAME = "Kayole Soweto";
 
 export interface MobileMappingStep {
@@ -21,11 +18,7 @@ export interface MobileMappingStep {
   };
 }
 
-/**
- * Factory function to generate mobile mapping steps with dynamic settlement name
- * @param settlementName - The settlement name to inject into the training content
- * @returns Array of training steps customized for the settlement
- */
+
 export function getMobileMappingSteps(settlementName: string = DEFAULT_SETTLEMENT_NAME): MobileMappingStep[] {
   return [
     {
@@ -212,10 +205,10 @@ export function getMobileMappingSteps(settlementName: string = DEFAULT_SETTLEMEN
   ];
 }
 
-// Default export using the default settlement name
+
 export const mobileMappingSteps = getMobileMappingSteps();
 
-// Form guides - explanations of questions in each form
+
 export interface FormGuide {
   formId: string;
   formName: string;

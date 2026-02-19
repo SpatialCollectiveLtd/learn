@@ -4,13 +4,10 @@ import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.learn_STACK_SECRET_SERVER_KEY || process.env.JWT_SECRET || 'your-secret-key';
 
-/**
- * GET /api/youth/training-progress
- * Fetch training progress for authenticated youth
- */
+
 export async function GET(request: NextRequest) {
   try {
-    // Get token from Authorization header
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return NextResponse.json(
@@ -21,7 +18,7 @@ export async function GET(request: NextRequest) {
 
     const token = authHeader.split(' ')[1];
     
-    // Verify token
+    
     let decoded: any;
     try {
       decoded = jwt.verify(token, JWT_SECRET);
@@ -33,9 +30,9 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const moduleType = searchParams.get('module'); // 'mapper' or 'validator'
+    const moduleType = searchParams.get('module'); 
 
-    // Build query based on module filter
+    
     let query = `
       SELECT module_type, step_id, completed_at
       FROM youth_training_progress
@@ -52,7 +49,7 @@ export async function GET(request: NextRequest) {
 
     const result = await Database.query(query, params);
 
-    // Group by module type
+    
     const progressByModule: { [key: string]: number[] } = {
       mapper: [],
       validator: [],
@@ -76,7 +73,7 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error fetching training progress:', error);
+    
     return NextResponse.json(
       { success: false, message: 'Failed to fetch training progress' },
       { status: 500 }
@@ -84,13 +81,10 @@ export async function GET(request: NextRequest) {
   }
 }
 
-/**
- * POST /api/youth/training-progress
- * Mark a step as completed (with sequential validation)
- */
+
 export async function POST(request: NextRequest) {
   try {
-    // Get token from Authorization header
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return NextResponse.json(
@@ -101,7 +95,7 @@ export async function POST(request: NextRequest) {
 
     const token = authHeader.split(' ')[1];
     
-    // Verify token
+    
     let decoded: any;
     try {
       decoded = jwt.verify(token, JWT_SECRET);
@@ -115,7 +109,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { moduleType, stepId } = body;
 
-    // Validate input
+    
     if (!moduleType || !stepId) {
       return NextResponse.json(
         { success: false, message: 'Module type and step ID are required' },
@@ -130,7 +124,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Define max steps per module
+    
     const maxSteps: { [key: string]: number } = {
       mapper: 7,
       validator: 6,
@@ -148,7 +142,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // CRITICAL VALIDATION: Ensure previous step is completed (except for step 1)
+    
     if (stepNumber > 1) {
       const previousStepCheck = await Database.query(
         `SELECT step_id FROM youth_training_progress 
@@ -168,7 +162,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // SPECIAL VALIDATION FOR STEP 2: Ensure OSM username is set
+    
     if (moduleType === 'mapper' && stepNumber === 2) {
       const youthCheck = await Database.query(
         'SELECT osm_username FROM youth_participants WHERE youth_id = $1',
@@ -186,7 +180,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Insert or update progress (using ON CONFLICT to handle duplicates)
+    
     await Database.query(
       `INSERT INTO youth_training_progress (youth_id, module_type, step_id, completed_at)
        VALUES ($1, $2, $3, CURRENT_TIMESTAMP)
@@ -206,7 +200,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error marking step complete:', error);
+    
     return NextResponse.json(
       { success: false, message: 'Failed to mark step as completed' },
       { status: 500 }

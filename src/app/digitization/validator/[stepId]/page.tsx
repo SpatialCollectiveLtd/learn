@@ -43,12 +43,12 @@ export default function ValidatorStepPage({ params }: PageProps) {
   const nextStep = getNextValidatorStep(resolvedParams.stepId);
   const previousStep = getPreviousValidatorStep(resolvedParams.stepId);
 
-  // Check authentication - Staff only
+  
   useEffect(() => {
     const staffToken = localStorage.getItem('staffToken');
     const staffDataStr = localStorage.getItem('staffData');
 
-    // Check if user is staff
+    
     if (!staffToken || !staffDataStr) {
       router.push('/');
       return;
@@ -58,7 +58,7 @@ export default function ValidatorStepPage({ params }: PageProps) {
       const staffData = JSON.parse(staffDataStr);
       const storedStaffId = staffData.staffId;
 
-      // Check if staff has validator training access (trainers and validators)
+      
       if (hasValidatorTrainingAccess(storedStaffId)) {
         setStaffId(storedStaffId);
         setIsAuthenticated(true);
@@ -74,7 +74,7 @@ export default function ValidatorStepPage({ params }: PageProps) {
     setIsLoading(false);
   }, [router]);
 
-  // Check if step is completed
+  
   useEffect(() => {
     if (isAuthenticated && staffId && step) {
       const saved = localStorage.getItem(`validator-completed-steps-${staffId}`);
@@ -104,7 +104,7 @@ export default function ValidatorStepPage({ params }: PageProps) {
     setIsCompleted(!isCompleted);
   };
 
-  // Loading state
+  
   if (isLoading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
@@ -116,7 +116,7 @@ export default function ValidatorStepPage({ params }: PageProps) {
     );
   }
 
-  // Step not found
+  
   if (!step) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
@@ -147,7 +147,7 @@ export default function ValidatorStepPage({ params }: PageProps) {
 
       <div className="relative z-10 pt-16">
         <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Staff Info Badge */}
+          {}
           <div className="bg-[#dc2626]/10 border border-[#dc2626]/30 rounded-lg px-4 py-2 mb-6 flex items-center justify-between">
             <div className="flex items-center gap-2 text-xs text-[#a3a3a3]">
               <Lock className="w-3.5 h-3.5 text-[#dc2626]" />
@@ -158,7 +158,7 @@ export default function ValidatorStepPage({ params }: PageProps) {
             </div>
           </div>
 
-          {/* Progress Indicator */}
+          {}
           <div className="mb-8">
             <div className="flex items-center justify-between text-sm text-[#a3a3a3] mb-2">
               <span>Step {step.id.replace('validator-', '')} of {validatorTrainingSteps.length}</span>
@@ -177,7 +177,7 @@ export default function ValidatorStepPage({ params }: PageProps) {
             </div>
           </div>
 
-          {/* Title */}
+          {}
           <header className="mb-8">
             <h1 className="text-3xl sm:text-4xl font-heading font-bold text-white mb-4">
               {step.title}
@@ -187,7 +187,7 @@ export default function ValidatorStepPage({ params }: PageProps) {
             </p>
           </header>
 
-          {/* Main Content */}
+          {}
           <div className="prose prose-invert max-w-none">
             {step.content.mainContent.map((block, index) => {
               if (block.type === 'text') {
@@ -271,7 +271,7 @@ export default function ValidatorStepPage({ params }: PageProps) {
             })}
           </div>
 
-          {/* Key Takeaways */}
+          {}
           {step.content.keyTakeaways && step.content.keyTakeaways.length > 0 && (
             <div className="mt-12 bg-[#0a0a0a] border border-[#262626] rounded-xl p-6">
               <h3 className="text-xl font-subheading font-semibold text-white mb-4 flex items-center gap-2">
@@ -289,7 +289,7 @@ export default function ValidatorStepPage({ params }: PageProps) {
             </div>
           )}
 
-          {/* Complete Button */}
+          {}
           <div className="mt-8 flex justify-center">
             <button
               onClick={toggleComplete}
@@ -313,7 +313,7 @@ export default function ValidatorStepPage({ params }: PageProps) {
             </button>
           </div>
 
-          {/* Navigation */}
+          {}
           <nav className="mt-12 pt-8 border-t border-[#262626] flex items-center justify-between gap-4">
             {previousStep ? (
               <Link

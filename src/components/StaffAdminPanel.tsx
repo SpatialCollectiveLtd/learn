@@ -19,7 +19,7 @@ export const StaffAdminPanel: React.FC = () => {
     text: string;
   } | null>(null);
 
-  // Load registered staff on mount
+  
   useEffect(() => {
     loadStaff();
   }, []);
@@ -43,7 +43,7 @@ export const StaffAdminPanel: React.FC = () => {
       setMessage({ type: 'error', text: result.message });
     }
 
-    // Clear message after 5 seconds
+    
     setTimeout(() => setMessage(null), 5000);
   };
 
@@ -66,7 +66,7 @@ export const StaffAdminPanel: React.FC = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-6">
-      {/* Header */}
+      {}
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">
           Staff ID Management
@@ -76,7 +76,7 @@ export const StaffAdminPanel: React.FC = () => {
         </p>
       </div>
 
-      {/* Message Alert */}
+      {}
       {message && (
         <div
           className={`mb-6 rounded-lg p-4 ${
@@ -95,7 +95,7 @@ export const StaffAdminPanel: React.FC = () => {
         </div>
       )}
 
-      {/* Add Staff Button */}
+      {}
       <div className="mb-6">
         <button
           onClick={() => setShowAddForm(!showAddForm)}
@@ -118,7 +118,7 @@ export const StaffAdminPanel: React.FC = () => {
         </button>
       </div>
 
-      {/* Add Staff Form */}
+      {}
       {showAddForm && (
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
@@ -201,7 +201,7 @@ export const StaffAdminPanel: React.FC = () => {
         </div>
       )}
 
-      {/* Registered Staff List */}
+      {}
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-200">
           <h2 className="text-lg font-semibold text-gray-900">
@@ -294,7 +294,7 @@ export const StaffAdminPanel: React.FC = () => {
         )}
       </div>
 
-      {/* Info Box */}
+      {}
       <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
         <h3 className="text-sm font-medium text-blue-900 mb-2">
           ℹ️ Important Information

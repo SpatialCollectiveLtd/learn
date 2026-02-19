@@ -60,7 +60,7 @@ export default function WorkDashboard() {
   const [lastRefreshTime, setLastRefreshTime] = useState<Date>(new Date());
 
   useEffect(() => {
-    // Check access permission
+    
     checkAccess();
     fetchAllData();
   }, []);
@@ -80,19 +80,19 @@ export default function WorkDashboard() {
       const data = await response.json();
 
       if (data.success) {
-        // Redirect microtasking users to their training dashboard
+        
         if (data.data.programType === 'microtasking') {
           router.push('/microtasking');
           return;
         }
         
-        // Redirect users who haven't completed training
+        
         if (!data.data.canAccessWorkDashboard) {
           router.push('/dashboard');
         }
       }
     } catch (err) {
-      console.error('Access check failed:', err);
+      
     }
   };
 
@@ -107,13 +107,12 @@ export default function WorkDashboard() {
         return;
       }
 
-      // First, sync work days from OSM stats (runs in background)
+      
       fetch('/api/work/days/sync', {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
-      }).catch(err => console.warn('Work days sync failed:', err));
+      }).catch(err => {});
 
-      // Fetch daily stats, work days, and profile in parallel
       const [statsRes, daysRes, profileRes] = await Promise.all([
         fetch('/api/work/stats/daily', {
           headers: { 'Authorization': `Bearer ${token}` },
@@ -142,7 +141,7 @@ export default function WorkDashboard() {
       if (daysData.success) {
         setWorkDays(daysData.data);
       } else {
-        console.warn('Failed to fetch work days:', daysData.message);
+        
       }
 
       if (profileData.success) {
@@ -150,7 +149,7 @@ export default function WorkDashboard() {
       }
 
     } catch (err: any) {
-      console.error('Error fetching data:', err);
+      
       setError(err.message || 'Failed to load dashboard data');
     } finally {
       setLoading(false);
@@ -179,7 +178,7 @@ export default function WorkDashboard() {
         setDailyStats(data.data);
         setLastRefreshTime(new Date());
 
-        // Re-fetch work days to update Performance Summary
+        
         const daysRes = await fetch('/api/work/days/count', {
           headers: { 'Authorization': `Bearer ${token}` },
         });
@@ -191,7 +190,7 @@ export default function WorkDashboard() {
         throw new Error(data.message);
       }
     } catch (err: any) {
-      console.error('Error refreshing stats:', err);
+      
       setError(err.message || 'Failed to refresh statistics');
     } finally {
       setRefreshing(false);
@@ -230,7 +229,7 @@ export default function WorkDashboard() {
   return (
     <div className="min-h-screen bg-black py-8 px-4">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
+        {}
         <div className="mb-8">
           <button
             onClick={() => router.push('/dashboard')}
@@ -257,7 +256,7 @@ export default function WorkDashboard() {
           </div>
         </div>
 
-        {/* Error Alert */}
+        {}
         {error && (
           <div className="mb-6 bg-error/10 border border-error/30 rounded-lg p-4 flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-error mt-0.5 flex-shrink-0" />
@@ -274,7 +273,7 @@ export default function WorkDashboard() {
           </div>
         )}
 
-        {/* Work Assignment Banners */}
+        {}
         {profile?.settlement === 'Kayole' && profile?.youthId?.startsWith('KAY') && (
           <div className="mb-6 bg-gradient-to-r from-primary/20 to-primary-dark/20 border-2 border-primary rounded-xl p-4 shadow-lg shadow-primary/20">
             <div className="flex items-start gap-3">
@@ -413,7 +412,7 @@ export default function WorkDashboard() {
           </div>
         )}
 
-        {/* Code of Conduct Banner for Digitization Users */}
+        {}
         {profile?.programType === 'digitization' && (
           <div className="mb-6 bg-gradient-to-r from-blue-600/20 to-blue-800/20 border-2 border-blue-500 rounded-xl p-4 shadow-lg shadow-blue-500/20">
             <div className="flex items-start gap-3">
@@ -441,17 +440,9 @@ export default function WorkDashboard() {
           </div>
         )}
 
-        {/*   onClick={() => setError(null)}
-              className="text-error hover:text-primary-hover"
-            >
-              ×
-            </button>
-          </div>
-        )}
-
-        {/* Main Stats Grid */}
+        {}
         <div className="grid md:grid-cols-2 gap-6 mb-6">
-          {/* Today's Buildings Card */}
+          {}
           <div className="bg-background-card rounded-2xl shadow-lg shadow-primary/10 p-8 border border-[#262626]">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
@@ -536,7 +527,7 @@ export default function WorkDashboard() {
             )}
           </div>
 
-          {/* Work Days Card */}
+          {}
           <div className="bg-background-card rounded-2xl shadow-lg shadow-info/10 p-8 border border-[#262626]">
             <div className="flex items-center gap-3 mb-6">
               <div className="bg-info/20 p-3 rounded-xl border border-info/30">
@@ -622,7 +613,7 @@ export default function WorkDashboard() {
           </div>
         </div>
 
-        {/* Performance Metrics */}
+        {}
         {workDays && (
           <div className="bg-background-card rounded-2xl shadow-lg shadow-primary/10 p-8 border border-[#262626]">
             <div className="flex items-center gap-3 mb-6">
@@ -663,14 +654,14 @@ export default function WorkDashboard() {
           </div>
         )}
 
-        {/* Last Updated Info */}
+        {}
         <div className="mt-6 text-center text-sm text-foreground-subtle">
           <p>Stats last refreshed at {formatTime(lastRefreshTime.toISOString())}</p>
           <p className="text-xs mt-1">Automatic updates every 5 minutes</p>
         </div>
       </div>
 
-      {/* Notification Toast */}
+      {}
       {profile && <NotificationToast youthId={profile.youthId} />}
     </div>
   );

@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// CORS configuration - Only allow app.spatialcollective.com
 const ALLOWED_ORIGIN = 'https://app.spatialcollective.com';
 
 export async function GET(request: NextRequest) {
-  // Handle CORS preflight
+  
   const origin = request.headers.get('origin');
   
-  // Check if origin is allowed
+  
   if (origin !== ALLOWED_ORIGIN) {
     return NextResponse.json(
       { success: false, message: 'Unauthorized origin' },
@@ -16,10 +15,10 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // Import database after CORS check
+    
     const { Database } = await import('../../_lib/database');
 
-    // Fetch all youth with OSM usernames
+    
     const result = await Database.query(`
       SELECT 
         youth_id,
@@ -40,7 +39,7 @@ export async function GET(request: NextRequest) {
       timestamp: new Date().toISOString()
     });
 
-    // Add CORS headers
+    
     response.headers.set('Access-Control-Allow-Origin', ALLOWED_ORIGIN);
     response.headers.set('Access-Control-Allow-Methods', 'GET');
     response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
@@ -48,7 +47,6 @@ export async function GET(request: NextRequest) {
     return response;
 
   } catch (error: any) {
-    console.error('Error fetching OSM data:', error);
     
     const response = NextResponse.json(
       { 
@@ -59,14 +57,14 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     );
 
-    // Add CORS headers even for errors
+    
     response.headers.set('Access-Control-Allow-Origin', ALLOWED_ORIGIN);
     
     return response;
   }
 }
 
-// Handle OPTIONS request for CORS preflight
+
 export async function OPTIONS(request: NextRequest) {
   const origin = request.headers.get('origin');
   

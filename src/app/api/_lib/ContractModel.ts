@@ -2,9 +2,7 @@ import { Database } from './database';
 import { ContractTemplate, SignedContract } from './types';
 
 export class ContractModel {
-  /**
-   * Get active contract template by program type
-   */
+  
   static async getTemplateByProgramType(programType: string): Promise<ContractTemplate | null> {
     const result = await Database.query<ContractTemplate>(
       `SELECT template_id, program_type, version, title, content, pdf_url, is_active, created_by, created_at, updated_at
@@ -17,9 +15,7 @@ export class ContractModel {
     return result.rows[0] || null;
   }
 
-  /**
-   * Create signed contract
-   */
+  
   static async createSignedContract(data: {
     youthId: string;
     templateId: string;
@@ -42,9 +38,7 @@ export class ContractModel {
     return result.rows[0];
   }
 
-  /**
-   * Get signed contract by youth ID
-   */
+  
   static async getSignedContractByYouthId(youthId: string): Promise<SignedContract | null> {
     const result = await Database.query<SignedContract>(
       `SELECT * FROM signed_contracts 
@@ -56,9 +50,7 @@ export class ContractModel {
     return result.rows[0] || null;
   }
 
-  /**
-   * Invalidate contract
-   */
+  
   static async invalidateContract(
     contractId: string,
     invalidatedBy: string,
@@ -75,9 +67,7 @@ export class ContractModel {
     );
   }
 
-  /**
-   * Get all templates
-   */
+  
   static async getAllTemplates(activeOnly: boolean = true): Promise<ContractTemplate[]> {
     const query = activeOnly
       ? 'SELECT * FROM contract_templates WHERE is_active = true ORDER BY created_at DESC'

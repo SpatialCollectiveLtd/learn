@@ -1,13 +1,8 @@
-// POST /api/work/days/sync
-// Auto-syncs work days from youth_osm_stats table
-// Creates/updates youth_work_days records for any date where youth mapped buildings
-// Auto-approves days to make them count immediately
-
 import { NextRequest, NextResponse } from 'next/server';
 import { Database } from '@/app/api/_lib/database';
 import jwt from 'jsonwebtoken';
 
-// Get JWT secret at runtime, not module load time (for Vercel compatibility)
+
 function getJwtSecret(): string {
   const secret = process.env.learn_STACK_SECRET_SERVER_KEY || process.env.JWT_SECRET || '';
   if (!secret || secret.length < 32) {
@@ -18,7 +13,7 @@ function getJwtSecret(): string {
 
 export async function POST(request: NextRequest) {
   try {
-    // Verify JWT authentication
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader?.startsWith('Bearer ')) {
       return NextResponse.json(
@@ -41,7 +36,7 @@ export async function POST(request: NextRequest) {
 
     const youthId = decoded.youthId;
 
-    // Get youth's settlement config for daily target
+    
     const configResult = await Database.query(`
       SELECT swc.daily_target
       FROM youth_participants yp
@@ -54,7 +49,7 @@ export async function POST(request: NextRequest) {
 
     const dailyTarget = configResult.rows[0]?.daily_target || 200;
 
-    // Get all dates where youth has OSM stats (days they actually worked)
+    
     const statsResult = await Database.query(`
       SELECT 
         date,
@@ -66,16 +61,15 @@ export async function POST(request: NextRequest) {
       ORDER BY date ASC
     `, [youthId]);
 
-    console.log(`[Sync] Found ${statsResult.rows.length} work days for youth ${youthId}`);
-
+    
     let syncedDays = 0;
     let updatedDays = 0;
 
-    // Sync each work day
+    
     for (const stat of statsResult.rows) {
       const targetMet = stat.buildings_mapped >= dailyTarget;
 
-      // Insert or update work day record - auto-approve it
+      
       const result = await Database.query(`
         INSERT INTO youth_work_days (
           youth_id, 
@@ -112,8 +106,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    console.log(`[Sync] Created ${syncedDays} new work days, updated ${updatedDays} existing`);
-
+    
     return NextResponse.json({
       success: true,
       message: `Synced ${statsResult.rows.length} work days`,
@@ -125,7 +118,6 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error: any) {
-    console.error('[API] Error syncing work days:', error);
     
     return NextResponse.json(
       {
@@ -138,7 +130,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// OPTIONS handler for CORS
+
 export async function OPTIONS(request: NextRequest) {
   return new NextResponse(null, {
     status: 200,

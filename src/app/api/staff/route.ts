@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.learn_STACK_SECRET_SERVER_KEY || process.env.JWT_SECRET || 'your-secret-key';
 
-// Verify JWT token and check permissions
+
 function verifyStaffToken(request: NextRequest): { staffId: string; role: string } | null {
   try {
     const authHeader = request.headers.get('authorization');
@@ -24,7 +24,7 @@ function verifyStaffToken(request: NextRequest): { staffId: string; role: string
   }
 }
 
-// GET: List all staff members (admin/superadmin only)
+
 export async function GET(request: NextRequest) {
   try {
     const auth = verifyStaffToken(request);
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get all staff members
+    
     const staff = await StaffModel.findAll();
 
     return NextResponse.json({
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error fetching staff:', error);
+    
     return NextResponse.json(
       { success: false, message: 'Failed to fetch staff members' },
       { status: 500 }

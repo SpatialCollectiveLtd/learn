@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import axios from "axios";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
 export default function ContractReviewPage() {
   const router = useRouter();
@@ -18,7 +18,7 @@ export default function ContractReviewPage() {
 
   useEffect(() => {
     const fetchContractData = async () => {
-      // Check if user is authenticated as youth
+      
       const userType = localStorage.getItem('userType');
       const storedYouthData = localStorage.getItem('youthData');
       const token = localStorage.getItem('youthToken');
@@ -32,7 +32,7 @@ export default function ContractReviewPage() {
         const parsed = JSON.parse(storedYouthData);
         setYouthData(parsed);
 
-        // Fetch signed contract from API
+        
         const response = await axios.get(
           `${API_URL}/api/contracts/signed`,
           {
@@ -46,7 +46,7 @@ export default function ContractReviewPage() {
           setContractData(response.data.data);
         }
       } catch (err: any) {
-        console.error('Failed to fetch contract:', err);
+        
         setError(err.response?.data?.message || 'Failed to load contract data');
       } finally {
         setIsLoading(false);
@@ -92,7 +92,7 @@ export default function ContractReviewPage() {
 
       <div className="relative z-10 py-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
-          {/* Back Button */}
+          {}
           <Link
             href="/dashboard/youth"
             className="inline-flex items-center gap-2 text-[#a3a3a3] hover:text-[#dc2626] transition-colors mb-6"
@@ -101,7 +101,7 @@ export default function ContractReviewPage() {
             Back to Dashboard
           </Link>
 
-          {/* Header */}
+          {}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-[#dc2626]/10 border border-[#dc2626]/30 rounded-full mb-4">
               <FileText className="w-8 h-8 text-[#dc2626]" />
@@ -114,9 +114,9 @@ export default function ContractReviewPage() {
             </p>
           </div>
 
-          {/* Contract Document */}
+          {}
           <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-xl shadow-2xl overflow-hidden mb-8">
-            {/* Contract Header */}
+            {}
             <div className="bg-[#dc2626] text-white p-6">
               <h2 className="text-2xl font-heading font-bold mb-2">
                 SPATIAL COLLECTIVE LIMITED
@@ -124,7 +124,7 @@ export default function ContractReviewPage() {
               <p className="text-red-100">Youth Training Program - Employment Contract</p>
             </div>
 
-            {/* Signed Status Banner */}
+            {}
             <div className="bg-green-900/20 border-b border-green-900/30 p-4">
               <div className="flex items-center gap-3 justify-center">
                 <CheckCircle className="w-5 h-5 text-green-400" />
@@ -140,9 +140,9 @@ export default function ContractReviewPage() {
               </div>
             </div>
 
-            {/* Contract Content */}
+            {}
             <div className="p-8 space-y-6 max-h-[500px] overflow-y-auto">
-              {/* Participant Info */}
+              {}
               <div className="bg-black/40 border border-[#2a2a2a] rounded-lg p-5">
                 <h3 className="text-lg font-semibold text-white mb-3">Participant Information</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
@@ -165,7 +165,7 @@ export default function ContractReviewPage() {
                 </div>
               </div>
 
-              {/* Contract Terms - Simplified for review */}
+              {}
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-white">Terms and Conditions</h3>
                 <p className="text-[#a3a3a3] text-sm">
@@ -175,7 +175,7 @@ export default function ContractReviewPage() {
               </div>
             </div>
 
-            {/* Agreement Status */}
+            {}
             <div className="px-8 pb-6">
               <div className="flex items-start gap-3 bg-green-900/10 border border-green-900/30 rounded-lg p-4">
                 <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
@@ -186,9 +186,9 @@ export default function ContractReviewPage() {
             </div>
           </div>
 
-          {/* Signature Section */}
+          {}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            {/* Digital Signature */}
+            {}
             <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-xl p-6">
               <div className="flex items-center gap-2 mb-4">
                 <User className="w-5 h-5 text-[#dc2626]" />
@@ -210,7 +210,7 @@ export default function ContractReviewPage() {
               </p>
             </div>
 
-            {/* Handwritten Signature */}
+            {}
             <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-xl p-6">
               <div className="flex items-center gap-2 mb-4">
                 <FileText className="w-5 h-5 text-[#737373]" />
@@ -224,7 +224,7 @@ export default function ContractReviewPage() {
               </p>
             </div>
 
-            {/* SC Admin Signature */}
+            {}
             <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-xl p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Shield className="w-5 h-5 text-[#dc2626]" />

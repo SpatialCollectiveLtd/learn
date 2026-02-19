@@ -7,7 +7,7 @@ export default function MaintenancePage() {
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4">
       <div className="max-w-2xl w-full text-center">
-        {/* Logo */}
+        {}
         <div className="mb-8 flex justify-center">
           <div className="relative w-32 h-32">
             <Image
@@ -19,7 +19,7 @@ export default function MaintenancePage() {
           </div>
         </div>
 
-        {/* Icon */}
+        {}
         <div className="mb-6">
           <svg
             className="w-24 h-24 mx-auto text-red-500 animate-pulse"
@@ -42,7 +42,7 @@ export default function MaintenancePage() {
           </svg>
         </div>
 
-        {/* Content */}
+        {}
         <h1 className="text-4xl font-bold text-white mb-4">
           System Maintenance in Progress
         </h1>
@@ -52,7 +52,7 @@ export default function MaintenancePage() {
           The platform will be back online shortly.
         </p>
 
-        {/* Status Box */}
+        {}
         <div className="bg-gray-900 border border-gray-800 rounded-lg p-8 mb-8">
           <div className="flex items-center justify-center mb-4">
             <div className="flex space-x-2">
@@ -76,7 +76,7 @@ export default function MaintenancePage() {
           </div>
         </div>
 
-        {/* What's Being Updated */}
+        {}
         <div className="bg-gray-900 border border-gray-800 rounded-lg p-6 text-left mb-8">
           <h2 className="text-white font-semibold mb-4 flex items-center">
             <svg className="w-5 h-5 mr-2 text-red-500" fill="currentColor" viewBox="0 0 20 20">
@@ -105,7 +105,7 @@ export default function MaintenancePage() {
           </ul>
         </div>
 
-        {/* Contact Info */}
+        {}
         <div className="text-gray-400">
           <p className="mb-2">For urgent matters, please contact:</p>
           <p className="text-red-500 font-semibold">info@spatialcollective.co.ke</p>
@@ -114,7 +114,7 @@ export default function MaintenancePage() {
           </p>
         </div>
 
-        {/* Footer */}
+        {}
         <div className="mt-8 text-gray-500 text-sm">
           <p>Spatial Collective Learning Platform</p>
           <p className="mt-1">© {new Date().getFullYear()} Spatial Collective Ltd. All rights reserved.</p>

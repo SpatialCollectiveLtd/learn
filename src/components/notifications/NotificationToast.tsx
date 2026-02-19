@@ -1,6 +1,3 @@
-// Notification Toast Component
-// Displays notifications that slide up from bottom-right
-// Auto-expires after specified duration
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -27,7 +24,7 @@ export default function NotificationToast({ youthId }: NotificationToastProps) {
   useEffect(() => {
     fetchNotifications();
     
-    // Check for expired notifications every hour
+    
     const interval = setInterval(fetchNotifications, 3600000);
     return () => clearInterval(interval);
   }, [youthId]);
@@ -45,7 +42,7 @@ export default function NotificationToast({ youthId }: NotificationToastProps) {
       if (data.success) {
         setNotifications(data.data);
         
-        // Show new notifications with slide-up animation
+        
         const newVisible: { [key: string]: boolean } = {};
         data.data.forEach((notif: Notification) => {
           if (!notif.is_hidden) {
@@ -55,7 +52,7 @@ export default function NotificationToast({ youthId }: NotificationToastProps) {
         setVisible(newVisible);
       }
     } catch (error) {
-      console.error('Error fetching notifications:', error);
+      
     }
   };
 
@@ -64,21 +61,21 @@ export default function NotificationToast({ youthId }: NotificationToastProps) {
       const token = localStorage.getItem('youthToken');
       if (!token) return;
 
-      // Hide with animation first
+      
       setVisible(prev => ({ ...prev, [notificationId]: false }));
 
-      // Wait for animation to complete
+      
       setTimeout(async () => {
         await fetch(`/api/youth/notifications/${notificationId}/hide`, {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${token}` },
         });
 
-        // Remove from state
+        
         setNotifications(prev => prev.filter(n => n.notification_id !== notificationId));
       }, 300);
     } catch (error) {
-      console.error('Error hiding notification:', error);
+      
     }
   };
 
@@ -148,7 +145,7 @@ export default function NotificationToast({ youthId }: NotificationToastProps) {
               border rounded-xl p-4 shadow-lg backdrop-blur-sm
               relative overflow-hidden
             `}>
-              {/* Animated border pulse for emphasis */}
+              {}
               <div className="absolute inset-0 border-2 border-white/20 rounded-xl animate-pulse" />
               
               <div className="flex gap-3 relative z-10">
@@ -182,7 +179,7 @@ export default function NotificationToast({ youthId }: NotificationToastProps) {
                 </div>
               </div>
 
-              {/* Progress bar for time remaining */}
+              {}
               {notification.auto_expire_at && (
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/10">
                   <div 

@@ -68,7 +68,7 @@ export default function PerformanceTab() {
   const [refreshing, setRefreshing] = useState(false);
   const [performanceData, setPerformanceData] = useState<PerformanceData | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [showDPWData, setShowDPWData] = useState(true); // Default to DPW data
+  const [showDPWData, setShowDPWData] = useState(true); 
 
   const safeNumber = (value: number | undefined | null, decimals: number = 1): string => {
     if (value === undefined || value === null || isNaN(value)) return '0';
@@ -88,7 +88,7 @@ export default function PerformanceTab() {
         return;
       }
 
-      // Choose endpoint based on toggle
+      
       const endpoint = showDPWData 
         ? '/api/youth/performance/dpw' 
         : '/api/youth/performance';
@@ -105,7 +105,7 @@ export default function PerformanceTab() {
         setError(result.error?.message || result.message || 'Failed to load performance data');
       }
     } catch (err: any) {
-      console.error('Performance fetch error:', err);
+      
       setError(err.message || 'Network error');
     } finally {
       setLoading(false);
@@ -178,10 +178,10 @@ export default function PerformanceTab() {
 
   const { personal_metrics, leaderboard = [] } = performanceData;
   
-  // For backward compatibility with non-DPW data (settlement_ranking not used for DPW)
+  
   const settlement_ranking = (performanceData as any).settlement_ranking || [];
   
-  // For DPW data, use earnings ranking
+  
   const userRank = showDPWData 
     ? (performanceData.user_ranking?.earnings_rank || 0)
     : (settlement_ranking[0]?.youth_rank || 0);
@@ -190,11 +190,11 @@ export default function PerformanceTab() {
 
   return (
     <div className="p-4 space-y-4">
-      {/* Header with Toggle and Refresh */}
+      {}
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-heading font-bold text-white">Performance Metrics</h2>
         <div className="flex items-center gap-3">
-          {/* DPW Data Toggle */}
+          {}
           <div className="flex items-center gap-2">
             <span className="text-xs text-foreground-subtle">Regular</span>
             <button
@@ -210,7 +210,7 @@ export default function PerformanceTab() {
             <span className="text-xs text-foreground-subtle">DPW</span>
           </div>
           
-          {/* Refresh Button */}
+          {}
           <button
             onClick={handleRefresh}
             disabled={refreshing}
@@ -221,7 +221,7 @@ export default function PerformanceTab() {
         </div>
       </div>
 
-      {/* Period Display for DPW Data */}
+      {}
       {showDPWData && performanceData?.period && (
         <div className="bg-primary/10 border border-primary/30 rounded-lg p-3">
           <div className="flex items-center gap-2">
@@ -231,7 +231,7 @@ export default function PerformanceTab() {
         </div>
       )}
 
-      {/* Your Rank Card */}
+      {}
       <div className={`
         rounded-xl p-6 text-center border-2
         ${isTopPerformer 
@@ -256,9 +256,9 @@ export default function PerformanceTab() {
         </p>
       </div>
 
-      {/* Personal Metrics Grid */}
+      {}
       <div className="grid grid-cols-2 gap-3">
-        {/* Show Overall Score only for regular data */}
+        {}
         {!showDPWData && personal_metrics?.overall_score !== undefined && (
           <div className="bg-background-elevated border border-border rounded-lg p-4">
             <div className="flex items-center gap-2 mb-2">
@@ -281,7 +281,7 @@ export default function PerformanceTab() {
           </p>
         </div>
         
-        {/* Attendance Rate */}
+        {}
         <div className="bg-background-elevated border border-border rounded-lg p-4">
           <div className="flex items-center gap-2 mb-2">
             <TrendingUp className="w-4 h-4 text-primary" />
@@ -292,7 +292,7 @@ export default function PerformanceTab() {
           </p>
         </div>
         
-        {/* Show POIs for regular data, Earnings for DPW */}
+        {}
         {showDPWData && personal_metrics?.total_earnings !== undefined ? (
           <div className="bg-background-elevated border border-border rounded-lg p-4">
             <div className="flex items-center gap-2 mb-2">
@@ -318,7 +318,7 @@ export default function PerformanceTab() {
           </div>
         )}
         
-        {/* Show Avg POIs per day only for regular data */}
+        {}
         {!showDPWData && personal_metrics?.avg_pois_per_day !== undefined && (
           <div className="bg-background-elevated border border-border rounded-lg p-4">
             <div className="flex items-center gap-2 mb-2">
@@ -332,7 +332,7 @@ export default function PerformanceTab() {
         )}
       </div>
 
-      {/* Score Breakdown */}
+      {}
       <div className="bg-background-elevated border border-border rounded-lg p-4">
         <h3 className="text-sm font-subheading font-semibold text-white mb-3">Score Breakdown</h3>
         
@@ -373,7 +373,7 @@ export default function PerformanceTab() {
         </div>
       </div>
 
-      {/* Info Note */}
+      {}
       <div className="bg-info/10 border border-info/30 rounded-lg p-3">
         <p className="text-xs text-foreground-muted">
           <strong>Note:</strong> {showDPWData 

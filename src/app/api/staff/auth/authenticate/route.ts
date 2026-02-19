@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 const JWT_SECRET = process.env.learn_STACK_SECRET_SERVER_KEY || process.env.JWT_SECRET || 'your-secret-key';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h';
 
-// Handle CORS preflight requests
+
 export async function OPTIONS(request: NextRequest) {
   return new NextResponse(null, {
     status: 200,
@@ -30,8 +30,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate format (S + T/F/M + EA + 4 digits + role)
-    // Examples: STEA8103SA (SuperAdmin), SFEA0119T (Trainer), SMEA4441A (Admin)
+    
+    
     const staffIdPattern = /^S[TFM]EA\d{4}(SA|T|A)$/i;
     if (!staffIdPattern.test(staffId.toUpperCase())) {
       const clientIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Find staff in database
+    
     const staff = await StaffModel.findById(staffId.toUpperCase());
 
     if (!staff) {
@@ -93,11 +93,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Update last login
+    
     await StaffModel.updateLastLogin(staff.staff_id);
 
-    // Generate JWT token
-    // @ts-ignore - JWT types are overly strict about expiresIn
     const token = jwt.sign(
       {
         staffId: staff.staff_id,
@@ -107,10 +105,10 @@ export async function POST(request: NextRequest) {
         userType: 'staff',
       },
       JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN }
+      { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions
     );
 
-    // Log successful authentication
+    
     const clientIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
     await AuthLogModel.log({
       userId: staff.staff_id,
@@ -136,7 +134,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Staff authentication error:', error);
+    
     return NextResponse.json(
       { success: false, message: 'An error occurred during authentication' },
       { status: 500 }

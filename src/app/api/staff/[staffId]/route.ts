@@ -23,7 +23,7 @@ function verifyStaffToken(request: NextRequest): { staffId: string; role: string
   }
 }
 
-// DELETE: Remove staff member
+
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ staffId: string }> }
@@ -40,7 +40,7 @@ export async function DELETE(
 
     const { staffId } = await params;
 
-    // Cannot delete superadmin accounts
+    
     const staffToDelete = await StaffModel.findById(staffId);
     if (!staffToDelete) {
       return NextResponse.json(
@@ -56,7 +56,7 @@ export async function DELETE(
       );
     }
 
-    // Admins can only delete trainers
+    
     if (auth.role === 'admin' && staffToDelete.role !== 'trainer') {
       return NextResponse.json(
         { success: false, message: 'Admins can only delete trainer accounts' },
@@ -64,7 +64,7 @@ export async function DELETE(
       );
     }
 
-    // Delete the staff member
+    
     await StaffModel.delete(staffId);
 
     return NextResponse.json({
@@ -73,7 +73,7 @@ export async function DELETE(
     });
 
   } catch (error) {
-    console.error('Error deleting staff:', error);
+    
     return NextResponse.json(
       { success: false, message: 'Failed to remove staff member' },
       { status: 500 }

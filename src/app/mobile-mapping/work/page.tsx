@@ -56,7 +56,7 @@ export default function MobileMappingWorkDashboard() {
         return;
       }
 
-      // Check training completion
+      
       const statusResponse = await fetch('/api/training/completion-status', {
         headers: { 'Authorization': `Bearer ${token}` },
       });
@@ -64,20 +64,20 @@ export default function MobileMappingWorkDashboard() {
       const statusData = await statusResponse.json();
 
       if (statusData.success) {
-        // Check if user is mobile mapping
+        
         if (statusData.data.programType !== 'mobile_mapping') {
           router.push('/dashboard');
           return;
         }
         
-        // Check if training is complete
+        
         if (!statusData.data.trainingCompleted) {
           router.push('/mobile-mapping');
           return;
         }
       }
 
-      // Fetch profile and work days
+      
       const [profileRes, daysRes] = await Promise.all([
         fetch('/api/youth/profile', {
           headers: { 'Authorization': `Bearer ${token}` },
@@ -99,22 +99,22 @@ export default function MobileMappingWorkDashboard() {
       }
 
     } catch (err: any) {
-      console.error('Error:', err);
+      
       setError(err.message || 'Failed to load dashboard');
     } finally {
       setLoading(false);
     }
   };
 
-  // Calculate current work day based on start date
+  
   const calculateCurrentWorkDay = () => {
     if (!workDays?.startDate) return 0;
     
     const start = new Date(workDays.startDate);
     const today = new Date();
     
-    // Set to Nairobi timezone (UTC+3)
-    const nairobiOffset = 3 * 60; // minutes
+    
+    const nairobiOffset = 3 * 60; 
     const localOffset = today.getTimezoneOffset();
     today.setMinutes(today.getMinutes() + localOffset + nairobiOffset);
     
@@ -123,7 +123,7 @@ export default function MobileMappingWorkDashboard() {
     
     while (current <= today && workDayCount < 20) {
       const dayOfWeek = current.getDay();
-      // Skip weekends (0 = Sunday, 6 = Saturday)
+      
       if (dayOfWeek !== 0 && dayOfWeek !== 6) {
         workDayCount++;
       }
@@ -149,7 +149,7 @@ export default function MobileMappingWorkDashboard() {
   return (
     <div className="min-h-screen bg-black py-6 px-4">
       <div className="max-w-lg mx-auto">
-        {/* Header */}
+        {}
         <div className="mb-6">
           <button
             onClick={() => router.push('/dashboard')}
@@ -170,7 +170,7 @@ export default function MobileMappingWorkDashboard() {
           </div>
         </div>
 
-        {/* Error Alert */}
+        {}
         {error && (
           <div className="mb-6 bg-error/10 border border-error/30 rounded-lg p-4 flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-error mt-0.5 flex-shrink-0" />
@@ -178,7 +178,7 @@ export default function MobileMappingWorkDashboard() {
           </div>
         )}
 
-        {/* User Profile Card */}
+        {}
         {profile && (
           <div className="mb-6 bg-background-card border border-border rounded-xl p-4">
             <div className="flex items-center gap-3">
@@ -199,7 +199,7 @@ export default function MobileMappingWorkDashboard() {
           </div>
         )}
 
-        {/* Current Day Highlight */}
+        {}
         <div className="mb-6 bg-gradient-to-r from-primary/20 to-primary-dark/20 border-2 border-primary rounded-xl p-6 text-center">
           <p className="text-foreground-subtle text-sm mb-2">Current Work Day</p>
           <div className="text-5xl font-heading font-bold text-white mb-1">
@@ -217,7 +217,7 @@ export default function MobileMappingWorkDashboard() {
           )}
         </div>
 
-        {/* Progress Bar */}
+        {}
         <div className="mb-6 bg-background-card border border-border rounded-xl p-4">
           <div className="flex justify-between items-center mb-3">
             <span className="text-foreground-subtle text-sm">Work Period Progress</span>
@@ -235,7 +235,7 @@ export default function MobileMappingWorkDashboard() {
           </div>
         </div>
 
-        {/* Days Grid */}
+        {}
         <div className="mb-6 bg-background-card border border-border rounded-xl p-4">
           <h3 className="text-sm font-subheading font-semibold text-white mb-4 flex items-center gap-2">
             <Calendar className="w-4 h-4 text-primary" />
@@ -268,7 +268,7 @@ export default function MobileMappingWorkDashboard() {
           </p>
         </div>
 
-        {/* Quick Stats */}
+        {}
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div className="bg-background-card border border-border rounded-xl p-4 text-center">
             <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-2">
@@ -286,7 +286,7 @@ export default function MobileMappingWorkDashboard() {
           </div>
         </div>
 
-        {/* Info Card */}
+        {}
         <div className="bg-info/10 border border-info/30 rounded-xl p-4">
           <h3 className="text-sm font-subheading font-semibold text-white mb-2 flex items-center gap-2">
             <AlertCircle className="w-4 h-4 text-info" />
@@ -300,7 +300,7 @@ export default function MobileMappingWorkDashboard() {
           </ul>
         </div>
 
-        {/* New: Tabbed Dashboard */}
+        {}
         <div className="mb-6 bg-background-card border border-border rounded-xl overflow-hidden">
           <WorkDashboardTabs
             paymentTab={<PaymentTab />}
@@ -310,7 +310,7 @@ export default function MobileMappingWorkDashboard() {
           />
         </div>
 
-        {/* Back to Training Link */}
+        {}
         <div className="mt-6 text-center">
           <button
             onClick={() => router.push('/mobile-mapping')}

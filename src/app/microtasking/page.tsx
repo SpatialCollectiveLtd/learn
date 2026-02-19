@@ -17,7 +17,7 @@ export default function MicrotaskingOverviewPage() {
     if (saved) {
       const completed = new Set<number>(JSON.parse(saved));
       setCompletedSteps(completed);
-      // Check if all 3 steps are completed
+      
       setAllTrainingComplete(completed.size === 3);
     }
   }, []);
@@ -25,8 +25,8 @@ export default function MicrotaskingOverviewPage() {
   const totalTime = microtaskingSteps.reduce((sum, step) => sum + step.estimatedTime, 0);
 
   const isStepUnlocked = (stepId: number): boolean => {
-    if (stepId === 1) return true; // First step always unlocked
-    return completedSteps.has(stepId - 1); // Can only access if previous step completed
+    if (stepId === 1) return true; 
+    return completedSteps.has(stepId - 1); 
   };
 
   const handleLaunchPlatform = () => {
@@ -41,7 +41,7 @@ export default function MicrotaskingOverviewPage() {
       
       <div className="relative z-10 pt-20 pb-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          {/* Header */}
+          {}
           <div className="text-center mb-12">
             <div className="flex items-center justify-center mb-4">
               <Smartphone className="w-12 h-12 text-blue-400 mr-3" />
@@ -68,7 +68,7 @@ export default function MicrotaskingOverviewPage() {
             </div>
           </div>
 
-          {/* Training Complete - Launch Platform Button */}
+          {}
           {allTrainingComplete && (
             <div className="mb-8">
               <CometCard className="p-6 bg-gradient-to-r from-green-900/30 to-emerald-900/30 border-green-500/30">
@@ -99,7 +99,7 @@ export default function MicrotaskingOverviewPage() {
             </div>
           )}
 
-          {/* Progress Bar */}
+          {}
           <div className="mb-8">
             <div className="bg-neutral-900/50 rounded-lg p-4 border border-neutral-800">
               <div className="flex items-center justify-between mb-2">
@@ -117,7 +117,7 @@ export default function MicrotaskingOverviewPage() {
             </div>
           </div>
 
-          {/* Training Steps */}
+          {}
           <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-1">
             {microtaskingSteps.map((step) => {
               const isCompleted = completedSteps.has(step.id);
@@ -139,7 +139,7 @@ export default function MicrotaskingOverviewPage() {
                     }`}
                   >
                     <div className="flex items-start gap-4">
-                      {/* Status Icon */}
+                      {}
                       <div className="flex-shrink-0">
                         {isCompleted ? (
                           <CheckCircle2 className="w-8 h-8 text-green-400" />
@@ -150,7 +150,7 @@ export default function MicrotaskingOverviewPage() {
                         )}
                       </div>
 
-                      {/* Content */}
+                      {}
                       <div className="flex-grow">
                         <div className="flex items-center gap-3 mb-2">
                           <h3 className="text-xl font-heading font-bold text-white">
@@ -192,7 +192,7 @@ export default function MicrotaskingOverviewPage() {
             })}
           </div>
 
-          {/* Platform Information Card */}
+          {}
           <div className="mt-8">
             <CometCard className="p-4 sm:p-6 bg-blue-900/20 border-blue-500/30">
               <div className="flex flex-col sm:flex-row items-start gap-4">
@@ -224,7 +224,7 @@ export default function MicrotaskingOverviewPage() {
             </CometCard>
           </div>
 
-          {/* Info Box */}
+          {}
           <div className="mt-8 text-center">
             <p className="text-sm text-[#a3a3a3]">
               Complete all {microtaskingSteps.length} training steps in order to unlock the platform. 

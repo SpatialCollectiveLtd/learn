@@ -1,38 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Database } from '@/app/api/_lib/database';
 
-/**
- * DPW Manager Sync API
- * 
- * Provides comprehensive data about youth participants to app.spatialcollective.com
- * Includes: work performance, attendance, training progress, module allocation
- * 
- * Authentication: API Key required in X-API-Key header
- * 
- * GET /api/external/dpw-sync - Get all data
- * GET /api/external/dpw-sync?youth_id=KAY123 - Get specific youth data
- * GET /api/external/dpw-sync?module=mobile_mapping - Filter by module
- */
+
 
 export async function GET(request: NextRequest) {
   const startTime = Date.now();
   const requestId = crypto.randomUUID();
   
   try {
-    // Verify API key authentication
+    
     const apiKey = request.headers.get('X-API-Key');
     const validApiKey = process.env.DPW_MANAGER_API_KEY;
     
-    // Log incoming request
-    console.log(`[DPW-API ${requestId}] Incoming request:`, {
-      timestamp: new Date().toISOString(),
-      apiKey: apiKey ? `${apiKey.substring(0, 10)}...` : 'MISSING',
-      ip: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
-      userAgent: request.headers.get('user-agent')
-    });
+    
+    
     
     if (!apiKey || !validApiKey || apiKey !== validApiKey) {
-      console.log(`[DPW-API ${requestId}] ❌ Auth failed - Invalid API key`);
+      
       return NextResponse.json(
         { success: false, message: 'Unauthorized - Invalid API Key' },
         { status: 401 }
@@ -43,9 +27,7 @@ export async function GET(request: NextRequest) {
     const youthId = searchParams.get('youth_id');
     const moduleFilter = searchParams.get('module');
     
-    console.log(`[DPW-API ${requestId}] Query params:`, { youthId, moduleFilter });
-
-    // Build query conditions
+    
     let whereConditions = ['yp.is_active = TRUE'];
     let queryParams: any[] = [];
     let paramIndex = 1;
@@ -64,7 +46,7 @@ export async function GET(request: NextRequest) {
 
     const whereClause = whereConditions.join(' AND ');
 
-    // Main query - comprehensive youth data
+    
     const youthData = await Database.query(`
       SELECT 
         yp.youth_id,
@@ -177,7 +159,7 @@ export async function GET(request: NextRequest) {
       ORDER BY yp.youth_id
     `, queryParams);
 
-    // Calculate aggregate statistics
+    
     const stats = await Database.query(`
       SELECT 
         program_type as module,
@@ -221,9 +203,7 @@ export async function GET(request: NextRequest) {
       ORDER BY program_type
     `, queryParams);
 
-    console.log(`[DPW-API ${requestId}] ✅ Query executed: ${youthData.rows.length} participants, ${stats.rows.length} stat rows`);
-
-    // Return comprehensive response
+    
     const response = {
       success: true,
       timestamp: new Date().toISOString(),
@@ -239,17 +219,11 @@ export async function GET(request: NextRequest) {
     };
     
     const duration = Date.now() - startTime;
-    console.log(`[DPW-API ${requestId}] ✅ Response sent in ${duration}ms`);
     
     return NextResponse.json(response);
 
   } catch (error: unknown) {
     const duration = Date.now() - startTime;
-    console.error(`[DPW-API ${requestId}] ❌ Error after ${duration}ms:`, {
-      error: error instanceof Error ? error.message : 'Unknown error',
-      errorType: error instanceof Error ? error.constructor.name : typeof error,
-      stack: error instanceof Error ? error.stack : undefined
-    });
     
     return NextResponse.json(
       { 
@@ -258,7 +232,7 @@ export async function GET(request: NextRequest) {
         error: error instanceof Error ? error.message : 'Unknown error',
         errorType: error instanceof Error ? error.constructor.name : 'UnknownError',
         timestamp: new Date().toISOString(),
-        // Include stack trace only in development
+        
         ...(process.env.NODE_ENV !== 'production' && { 
           stack: error instanceof Error ? error.stack : undefined 
         })

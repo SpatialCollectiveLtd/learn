@@ -28,7 +28,7 @@ export default function MapperOverviewPage() {
       
       <div className="relative z-10 pt-20 pb-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          {/* Header */}
+          {}
           <div className="text-center mb-12">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-white mb-4">
               Mapper Training
@@ -52,7 +52,7 @@ export default function MapperOverviewPage() {
             </div>
           </div>
 
-          {/* Training Steps Grid */}
+          {}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {mapperTrainingSteps.map((step) => {
               const isCompleted = completedSteps.has(step.id);

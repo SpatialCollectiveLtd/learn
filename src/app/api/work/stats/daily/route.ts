@@ -1,13 +1,9 @@
-// GET /api/work/stats/daily
-// Fetches today's building count for authenticated youth mapper
-// Uses caching to prevent OSM API rate limiting
-
 import { NextRequest, NextResponse } from 'next/server';
 import { Database } from '@/app/api/_lib/database';
 import { getTodayBuildingCount } from '@/lib/osm-service';
 import jwt from 'jsonwebtoken';
 
-// Get JWT secret at runtime, not module load time (for Vercel compatibility)
+
 function getJwtSecret(): string {
   const secret = process.env.learn_STACK_SECRET_SERVER_KEY || process.env.JWT_SECRET || '';
   if (!secret || secret.length < 32) {
@@ -18,7 +14,7 @@ function getJwtSecret(): string {
 
 export async function GET(request: NextRequest) {
   try {
-    // Verify JWT authentication
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader?.startsWith('Bearer ')) {
       return NextResponse.json(
@@ -41,7 +37,7 @@ export async function GET(request: NextRequest) {
 
     const youthId = decoded.youthId;
 
-    // Get youth data with settlement config
+    
     const youthResult = await Database.query(`
       SELECT 
         yp.youth_id,
@@ -69,7 +65,7 @@ export async function GET(request: NextRequest) {
 
     const youth = youthResult.rows[0];
 
-    // Check if OSM username exists (required for digitization)
+    
     if (youth.program_type === 'digitization' && !youth.osm_username) {
       return NextResponse.json({
         success: false,
@@ -79,7 +75,7 @@ export async function GET(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // For non-digitization modules, OSM tracking not yet implemented
+    
     if (youth.program_type !== 'digitization') {
       return NextResponse.json({
         success: false,
@@ -88,15 +84,15 @@ export async function GET(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Get today's date in settlement timezone
+    
     const timezone = youth.timezone || 'Africa/Nairobi';
     const offset = timezone === 'Africa/Nairobi' ? 3 : 0;
     const now = new Date();
     const localDate = new Date(now.getTime() + (offset * 60 * 60 * 1000));
     const today = localDate.toISOString().split('T')[0];
 
-    // First check database cache for recent stats (within last 5 minutes)
-    // Note: The date column is stored as a PostgreSQL DATE which returns the raw date string
+    
+    
     const cachedStatsResult = await Database.query(`
       SELECT buildings_mapped, changesets_analyzed, last_changeset_id, last_upload_time, updated_at
       FROM youth_osm_stats
@@ -107,9 +103,9 @@ export async function GET(request: NextRequest) {
 
     let stats;
     if (cachedStatsResult.rows.length > 0) {
-      // Use cached stats from database
+      
       const cached = cachedStatsResult.rows[0];
-      console.log(`[API] Using cached stats from database for ${youthId}`);
+      
       stats = {
         totalBuildings: cached.buildings_mapped || 0,
         changesetsAnalyzed: cached.changesets_analyzed || 0,
@@ -119,22 +115,22 @@ export async function GET(request: NextRequest) {
         processingTime: 0,
       };
     } else {
-      // Fetch fresh OSM stats
-      console.log(`[API] Fetching fresh OSM stats for ${youthId}`);
+      
+      
       stats = await getTodayBuildingCount(
         youth.osm_username,
         youth.project_hashtag || '#DPW2025',
         youth.timezone || 'Africa/Nairobi',
-        false, // Don't force refresh
-        youth.exception_hashtags || [] // Exception hashtags for this user
+        false, 
+        youth.exception_hashtags || [] 
       );
     }
 
-    // Calculate percentage
+    
     const dailyTarget = youth.daily_target || 200;
     const percentage = Math.round((stats.totalBuildings / dailyTarget) * 100);
 
-    // Only update database if we fetched fresh stats (not from cache)
+    
     if (!stats.cacheHit) {
       await Database.query(`
         INSERT INTO youth_osm_stats (
@@ -159,7 +155,7 @@ export async function GET(request: NextRequest) {
       ]);
     }
 
-    // Auto-sync work day (create/update and auto-approve)
+    
     if (stats.totalBuildings > 0) {
       const targetMet = stats.totalBuildings >= dailyTarget;
       await Database.query(`
@@ -194,25 +190,23 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error: any) {
-    console.error('[API] Error fetching daily stats:', error?.message || error);
-    console.error('[API] Error stack:', error?.stack);
     
-    // Try to return cached data from database on any error
+    
     try {
-      // Attempt to get last known stats from database
+      
       const authHeader = request.headers.get('authorization');
       const token = authHeader?.substring(7);
       if (token) {
         const decoded: any = jwt.verify(token, getJwtSecret());
         const youthId = decoded.youthId;
         
-        // Get today's date in EAT
-        const offset = 3; // EAT is UTC+3
+        
+        const offset = 3; 
         const now = new Date();
         const localDate = new Date(now.getTime() + (offset * 60 * 60 * 1000));
         const today = localDate.toISOString().split('T')[0];
         
-        // Check for cached stats in database - simple date comparison
+        
         const cachedResult = await Database.query(`
           SELECT buildings_mapped, changesets_analyzed, last_upload_time
           FROM youth_osm_stats
@@ -222,7 +216,6 @@ export async function GET(request: NextRequest) {
         
         if (cachedResult.rows.length > 0) {
           const cached = cachedResult.rows[0];
-          console.log('[API] Returning cached stats from database due to error');
           
           return NextResponse.json({
             success: true,
@@ -239,7 +232,7 @@ export async function GET(request: NextRequest) {
           });
         }
         
-        // If no cached stats for today, return 0 with a message
+        
         return NextResponse.json({
           success: true,
           data: {
@@ -254,7 +247,7 @@ export async function GET(request: NextRequest) {
         });
       }
     } catch (fallbackError: any) {
-      console.error('[API] Fallback also failed:', fallbackError?.message);
+      
     }
     
     return NextResponse.json(
@@ -268,7 +261,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// OPTIONS handler for CORS
+
 export async function OPTIONS(request: NextRequest) {
   return new NextResponse(null, {
     status: 200,

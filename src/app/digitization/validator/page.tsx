@@ -18,14 +18,14 @@ export default function ValidatorOverviewPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
 
-  // Check authentication status - Staff only
+  
   useEffect(() => {
     const staffToken = localStorage.getItem('staffToken');
     const staffDataStr = localStorage.getItem('staffData');
 
-    // Check if user is staff
+    
     if (!staffToken || !staffDataStr) {
-      // Not staff - redirect to login
+      
       router.push('/');
       return;
     }
@@ -35,13 +35,13 @@ export default function ValidatorOverviewPage() {
       const storedStaffId = staffData.staffId;
       const storedStaffName = staffData.fullName;
 
-      // Check if staff has validator training access (trainers and validators)
+      
       if (hasValidatorTrainingAccess(storedStaffId)) {
         setStaffId(storedStaffId);
         setStaffName(storedStaffName);
         setIsAuthenticated(true);
       } else {
-        // Staff doesn't have validator access
+        
         router.push('/dashboard/staff');
         return;
       }
@@ -53,7 +53,7 @@ export default function ValidatorOverviewPage() {
     setIsLoading(false);
   }, [router]);
 
-  // Load completed steps
+  
   useEffect(() => {
     if (isAuthenticated && staffId) {
       const saved = localStorage.getItem(`validator-completed-steps-${staffId}`);
@@ -71,7 +71,7 @@ export default function ValidatorOverviewPage() {
 
   const totalTime = validatorTrainingSteps.reduce((sum, step) => sum + step.estimatedTime, 0);
 
-  // Loading state
+  
   if (isLoading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
@@ -83,7 +83,7 @@ export default function ValidatorOverviewPage() {
     );
   }
 
-  // Show training content
+  
   return (
     <main className="min-h-screen bg-black relative overflow-hidden">
       <BackgroundBeams className="opacity-30" />
@@ -92,7 +92,7 @@ export default function ValidatorOverviewPage() {
 
       <div className="relative z-10 pt-20 pb-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          {/* Welcome Banner for Staff */}
+          {}
           <div className="bg-[#dc2626]/10 border border-[#dc2626]/30 rounded-xl p-4 mb-8 max-w-3xl mx-auto">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -115,7 +115,7 @@ export default function ValidatorOverviewPage() {
             </div>
           </div>
 
-          {/* Header */}
+          {}
           <div className="text-center mb-12">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-[#dc2626]/10 border border-[#dc2626]/30 rounded-full mb-4">
               <CheckCircle2 className="w-8 h-8 text-[#dc2626]" />
@@ -142,7 +142,7 @@ export default function ValidatorOverviewPage() {
             </div>
           </div>
 
-          {/* Restricted Content Notice */}
+          {}
           <div className="bg-[#dc2626]/10 border border-[#dc2626]/30 rounded-xl p-4 mb-8 max-w-3xl mx-auto">
             <div className="flex items-start gap-3">
               <Lock className="w-5 h-5 text-[#dc2626] flex-shrink-0 mt-0.5" />
@@ -155,7 +155,7 @@ export default function ValidatorOverviewPage() {
             </div>
           </div>
 
-          {/* Training Steps Grid */}
+          {}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {validatorTrainingSteps.map((step) => {
               const isCompleted = completedSteps.has(step.id);
@@ -197,7 +197,7 @@ export default function ValidatorOverviewPage() {
         </div>
       </div>
 
-      {/* Footer */}
+      {}
       <div className="border-t border-[#262626] bg-black mt-12 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <p className="text-center text-xs text-[#a3a3a3]">

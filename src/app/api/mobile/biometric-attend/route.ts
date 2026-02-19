@@ -3,17 +3,15 @@ import { verifyStaffToken } from '@/app/api/_lib/auth';
 import { Database } from '@/app/api/_lib/database';
 import crypto from 'crypto';
 
-/**
- * POST /api/mobile/biometric-attend - Verify biometric and record attendance
- */
+
 export async function POST(request: NextRequest) {
   const trx = await Database.getConnection();
   
   try {
-    // Start transaction
+    
     await trx.query('BEGIN');
 
-    // Verify staff authentication
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader?.startsWith('Bearer ')) {
       throw new Error('Unauthorized');
@@ -35,12 +33,12 @@ export async function POST(request: NextRequest) {
       note 
     } = body;
 
-    // Validate required fields
+    
     if (!challengeId || !youth_id || !webAuthnResponse || !session_id || !date) {
       throw new Error('Missing required fields');
     }
 
-    // Verify challenge exists and is valid
+    
     const challengeResult = await trx.query(`
       SELECT challenge_id, youth_id, challenge_data, action_type, expires_at, used
       FROM biometric_challenges 
@@ -65,7 +63,7 @@ export async function POST(request: NextRequest) {
       throw new Error('Challenge not for authentication');
     }
 
-    // Get youth details
+    
     const youthResult = await trx.query(`
       SELECT youth_id, full_name, program_type, settlement
       FROM youth_participants 
@@ -78,7 +76,7 @@ export async function POST(request: NextRequest) {
 
     const youth = youthResult.rows[0];
 
-    // Get biometric credentials for youth
+    
     const credentialsResult = await trx.query(`
       SELECT credential_id, public_key, counter
       FROM biometric_credentials 
@@ -89,45 +87,45 @@ export async function POST(request: NextRequest) {
       throw new Error('No biometric credentials found');
     }
 
-    // Verify WebAuthn assertion
+    
     const originalChallenge = Buffer.from(challenge.challenge_data, 'base64');
     let verificationSuccessful = false;
     let usedCredential = null;
 
     for (const credential of credentialsResult.rows) {
       try {
-        // Basic WebAuthn verification (simplified for this implementation)
-        // In production, use a proper WebAuthn library like @simplewebauthn/server
+        
+        
         
         const clientDataJSON = JSON.parse(
           Buffer.from(webAuthnResponse.response.clientDataJSON, 'base64').toString()
         );
 
-        // Verify challenge matches
+        
         const responseChallenge = Buffer.from(clientDataJSON.challenge, 'base64url');
         if (!originalChallenge.equals(responseChallenge)) {
           continue;
         }
 
-        // Verify origin (in production, check against allowed origins)
+        
         if (clientDataJSON.type !== 'webauthn.get') {
           continue;
         }
 
-        // Verify credential ID matches
+        
         const credentialId = Buffer.from(webAuthnResponse.id, 'base64url');
         const storedCredentialId = Buffer.from(credential.credential_id, 'base64');
         if (!credentialId.equals(storedCredentialId)) {
           continue;
         }
 
-        // If we get here, basic verification passed
+        
         verificationSuccessful = true;
         usedCredential = credential;
         break;
 
       } catch (verifyError) {
-        console.log(`Verification failed for credential ${credential.credential_id}:`, verifyError);
+        
         continue;
       }
     }
@@ -136,14 +134,14 @@ export async function POST(request: NextRequest) {
       throw new Error('Biometric verification failed');
     }
 
-    // Mark challenge as used
+    
     await trx.query(`
       UPDATE biometric_challenges 
       SET used = TRUE, used_at = NOW(), used_by = $1
       WHERE challenge_id = $2
     `, [decoded.staffId, challengeId]);
 
-    // Check if attendance already exists for this date
+    
     const existingAttendance = await trx.query(`
       SELECT attendance_id
       FROM attendance_records
@@ -153,7 +151,7 @@ export async function POST(request: NextRequest) {
     let attendanceId;
 
     if (existingAttendance.rows.length > 0) {
-      // Update existing attendance
+      
       attendanceId = existingAttendance.rows[0].attendance_id;
       await trx.query(`
         UPDATE attendance_records 
@@ -175,7 +173,7 @@ export async function POST(request: NextRequest) {
         attendanceId
       ]);
     } else {
-      // Insert new attendance record
+      
       const attendanceResult = await trx.query(`
         INSERT INTO attendance_records (
           youth_id,
@@ -203,7 +201,7 @@ export async function POST(request: NextRequest) {
       attendanceId = attendanceResult.rows[0].attendance_id;
     }
 
-    // Log biometric verification in audit trail
+    
     await trx.query(`
       INSERT INTO biometric_audit_log (
         youth_id,
@@ -229,7 +227,7 @@ export async function POST(request: NextRequest) {
       })
     ]);
 
-    // Commit transaction
+    
     await trx.query('COMMIT');
 
     return NextResponse.json({
@@ -251,10 +249,9 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error: unknown) {
-    // Rollback transaction
+    
     await trx.query('ROLLBACK');
     
-    console.error('Biometric attendance error:', error);
     
     const errorMessage = error instanceof Error ? error.message : 'Server error';
     const statusCode = errorMessage.includes('Unauthorized') || errorMessage.includes('Invalid token') ? 401 :

@@ -71,7 +71,7 @@ export default function BadgesTab() {
         setError(result.error?.message || 'Failed to load badges');
       }
     } catch (err: any) {
-      console.error('Badges fetch error:', err);
+      
       setError(err.message || 'Network error');
     } finally {
       setLoading(false);
@@ -145,7 +145,7 @@ export default function BadgesTab() {
 
   return (
     <div className="p-4 space-y-4">
-      {/* Header with Refresh */}
+      {}
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-heading font-bold text-white">Achievements</h2>
         <button
@@ -157,7 +157,7 @@ export default function BadgesTab() {
         </button>
       </div>
 
-      {/* Progress Summary */}
+      {}
       <div className="bg-gradient-to-br from-primary/20 to-primary-dark/20 border border-primary/30 rounded-xl p-4">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
@@ -181,7 +181,7 @@ export default function BadgesTab() {
         </p>
       </div>
 
-      {/* Filter Buttons */}
+      {}
       <div className="flex gap-2">
         <button
           onClick={() => setFilterEarned(null)}
@@ -221,7 +221,7 @@ export default function BadgesTab() {
         </button>
       </div>
 
-      {/* Badges Grid */}
+      {}
       <div className="grid grid-cols-1 gap-3">
         {filteredBadges.map((badge) => (
           <div
@@ -235,7 +235,7 @@ export default function BadgesTab() {
             `}
           >
             <div className="flex items-start gap-3">
-              {/* Badge Icon */}
+              {}
               <div className={`
                 w-14 h-14 rounded-xl flex items-center justify-center text-3xl flex-shrink-0
                 ${badge.earned ? 'bg-white/10' : 'bg-background-elevated'}
@@ -243,7 +243,7 @@ export default function BadgesTab() {
                 {badge.earned ? badge.icon : <Lock className="w-6 h-6 text-foreground-subtle" />}
               </div>
               
-              {/* Badge Info */}
+              {}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
                   <h3 className={`text-sm font-bold truncate ${badge.earned ? 'text-white' : 'text-foreground-subtle'}`}>
@@ -256,7 +256,7 @@ export default function BadgesTab() {
                 
                 <p className="text-xs text-foreground-subtle mb-2">{badge.description}</p>
                 
-                {/* Tier Badge */}
+                {}
                 <div className="flex items-center gap-2">
                   <span className={`
                     px-2 py-0.5 rounded-full text-xs font-semibold uppercase
@@ -273,7 +273,7 @@ export default function BadgesTab() {
                   )}
                 </div>
                 
-                {/* Progress Bar (for locked badges) */}
+                {}
                 {!badge.earned && badge.progress > 0 && (
                   <div className="mt-2">
                     <div className="flex justify-between text-xs mb-1">
@@ -294,7 +294,7 @@ export default function BadgesTab() {
         ))}
       </div>
 
-      {/* Empty State */}
+      {}
       {filteredBadges.length === 0 && (
         <div className="text-center py-8">
           <Star className="w-12 h-12 text-foreground-subtle mx-auto mb-3" />

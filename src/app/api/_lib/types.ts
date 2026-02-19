@@ -1,5 +1,3 @@
-// Type definitions for the application
-
 export interface StaffMember {
   staff_id: string;
   full_name: string;

@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-02-17T08-18-51-269Z",
+  "total_attendance_records": 2716,
+  "total_youth_participants": 272,
+  "this_week_records": 304,
+  "suspicious_bulk_patterns": 20,
+  "backup_location": "backups/pre-restoration-backup-2026-02-17T08-18-51-269Z",
+  "notes": [
+    "Complete database backup before attendance data restoration",
+    "This week's data (Feb 10-17) identified and preserved separately",
+    "Suspicious bulk submission patterns documented for reference",
+    "Ready for selective restoration preserving legitimate recent data"
+  ]
+}

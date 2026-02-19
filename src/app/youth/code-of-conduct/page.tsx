@@ -13,7 +13,7 @@ export default function CodeOfConductPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Check authentication
+    
     const token = localStorage.getItem('youthToken');
     const youthData = localStorage.getItem('youthData');
     
@@ -25,7 +25,7 @@ export default function CodeOfConductPage() {
     try {
       const parsed = JSON.parse(youthData);
       
-      // Only allow digitization users
+      
       if (parsed.programType !== 'digitization') {
         router.push('/youth/dashboard');
         return;
@@ -35,7 +35,7 @@ export default function CodeOfConductPage() {
       setYouthId(parsed.youthId);
       setIsAuthenticated(true);
 
-      // Check if already acknowledged
+      
       const ackKey = `code_conduct_ack_${parsed.youthId}`;
       const hasAcknowledged = localStorage.getItem(ackKey);
       if (hasAcknowledged) {
@@ -49,7 +49,7 @@ export default function CodeOfConductPage() {
   const handleAcknowledge = async () => {
     setLoading(true);
     
-    // Record acknowledgment in localStorage
+    
     const ackKey = `code_conduct_ack_${youthId}`;
     const ackData = {
       acknowledgedAt: new Date().toISOString(),
@@ -59,8 +59,8 @@ export default function CodeOfConductPage() {
     
     localStorage.setItem(ackKey, JSON.stringify(ackData));
     
-    // TODO: Could also send to API to record in database
-    // await fetch('/api/youth/acknowledge-conduct', { ... });
+    
+    
     
     setTimeout(() => {
       setAcknowledged(true);
@@ -78,7 +78,7 @@ export default function CodeOfConductPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
+      {}
       <div className="bg-[#1a1a1a] border-b border-[#2a2a2a] sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
@@ -99,7 +99,7 @@ export default function CodeOfConductPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        {/* Title Section */}
+        {}
         <div className="mb-6">
           <div className="flex items-center gap-3 mb-2">
             <div className="bg-primary/20 p-3 rounded-lg">
@@ -116,7 +116,7 @@ export default function CodeOfConductPage() {
           </div>
         </div>
 
-        {/* Download Button */}
+        {}
         <div className="mb-6">
           <a
             href="/documents/youth-code-of-conduct.pdf"
@@ -128,7 +128,7 @@ export default function CodeOfConductPage() {
           </a>
         </div>
 
-        {/* PDF Viewer */}
+        {}
         <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl overflow-hidden">
           <div className="p-4 border-b border-[#2a2a2a]">
             <h2 className="text-white font-semibold flex items-center gap-2">
@@ -137,7 +137,7 @@ export default function CodeOfConductPage() {
             </h2>
           </div>
           
-          {/* Responsive PDF embed - works on most devices */}
+          {}
           <div className="relative w-full" style={{ minHeight: '70vh' }}>
             <iframe
               src="/documents/youth-code-of-conduct.pdf#view=FitH"
@@ -148,7 +148,7 @@ export default function CodeOfConductPage() {
           </div>
         </div>
 
-        {/* Acknowledgment Section */}
+        {}
         <div className="mt-6 bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-4 sm:p-6">
           {!acknowledged ? (
             <div className="space-y-4">
@@ -196,7 +196,7 @@ export default function CodeOfConductPage() {
           )}
         </div>
 
-        {/* Mobile Notice */}
+        {}
         <div className="mt-4 bg-warning/10 border border-warning/30 rounded-lg p-4 sm:hidden">
           <p className="text-warning text-sm">
             <strong>Tip:</strong> If the PDF doesn't display properly on your device, 

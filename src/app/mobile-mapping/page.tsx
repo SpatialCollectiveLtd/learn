@@ -33,7 +33,7 @@ export default function MobileMappingOverviewPage() {
       setCompletedSteps(new Set(JSON.parse(saved)));
     }
     
-    // Fetch ODK configuration
+    
     fetchOdkConfig();
   }, []);
 
@@ -51,7 +51,7 @@ export default function MobileMappingOverviewPage() {
         setOdkConfig(data.data);
       }
       
-      // Fetch user profile to get settlement
+      
       const profileResponse = await fetch('/api/youth/profile', {
         headers: { 'Authorization': `Bearer ${token}` },
       });
@@ -61,7 +61,7 @@ export default function MobileMappingOverviewPage() {
         setMobileMappingSteps(getMobileMappingSteps(profileData.data.settlement));
       }
     } catch (error) {
-      console.error('Error fetching ODK config:', error);
+      
     } finally {
       setOdkLoading(false);
     }
@@ -77,7 +77,7 @@ export default function MobileMappingOverviewPage() {
       
       <div className="relative z-10 pt-20 pb-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          {/* Header */}
+          {}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 border border-primary/30 mb-4">
               <Smartphone className="w-8 h-8 text-primary" />
@@ -104,7 +104,7 @@ export default function MobileMappingOverviewPage() {
             </div>
           </div>
 
-          {/* ========== ODK SETUP QR CODE - PROMINENT AT TOP ========== */}
+          {}
           <div className="max-w-2xl mx-auto mb-10">
             <div className="bg-gradient-to-r from-primary/20 to-primary/5 border-2 border-primary/50 rounded-2xl p-6">
               <div className="flex items-center justify-between mb-4">
@@ -180,7 +180,7 @@ export default function MobileMappingOverviewPage() {
             </div>
           </div>
 
-          {/* Progress Bar */}
+          {}
           <div className="max-w-2xl mx-auto mb-8">
             <div className="bg-background-card border border-border rounded-xl p-4">
               <div className="flex justify-between text-sm mb-2">
@@ -198,7 +198,7 @@ export default function MobileMappingOverviewPage() {
             </div>
           </div>
 
-          {/* Training Steps Grid */}
+          {}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-12">
             {mobileMappingSteps.map((step) => {
               const isCompleted = completedSteps.has(step.id);
@@ -247,7 +247,7 @@ export default function MobileMappingOverviewPage() {
             })}
           </div>
 
-          {/* ========== FORM GUIDES SECTION ========== */}
+          {}
           <div className="max-w-4xl mx-auto mb-12">
             <div className="bg-background-card border border-border rounded-2xl overflow-hidden">
               <div className="bg-gradient-to-r from-info/20 to-info/5 p-6 border-b border-border">
@@ -327,7 +327,7 @@ export default function MobileMappingOverviewPage() {
             </div>
           </div>
 
-          {/* Quick Reference */}
+          {}
           <div className="max-w-2xl mx-auto">
             <div className="bg-background-card border border-border rounded-xl p-6">
               <h3 className="text-lg font-heading font-bold text-white mb-4 flex items-center gap-2">

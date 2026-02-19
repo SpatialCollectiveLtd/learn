@@ -18,7 +18,7 @@ import {
   ClipboardList
 } from "lucide-react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
 export default function TrainerDashboard() {
   const router = useRouter();
@@ -29,7 +29,7 @@ export default function TrainerDashboard() {
 
   useEffect(() => {
     const fetchData = async () => {
-      // Check if user is authenticated as trainer
+      
       const token = localStorage.getItem('staffToken');
       const staff = localStorage.getItem('staffData');
 
@@ -40,7 +40,7 @@ export default function TrainerDashboard() {
 
       const staffInfo = JSON.parse(staff);
       
-      // Only trainers can access this page
+      
       if (staffInfo.role !== 'trainer') {
         router.push('/dashboard/staff');
         return;
@@ -49,7 +49,7 @@ export default function TrainerDashboard() {
       setStaffData(staffInfo);
 
       try {
-        // Fetch recent activity
+        
         const activityResponse = await axios.get(`${API_URL}/api/trainer/activity`, {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -58,7 +58,7 @@ export default function TrainerDashboard() {
           setActivities(activityResponse.data.data.activities);
         }
 
-        // Fetch youth count
+        
         const youthResponse = await axios.get(`${API_URL}/api/trainer/youth`, {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -67,7 +67,7 @@ export default function TrainerDashboard() {
           setYouthCount(youthResponse.data.data.activeCount);
         }
       } catch (error) {
-        console.error('Error fetching trainer data:', error);
+        
       } finally {
         setIsLoading(false);
       }
@@ -82,7 +82,7 @@ export default function TrainerDashboard() {
     router.push('/');
   };
 
-  // Quick stats for trainers
+  
   const stats = [
     { label: "Active Trainees", value: youthCount.toString(), icon: Users, color: "text-blue-500" },
     { label: "Modules", value: "4", icon: BookOpen, color: "text-green-500" },
@@ -162,7 +162,7 @@ export default function TrainerDashboard() {
       <BackgroundBeams className="opacity-30" />
 
       <div className="relative z-10">
-        {/* Header */}
+        {}
         <header className="bg-[#1F2121]/80 backdrop-blur-sm border-b border-[#2a2a2a] sticky top-0 z-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center justify-between">
@@ -197,9 +197,9 @@ export default function TrainerDashboard() {
           </div>
         </header>
 
-        {/* Main Content */}
+        {}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Welcome Section */}
+          {}
           <div className="mb-8">
             <h2 className="text-3xl sm:text-4xl font-heading font-bold text-white mb-2">
               Welcome back, {staffData?.fullName?.split(' ')[0]}! 👋
@@ -209,7 +209,7 @@ export default function TrainerDashboard() {
             </p>
           </div>
 
-          {/* Stats Grid */}
+          {}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             {stats.map((stat, index) => (
               <div
@@ -227,7 +227,7 @@ export default function TrainerDashboard() {
             ))}
           </div>
 
-          {/* Quick Actions */}
+          {}
           <div className="mb-8">
             <h3 className="text-2xl font-heading font-bold text-white mb-6">
               Quick Actions

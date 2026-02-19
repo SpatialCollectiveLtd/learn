@@ -1,13 +1,9 @@
-// Updated work stats API to support multi-module assignments
-// GET /api/work/stats/daily
-// Fetches today's building count for authenticated youth mapper with module assignment history support
-
 import { NextRequest, NextResponse } from 'next/server';
 import { Database } from '@/app/api/_lib/database';
 import { getTodayBuildingCount } from '@/lib/osm-service';
 import jwt from 'jsonwebtoken';
 
-// Get JWT secret at runtime, not module load time (for Vercel compatibility)
+
 function getJwtSecret(): string {
   const secret = process.env.learn_STACK_SECRET_SERVER_KEY || process.env.JWT_SECRET || '';
   if (!secret || secret.length < 32) {
@@ -18,7 +14,7 @@ function getJwtSecret(): string {
 
 export async function GET(request: NextRequest) {
   try {
-    // Verify JWT authentication
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader?.startsWith('Bearer ')) {
       return NextResponse.json(
@@ -41,14 +37,14 @@ export async function GET(request: NextRequest) {
 
     const youthId = decoded.youthId;
 
-    // Get today's date in settlement timezone
-    const timezone = 'Africa/Nairobi'; // Default timezone
-    const offset = 3; // Nairobi UTC+3
+    
+    const timezone = 'Africa/Nairobi'; 
+    const offset = 3; 
     const now = new Date();
     const localDate = new Date(now.getTime() + (offset * 60 * 60 * 1000));
     const today = localDate.toISOString().split('T')[0];
 
-    // UPDATED: Get youth data with current module assignment and settlement config  
+    
     const youthResult = await Database.query(`
       SELECT 
         yp.youth_id,
@@ -90,8 +86,8 @@ export async function GET(request: NextRequest) {
     const youth = youthResult.rows[0];
     const activeProgram = youth.active_program_type || youth.current_program_type;
 
-    // UPDATED: More flexible program type checking
-    // Check if OSM username exists for modules that require it
+    
+    
     const osmRequiredPrograms = ['digitization', 'mobile_mapping'];
     if (osmRequiredPrograms.includes(activeProgram) && !youth.osm_username) {
       return NextResponse.json({
@@ -102,7 +98,7 @@ export async function GET(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // For non-OSM modules, return appropriate response
+    
     if (!osmRequiredPrograms.includes(activeProgram)) {
       return NextResponse.json({
         success: false,
@@ -115,7 +111,7 @@ export async function GET(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Check work period limits (20-day total across all modules)
+    
     const maxWorkDays = youth.total_work_days || 20;
     const remainingDays = maxWorkDays - (youth.total_work_days || 0);
     
@@ -129,7 +125,7 @@ export async function GET(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // First check database cache for recent stats (within last 5 minutes)
+    
     const cachedStatsResult = await Database.query(`
       SELECT buildings_mapped, changesets_analyzed, last_changeset_id, last_upload_time, updated_at
       FROM youth_osm_stats
@@ -140,9 +136,9 @@ export async function GET(request: NextRequest) {
 
     let stats;
     if (cachedStatsResult.rows.length > 0) {
-      // Use cached stats from database
+      
       const cached = cachedStatsResult.rows[0];
-      console.log(`[API] Using cached stats from database for ${youthId}`);
+      
       stats = {
         totalBuildings: cached.buildings_mapped || 0,
         changesetsAnalyzed: cached.changesets_analyzed || 0,
@@ -152,8 +148,8 @@ export async function GET(request: NextRequest) {
         processingTime: 0,
       };
     } else {
-      // Fetch fresh stats from OSM API
-      console.log(`[API] Fetching fresh OSM stats for ${youthId}`);
+      
+      
       const startTime = Date.now();
       
       stats = await getTodayBuildingCount(
@@ -170,12 +166,12 @@ export async function GET(request: NextRequest) {
     const dailyTarget = youth.daily_target || 200;
     const percentage = Math.round((stats.totalBuildings / dailyTarget) * 100);
 
-    // Auto-sync work day if target is met and not already recorded
+    
     if (stats.totalBuildings > 0) {
       const targetMet = stats.totalBuildings >= dailyTarget;
       
       try {
-        // UPDATED: Insert work day with proper module assignment context
+        
         await Database.query(`
           INSERT INTO youth_work_days (
             youth_id, work_date, buildings_count, daily_target,
@@ -193,8 +189,7 @@ export async function GET(request: NextRequest) {
             updated_at = CURRENT_TIMESTAMP
         `, [youthId, today, stats.totalBuildings, dailyTarget, targetMet]);
       } catch (syncError) {
-        console.error(`[API] Work day sync failed for ${youthId}:`, syncError);
-        // Continue with response - sync failure shouldn't break the API
+        
       }
     }
 
@@ -208,14 +203,14 @@ export async function GET(request: NextRequest) {
         lastChangesetId: stats.lastChangesetId,
         lastUploadTime: stats.lastUploadTime,
         
-        // UPDATED: Include module assignment context
+        
         moduleInfo: {
           currentProgram: activeProgram,
           assignmentId: youth.active_assignment_id,
           isTransitioned: activeProgram !== youth.current_program_type
         },
         
-        // Work period progress (across all modules)
+        
         workPeriod: {
           totalDaysWorked: youth.total_work_days || 0,
           pendingDays: youth.pending_work_days || 0,
@@ -231,7 +226,7 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('[API] Daily stats error:', error);
+    
     return NextResponse.json(
       { 
         success: false, 

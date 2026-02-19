@@ -40,25 +40,25 @@ interface AttendanceRecord {
 export default function StaffAttendancePage() {
   const router = useRouter();
   
-  // Auth state
+  
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [staffName, setStaffName] = useState('');
   
-  // Module selection state
+  
   const [selectedModule, setSelectedModule] = useState('mobile_mapping');
   
-  // Settlement filter state
+  
   const [selectedSettlement, setSelectedSettlement] = useState('all');
   
-  // Search state
+  
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Youth[]>([]);
   const [searching, setSearching] = useState(false);
   
-  // Selected youth state
+  
   const [selectedYouth, setSelectedYouth] = useState<Youth | null>(null);
   
-  // Form state
+  
   const [attendanceDate, setAttendanceDate] = useState(
     new Date().toISOString().split('T')[0]
   );
@@ -66,20 +66,20 @@ export default function StaffAttendancePage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   
-  // Today's attendance state
+  
   const [todayRecords, setTodayRecords] = useState<AttendanceRecord[]>([]);
   const [attendanceCount, setAttendanceCount] = useState(0);
   const [totalMappers, setTotalMappers] = useState(0);
   const [loadingRecords, setLoadingRecords] = useState(true);
   
-  // Delete state
+  
   const [deletingRecordId, setDeletingRecordId] = useState<number | null>(null);
   const [deleteMessage, setDeleteMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   
-  // Filter state for existing records
+  
   const [recordsFilter, setRecordsFilter] = useState('');
 
-  // Module display names
+  
   const moduleNames: Record<string, string> = {
     mobile_mapping: 'Mobile Mapping',
     digitization: 'Digitization',
@@ -87,7 +87,7 @@ export default function StaffAttendancePage() {
     household_survey: 'Household Survey'
   };
 
-  // Settlement display names and prefixes
+  
   const settlements = [
     { value: 'all', label: 'All Settlements', prefix: '' },
     { value: 'kayole', label: 'Kayole Soweto', prefix: 'KAY' },
@@ -95,7 +95,7 @@ export default function StaffAttendancePage() {
     { value: 'kariobangi', label: 'Kariobangi Machakos', prefix: 'KAR' }
   ];
 
-  // Check auth on mount - allow trainer, admin, and superadmin
+  
   useEffect(() => {
     const token = localStorage.getItem('staffToken');
     const staffData = localStorage.getItem('staffData');
@@ -107,7 +107,7 @@ export default function StaffAttendancePage() {
     
     try {
       const parsed = JSON.parse(staffData);
-      // Allow trainer, admin, and superadmin roles
+      
       const allowedRoles = ['trainer', 'admin', 'superadmin'];
       if (!allowedRoles.includes(parsed.role)) {
         router.push('/');
@@ -121,7 +121,7 @@ export default function StaffAttendancePage() {
     }
   }, [router]);
 
-  // Fetch today's attendance
+  
   const fetchTodayAttendance = async () => {
     setLoadingRecords(true);
     try {
@@ -130,9 +130,9 @@ export default function StaffAttendancePage() {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
-      // Handle auth errors
+      
       if (response.status === 401) {
-        console.error('Authentication failed - redirecting to login');
+        
         localStorage.removeItem('staffToken');
         localStorage.removeItem('staffData');
         router.push('/');
@@ -141,7 +141,7 @@ export default function StaffAttendancePage() {
       
       const data = await response.json();
       if (data.success) {
-        // Filter records by settlement if not 'all'
+        
         let records = data.data.records;
         if (selectedSettlement !== 'all') {
           const settlement = settlements.find(s => s.value === selectedSettlement);
@@ -156,30 +156,30 @@ export default function StaffAttendancePage() {
         setAttendanceCount(records.length);
         setTotalMappers(data.data.total_mappers);
       } else if (data.message?.includes('token')) {
-        // Token error - redirect to login
+        
         localStorage.removeItem('staffToken');
         localStorage.removeItem('staffData');
         router.push('/');
       }
     } catch (error) {
-      console.error('Error fetching attendance:', error);
+      
     } finally {
       setLoadingRecords(false);
     }
   };
 
-  // Fetch attendance when date, module, or settlement changes
+  
   useEffect(() => {
     if (isAuthenticated) {
       fetchTodayAttendance();
-      // Clear selected youth when module changes
+      
       setSelectedYouth(null);
       setSearchQuery('');
       setSearchResults([]);
     }
   }, [attendanceDate, selectedModule, selectedSettlement, isAuthenticated]);
 
-  // Search youth
+  
   const searchYouth = useCallback(async (query: string) => {
     if (query.length < 3) {
       setSearchResults([]);
@@ -189,26 +189,25 @@ export default function StaffAttendancePage() {
     setSearching(true);
     try {
       const token = localStorage.getItem('staffToken');
-      console.log('Searching for:', query, 'with token:', token ? 'present' : 'missing');
+      
       const response = await fetch(`/api/staff/attendance/search?q=${encodeURIComponent(query)}&module=${selectedModule}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
-      console.log('Search response status:', response.status);
+      
       const data = await response.json();
-      console.log('Search response data:', data);
       
       if (data.success) {
         setSearchResults(data.data.results);
       }
     } catch (error) {
-      console.error('Search error:', error);
+      
     } finally {
       setSearching(false);
     }
   }, [selectedModule]);
 
-  // Debounced search
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       if (searchQuery.length >= 3) {
@@ -219,7 +218,7 @@ export default function StaffAttendancePage() {
     return () => clearTimeout(timer);
   }, [searchQuery, searchYouth]);
 
-  // Select youth
+  
   const handleSelectYouth = (youth: Youth) => {
     setSelectedYouth(youth);
     setSearchQuery('');
@@ -227,14 +226,14 @@ export default function StaffAttendancePage() {
     setSubmitMessage(null);
   };
 
-  // Clear selection
+  
   const clearSelection = () => {
     setSelectedYouth(null);
     setNotes('');
     setSubmitMessage(null);
   };
   
-  // Filter attendance records based on search query
+  
   const filteredRecords = recordsFilter.trim()
     ? todayRecords.filter(record => {
         const query = recordsFilter.toLowerCase();
@@ -244,7 +243,7 @@ export default function StaffAttendancePage() {
         );
       })
     : todayRecords;
-  // Delete attendance record
+  
   const deleteAttendanceRecord = async (recordId: number, youthName: string) => {
     if (!confirm(`Are you sure you want to delete the attendance record for ${youthName}? This action cannot be undone.`)) {
       return;
@@ -266,21 +265,21 @@ export default function StaffAttendancePage() {
       
       if (data.success) {
         setDeleteMessage({ type: 'success', text: data.message });
-        // Refresh the attendance list
+        
         fetchTodayAttendance();
-        // Clear message after 5 seconds
+        
         setTimeout(() => setDeleteMessage(null), 5000);
       } else {
         setDeleteMessage({ type: 'error', text: data.message || 'Failed to delete attendance record' });
       }
     } catch (error) {
-      console.error('Delete error:', error);
+      
       setDeleteMessage({ type: 'error', text: 'Network error. Please try again.' });
     } finally {
       setDeletingRecordId(null);
     }
   };
-  // Submit attendance
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedYouth) return;
@@ -313,7 +312,7 @@ export default function StaffAttendancePage() {
         setSubmitMessage({ type: 'error', text: data.message || 'Failed to record attendance' });
       }
     } catch (error) {
-      console.error('Submit error:', error);
+      
       setSubmitMessage({ type: 'error', text: 'Network error. Please try again.' });
     } finally {
       setSubmitting(false);
@@ -331,7 +330,7 @@ export default function StaffAttendancePage() {
   return (
     <div className="min-h-screen bg-black py-4 sm:py-8 px-3 sm:px-4">
       <div className="max-w-4xl mx-auto">
-        {/* Header - Mobile responsive */}
+        {}
         <div className="mb-6 sm:mb-8">
           <button
             onClick={() => router.back()}
@@ -356,7 +355,7 @@ export default function StaffAttendancePage() {
           </div>
         </div>
 
-        {/* Stats Cards - Mobile responsive */}
+        {}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
           <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-3 sm:p-4">
             <div className="flex items-center gap-3">
@@ -398,14 +397,14 @@ export default function StaffAttendancePage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-          {/* Left: Attendance Form */}
+          {}
           <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl sm:rounded-2xl p-4 sm:p-6">
             <h2 className="text-lg font-heading font-bold text-white mb-4 flex items-center gap-2">
               <UserCheck className="w-5 h-5 text-primary" />
               Record Attendance
             </h2>
 
-            {/* Success/Error Message */}
+            {}
             {submitMessage && (
               <div className={`mb-4 p-3 rounded-lg flex items-center gap-2 ${
                 submitMessage.type === 'success' 
@@ -421,7 +420,7 @@ export default function StaffAttendancePage() {
               </div>
             )}
 
-            {/* Delete Success/Error Message */}
+            {}
             {deleteMessage && (
               <div className={`mb-4 p-3 rounded-lg flex items-center gap-2 ${
                 deleteMessage.type === 'success' 
@@ -437,7 +436,7 @@ export default function StaffAttendancePage() {
               </div>
             )}
 
-            {/* Module Selector */}
+            {}
             <div className="mb-4">
               <label className="block text-sm font-semibold text-white mb-2 flex items-center gap-2">
                 <Users className="w-4 h-4 text-primary" />
@@ -455,7 +454,7 @@ export default function StaffAttendancePage() {
               </select>
             </div>
 
-            {/* Settlement Filter */}
+            {}
             <div className="mb-4">
               <label className="block text-sm font-semibold text-white mb-2 flex items-center gap-2">
                 <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -477,14 +476,14 @@ export default function StaffAttendancePage() {
               </select>
             </div>
 
-            {/* Date Picker with Quick Actions */}
+            {}
             <div className="mb-4">
               <label className="block text-sm font-semibold text-white mb-2 flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-primary" />
                 Select Date to View/Record
               </label>
               
-              {/* Quick Date Buttons */}
+              {}
               <div className="grid grid-cols-3 gap-2 mb-3">
                 <button
                   type="button"
@@ -529,7 +528,7 @@ export default function StaffAttendancePage() {
                 </button>
               </div>
 
-              {/* Date Input with Better Styling */}
+              {}
               <div className="relative">
                 <input
                   type="date"
@@ -561,7 +560,7 @@ export default function StaffAttendancePage() {
               </div>
             </div>
 
-            {/* Search or Selected Youth */}
+            {}
             {!selectedYouth ? (
               <div className="mb-4">
                 <label className="block text-sm text-[#a3a3a3] mb-2 flex items-center gap-2">
@@ -581,7 +580,7 @@ export default function StaffAttendancePage() {
                   )}
                 </div>
 
-                {/* Search Results */}
+                {}
                 {searchResults.length > 0 && (
                   <div className="mt-2 bg-[#262626] border border-[#3a3a3a] rounded-lg overflow-hidden max-h-80 overflow-y-auto">
                     {searchResults.map((youth) => (
@@ -619,7 +618,7 @@ export default function StaffAttendancePage() {
                 )}
               </div>
             ) : (
-              /* Selected Youth Card */
+              
               <div className="mb-4 bg-[#262626] border border-primary/30 rounded-lg p-4">
                 <div className="flex justify-between items-start mb-3">
                   <h3 className="text-lg font-bold text-white">{selectedYouth.full_name}</h3>
@@ -661,7 +660,7 @@ export default function StaffAttendancePage() {
               </div>
             )}
 
-            {/* Notes */}
+            {}
             {selectedYouth && (
               <div className="mb-4">
                 <label className="block text-sm text-[#a3a3a3] mb-2">
@@ -677,7 +676,7 @@ export default function StaffAttendancePage() {
               </div>
             )}
 
-            {/* Submit Button */}
+            {}
             <button
               onClick={handleSubmit}
               disabled={!selectedYouth || submitting}
@@ -697,7 +696,7 @@ export default function StaffAttendancePage() {
             </button>
           </div>
 
-          {/* Right: Today's Attendance List */}
+          {}
           <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl sm:rounded-2xl p-4 sm:p-6">
             <h2 className="text-lg font-heading font-bold text-white mb-4 flex items-center gap-2">
               <Clock className="w-5 h-5 text-primary" />
@@ -708,7 +707,7 @@ export default function StaffAttendancePage() {
               })}
             </h2>
 
-            {/* Search existing records */}
+            {}
             {todayRecords.length > 0 && (
               <div className="mb-4">
                 <label className="block text-sm text-[#a3a3a3] mb-2 flex items-center gap-2">
@@ -772,7 +771,7 @@ export default function StaffAttendancePage() {
             ) : (
               <div className="space-y-2 max-h-[500px] overflow-y-auto pr-2">
                 {filteredRecords.map((record, index) => {
-                  // Highlight matching text
+                  
                   const query = recordsFilter.toLowerCase();
                   const nameMatches = record.full_name.toLowerCase().includes(query);
                   const idMatches = record.youth_id.toLowerCase().includes(query);

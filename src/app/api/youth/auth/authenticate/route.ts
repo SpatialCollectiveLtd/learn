@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 const JWT_SECRET = process.env.learn_STACK_SECRET_SERVER_KEY || process.env.JWT_SECRET || 'your-secret-key';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h';
 
-// Handle CORS preflight requests
+
 export async function OPTIONS(request: NextRequest) {
   return new NextResponse(null, {
     status: 200,
@@ -19,28 +19,28 @@ export async function OPTIONS(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  console.log('[AUTH] POST request received');
+  
   try {
     const body = await request.json();
-    console.log('[AUTH] Body parsed:', body);
+    
     const { youthId } = body;
 
     if (!youthId) {
-      console.log('[AUTH] No youthId provided');
+      
       return NextResponse.json(
         { success: false, message: 'Youth ID is required' },
         { status: 400 }
       );
     }
 
-    // Normalize youth ID to uppercase for case-insensitive matching
+    
     const normalizedYouthId = youthId.toUpperCase().trim();
 
-    // Validate format: KAY (Kayole), KAR (Kariobangi), HUR (Mji wa Huruma) followed by alphanumeric characters
-    // Supports formats like: KAY1278MK, KAR119BN, HUR728CM
+    
+    
     const youthIdPattern = /^(KAY|KAR|HUR)[A-Z0-9]+$/i;
     if (!youthIdPattern.test(normalizedYouthId)) {
-      console.log('[AUTH] Invalid format:', youthId);
+      
       const clientIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
       await AuthLogModel.log({
         userId: normalizedYouthId,
@@ -61,10 +61,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check for too many failed login attempts (max 5 in 15 minutes)
+    
     const failedAttempts = await AuthLogModel.getFailedAttempts(normalizedYouthId, 15);
     if (failedAttempts >= 5) {
-      console.log('[AUTH] Too many failed attempts:', normalizedYouthId);
+      
       const clientIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
       await AuthLogModel.log({
         userId: normalizedYouthId,
@@ -85,11 +85,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Find youth in database
-    console.log('[AUTH] Looking up youth:', normalizedYouthId);
+    
+    
     const youth = await YouthModel.findById(normalizedYouthId);
-    console.log('[AUTH] Youth found:', youth ? 'yes' : 'no');
-
+    
     if (!youth) {
       const clientIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
       await AuthLogModel.log({
@@ -126,14 +125,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Update last login
+    
     await YouthModel.updateLastLogin(youth.youth_id);
 
-    // Check if contract is signed
+    
     const hasSignedContract = await YouthModel.hasSignedContract(youth.youth_id);
 
-    // Generate JWT token
-    // @ts-ignore - JWT types are overly strict about expiresIn
     const token = jwt.sign(
       {
         youthId: youth.youth_id,
@@ -144,10 +141,10 @@ export async function POST(request: NextRequest) {
         userType: 'youth',
       },
       JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN }
+      { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions
     );
 
-    // Log successful authentication
+    
     const clientIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
     await AuthLogModel.log({
       userId: youth.youth_id,
@@ -177,8 +174,8 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('[AUTH] Youth authentication error:', error);
-    console.error('[AUTH] Error stack:', error instanceof Error ? error.stack : 'No stack');
+    
+    
     return NextResponse.json(
       { success: false, message: 'An error occurred during authentication', error: String(error) },
       { status: 500 }

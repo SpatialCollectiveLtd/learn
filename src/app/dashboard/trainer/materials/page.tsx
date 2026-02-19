@@ -78,7 +78,7 @@ export default function TrainingMaterialsPage() {
         </header>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Overview Stats */}
+          {}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
             <div className="bg-[#1F2121]/50 backdrop-blur-sm border border-[#2a2a2a] rounded-lg p-6">
               <BookOpen className="w-8 h-8 text-blue-500 mb-2" />
@@ -97,7 +97,7 @@ export default function TrainingMaterialsPage() {
             </div>
           </div>
 
-          {/* Mapper Training Module */}
+          {}
           <div className="mb-8">
             <div className="bg-gradient-to-r from-[#3b82f6]/10 to-[#3b82f6]/5 border border-[#3b82f6]/30 rounded-xl p-6 mb-4">
               <div className="flex items-center justify-between mb-2">
@@ -162,7 +162,7 @@ export default function TrainingMaterialsPage() {
             </div>
           </div>
 
-          {/* Validator Training Module */}
+          {}
           <div className="mb-8">
             <div className="bg-gradient-to-r from-[#22c55e]/10 to-[#22c55e]/5 border border-[#22c55e]/30 rounded-xl p-6 mb-4">
               <div className="flex items-center justify-between mb-2">
@@ -227,7 +227,7 @@ export default function TrainingMaterialsPage() {
             </div>
           </div>
 
-          {/* Help Section */}
+          {}
           <div className="bg-gradient-to-r from-[#dc2626]/10 to-[#dc2626]/5 border border-[#dc2626]/30 rounded-lg p-6">
             <h3 className="text-xl font-heading font-bold text-white mb-2">
               Trainer Resources

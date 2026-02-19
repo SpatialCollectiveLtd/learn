@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.learn_STACK_SECRET_SERVER_KEY || process.env.JWT_SECRET || 'your-secret-key';
 
-// Handle CORS preflight requests
+
 export async function OPTIONS(request: NextRequest) {
   return new NextResponse(null, {
     status: 200,
@@ -18,7 +18,7 @@ export async function OPTIONS(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    // Get authorization header
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return NextResponse.json(
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
 
     const token = authHeader.substring(7);
     
-    // Verify JWT token
+    
     let decoded: any;
     try {
       decoded = jwt.verify(token, JWT_SECRET);
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get youth ID from token
+    
     const youthId = decoded.youthId;
     if (!youthId) {
       return NextResponse.json(
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get request body
+    
     const body = await request.json();
     const { templateId, signatureData } = body;
 
@@ -60,11 +60,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get IP address and user agent
+    
     const clientIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
     const userAgent = request.headers.get('user-agent') || undefined;
 
-    // Create signed contract
+    
     const signedContract = await ContractModel.createSignedContract({
       youthId,
       templateId,
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Sign contract error:', error);
+    
     return NextResponse.json(
       { success: false, message: 'An error occurred while signing contract' },
       { status: 500 }

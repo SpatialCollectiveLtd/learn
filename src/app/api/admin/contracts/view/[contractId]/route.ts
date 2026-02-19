@@ -8,7 +8,7 @@ export async function GET(
   try {
     const { contractId } = await params;
 
-    // Fetch the specific contract
+    
     const result = await Database.query(`
       SELECT 
         sc.contract_id,
@@ -41,7 +41,7 @@ export async function GET(
     const contract = result.rows[0];
     let contractHtml = contract.template_content;
     
-    // Replace placeholders with actual data
+    
     contractHtml = contractHtml
       .replace(/\{\{PARTICIPANT_NAME\}\}/g, contract.full_name)
       .replace(/\{\{YOUTH_ID\}\}/g, contract.youth_id)
@@ -56,7 +56,7 @@ export async function GET(
       .replace(/\{\{TRAINING_STIPEND\}\}/g, 'KES 500')
       .replace(/\{\{PRODUCTION_RATE\}\}/g, 'KES 15 per completed parcel');
 
-    // Wrap in full HTML with print button
+    
     const html = `
       <!DOCTYPE html>
       <html>
@@ -91,7 +91,7 @@ export async function GET(
     });
 
   } catch (error) {
-    console.error('View contract error:', error);
+    
     return new NextResponse(
       '<html><body><h1>Error loading contract</h1></body></html>',
       {

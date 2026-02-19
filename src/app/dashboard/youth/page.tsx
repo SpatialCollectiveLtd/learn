@@ -14,8 +14,8 @@ export default function YouthDashboard() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Auto-redirect to new dashboard selection page
-    // This page is deprecated in favor of /dashboard
+    
+    
     router.push('/dashboard');
   }, [router]);
 
@@ -79,7 +79,7 @@ export default function YouthDashboard() {
     },
   ];
 
-  // Filter modules based on user's program type
+  
   const modules = allModules.filter(module => 
     module.programType === youthData?.programType
   );
@@ -100,7 +100,7 @@ export default function YouthDashboard() {
       <BackgroundBeams className="opacity-30" />
 
       <div className="relative z-10">
-        {/* Header */}
+        {}
         <header className="bg-[#1F2121]/80 backdrop-blur-sm border-b border-[#2a2a2a] sticky top-0 z-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center justify-between">
@@ -125,9 +125,9 @@ export default function YouthDashboard() {
           </div>
         </header>
 
-        {/* Main Content */}
+        {}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          {/* Welcome Section */}
+          {}
           <div className="max-w-4xl mx-auto mb-12">
             <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-2xl shadow-lg p-8">
               <div className="flex items-start gap-4 mb-6">
@@ -147,7 +147,7 @@ export default function YouthDashboard() {
                 </div>
               </div>
 
-              {/* Contract Status - TEMPORARILY DISABLED */}
+              {}
               <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-6">
                 <div className="flex items-start gap-3">
                   <FileText className="w-6 h-6 text-yellow-500 flex-shrink-0 mt-1" />
@@ -167,7 +167,7 @@ export default function YouthDashboard() {
             </div>
           </div>
 
-          {/* Training Modules */}
+          {}
           <div className="max-w-5xl mx-auto">
             <h3 className="text-2xl font-heading font-bold text-white mb-6">
               Your Training Modules
@@ -227,13 +227,13 @@ export default function YouthDashboard() {
             </div>
           </div>
 
-          {/* Resources Section */}
+          {}
           <div className="max-w-5xl mx-auto mt-12">
             <h3 className="text-xl font-heading font-bold text-white mb-6">
               Resources & Support
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Code of Conduct - Only for Digitization */}
+              {}
               {youthData?.programType === 'digitization' && (
                 <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-xl p-6">
                   <div className="flex items-start gap-4">
@@ -257,26 +257,8 @@ export default function YouthDashboard() {
                 </div>
               )}
               
-              {/* TEMPORARILY REMOVED: Contract link while contracts are being updated */}
-              {/* <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-xl p-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-[#2a2a2a] flex items-center justify-center">
-                    <FileText className="w-6 h-6 text-[#e5e5e5]" />
-                  </div>
-                  <div>
-                    <h4 className="text-white font-semibold mb-2">Your Contract</h4>
-                    <p className="text-[#a3a3a3] text-sm mb-3">
-                      View your signed training agreement.
-                    </p>
-                    <Link
-                      href="/contract"
-                      className="text-[#dc2626] text-sm hover:text-[#b91c1c]"
-                    >
-                      View Agreement
-                    </Link>
-                  </div>
-                </div>
-              </div> */}
+              {}
+              {}
 
               <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-xl p-6">
                 <h4 className="text-white font-semibold mb-2">Need Help?</h4>
@@ -288,7 +270,7 @@ export default function YouthDashboard() {
           </div>
         </div>
 
-        {/* Footer */}
+        {}
         <footer className="border-t border-[#2a2a2a] mt-12 bg-black/20">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <p className="text-center text-sm text-[#737373]">
@@ -298,7 +280,7 @@ export default function YouthDashboard() {
         </footer>
       </div>
 
-      {/* OSM Username Notification */}
+      {}
       <OsmUsernameNotification />
     </main>
   );

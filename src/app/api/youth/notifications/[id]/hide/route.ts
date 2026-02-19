@@ -1,6 +1,3 @@
-// POST /api/youth/notifications/[id]/hide
-// Hides a notification
-
 import { NextRequest, NextResponse } from 'next/server';
 import { Database } from '@/app/api/_lib/database';
 import jwt from 'jsonwebtoken';
@@ -36,7 +33,7 @@ export async function POST(
     const { id } = await params;
     const notificationId = id;
 
-    // Hide notification (only if it belongs to this youth)
+    
     const result = await Database.query(`
       UPDATE youth_notifications
       SET is_hidden = TRUE,
@@ -59,7 +56,6 @@ export async function POST(
     });
 
   } catch (error: any) {
-    console.error('[API] Error hiding notification:', error);
     
     return NextResponse.json(
       {

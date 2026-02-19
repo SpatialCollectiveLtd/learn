@@ -23,12 +23,12 @@ function verifyStaffToken(request: NextRequest): { staffId: string; role: string
   }
 }
 
-// POST: Create new staff member
+
 export async function POST(request: NextRequest) {
   try {
     const auth = verifyStaffToken(request);
     
-    // Only admin and superadmin can create staff
+    
     if (!auth || (auth.role !== 'admin' && auth.role !== 'superadmin')) {
       return NextResponse.json(
         { success: false, message: 'Unauthorized' },
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { staffId, fullName, email, role } = body;
 
-    // Validate required fields
+    
     if (!staffId || !fullName || !email || !role) {
       return NextResponse.json(
         { success: false, message: 'All fields are required' },
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate staff ID format
+    
     const staffIdPattern = /^S[TFM]EA\d{4}(SA|T|A)$/i;
     if (!staffIdPattern.test(staffId)) {
       return NextResponse.json(
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check permissions
+    
     if (auth.role === 'admin' && role !== 'trainer') {
       return NextResponse.json(
         { success: false, message: 'Admins can only create trainer accounts' },
@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if staff ID already exists
+    
     const existing = await StaffModel.findById(staffId);
     if (existing) {
       return NextResponse.json(
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create staff member
+    
     const newStaff = await StaffModel.create({
       staffId,
       fullName,
@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error creating staff:', error);
+    
     return NextResponse.json(
       { success: false, message: 'Failed to create staff member' },
       { status: 500 }

@@ -1,7 +1,3 @@
-// Microtasking training steps data structure
-// Platform: micro.spatialcollective.co.ke
-// Simple image classification tasks with quality focus
-
 export interface MicrotaskingStep {
   id: number;
   title: string;
@@ -457,5 +453,4 @@ export const microtaskingSteps: MicrotaskingStep[] = [
   }
 ];
 
-// Platform URL constant
 export const MICROTASKING_PLATFORM_URL = 'https://micro.spatialcollective.co.ke';

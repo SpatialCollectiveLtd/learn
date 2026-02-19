@@ -2,15 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyStaffToken } from '@/app/api/_lib/auth';
 import { Database } from '@/app/api/_lib/database';
 
-/**
- * Search for youth by ID, name, or phone number - returns name, ID, phone
- * GET /api/staff/attendance/search?q=KAY123
- * GET /api/staff/attendance/search?q=John
- * GET /api/staff/attendance/search?q=0712345678
- */
+
 export async function GET(request: NextRequest) {
   try {
-    // Verify staff authentication
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader?.startsWith('Bearer ')) {
       return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
@@ -33,8 +28,8 @@ export async function GET(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Search for youth by ID, name, or phone number in the specified module
-    console.log('Searching for youth with query:', query, 'in module:', module);
+    
+    
     const result = await Database.query(`
       SELECT 
         youth_id,
@@ -60,8 +55,7 @@ export async function GET(request: NextRequest) {
       LIMIT 20
     `, [`%${query}%`, module, `${query}%`]);
     
-    console.log('Search results:', result.rows.length, 'records found');
-
+    
     return NextResponse.json({
       success: true,
       data: {
@@ -71,7 +65,7 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error: unknown) {
-    console.error('Attendance search error:', error);
+    
     return NextResponse.json(
       { success: false, message: 'Server error' },
       { status: 500 }

@@ -49,7 +49,7 @@ interface LeaderboardEntry {
 
 export async function GET(request: NextRequest) {
   try {
-    // Get token from Authorization header
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
     const decoded = verifyYouthToken(token);
     const youth_id = decoded.youthId;
 
-    // Load DPW payment data
+    
     const dataPath = path.join(process.cwd(), 'data', 'dpw-payment-data.json');
     
     try {
@@ -82,17 +82,17 @@ export async function GET(request: NextRequest) {
         });
       }
 
-      // Calculate personal metrics with adjusted quality
+      
       const adjustedQualityScore = Math.max(userPayment.overall_quality_percentage, 60);
       
       const personalMetrics = {
         quality_score: adjustedQualityScore,
-        attendance_rate: Math.round((userPayment.total_days / 20) * 100), // Assuming 20 max days for period
+        attendance_rate: Math.round((userPayment.total_days / 20) * 100), 
         total_earnings: userPayment.total_payment,
         total_days_worked: userPayment.total_days
       };
 
-      // Create full participant list ranked by total earnings 
+      
       const allParticipants: LeaderboardEntry[] = Object.values(paymentData.data)
         .map(participant => ({
           youth_id: participant.youth_id,
@@ -102,20 +102,20 @@ export async function GET(request: NextRequest) {
           total_earnings: participant.total_payment,
           total_days: participant.total_days
         }))
-        .sort((a, b) => b.total_earnings - a.total_earnings); // Sort by total earnings
+        .sort((a, b) => b.total_earnings - a.total_earnings); 
 
-      // Calculate user rank from all participants
+      
       const userRankIndex = allParticipants.findIndex(entry => entry.youth_id === youth_id);
       const userRank = userRankIndex >= 0 ? userRankIndex + 1 : 0;
       
-      // Get top 20 for leaderboard display
+      
       const leaderboard = allParticipants.slice(0, 20);
 
       return NextResponse.json({
         period: 'Jan 7 - Feb 6, 2026',
         personal_metrics: personalMetrics,
         leaderboard: leaderboard,
-        all_participants: allParticipants.length, // For pagination
+        all_participants: allParticipants.length, 
         user_ranking: {
           earnings_rank: userRank,
           total_participants: allParticipants.length
@@ -123,7 +123,7 @@ export async function GET(request: NextRequest) {
       });
 
     } catch (fileError) {
-      console.error('Error reading DPW payment data:', fileError);
+      
       return NextResponse.json({
         message: 'DPW performance data not available',
         personal_metrics: {
@@ -138,7 +138,7 @@ export async function GET(request: NextRequest) {
     }
 
   } catch (error) {
-    console.error('Error fetching DPW performance data:', error);
+    
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

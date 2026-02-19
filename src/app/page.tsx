@@ -6,7 +6,7 @@ import { Shield, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -28,21 +28,21 @@ export default function LoginPage() {
       if (response.data.success) {
         const { token, youth } = response.data.data;
 
-        // Store authentication data
+        
         localStorage.setItem('youthToken', token);
         localStorage.setItem('youthData', JSON.stringify(youth));
         localStorage.setItem('userType', 'youth');
 
-        // CONTRACTS TEMPORARILY DISABLED - Always go to dashboard
-        // TODO: Re-enable contract check when module-specific contracts are ready
-        // const agreementAccepted = localStorage.getItem(`agreement-accepted-${youth.youthId}`);
-        // if (!agreementAccepted) {
-        //   router.push('/contract');
-        // } else {
-        //   router.push('/dashboard/youth');
-        // }
         
-        // Direct to new dashboard selection page
+        
+        
+        
+        
+        
+        
+        
+        
+        
         router.push('/dashboard');
       }
     } catch (err: any) {
@@ -65,15 +65,15 @@ export default function LoginPage() {
       if (response.data.success) {
         const { token, staff } = response.data.data;
 
-        // Store staff authentication in localStorage
+        
         localStorage.setItem('staffToken', token);
         localStorage.setItem('staffData', JSON.stringify(staff));
 
-        // Route based on staff role
+        
         if (staff.role === 'admin') {
           router.push('/dashboard/admin');
         } else {
-          // trainer and superadmin go to /dashboard/staff
+          
           router.push('/dashboard/staff');
         }
       }
@@ -91,7 +91,7 @@ export default function LoginPage() {
       <BackgroundBeams className="opacity-40" />
 
       <div className="relative z-10 w-full max-w-md px-4">
-        {/* Logo/Header */}
+        {}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-heading font-bold text-white mb-2">
             <span className="text-[#dc2626]">SC</span> Training Hub
@@ -99,9 +99,9 @@ export default function LoginPage() {
           <p className="text-[#a3a3a3]">Spatial Collective Learning Platform</p>
         </div>
 
-        {/* Login Card */}
+        {}
         <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-2xl shadow-2xl overflow-hidden">
-          {/* Tab Switcher */}
+          {}
           <div className="grid grid-cols-2 border-b border-[#2a2a2a]">
             <button
               onClick={() => {
@@ -139,7 +139,7 @@ export default function LoginPage() {
             </button>
           </div>
 
-          {/* Login Form */}
+          {}
           <div className="p-8">
             <div className="mb-6">
               <h2 className="text-2xl font-heading font-bold text-white mb-2">
@@ -199,7 +199,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Footer */}
+        {}
         <div className="text-center mt-8">
           <p className="text-[#737373] text-sm">
             © {new Date().getFullYear()} Spatial Collective. All rights reserved.

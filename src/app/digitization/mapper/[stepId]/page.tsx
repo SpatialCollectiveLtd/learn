@@ -22,32 +22,29 @@ import { mapperTrainingSteps, getStepById, getNextStep, getPreviousStep } from "
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
-// Get project URL based on youth ID prefix (settlement)
+
 function getProjectUrlForYouth(youthId: string): string | null {
   if (!youthId) return null;
   
   const prefix = youthId.substring(0, 3).toUpperCase();
   
   if (prefix === 'KAR') {
-    // Kariobangi Machakos
-    return 'https://tasks.hotosm.org/projects/38022/';
+    return 'https://tasks.hotosm.org/projects/16854';
   }
   
   if (prefix === 'HUR') {
-    // Mji wa Huruma
-    return 'https://tasks.hotosm.org/projects/38055/';
+    return 'https://tasks.hotosm.org/projects/17066';
   }
   
   if (prefix === 'KAY') {
-    // Kayole Soweto
-    return 'https://tasks.hotosm.org/projects/38056/';
+    return 'https://tasks.hotosm.org/projects/16863';
   }
   
-  // No project assigned for this settlement
+  
   return null;
 }
 
-// Function to make URLs clickable
+
 function renderTextWithLinks(text: string) {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   const parts = text.split(urlRegex);
@@ -96,7 +93,7 @@ export default function MapperTrainingStepPage({
   const nextStep = getNextStep(currentStepId);
   const previousStep = getPreviousStep(currentStepId);
 
-  // Load completed steps from server and check if current step is locked
+  
   useEffect(() => {
     const fetchProgress = async () => {
       const token = localStorage.getItem('youthToken');
@@ -114,22 +111,22 @@ export default function MapperTrainingStepPage({
           const completed = new Set<number>(response.data.data.progress.mapper);
           setCompletedSteps(completed);
 
-          // Check if this step is locked (previous step not completed)
+          
           if (currentStepId > 1 && !completed.has(currentStepId - 1)) {
             setIsStepLocked(true);
-            // Auto-redirect to the last completed step + 1 or step 1
+            
             const lastCompleted = Math.max(...Array.from(completed), 0);
             const nextAvailable = lastCompleted + 1;
             
             if (nextAvailable < currentStepId) {
               setTimeout(() => {
-                router.push(`/digitization/mapper/${nextAvailable}`);
+                router.push('/digitization/mapper/' + nextAvailable);
               }, 2000);
             }
           }
         }
       } catch (error) {
-        console.error('Error fetching progress:', error);
+        
       } finally {
         setIsLoadingProgress(false);
       }
@@ -138,7 +135,7 @@ export default function MapperTrainingStepPage({
     fetchProgress();
   }, [currentStepId, router]);
 
-  // Fetch OSM username and youth ID on component mount
+  
   useEffect(() => {
     const fetchOsmUsername = async () => {
       const token = localStorage.getItem('youthToken');
@@ -150,32 +147,32 @@ export default function MapperTrainingStepPage({
             headers: { Authorization: `Bearer ${token}` },
           });
           
-          // Set youth ID for settlement-based content
+          
           if (response.data.success && response.data.data.youthId) {
             setYouthId(response.data.data.youthId);
           }
           
-          // Check for osmUsername (API returns camelCase)
+          
           if (response.data.success && response.data.data.osmUsername) {
             const username = response.data.data.osmUsername;
             setSavedOsmUsername(username);
             setOsmUsername(username);
             setOsmVerificationStatus('verified');
-            setIsEditingOsm(false); // Ensure we're not in edit mode
+            setIsEditingOsm(false); 
             
-            // Update localStorage with OSM username
+            
             if (youthData) {
               const youth = JSON.parse(youthData);
               youth.osmUsername = username;
               localStorage.setItem('youthData', JSON.stringify(youth));
             }
             
-            console.log('✓ Loaded saved OSM username:', username);
+            
           } else {
-            console.log('No saved OSM username found');
+            
           }
         } catch (error) {
-          console.error('Error fetching OSM username:', error);
+          
         }
       }
     };
@@ -202,7 +199,7 @@ export default function MapperTrainingStepPage({
         }
       }
     } catch (error) {
-      console.error('Error verifying OSM username:', error);
+      
       setOsmVerificationStatus('error');
     } finally {
       setIsVerifyingOsm(false);
@@ -222,27 +219,24 @@ export default function MapperTrainingStepPage({
     setOsmVerificationStatus('none');
 
     try {
-      // Normalize username: trim whitespace
-      // OSM displays usernames with spaces as %20 in URLs, but we'll store them with spaces
+      
+      
       const normalizedUsername = osmUsername.trim();
       
-      console.log('Verifying OSM username:', normalizedUsername);
       
-      // Step 1: Verify the username exists on OSM
       const verifyResponse = await axios.get(`${API_URL}/api/osm/verify-username?username=${encodeURIComponent(normalizedUsername)}`);
       
-      console.log('Verification response:', verifyResponse.data);
       
       if (verifyResponse.data.success) {
         if (verifyResponse.data.exists === false) {
-          // Username not found on OSM
+          
           setOsmVerificationStatus('not-found');
           setOsmError(`⚠ This username was not found on OpenStreetMap. Please check the spelling (including capital letters) or create an account at openstreetmap.org first. Tried: "${normalizedUsername}"`);  
           setIsSavingOsm(false);
           setIsVerifyingOsm(false);
           return;
         } else if (verifyResponse.data.exists === null) {
-          // Couldn't verify (network issue)
+          
           setOsmVerificationStatus('error');
           setOsmError('⚠ Unable to verify your username at this time. Please check your internet connection and try again.');
           setIsSavingOsm(false);
@@ -250,13 +244,13 @@ export default function MapperTrainingStepPage({
           return;
         }
         
-        // Username verified! Proceed to save
+        
         setOsmVerificationStatus('verified');
       }
 
       setIsVerifyingOsm(false);
 
-      // Step 2: Save the verified username
+      
       const token = localStorage.getItem('youthToken');
       if (!token) {
         setOsmError('Authentication required. Please login again.');
@@ -278,7 +272,7 @@ export default function MapperTrainingStepPage({
         setOsmVerificationStatus('verified');
         setOsmSuccess('✓ OSM username verified and saved successfully! You can now proceed to the next step.');
         
-        // Update local storage
+        
         const youthData = localStorage.getItem('youthData');
         if (youthData) {
           const youth = JSON.parse(youthData);
@@ -286,7 +280,7 @@ export default function MapperTrainingStepPage({
           localStorage.setItem('youthData', JSON.stringify(youth));
         }
         
-        // Scroll to success message
+        
         setTimeout(() => {
           const successElement = document.querySelector('.bg-gradient-to-r');
           if (successElement) {
@@ -294,7 +288,7 @@ export default function MapperTrainingStepPage({
           }
         }, 100);
 
-        // Auto-dismiss success banner after 10 seconds
+        
         setTimeout(() => {
           setOsmSuccess('');
         }, 10000);
@@ -309,7 +303,7 @@ export default function MapperTrainingStepPage({
   };
 
   const markStepComplete = async () => {
-    // For step 2, require OSM username before proceeding
+    
     if (currentStepId === 2 && !savedOsmUsername) {
       setOsmError('⚠ You must save your verified OSM username before completing this step.');
       window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
@@ -324,7 +318,7 @@ export default function MapperTrainingStepPage({
         return;
       }
 
-      // Mark step complete in database
+      
       const response = await axios.post(
         `${API_URL}/api/youth/training-progress`,
         { moduleType: 'mapper', stepId: currentStepId },
@@ -336,13 +330,13 @@ export default function MapperTrainingStepPage({
         newCompleted.add(currentStepId);
         setCompletedSteps(newCompleted);
         
-        // Auto-navigate to next step
+        
         if (nextStep) {
           setTimeout(() => {
             router.push(`/digitization/mapper/${nextStep.id}`);
           }, 500);
         } else {
-          // All steps completed
+          
           setTimeout(() => {
             router.push('/digitization');
           }, 1000);
@@ -355,7 +349,7 @@ export default function MapperTrainingStepPage({
           router.push(`/digitization/mapper/${error.response.data.missingStep}`);
         }
       } else {
-        console.error('Error marking step complete:', error);
+        
         alert('Failed to save progress. Please try again.');
       }
     }
@@ -365,7 +359,7 @@ export default function MapperTrainingStepPage({
     return <div className="min-h-screen bg-black flex items-center justify-center text-white">Step not found</div>;
   }
 
-  // Show locked state if step is not accessible
+  
   if (isLoadingProgress) {
     return (
       <main className="min-h-screen bg-black relative overflow-hidden">
@@ -428,7 +422,7 @@ export default function MapperTrainingStepPage({
       <FloatingHeader showBackButton backHref="/digitization" />
       
       <div className="relative z-10 pt-20 pb-12">
-        {/* Progress Bar */}
+        {}
         <div className="fixed top-[72px] left-0 right-0 z-40 h-1 bg-[#262626]">
           <div 
             className="h-full bg-gradient-to-r from-[#dc2626] to-[#ef4444] transition-all duration-500"
@@ -437,7 +431,7 @@ export default function MapperTrainingStepPage({
         </div>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
-          {/* Step Header */}
+          {}
           <div className="mb-6 sm:mb-8 lg:mb-12">
             <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
               <div className="flex items-center gap-1.5 sm:gap-2 text-[#a3a3a3] text-xs sm:text-sm">
@@ -459,7 +453,7 @@ export default function MapperTrainingStepPage({
             </p>
           </div>
 
-          {/* Main Content */}
+          {}
           <div className="space-y-6 sm:space-y-8 mb-12">
             {currentStep.content.mainContent.map((block, index) => (
               <div key={index}>
@@ -503,7 +497,7 @@ export default function MapperTrainingStepPage({
                       const projectUrl = getProjectUrlForYouth(youthId);
                       
                       if (projectUrl) {
-                        // Show project link for assigned settlements
+                        
                         return (
                           <ul className="space-y-2 sm:space-y-3">
                             <li className="flex items-start gap-2 sm:gap-3 text-[#e5e5e5] text-sm sm:text-base">
@@ -543,7 +537,7 @@ export default function MapperTrainingStepPage({
                           </ul>
                         );
                       } else {
-                        // Show coming soon message for settlements without assigned projects
+                        
                         return (
                           <div className="bg-[#f59e0b]/10 border border-[#f59e0b]/30 rounded-lg p-4">
                             <div className="flex items-start gap-3">
@@ -606,7 +600,7 @@ export default function MapperTrainingStepPage({
             ))}
           </div>
 
-          {/* OSM Username Form - Only show on Step 2 */}
+          {}
           {currentStepId === 2 && (
             <div className="bg-gradient-to-r from-[#3b82f6]/10 to-[#3b82f6]/5 border border-[#3b82f6]/30 rounded-xl p-6 mb-12">
               <div className="flex items-start gap-4 mb-4">
@@ -630,7 +624,7 @@ export default function MapperTrainingStepPage({
               </div>
 
               {savedOsmUsername && !isEditingOsm ? (
-                // Show saved username with edit option
+                
                 <div className="space-y-4">
                   <div className="bg-[#22c55e]/10 border border-[#22c55e]/30 rounded-lg p-4">
                     <div className="flex items-center justify-between">
@@ -642,7 +636,7 @@ export default function MapperTrainingStepPage({
                           <p className="text-sm text-[#a3a3a3] mb-1">✓ Saved OSM Username</p>
                           <p className="text-lg font-semibold text-white">{savedOsmUsername}</p>
                           <a 
-                            href={`https://www.openstreetmap.org/user/${encodeURIComponent(savedOsmUsername)}`}
+                            href={'https://www.openstreetmap.org/user/' + encodeURIComponent(savedOsmUsername)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-xs text-[#3b82f6] hover:text-[#2563eb] inline-flex items-center gap-1 mt-1"
@@ -664,7 +658,7 @@ export default function MapperTrainingStepPage({
                     </div>
                   </div>
                   
-                  {/* Helpful reminder */}
+                  {}
                   <div className="bg-[#3b82f6]/10 border border-[#3b82f6]/30 rounded-lg p-3">
                     <p className="text-sm text-[#e5e5e5]">
                       <strong>Ready to continue?</strong> Scroll down and click <strong className="text-[#22c55e]">"Mark as Complete"</strong> to proceed to the next step.
@@ -672,14 +666,14 @@ export default function MapperTrainingStepPage({
                   </div>
                 </div>
               ) : (
-                // Show input form
+                
                 <div className="space-y-4">
                   <div>
                     <label htmlFor="osmUsername" className="block text-sm font-medium text-[#e5e5e5] mb-2">
                       OpenStreetMap Username
                     </label>
                     
-                    {/* Helpful notice about usernames */}
+                    {}
                     <div className="mb-3 bg-[#3b82f6]/10 border border-[#3b82f6]/30 rounded-lg p-3">
                       <p className="text-sm font-semibold text-[#3b82f6] mb-2 flex items-center gap-1"><Lightbulb className="w-4 h-4" /> Important Tips</p>
                       <ul className="text-xs text-[#e5e5e5] space-y-2">
@@ -695,15 +689,15 @@ export default function MapperTrainingStepPage({
                       </ul>
                     </div>
                     
-                    {/* Instructions on how to find OSM username */}
+                    {}
                     <div className="mb-3 bg-[#3b82f6]/10 border border-[#3b82f6]/30 rounded-lg p-3">
                       <p className="text-xs text-[#e5e5e5] mb-2">
                         <strong>How to find your OSM username:</strong>
                       </p>
                       <ol className="text-xs text-[#a3a3a3] space-y-1 list-decimal list-inside">
-                        <li>Go to <a href="https://www.openstreetmap.org" target="_blank" rel="noopener noreferrer" className="text-[#3b82f6] hover:underline">openstreetmap.org</a> and login</li>
+                        <li>Go to <a href="https://www.openstreetmap.org" target="_blank" rel="noopener noreferrer" className="text-[#3b82f6] hover:underline">OpenStreetMap.org</a></li>
                         <li>Click on your profile icon (top right corner)</li>
-                        <li>Click "My Profile"</li>
+                        <li>Click My Profile</li>
                         <li>Your username is the <strong className="text-white">last part of the URL</strong> in your browser</li>
                         <li>Example: openstreetmap.org/user/<strong className="text-[#22c55e]">YourUsername</strong></li>
                       </ol>
@@ -728,7 +722,7 @@ export default function MapperTrainingStepPage({
                     </p>
                   </div>
 
-                  {/* Verification Status */}
+                  {}
                   {osmVerificationStatus === 'verified' && (
                     <div className="bg-[#22c55e]/10 border border-[#22c55e]/30 rounded-lg p-3">
                       <div className="flex items-center gap-2">
@@ -807,7 +801,7 @@ export default function MapperTrainingStepPage({
             </div>
           )}
 
-          {/* Key Takeaways */}
+          {}
           {currentStep.content.keyTakeaways && (
             <div className="bg-gradient-to-r from-[#dc2626]/10 to-[#dc2626]/5 border border-[#dc2626]/20 rounded-xl p-4 sm:p-6 mb-12">
               <h3 className="text-lg sm:text-xl font-subheading font-bold text-white mb-3 sm:mb-4">
@@ -824,11 +818,10 @@ export default function MapperTrainingStepPage({
             </div>
           )}
 
-          {/* Navigation */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4">
             {previousStep ? (
               <MovingBorderButton
-                onClick={() => router.push(`/digitization/mapper/${previousStep.id}`)}
+                onClick={() => router.push('/dig' + 'itization/mapper/' + previousStep.id)}
                 className="w-full sm:flex-1 sm:max-w-[180px]"
               >
                 <ChevronLeft className="w-4 h-4" />
@@ -841,13 +834,13 @@ export default function MapperTrainingStepPage({
             <button
               onClick={markStepComplete}
               disabled={currentStepId === 2 && !savedOsmUsername}
-              className={`px-4 sm:px-6 py-3 rounded-lg font-medium transition-all text-sm sm:text-base whitespace-nowrap ${
+              className={'px-4 sm:px-6 py-3 rounded-lg font-medium transition-all text-sm sm:text-base whitespace-nowrap ' + (
                 completedSteps.has(currentStepId)
                   ? 'bg-[#22c55e] text-white'
                   : (currentStepId === 2 && !savedOsmUsername)
                   ? 'bg-[#262626] text-[#737373] cursor-not-allowed'
                   : 'bg-[#dc2626] text-white hover:bg-[#ef4444]'
-              }`}
+              )}
             >
               {completedSteps.has(currentStepId) ? (
                 <span className="flex items-center justify-center gap-2">
@@ -863,17 +856,17 @@ export default function MapperTrainingStepPage({
               <button
                 onClick={() => {
                   if (completedSteps.has(currentStepId)) {
-                    router.push(`/digitization/mapper/${nextStep.id}`);
+                    router.push('/digitization/mapper/' + nextStep.id);
                   } else {
                     alert('Please complete this step before proceeding to the next one.');
                   }
                 }}
                 disabled={!completedSteps.has(currentStepId)}
-                className={`w-full sm:flex-1 sm:max-w-[180px] px-4 py-3 rounded-lg font-medium transition-all ${
+                className={'w-full sm:flex-1 sm:max-w-[180px] px-4 py-3 rounded-lg font-medium transition-all ' + (
                   completedSteps.has(currentStepId)
                     ? 'bg-gradient-to-r from-[#dc2626] to-[#ef4444] text-white hover:opacity-90'
                     : 'bg-[#262626] text-[#737373] cursor-not-allowed'
-                } flex items-center justify-center gap-2`}
+                ) + ' flex items-center justify-center gap-2'}
               >
                 <span>Next</span>
                 <ChevronRight className="w-4 h-4" />
@@ -888,11 +881,11 @@ export default function MapperTrainingStepPage({
                   }
                 }}
                 disabled={!completedSteps.has(currentStepId)}
-                className={`w-full sm:flex-1 sm:max-w-[180px] px-4 py-3 rounded-lg font-medium transition-all ${
+                className={'w-full sm:flex-1 sm:max-w-[180px] px-4 py-3 rounded-lg font-medium transition-all ' + (
                   completedSteps.has(currentStepId)
                     ? 'bg-gradient-to-r from-[#dc2626] to-[#ef4444] text-white hover:opacity-90'
                     : 'bg-[#262626] text-[#737373] cursor-not-allowed'
-                } flex items-center justify-center gap-2`}
+                ) + ' flex items-center justify-center gap-2'}
               >
                 <span>Finish</span>
                 <Check className="w-4 h-4" />

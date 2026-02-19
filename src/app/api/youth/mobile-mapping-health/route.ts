@@ -1,9 +1,6 @@
 import { NextResponse } from 'next/server';
 
-/**
- * Mobile Mapping Health Check
- * Verifies that mobile mapping routes are deployed
- */
+
 
 export async function GET() {
   const routes = [

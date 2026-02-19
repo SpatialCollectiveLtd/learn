@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
-// Use relative URL for same-domain API calls (works in both dev and prod)
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
 interface StaffAuthenticationProps {
@@ -25,14 +25,14 @@ export const StaffAuthentication: React.FC<StaffAuthenticationProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isOnline, setIsOnline] = useState(true);
 
-  // Network status detection
+  
   useEffect(() => {
     const updateOnlineStatus = () => setIsOnline(navigator.onLine);
     
-    // Check initial status
+    
     setIsOnline(navigator.onLine);
 
-    // Listen for online/offline events
+    
     window.addEventListener('online', updateOnlineStatus);
     window.addEventListener('offline', updateOnlineStatus);
 
@@ -46,7 +46,7 @@ export const StaffAuthentication: React.FC<StaffAuthenticationProps> = ({
     e.preventDefault();
     setError('');
 
-    // Check network connectivity before attempting request
+    
     if (!navigator.onLine) {
       router.push('/offline');
       return;
@@ -58,29 +58,29 @@ export const StaffAuthentication: React.FC<StaffAuthenticationProps> = ({
       const response = await axios.post(`${API_URL}/api/staff/auth/authenticate`, {
         staffId,
       }, {
-        timeout: 15000, // 15 second timeout
+        timeout: 15000, 
       });
 
       if (response.data.success) {
-        // Store token in localStorage
+        
         localStorage.setItem('staffToken', response.data.data.token);
         localStorage.setItem('staffData', JSON.stringify(response.data.data.staff));
         onAuthenticated(response.data.data);
       }
     } catch (err: any) {
-      // Network error handling
+      
       if (err.code === 'ERR_NETWORK' || err.code === 'ECONNABORTED') {
         router.push('/offline');
         return;
       }
 
-      // Server error handling
+      
       if (err.response?.status === 503) {
         router.push('/maintenance');
         return;
       }
 
-      // 404 or other errors
+      
       if (err.response?.status === 404) {
         setError('Staff authentication service is currently unavailable. Please try again later.');
       } else {
@@ -93,7 +93,7 @@ export const StaffAuthentication: React.FC<StaffAuthenticationProps> = ({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      {/* Network Status Indicator */}
+      {}
       {!isOnline && (
         <div className="fixed top-0 left-0 right-0 bg-red-600 text-white py-2 px-4 text-center text-sm font-medium z-50 shadow-md">
           <div className="flex items-center justify-center">
@@ -116,7 +116,7 @@ export const StaffAuthentication: React.FC<StaffAuthenticationProps> = ({
       )}
 
       <div className="max-w-md w-full bg-white rounded-lg shadow-xl p-8">
-        {/* Header */}
+        {}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-100 rounded-full mb-4">
             <svg
@@ -141,7 +141,7 @@ export const StaffAuthentication: React.FC<StaffAuthenticationProps> = ({
           </p>
         </div>
 
-        {/* Authentication Form */}
+        {}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label
@@ -166,7 +166,7 @@ export const StaffAuthentication: React.FC<StaffAuthenticationProps> = ({
             </p>
           </div>
 
-          {/* Error Message */}
+          {}
           {error && (
             <div className="bg-red-50 border border-red-200 rounded-lg p-4">
               <div className="flex">
@@ -186,7 +186,7 @@ export const StaffAuthentication: React.FC<StaffAuthenticationProps> = ({
             </div>
           )}
 
-          {/* Submit Button */}
+          {}
           <button
             type="submit"
             disabled={isLoading || !staffId.trim()}
@@ -221,7 +221,7 @@ export const StaffAuthentication: React.FC<StaffAuthenticationProps> = ({
           </button>
         </form>
 
-        {/* Help Section */}
+        {}
         <div className="mt-8 pt-6 border-t border-gray-200">
           <div className="bg-blue-50 rounded-lg p-4">
             <h3 className="text-sm font-medium text-blue-900 mb-2">
@@ -239,7 +239,7 @@ export const StaffAuthentication: React.FC<StaffAuthenticationProps> = ({
           </div>
         </div>
 
-        {/* Security Note */}
+        {}
         <div className="mt-4 text-center">
           <p className="text-xs text-gray-500">
             🔒 This content is restricted to authorized Spatial Collective

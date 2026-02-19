@@ -42,7 +42,7 @@ export default function AdminStaffManagement() {
 
     const staffInfo = JSON.parse(staff);
     
-    // Allow both admin and superadmin to access this page
+    
     if (staffInfo.role !== 'admin' && staffInfo.role !== 'superadmin') {
       router.push('/dashboard/staff');
       return;
@@ -63,7 +63,7 @@ export default function AdminStaffManagement() {
         setStaffMembers(response.data.data.filter((s: StaffMember) => s.role === 'trainer'));
       }
     } catch (error) {
-      console.error('Error loading trainers:', error);
+      
       setMessage({ type: 'error', text: 'Failed to load trainers' });
     } finally {
       setIsLoading(false);
@@ -137,7 +137,7 @@ export default function AdminStaffManagement() {
       <BackgroundBeams className="opacity-30" />
 
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
+        {}
         <div className="mb-8">
           <button
             onClick={() => router.push('/dashboard/admin')}
@@ -152,7 +152,7 @@ export default function AdminStaffManagement() {
           <p className="text-[#a3a3a3]">Add and manage trainer accounts</p>
         </div>
 
-        {/* Message Alert */}
+        {}
         {message && (
           <div className={`mb-6 rounded-lg p-4 flex items-center gap-3 ${
             message.type === 'success' 
@@ -170,7 +170,7 @@ export default function AdminStaffManagement() {
           </div>
         )}
 
-        {/* Add Trainer Button */}
+        {}
         <div className="mb-6">
           <button
             onClick={() => setShowAddForm(!showAddForm)}
@@ -181,7 +181,7 @@ export default function AdminStaffManagement() {
           </button>
         </div>
 
-        {/* Add Trainer Form */}
+        {}
         {showAddForm && (
           <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-lg p-6 mb-6">
             <h2 className="text-xl font-heading font-bold text-white mb-4">
@@ -255,7 +255,7 @@ export default function AdminStaffManagement() {
           </div>
         )}
 
-        {/* Trainers List */}
+        {}
         <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-lg overflow-hidden">
           <div className="px-6 py-4 border-b border-[#2a2a2a]">
             <h2 className="text-xl font-heading font-bold text-white">

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
-// Use relative URL for same-domain API calls (works in both dev and prod)
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
 interface YouthAuthenticationProps {
@@ -26,7 +26,7 @@ export const YouthAuthentication: React.FC<YouthAuthenticationProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isOnline, setIsOnline] = useState(true);
 
-  // Check network status
+  
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
@@ -45,7 +45,7 @@ export const YouthAuthentication: React.FC<YouthAuthenticationProps> = ({
     e.preventDefault();
     setError('');
 
-    // Check internet connection first
+    
     if (!navigator.onLine) {
       router.push('/offline');
       return;
@@ -57,17 +57,17 @@ export const YouthAuthentication: React.FC<YouthAuthenticationProps> = ({
       const response = await axios.post(`${API_URL}/api/youth/auth/authenticate`, {
         youthId,
       }, {
-        timeout: 15000, // 15 second timeout
+        timeout: 15000, 
       });
 
       if (response.data.success) {
-        // Store token in localStorage
+        
         localStorage.setItem('youthToken', response.data.data.token);
         localStorage.setItem('youthData', JSON.stringify(response.data.data.youth));
         onAuthenticated(response.data.data);
       }
     } catch (err: any) {
-      // Handle different types of errors
+      
       if (err.code === 'ERR_NETWORK' || err.code === 'ECONNABORTED' || !navigator.onLine) {
         router.push('/offline');
       } else if (err.response?.status === 503) {
@@ -84,7 +84,7 @@ export const YouthAuthentication: React.FC<YouthAuthenticationProps> = ({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-100 flex items-center justify-center p-4">
-      {/* Network Status Indicator */}
+      {}
       {!isOnline && (
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-2">
           <svg className="w-5 h-5 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
@@ -95,7 +95,7 @@ export const YouthAuthentication: React.FC<YouthAuthenticationProps> = ({
       )}
       
       <div className="max-w-md w-full bg-white rounded-lg shadow-xl p-8">
-        {/* Header */}
+        {}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
             <svg
@@ -123,7 +123,7 @@ export const YouthAuthentication: React.FC<YouthAuthenticationProps> = ({
           </p>
         </div>
 
-        {/* Authentication Form */}
+        {}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label
@@ -148,7 +148,7 @@ export const YouthAuthentication: React.FC<YouthAuthenticationProps> = ({
             </p>
           </div>
 
-          {/* Error Message */}
+          {}
           {error && (
             <div className="bg-red-50 border border-red-200 rounded-lg p-4">
               <div className="flex">
@@ -168,7 +168,7 @@ export const YouthAuthentication: React.FC<YouthAuthenticationProps> = ({
             </div>
           )}
 
-          {/* Submit Button */}
+          {}
           <button
             type="submit"
             disabled={isLoading || !youthId.trim()}
@@ -203,7 +203,7 @@ export const YouthAuthentication: React.FC<YouthAuthenticationProps> = ({
           </button>
         </form>
 
-        {/* Help Section */}
+        {}
         <div className="mt-8 pt-6 border-t border-gray-200">
           <div className="bg-blue-50 rounded-lg p-4">
             <h3 className="text-sm font-medium text-blue-900 mb-2">
@@ -216,7 +216,7 @@ export const YouthAuthentication: React.FC<YouthAuthenticationProps> = ({
           </div>
         </div>
 
-        {/* Info Note */}
+        {}
         <div className="mt-4 text-center">
           <p className="text-xs text-gray-500">
             🔒 Secure access to your training modules

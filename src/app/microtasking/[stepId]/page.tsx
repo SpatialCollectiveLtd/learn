@@ -22,7 +22,7 @@ import { microtaskingSteps, MICROTASKING_PLATFORM_URL } from "@/data/microtaskin
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
-// Function to make URLs clickable
+
 function renderTextWithLinks(text: string) {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   const parts = text.split(urlRegex);
@@ -63,7 +63,7 @@ export default function MicrotaskingStepPage({ params }: { params: Promise<{ ste
       return;
     }
 
-    // Check if step is already completed
+    
     const saved = localStorage.getItem('microtasking-completed-steps');
     if (saved) {
       const completed = new Set<number>(JSON.parse(saved));
@@ -86,7 +86,7 @@ export default function MicrotaskingStepPage({ params }: { params: Promise<{ ste
         return;
       }
 
-      // Submit to API
+      
       const response = await axios.post(
         `${API_URL}/api/youth/training-progress`,
         {
@@ -102,7 +102,7 @@ export default function MicrotaskingStepPage({ params }: { params: Promise<{ ste
       );
 
       if (response.data.success) {
-        // Update localStorage
+        
         const saved = localStorage.getItem('microtasking-completed-steps');
         const completed = saved ? new Set<number>(JSON.parse(saved)) : new Set<number>();
         completed.add(stepId);
@@ -110,7 +110,7 @@ export default function MicrotaskingStepPage({ params }: { params: Promise<{ ste
         
         setIsCompleted(true);
 
-        // Auto-navigate to next step after 1 second, or back to overview if last step
+        
         setTimeout(() => {
           if (stepId < microtaskingSteps.length) {
             router.push(`/microtasking/${stepId + 1}`);
@@ -120,7 +120,7 @@ export default function MicrotaskingStepPage({ params }: { params: Promise<{ ste
         }, 1000);
       }
     } catch (err: any) {
-      console.error('Error marking step complete:', err);
+      
       setError(err.response?.data?.message || 'Failed to mark step as complete');
     } finally {
       setIsSubmitting(false);
@@ -138,7 +138,7 @@ export default function MicrotaskingStepPage({ params }: { params: Promise<{ ste
       
       <div className="relative z-10 pt-20 pb-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
-          {/* Header */}
+          {}
           <div className="text-center mb-8">
             <div className="flex items-center justify-center gap-2 text-sm text-[#a3a3a3] mb-3">
               <Smartphone className="w-4 h-4" />
@@ -163,7 +163,7 @@ export default function MicrotaskingStepPage({ params }: { params: Promise<{ ste
             </div>
           </div>
 
-          {/* Progress Bar */}
+          {}
           <div className="mb-8">
             <div className="w-full bg-neutral-800 rounded-full h-2 overflow-hidden">
               <div
@@ -173,9 +173,9 @@ export default function MicrotaskingStepPage({ params }: { params: Promise<{ ste
             </div>
           </div>
 
-          {/* Content */}
+          {}
           <div className="prose prose-invert max-w-none">
-            {/* Introduction */}
+            {}
             <div className="bg-gradient-to-br from-blue-900/30 to-purple-900/30 rounded-lg p-6 mb-8 border border-blue-500/30">
               <div className="flex items-start gap-3">
                 <BookOpen className="w-6 h-6 text-blue-400 flex-shrink-0 mt-1" />
@@ -185,7 +185,7 @@ export default function MicrotaskingStepPage({ params }: { params: Promise<{ ste
               </div>
             </div>
 
-            {/* Main Content */}
+            {}
             <div className="space-y-6">
               {step.content.mainContent.map((block, index) => {
                 switch (block.type) {
@@ -265,7 +265,7 @@ export default function MicrotaskingStepPage({ params }: { params: Promise<{ ste
               })}
             </div>
 
-            {/* Key Takeaways */}
+            {}
             {step.content.keyTakeaways && step.content.keyTakeaways.length > 0 && (
               <div className="mt-8 bg-gradient-to-br from-purple-900/30 to-blue-900/30 rounded-lg p-6 border border-purple-500/30">
                 <h3 className="text-xl font-heading font-bold text-white mb-4 flex items-center gap-2 mt-0">
@@ -284,7 +284,7 @@ export default function MicrotaskingStepPage({ params }: { params: Promise<{ ste
             )}
           </div>
 
-          {/* Error Message */}
+          {}
           {error && (
             <div className="mt-6 bg-red-900/20 border border-red-500/30 rounded-lg p-4">
               <div className="flex items-center gap-2 text-red-400">
@@ -294,9 +294,9 @@ export default function MicrotaskingStepPage({ params }: { params: Promise<{ ste
             </div>
           )}
 
-          {/* Navigation Buttons */}
+          {}
           <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4">
-            {/* Previous Button */}
+            {}
             {previousStep ? (
               <button
                 onClick={() => router.push(`/microtasking/${previousStep.id}`)}
@@ -320,7 +320,7 @@ export default function MicrotaskingStepPage({ params }: { params: Promise<{ ste
               </button>
             )}
 
-            {/* Mark Complete / Next Button */}
+            {}
             <div className="w-full sm:w-auto flex flex-col sm:flex-row gap-3">
               {!isCompleted && (
                 <MovingBorderButton

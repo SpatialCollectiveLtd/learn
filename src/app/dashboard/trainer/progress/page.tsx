@@ -30,7 +30,7 @@ export default function YouthProgressPage() {
     setIsLoading(false);
   }, [router]);
 
-  // Mock data - replace with API call
+  
   const progressData = [
     {
       youthId: "KAYTEST001ES",
@@ -103,7 +103,7 @@ export default function YouthProgressPage() {
         </header>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Stats */}
+          {}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
             <div className="bg-[#1F2121]/50 backdrop-blur-sm border border-[#2a2a2a] rounded-lg p-6">
               <div className="flex items-center justify-between mb-2">
@@ -128,7 +128,7 @@ export default function YouthProgressPage() {
             </div>
           </div>
 
-          {/* Progress Table */}
+          {}
           <div className="bg-[#1F2121]/50 backdrop-blur-sm border border-[#2a2a2a] rounded-lg overflow-hidden">
             <div className="p-6 border-b border-[#2a2a2a]">
               <h2 className="text-xl font-heading font-bold text-white">Trainee Progress Overview</h2>

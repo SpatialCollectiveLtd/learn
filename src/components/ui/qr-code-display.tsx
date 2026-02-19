@@ -10,10 +10,7 @@ interface QRCodeDisplayProps {
   onLoad?: () => void;
 }
 
-/**
- * Simple QR Code display using a canvas-based generator
- * No external dependencies - generates QR code purely in browser
- */
+
 export function QRCodeDisplay({ data, size = 200, className = '', onLoad }: QRCodeDisplayProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -29,12 +26,12 @@ export function QRCodeDisplay({ data, size = 200, className = '', onLoad }: QRCo
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Create an image from QR code API - white background, black QR for best scanning
+    
     const img = new Image();
     img.crossOrigin = 'anonymous';
     const encodedData = encodeURIComponent(data);
-    // Use white background (#ffffff) and black code (#000000) for best scannability
-    img.src = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodedData}&bgcolor=ffffff&color=000000&margin=10`;
+    
+    img.src = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodedData}&format=png`;
     
     img.onload = () => {
       ctx.fillStyle = '#ffffff';
@@ -45,7 +42,7 @@ export function QRCodeDisplay({ data, size = 200, className = '', onLoad }: QRCo
     };
 
     img.onerror = () => {
-      // Fallback: show error state
+      
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, size, size);
       setIsLoading(false);
@@ -55,7 +52,6 @@ export function QRCodeDisplay({ data, size = 200, className = '', onLoad }: QRCo
 
   return (
     <div className={`relative ${className}`} style={{ width: size, height: size }}>
-      {/* Canvas for QR code */}
       <canvas
         ref={canvasRef}
         width={size}
@@ -63,7 +59,6 @@ export function QRCodeDisplay({ data, size = 200, className = '', onLoad }: QRCo
         className={`rounded-lg ${isLoading ? 'invisible' : 'visible'}`}
       />
       
-      {/* Loading overlay */}
       {isLoading && (
         <div 
           className="absolute inset-0 flex flex-col items-center justify-center bg-white rounded-lg"
@@ -74,7 +69,7 @@ export function QRCodeDisplay({ data, size = 200, className = '', onLoad }: QRCo
         </div>
       )}
       
-      {/* Error state */}
+      {}
       {hasError && !isLoading && (
         <div 
           className="absolute inset-0 flex flex-col items-center justify-center bg-white rounded-lg"

@@ -3,11 +3,10 @@ import { Database } from '../_lib/database';
 
 export async function GET(request: NextRequest) {
   try {
-    // Test database connection
+    
     const result = await Database.query('SELECT NOW() as current_time, version() as pg_version');
     
-    // Get OSM server configuration
-    const osmServerUrl = process.env.NEXT_PUBLIC_OSM_SERVER_URL || 'https://api.openstreetmap.org';
+    const osmServerUrl = process.env.NEXT_PUBLIC_OSM_SERVER_URL || 'https://osm.spatialcollective.co.ke';
     
     return NextResponse.json({
       success: true,
@@ -28,7 +27,7 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error: any) {
-    console.error('Debug endpoint error:', error);
+    
     return NextResponse.json(
       { 
         success: false,

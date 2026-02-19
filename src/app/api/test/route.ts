@@ -2,10 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('[TEST] Received POST request');
     
     const body = await request.json();
-    console.log('[TEST] Body:', body);
     
     return NextResponse.json({
       success: true,
@@ -13,7 +11,7 @@ export async function POST(request: NextRequest) {
       receivedData: body,
     });
   } catch (error) {
-    console.error('[TEST] Error:', error);
+    
     return NextResponse.json(
       { success: false, message: 'Test failed', error: String(error) },
       { status: 500 }

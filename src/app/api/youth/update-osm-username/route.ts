@@ -6,7 +6,7 @@ const JWT_SECRET = process.env.learn_STACK_SECRET_SERVER_KEY || process.env.JWT_
 
 export async function PUT(request: NextRequest) {
   try {
-    // Get token from Authorization header
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return NextResponse.json(
@@ -17,7 +17,7 @@ export async function PUT(request: NextRequest) {
 
     const token = authHeader.split(' ')[1];
     
-    // Verify token
+    
     let decoded: any;
     try {
       decoded = jwt.verify(token, JWT_SECRET);
@@ -28,7 +28,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Get OSM username from request body
+    
     const body = await request.json();
     const { osmUsername } = body;
 
@@ -39,8 +39,8 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Validate OSM username format (alphanumeric, underscores, hyphens, and spaces)
-    // OSM allows usernames with spaces, which appear as %20 in URLs
+    
+    
     const osmUsernamePattern = /^[a-zA-Z0-9_\- ]+$/;
     if (!osmUsernamePattern.test(osmUsername.trim())) {
       return NextResponse.json(
@@ -49,7 +49,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Update youth participant's OSM username
+    
     await YouthModel.updateOsmUsername(decoded.youthId, osmUsername.trim());
 
     return NextResponse.json({
@@ -62,7 +62,7 @@ export async function PUT(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error updating OSM username:', error);
+    
     return NextResponse.json(
       { success: false, message: 'An error occurred while updating OSM username' },
       { status: 500 }

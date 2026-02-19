@@ -1,18 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyYouthToken } from '@/app/api/_lib/auth';
 
-/**
- * Query Submission API - Proxy to DPW Manager
- * 
- * POST /api/youth/queries/submit
- * Submits a new query/dispute to DPW Manager
- * 
- * Auth: Bearer token (youth JWT)
- * Body: { category, subject, message, priority, attachments? }
- * Response: Query confirmation with query_id
- */
 
-const DPW_BASE_URL = process.env.DPW_MANAGER_BASE_URL || 'https://digital-chi-six.vercel.app/api/v1';
+const DPW_BASE_URL = process.env.DPW_MANAGER_BASE_URL || 'https://app.spatialcollective.com';
 const DPW_API_KEY = process.env.DPW_MANAGER_API_KEY || '806920718fb09a005ce0672fb9cf202995ef4c42e4b7582db7c5e15881d29bd3';
 
 export async function POST(request: NextRequest) {
@@ -20,7 +10,7 @@ export async function POST(request: NextRequest) {
   const requestId = crypto.randomUUID();
   
   try {
-    // Verify youth authentication
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return NextResponse.json(
@@ -44,11 +34,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Parse request body
+    
     const body = await request.json();
     const { category, subject, message, priority, attachments } = body;
 
-    // Validation
+    
     if (!category || !subject || !message) {
       return NextResponse.json(
         { 
@@ -62,9 +52,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(`[Query-Submit ${requestId}] ${youthId} - ${category}: ${subject}`);
-
-    // Call DPW Manager API
+    
     const dpwUrl = `${DPW_BASE_URL}/youth/queries/submit`;
     
     const dpwResponse = await fetch(dpwUrl, {
@@ -82,12 +70,11 @@ export async function POST(request: NextRequest) {
         priority: priority || 'medium',
         attachments: attachments || [],
       }),
-      signal: AbortSignal.timeout(15000), // 15s for file uploads
+      signal: AbortSignal.timeout(15000), 
     });
 
     if (!dpwResponse.ok) {
       const errorData = await dpwResponse.json().catch(() => ({ error: 'Unknown error' }));
-      console.error(`[Query-Submit ${requestId}] DPW API error:`, dpwResponse.status, errorData);
       
       return NextResponse.json(
         { 
@@ -105,13 +92,13 @@ export async function POST(request: NextRequest) {
     const queryData = await dpwResponse.json();
     const duration = Date.now() - startTime;
     
-    console.log(`[Query-Submit ${requestId}] Success (${duration}ms) - Query ID: ${queryData.data?.query_id}`);
+    
 
     return NextResponse.json(queryData);
 
   } catch (error: any) {
     const duration = Date.now() - startTime;
-    console.error(`[Query-Submit ${requestId}] Error (${duration}ms):`, error);
+    
     
     return NextResponse.json(
       { 

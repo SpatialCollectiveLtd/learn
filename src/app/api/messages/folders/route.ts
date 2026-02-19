@@ -2,12 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyYouthToken } from '@/app/api/_lib/auth';
 import { Database } from '@/app/api/_lib/database';
 
-const EMAIL_API_URL = process.env.EMAIL_API_URL || 'https://tasks.spatialcollective.co.ke/email-api';
+const EMAIL_API_URL = process.env.EMAIL_API_URL || 'https://email-api.spatialcollective.com';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || '06682c28d538516b9920423822798612';
 
 export async function GET(request: NextRequest) {
   try {
-    // Verify authentication
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return NextResponse.json(
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
 
     const youthId = decoded.youthId;
 
-    // Get youth's work email
+    
     const result = await Database.query(
       'SELECT youth_id, work_email FROM youth_participants WHERE youth_id = $1',
       [youthId]
@@ -42,10 +42,10 @@ export async function GET(request: NextRequest) {
     }
 
     const workEmail = result.rows[0].work_email;
-    // Default email password as per Email API specification
+    
     const emailPassword = 'DPW2026Map!';
 
-    // Fetch folders from Email API
+    
     const response = await fetch(`${EMAIL_API_URL}/folders`, {
       method: 'POST',
       headers: {
@@ -75,7 +75,7 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error: any) {
-    console.error('Error fetching folders:', error);
+    
     return NextResponse.json(
       { success: false, message: error.message || 'Internal server error' },
       { status: 500 }

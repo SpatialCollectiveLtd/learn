@@ -36,7 +36,7 @@ export function MovingBorderButton({
         className
       )}
     >
-      {/* Animated border gradient */}
+      {}
       <motion.div
         className={cn(
           "absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity",
@@ -56,12 +56,12 @@ export function MovingBorderButton({
         }}
       />
       
-      {/* Inner content container */}
+      {}
       <span className="relative z-10 flex items-center gap-2">
         {children}
       </span>
       
-      {/* Subtle glow effect */}
+      {}
       <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-transparent via-[#dc2626]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity blur-sm" />
     </button>
   );

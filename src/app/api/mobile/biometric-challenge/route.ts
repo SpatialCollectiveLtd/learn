@@ -3,12 +3,10 @@ import { verifyStaffToken } from '@/app/api/_lib/auth';
 import { Database } from '@/app/api/_lib/database';
 import crypto from 'crypto';
 
-/**
- * POST /api/mobile/biometric-challenge - Generate WebAuthn challenge
- */
+
 export async function POST(request: NextRequest) {
   try {
-    // Verify staff authentication
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader?.startsWith('Bearer ')) {
       return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
@@ -37,7 +35,7 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Verify youth exists
+    
     const youthCheck = await Database.query(`
       SELECT youth_id, full_name, program_type 
       FROM youth_participants 
@@ -51,7 +49,7 @@ export async function POST(request: NextRequest) {
       }, { status: 404 });
     }
 
-    // For authentication, check if youth has registered biometric
+    
     let allowedCredentials: any[] = [];
     if (action === 'authenticate') {
       const credentialsCheck = await Database.query(`
@@ -67,7 +65,7 @@ export async function POST(request: NextRequest) {
         }, { status: 400 });
       }
 
-      // Convert stored credential IDs for WebAuthn
+      
       allowedCredentials = credentialsCheck.rows.map(cred => ({
         id: Buffer.from(cred.credential_id, 'base64'),
         type: 'public-key',
@@ -75,18 +73,18 @@ export async function POST(request: NextRequest) {
       }));
     }
 
-    // Generate cryptographically secure challenge (32 bytes)
+    
     const challenge = crypto.randomBytes(32);
     const challengeId = crypto.randomUUID();
 
-    // Clean up old challenges for this youth (older than 5 minutes)
+    
     await Database.query(`
       UPDATE biometric_challenges 
       SET used = TRUE, used_at = NOW(), used_by = $1
       WHERE youth_id = $2 AND created_at < NOW() - INTERVAL '5 minutes' AND used = FALSE
     `, [decoded.staffId, youth_id.toUpperCase()]);
 
-    // Store challenge in database (expires in 2 minutes)
+    
     await Database.query(`
       INSERT INTO biometric_challenges (
         challenge_id,
@@ -109,11 +107,11 @@ export async function POST(request: NextRequest) {
     const response: any = {
       success: true,
       challengeId,
-      challenge: Array.from(challenge), // Convert to array for frontend
+      challenge: Array.from(challenge), 
       youth: youthCheck.rows[0]
     };
 
-    // Add allowed credentials for authentication
+    
     if (action === 'authenticate') {
       response.allowedCredentials = allowedCredentials.map(cred => ({
         id: Array.from(cred.id),
@@ -125,7 +123,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(response);
 
   } catch (error: unknown) {
-    console.error('Biometric challenge generation error:', error);
+    
     return NextResponse.json(
       { success: false, message: 'Server error during challenge generation' },
       { status: 500 }

@@ -38,7 +38,7 @@ export default function AdminDashboard() {
   const [confirmAction, setConfirmAction] = useState<'selected' | 'all' | null>(null);
 
   useEffect(() => {
-    // Check authentication
+    
     const token = localStorage.getItem('staffToken');
     const staff = localStorage.getItem('staffData');
 
@@ -49,7 +49,7 @@ export default function AdminDashboard() {
 
     const staffInfo = JSON.parse(staff);
     
-    // Check if user is admin or superadmin
+    
     if (staffInfo.role !== 'admin' && staffInfo.role !== 'superadmin') {
       alert('Access denied. Admin privileges required.');
       router.push('/dashboard/staff');
@@ -59,7 +59,7 @@ export default function AdminDashboard() {
     setStaffData(staffInfo);
     fetchYouthParticipants(token);
 
-    // Auto-refresh every 30 seconds to get latest data
+    
     const interval = setInterval(() => {
       fetchYouthParticipants(token);
     }, 30000);
@@ -80,7 +80,7 @@ export default function AdminDashboard() {
         setYouth(response.data.data);
       }
     } catch (error: any) {
-      console.error('Error fetching youth:', error);
+      
       if (error.response?.status === 401) {
         localStorage.removeItem('staffToken');
         localStorage.removeItem('staffData');
@@ -123,7 +123,7 @@ export default function AdminDashboard() {
       return;
     }
 
-    // Check if selected youth have signed contracts
+    
     const selectedParticipants = youth.filter(y => selectedYouth.has(y.youth_id));
     const signedCount = selectedParticipants.filter(y => y.has_signed_contract).length;
     
@@ -186,14 +186,14 @@ export default function AdminDashboard() {
   const getFilteredYouth = () => {
     let filtered = youth;
 
-    // Apply contract filter
+    
     if (filter === 'signed') {
       filtered = filtered.filter(y => y.has_signed_contract);
     } else if (filter === 'unsigned') {
       filtered = filtered.filter(y => !y.has_signed_contract);
     }
 
-    // Apply search filter
+    
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(y =>
@@ -210,7 +210,7 @@ export default function AdminDashboard() {
 
   const filteredYouth = getFilteredYouth();
   
-  // Pagination logic
+  
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredYouth.slice(indexOfFirstItem, indexOfLastItem);
@@ -235,7 +235,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-black">
-      {/* Header */}
+      {}
       <header className="bg-[#1F2121] border-b border-[#2a2a2a] sticky top-0 z-50 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
@@ -278,7 +278,7 @@ export default function AdminDashboard() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Statistics Cards */}
+        {}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-lg p-6">
             <div className="flex items-center justify-between">
@@ -317,10 +317,10 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Controls */}
+        {}
         <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-lg p-6 mb-6">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            {/* Search */}
+            {}
             <div className="flex-1 max-w-md relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#a3a3a3]" />
               <input
@@ -332,7 +332,7 @@ export default function AdminDashboard() {
               />
             </div>
 
-            {/* Filters */}
+            {}
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setFilter('all')}
@@ -366,7 +366,7 @@ export default function AdminDashboard() {
               </button>
             </div>
 
-            {/* Print Actions */}
+            {}
             <div className="flex items-center gap-2">
               <button
                 onClick={printSelected}
@@ -386,7 +386,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          {/* Selection Controls */}
+          {}
           {filteredYouth.length > 0 && (
             <div className="mt-4 flex items-center gap-4">
               <button
@@ -405,7 +405,7 @@ export default function AdminDashboard() {
           )}
         </div>
 
-        {/* Youth Table */}
+        {}
         <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-lg overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -520,7 +520,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Pagination Controls */}
+        {}
         {totalPages > 1 && (
           <div className="mt-6 flex items-center justify-between">
             <div className="text-sm text-[#a3a3a3]">
@@ -563,13 +563,13 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* Results Count */}
+        {}
         <div className="mt-4 text-center text-sm text-[#a3a3a3]">
           Showing {filteredYouth.length} of {stats.total} participants
         </div>
       </main>
 
-      {/* Confirmation Modal */}
+      {}
       {showConfirmModal && (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
           <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-lg max-w-md w-full p-6 shadow-2xl">
@@ -615,7 +615,7 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* Error Modal */}
+      {}
       {showErrorModal && (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
           <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-lg max-w-md w-full p-6 shadow-2xl">

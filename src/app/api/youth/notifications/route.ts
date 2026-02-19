@@ -1,6 +1,3 @@
-// GET /api/youth/notifications
-// Fetches active notifications for authenticated youth
-
 import { NextRequest, NextResponse } from 'next/server';
 import { Database } from '@/app/api/_lib/database';
 import jwt from 'jsonwebtoken';
@@ -31,7 +28,7 @@ export async function GET(request: NextRequest) {
 
     const youthId = decoded.youthId;
 
-    // Fetch active notifications (not hidden and not expired)
+    
     const result = await Database.query(`
       SELECT 
         notification_id,
@@ -54,7 +51,6 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error: any) {
-    console.error('[API] Error fetching notifications:', error);
     
     return NextResponse.json(
       {

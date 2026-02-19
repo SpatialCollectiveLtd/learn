@@ -11,7 +11,7 @@ export default function NoInternet() {
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4">
       <div className="max-w-md w-full text-center">
-        {/* Logo */}
+        {}
         <div className="mb-8 flex justify-center">
           <div className="relative w-32 h-32">
             <Image
@@ -23,7 +23,7 @@ export default function NoInternet() {
           </div>
         </div>
 
-        {/* Icon */}
+        {}
         <div className="mb-6">
           <svg
             className="w-24 h-24 mx-auto text-red-500"
@@ -40,7 +40,7 @@ export default function NoInternet() {
           </svg>
         </div>
 
-        {/* Content */}
+        {}
         <h1 className="text-3xl font-bold text-white mb-4">
           No Internet Connection
         </h1>
@@ -49,7 +49,7 @@ export default function NoInternet() {
           Unable to connect to Spatial Collective servers. Please check your internet connection and try again.
         </p>
 
-        {/* Retry Button */}
+        {}
         <button
           onClick={handleRetry}
           className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors mb-6"
@@ -57,7 +57,7 @@ export default function NoInternet() {
           Retry Connection
         </button>
 
-        {/* Troubleshooting Tips */}
+        {}
         <div className="bg-gray-900 border border-gray-800 rounded-lg p-6 text-left">
           <h2 className="text-white font-semibold mb-3 flex items-center">
             <svg className="w-5 h-5 mr-2 text-red-500" fill="currentColor" viewBox="0 0 20 20">
@@ -85,7 +85,7 @@ export default function NoInternet() {
           </ul>
         </div>
 
-        {/* Footer */}
+        {}
         <div className="mt-8 text-gray-500 text-sm">
           <p>Spatial Collective Learning Platform</p>
           <p className="mt-1">For support: info@spatialcollective.co.ke</p>

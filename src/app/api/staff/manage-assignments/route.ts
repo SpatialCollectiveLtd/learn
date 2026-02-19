@@ -1,13 +1,10 @@
-// POST /api/staff/manage-assignments
-// Staff API to transition youth between modules during their 20-day employment period
-
 import { NextRequest, NextResponse } from 'next/server';
 import { Database } from '@/app/api/_lib/database';
 import { verifyStaffToken } from '@/app/api/_lib/auth';
 
 export async function POST(request: NextRequest) {
   try {
-    // Verify staff authentication
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader?.startsWith('Bearer ')) {
       return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
@@ -29,7 +26,7 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Action: Get assignment history for a youth
+    
     if (action === 'get_history') {
       if (!youth_id) {
         return NextResponse.json({ 
@@ -87,7 +84,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Action: Get eligible youth for transitions
+    
     if (action === 'get_eligible') {
       const eligibleResult = await Database.query(`
         SELECT 
@@ -128,7 +125,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Action: Transition youth to new module
+    
     if (action === 'transition') {
       if (!youth_id || !program_type || !transition_date) {
         return NextResponse.json({ 
@@ -137,7 +134,7 @@ export async function POST(request: NextRequest) {
         }, { status: 400 });
       }
 
-      // Validate program type
+      
       const validPrograms = ['digitization', 'mobile_mapping', 'household_survey', 'microtasking'];
       if (!validPrograms.includes(program_type)) {
         return NextResponse.json({ 
@@ -146,7 +143,7 @@ export async function POST(request: NextRequest) {
         }, { status: 400 });
       }
 
-      // Check if youth exists and is eligible
+      
       const youthCheck = await Database.query(`
         SELECT 
           yp.youth_id, 
@@ -167,7 +164,7 @@ export async function POST(request: NextRequest) {
 
       const youth = youthCheck.rows[0];
 
-      // Check if youth has completed 20-day work period
+      
       if (youth.work_days_completed >= 20) {
         return NextResponse.json({ 
           success: false, 
@@ -175,7 +172,7 @@ export async function POST(request: NextRequest) {
         }, { status: 400 });
       }
 
-      // Check if transitioning to same program type
+      
       if (youth.current_program_type === program_type) {
         return NextResponse.json({ 
           success: false, 
@@ -183,7 +180,7 @@ export async function POST(request: NextRequest) {
         }, { status: 400 });
       }
 
-      // Check if settlement has configuration for new program type
+      
       const configCheck = await Database.query(`
         SELECT config_id, daily_target, project_hashtag
         FROM settlement_work_config
@@ -197,7 +194,7 @@ export async function POST(request: NextRequest) {
         }, { status: 400 });
       }
 
-      // Perform the transition using the database function
+      
       try {
         const transitionResult = await Database.query(`
           SELECT transition_youth_module($1, $2, $3, $4, $5) as new_assignment_id
@@ -211,7 +208,7 @@ export async function POST(request: NextRequest) {
 
         const newAssignmentId = transitionResult.rows[0].new_assignment_id;
 
-        // Get updated assignment info
+        
         const updatedInfo = await Database.query(`
           SELECT 
             yma.assignment_id,
@@ -239,7 +236,6 @@ export async function POST(request: NextRequest) {
 
       } catch (err: unknown) {
         const error = err as Error;
-        console.error('[API] Module transition error:', error);
         
         return NextResponse.json({
           success: false,
@@ -255,7 +251,7 @@ export async function POST(request: NextRequest) {
     }, { status: 400 });
 
   } catch (error) {
-    console.error('[API] Assignment management error:', error);
+    
     return NextResponse.json(
       { 
         success: false, 
@@ -267,13 +263,13 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// GET /api/staff/manage-assignments?youth_id=KAY1234&action=get_history
+
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const youth_id = searchParams.get('youth_id');
   const action = searchParams.get('action') || 'get_history';
 
-  // Reuse the POST logic for GET requests
+  
   const mockBody = { action, youth_id };
   const mockRequest = {
     ...request,

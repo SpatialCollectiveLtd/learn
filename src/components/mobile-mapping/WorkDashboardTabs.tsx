@@ -53,7 +53,7 @@ export default function WorkDashboardTabs({
 
   return (
     <div className="w-full">
-      {/* Tab Navigation */}
+      {}
       <div className="bg-background-card border-b border-border">
         <div className="flex overflow-x-auto scrollbar-hide">
           {TABS.map((tab) => (
@@ -77,7 +77,7 @@ export default function WorkDashboardTabs({
         </div>
       </div>
 
-      {/* Tab Content */}
+      {}
       <div className="bg-background-card">
         {renderTabContent()}
       </div>

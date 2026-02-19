@@ -63,7 +63,7 @@ export default function SuperAdminStaffManagement() {
         setStaffMembers(response.data.data);
       }
     } catch (error) {
-      console.error('Error loading staff:', error);
+      
       setMessage({ type: 'error', text: 'Failed to load staff members' });
     } finally {
       setIsLoading(false);
@@ -137,7 +137,7 @@ export default function SuperAdminStaffManagement() {
       <BackgroundBeams className="opacity-30" />
 
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
+        {}
         <div className="mb-8">
           <button
             onClick={() => router.push('/dashboard/staff')}
@@ -152,7 +152,7 @@ export default function SuperAdminStaffManagement() {
           <p className="text-[#a3a3a3]">Add and manage trainers and admins</p>
         </div>
 
-        {/* Message Alert */}
+        {}
         {message && (
           <div className={`mb-6 rounded-lg p-4 flex items-center gap-3 ${
             message.type === 'success' 
@@ -170,7 +170,7 @@ export default function SuperAdminStaffManagement() {
           </div>
         )}
 
-        {/* Add Staff Button */}
+        {}
         <div className="mb-6">
           <button
             onClick={() => setShowAddForm(!showAddForm)}
@@ -181,7 +181,7 @@ export default function SuperAdminStaffManagement() {
           </button>
         </div>
 
-        {/* Add Staff Form */}
+        {}
         {showAddForm && (
           <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-lg p-6 mb-6">
             <h2 className="text-xl font-heading font-bold text-white mb-4">
@@ -269,7 +269,7 @@ export default function SuperAdminStaffManagement() {
           </div>
         )}
 
-        {/* Staff List */}
+        {}
         <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-lg overflow-hidden">
           <div className="px-6 py-4 border-b border-[#2a2a2a]">
             <h2 className="text-xl font-heading font-bold text-white">

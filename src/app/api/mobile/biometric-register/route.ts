@@ -2,12 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyStaffToken } from '@/app/api/_lib/auth';
 import { Database } from '@/app/api/_lib/database';
 
-/**
- * POST /api/mobile/biometric-register - Register youth biometric credential
- */
+
 export async function POST(request: NextRequest) {
   try {
-    // Verify staff authentication
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader?.startsWith('Bearer ')) {
       return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
@@ -29,7 +27,7 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Verify youth exists
+    
     const youthCheck = await Database.query(`
       SELECT youth_id, full_name, program_type, settlement 
       FROM youth_participants 
@@ -43,7 +41,7 @@ export async function POST(request: NextRequest) {
       }, { status: 404 });
     }
 
-    // Verify challenge exists and is valid
+    
     const challengeCheck = await Database.query(`
       SELECT challenge_id, youth_id, challenge_data, expires_at, action_type
       FROM biometric_challenges 
@@ -65,7 +63,7 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Check if youth already has biometric registered
+    
     const existingBiometric = await Database.query(`
       SELECT credential_id FROM biometric_credentials 
       WHERE youth_id = $1 AND is_active = TRUE
@@ -78,10 +76,10 @@ export async function POST(request: NextRequest) {
       }, { status: 409 });
     }
 
-    // Here you would normally verify the WebAuthn credential
-    // For now, we'll assume it's valid and store it
     
-    // Store the biometric credential
+    
+    
+    
     const credentialResult = await Database.query(`
       INSERT INTO biometric_credentials (
         youth_id, 
@@ -98,7 +96,7 @@ export async function POST(request: NextRequest) {
       youth_id.toUpperCase(),
       credential.id,
       JSON.stringify(credential),
-      0, // Initial counter
+      0, 
       decoded.staffId,
       JSON.stringify({
         userAgent: request.headers.get('user-agent'),
@@ -106,14 +104,14 @@ export async function POST(request: NextRequest) {
       })
     ]);
 
-    // Mark challenge as used
+    
     await Database.query(`
       UPDATE biometric_challenges 
       SET used = TRUE, used_at = NOW(), used_by = $1
       WHERE challenge_id = $2
     `, [decoded.staffId, challengeId]);
 
-    // Log the registration event
+    
     await Database.query(`
       INSERT INTO biometric_audit_log (
         youth_id,
@@ -148,7 +146,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error: unknown) {
-    console.error('Biometric registration error:', error);
+    
     return NextResponse.json(
       { success: false, message: 'Server error during biometric registration' },
       { status: 500 }

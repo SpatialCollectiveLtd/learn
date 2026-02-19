@@ -2,9 +2,7 @@ import { Database } from './database';
 import { StaffMember } from './types';
 
 export class StaffModel {
-  /**
-   * Find staff by ID
-   */
+  
   static async findById(staffId: string): Promise<StaffMember | null> {
     const result = await Database.query<StaffMember>(
       'SELECT * FROM staff_members WHERE staff_id = $1',
@@ -13,9 +11,7 @@ export class StaffModel {
     return result.rows[0] || null;
   }
 
-  /**
-   * Find staff by email
-   */
+  
   static async findByEmail(email: string): Promise<StaffMember | null> {
     const result = await Database.query<StaffMember>(
       'SELECT * FROM staff_members WHERE email = $1',
@@ -24,9 +20,7 @@ export class StaffModel {
     return result.rows[0] || null;
   }
 
-  /**
-   * Update last login timestamp
-   */
+  
   static async updateLastLogin(staffId: string): Promise<void> {
     await Database.query(
       'UPDATE staff_members SET last_login = CURRENT_TIMESTAMP WHERE staff_id = $1',
@@ -34,9 +28,7 @@ export class StaffModel {
     );
   }
 
-  /**
-   * Create new staff member
-   */
+  
   static async create(data: {
     staffId: string;
     fullName: string;
@@ -61,9 +53,7 @@ export class StaffModel {
     return result.rows[0];
   }
 
-  /**
-   * Get all staff members
-   */
+  
   static async findAll(): Promise<StaffMember[]> {
     const result = await Database.query<StaffMember>(
       'SELECT * FROM staff_members WHERE is_active = TRUE ORDER BY full_name'
@@ -71,9 +61,7 @@ export class StaffModel {
     return result.rows;
   }
 
-  /**
-   * Delete staff member permanently
-   */
+  
   static async delete(staffId: string): Promise<void> {
     await Database.query(
       'DELETE FROM staff_members WHERE staff_id = $1',
@@ -81,9 +69,7 @@ export class StaffModel {
     );
   }
 
-  /**
-   * Deactivate staff member
-   */
+  
   static async deactivate(staffId: string): Promise<void> {
     await Database.query(
       'UPDATE staff_members SET is_active = FALSE WHERE staff_id = $1',
@@ -91,9 +77,7 @@ export class StaffModel {
     );
   }
 
-  /**
-   * Check if staff ID exists and is active
-   */
+  
   static async isActive(staffId: string): Promise<boolean> {
     const result = await Database.query<{ is_active: boolean }>(
       'SELECT is_active FROM staff_members WHERE staff_id = $1',

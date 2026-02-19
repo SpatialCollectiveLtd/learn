@@ -1,10 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Database } from '@/app/api/_lib/database';
 
-/**
- * ONE-TIME FIX: Ensure all mobile mappers are active and properly assigned
- * GET /api/admin/fix-mobile-mappers?secret=YOUR_SECRET_KEY
- */
+
 
 const MOBILE_MAPPER_IDS = [
   'KAY348RN', 'KAY1278MK', 'KAY2015NM', 'KAY2615VO', 'KAY1383EN',
@@ -34,7 +31,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const secret = searchParams.get('secret');
 
-    // Simple security check
+    
     if (secret !== process.env.ADMIN_SECRET_KEY) {
       return NextResponse.json(
         { success: false, message: 'Unauthorized' },
@@ -42,9 +39,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    console.log('🔧 Starting mobile mapper fix...');
-
-    // Check current state
+    
     const checkQuery = `
       SELECT 
         COUNT(*) FILTER (WHERE youth_id = ANY($1)) as found_count,
@@ -54,7 +49,7 @@ export async function GET(request: NextRequest) {
     
     const beforeState = await Database.query(checkQuery, [MOBILE_MAPPER_IDS]);
     
-    // Update all mobile mappers
+    
     const updateResult = await Database.query(`
       UPDATE youth_participants
       SET 
@@ -68,7 +63,7 @@ export async function GET(request: NextRequest) {
 
     const afterState = await Database.query(checkQuery, [MOBILE_MAPPER_IDS]);
 
-    // Get attendance record counts
+    
     const attendanceCheck = await Database.query(`
       SELECT 
         attendance_date,
@@ -98,7 +93,7 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error: unknown) {
-    console.error('Fix mobile mappers error:', error);
+    
     return NextResponse.json(
       { 
         success: false, 

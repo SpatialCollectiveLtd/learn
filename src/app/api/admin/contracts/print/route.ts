@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
 
     const idsArray = youthIds.split(',');
 
-    // Fetch contracts for the specified youth IDs
+    
     const result = await Database.query(`
       SELECT 
         sc.contract_id,
@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Generate HTML for printing all contracts
+    
     let html = `
       <!DOCTYPE html>
       <html>
@@ -89,11 +89,11 @@ export async function GET(request: NextRequest) {
         </button>
     `;
 
-    // Add each contract
+    
     for (const contract of result.rows) {
       let contractHtml = contract.template_content;
       
-      // Replace placeholders with actual data
+      
       contractHtml = contractHtml
         .replace(/\{\{PARTICIPANT_NAME\}\}/g, contract.full_name)
         .replace(/\{\{YOUTH_ID\}\}/g, contract.youth_id)
@@ -121,7 +121,7 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Print contracts error:', error);
+    
     return NextResponse.json(
       { success: false, message: 'An error occurred while generating contracts' },
       { status: 500 }

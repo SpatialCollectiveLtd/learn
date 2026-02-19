@@ -24,7 +24,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
 
 
-// Function to make URLs clickable
+
 function renderTextWithLinks(text: string) {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   const parts = text.split(urlRegex);
@@ -65,7 +65,7 @@ export default function MobileMappingStepPage({
   
   const currentStepId = parseInt(stepId);
 
-  // Load user profile and completed steps from server
+  
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem('youthToken');
@@ -75,7 +75,7 @@ export default function MobileMappingStepPage({
       }
 
       try {
-        // 1. Fetch user profile for settlement
+        
         const profileResponse = await axios.get(`${API_URL}/api/youth/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -87,7 +87,7 @@ export default function MobileMappingStepPage({
           setSteps(userSteps);
         }
 
-        // Update current, next, prev based on user's steps
+        
         const step = userSteps.find(s => s.id === currentStepId);
         setCurrentStep(step);
 
@@ -95,7 +95,7 @@ export default function MobileMappingStepPage({
         setNextStep(currentIndex < userSteps.length - 1 ? userSteps[currentIndex + 1] : null);
         setPreviousStep(currentIndex > 0 ? userSteps[currentIndex - 1] : null);
 
-        // 2. Fetch progress
+        
         const response = await axios.get(`${API_URL}/api/youth/training-progress?module=mobile_mapping`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -104,7 +104,7 @@ export default function MobileMappingStepPage({
           const completed = new Set<number>(response.data.data.progress.mobile_mapping || []);
           setCompletedSteps(completed);
 
-          // Check if this step is locked
+          
           if (currentStepId > 1 && !completed.has(currentStepId - 1)) {
             setIsStepLocked(true);
             const lastCompleted = Math.max(...Array.from(completed), 0);
@@ -118,7 +118,7 @@ export default function MobileMappingStepPage({
           }
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        
       } finally {
         setIsLoadingProgress(false);
       }
@@ -147,7 +147,7 @@ export default function MobileMappingStepPage({
         newCompleted.add(currentStepId);
         setCompletedSteps(newCompleted);
         
-        // Also save to localStorage for immediate UI update
+        
         localStorage.setItem('mobile-mapping-completed-steps', JSON.stringify(Array.from(newCompleted)));
         
         if (nextStep) {
@@ -155,7 +155,7 @@ export default function MobileMappingStepPage({
             router.push(`/mobile-mapping/${nextStep.id}`);
           }, 500);
         } else {
-          // All steps completed - go to work dashboard
+          
           setTimeout(() => {
             router.push('/mobile-mapping/work');
           }, 1000);
@@ -168,7 +168,7 @@ export default function MobileMappingStepPage({
           router.push(`/mobile-mapping/${error.response.data.missingStep}`);
         }
       } else {
-        console.error('Error marking step complete:', error);
+        
         alert('Failed to save progress. Please try again.');
       }
     }
@@ -231,7 +231,7 @@ export default function MobileMappingStepPage({
       <div className="relative z-10 pt-20 pb-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
           
-          {/* Step Header */}
+          {}
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/30 flex items-center justify-center">
@@ -256,7 +256,7 @@ export default function MobileMappingStepPage({
               {currentStep.title}
             </h1>
             
-            {/* Progress Bar */}
+            {}
             <div className="w-full h-2 bg-background-card rounded-full overflow-hidden">
               <div 
                 className="h-full bg-gradient-to-r from-primary to-primary-hover transition-all duration-300"
@@ -265,14 +265,14 @@ export default function MobileMappingStepPage({
             </div>
           </div>
 
-          {/* Introduction */}
+          {}
           <div className="bg-background-card border border-border rounded-xl p-6 mb-8">
             <p className="text-foreground-muted text-lg leading-relaxed">
               {currentStep.content.introduction}
             </p>
           </div>
 
-          {/* Main Content */}
+          {}
           <div className="space-y-6">
             {currentStep.content.mainContent.map((block, index) => {
               if (block.type === 'text') {
@@ -338,7 +338,7 @@ export default function MobileMappingStepPage({
             })}
           </div>
 
-          {/* Key Takeaways */}
+          {}
           {currentStep.content.keyTakeaways && (
             <div className="mt-8 bg-gradient-to-r from-primary/10 to-primary-dark/10 border border-primary/30 rounded-xl p-6">
               <h3 className="text-xl font-subheading font-bold text-white mb-4 flex items-center gap-2">
@@ -358,11 +358,11 @@ export default function MobileMappingStepPage({
         </div>
       </div>
 
-      {/* Fixed Bottom Navigation */}
+      {}
       <div className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t border-border z-40">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl py-4">
           <div className="flex items-center justify-between gap-4">
-            {/* Previous Button */}
+            {}
             {previousStep ? (
               <button
                 onClick={() => router.push(`/mobile-mapping/${previousStep.id}`)}
@@ -375,7 +375,7 @@ export default function MobileMappingStepPage({
               <div />
             )}
 
-            {/* Complete/Next Button */}
+            {}
             <MovingBorderButton
               onClick={markStepComplete}
               disabled={isCompleted && nextStep !== null}
@@ -403,7 +403,7 @@ export default function MobileMappingStepPage({
               </span>
             </MovingBorderButton>
 
-            {/* Next Button (visual only when completed) */}
+            {}
             {nextStep && isCompleted ? (
               <button
                 onClick={() => router.push(`/mobile-mapping/${nextStep.id}`)}

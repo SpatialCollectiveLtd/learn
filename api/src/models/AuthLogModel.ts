@@ -1,9 +1,7 @@
 import { Database } from '../config/database';
 
 export class AuthLogModel {
-  /**
-   * Create authentication log entry
-   */
+  
   static async log(data: {
     userId: string;
     userType: 'youth' | 'staff';
@@ -28,9 +26,7 @@ export class AuthLogModel {
     );
   }
 
-  /**
-   * Get logs for a specific user
-   */
+  
   static async getUserLogs(userId: string, limit: number = 50): Promise<any[]> {
     const result = await Database.query(
       `SELECT * FROM auth_logs
@@ -42,9 +38,7 @@ export class AuthLogModel {
     return result.rows;
   }
 
-  /**
-   * Get all logs (admin only)
-   */
+  
   static async getAllLogs(limit: number = 100): Promise<any[]> {
     const result = await Database.query(
       `SELECT * FROM auth_logs
@@ -55,9 +49,7 @@ export class AuthLogModel {
     return result.rows;
   }
 
-  /**
-   * Get failed login attempts
-   */
+  
   static async getFailedAttempts(userId: string, minutes: number = 15): Promise<number> {
     const result = await Database.query<{ count: string }>(
       `SELECT COUNT(*) as count FROM auth_logs

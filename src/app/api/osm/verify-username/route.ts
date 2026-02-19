@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-/**
- * Verify if an OSM username exists and is active
- * Uses the OSM API v0.6 to check user details
- */
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -16,21 +13,16 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Normalize username - trim whitespace
-    // OSM allows usernames with spaces, which appear as %20 in URLs
+    
+    
     const normalizedUsername = username.trim();
 
-    // Call OSM API to verify user exists
-    // OSM API endpoint: https://osm.spatialcollective.co.ke/api/0.6/user/{username}
-    // Note: This requires the username to be the display name or ID
+    
+    
+    
     
     try {
-      // First, try to get user details by username
-      // OSM API doesn't have a direct username lookup, so we use the user details endpoint
-      // We need to search by display name which requires authentication OR
-      // Use the public OSM server to verify
-      
-      const OSM_SERVER_BASE = process.env.NEXT_PUBLIC_OSM_SERVER_URL || 'https://www.openstreetmap.org';
+      const OSM_SERVER_BASE = process.env.NEXT_PUBLIC_OSM_SERVER_URL || 'https://osm.spatialcollective.co.ke';
       
       const response = await fetch(
         `${OSM_SERVER_BASE}/api/0.6/user/details.json`,
@@ -38,12 +30,12 @@ export async function GET(request: NextRequest) {
           headers: {
             'User-Agent': 'Spatial-Collective-Training-Platform/1.0',
           },
-          // This requires authentication, so let's use an alternative approach
+          
         }
       );
 
-      // Alternative: Check if user profile page exists
-      // encodeURIComponent handles spaces correctly (converts to %20)
+      
+      
       const profileCheck = await fetch(
         `${OSM_SERVER_BASE}/user/${encodeURIComponent(normalizedUsername)}`,
         {
@@ -55,7 +47,7 @@ export async function GET(request: NextRequest) {
       );
 
       if (profileCheck.status === 200) {
-        // User exists
+        
         return NextResponse.json({
           success: true,
           exists: true,
@@ -64,7 +56,7 @@ export async function GET(request: NextRequest) {
           message: 'OSM account verified successfully',
         });
       } else if (profileCheck.status === 404) {
-        // User not found
+        
         return NextResponse.json({
           success: true,
           exists: false,
@@ -72,7 +64,7 @@ export async function GET(request: NextRequest) {
           message: 'OSM username not found. Please check the spelling or create an account at openstreetmap.org',
         });
       } else {
-        // Other status codes
+        
         return NextResponse.json({
           success: true,
           exists: null,
@@ -82,7 +74,7 @@ export async function GET(request: NextRequest) {
       }
 
     } catch (fetchError) {
-      console.error('OSM API fetch error:', fetchError);
+      
       return NextResponse.json({
         success: true,
         exists: null,
@@ -92,7 +84,7 @@ export async function GET(request: NextRequest) {
     }
 
   } catch (error) {
-    console.error('Error verifying OSM username:', error);
+    
     return NextResponse.json(
       { 
         success: false, 

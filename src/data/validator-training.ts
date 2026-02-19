@@ -1,12 +1,8 @@
-// Validator Training Content for Digitization Module
-// Based on DPW Validation Tool v3.0.3
-// RESTRICTED: Spatial Collective Staff Only - Requires Staff ID Authentication
-
 export interface TrainingStep {
   id: string;
   title: string;
   shortTitle: string;
-  estimatedTime: number; // in minutes
+  estimatedTime: number; 
   content: {
     introduction: string;
     mainContent: ContentBlock[];
@@ -21,7 +17,7 @@ export interface ContentBlock {
   imagePath?: string;
 }
 
-// Staff Authentication Interfaces
+
 export interface StaffCredentials {
   staffId: string;
   name?: string;
@@ -112,12 +108,12 @@ export const validatorTrainingSteps: TrainingStep[] = [
             'Open JOSM',
             'Click Help → About',
             'Look for the version number (should be 18823 or higher)',
-            'If your version is too old, download the latest from https://josm.openstreetmap.de/'
+            'If your version is too old, download the latest from https://josm.openstreetmap.de',
           ]
         },
         {
           type: 'code',
-          content: '```powershell\n# Check Java version in PowerShell\njava -version\n\n# Expected output:\n# java version "21.0.x"\n```\n\nIf you don\'t have Java 21, download it from: https://adoptium.net/'
+          content: '```powershell\n# Check Java version in PowerShell\njava -version\n\n# Expected output:\n# java version "21.0.x"\n```\n\nIf you don\'t have Java 21, download it from: https://www.oracle.com/java/technologies/downloads/#java21',
         },
         {
           type: 'text',
@@ -141,7 +137,7 @@ export const validatorTrainingSteps: TrainingStep[] = [
           type: 'steps',
           content: 'Download Process:',
           items: [
-            'Go to: https://github.com/SpatialCollectiveLtd/DPW-Validation-JOSM-Plugin/releases',
+            'Go to: https://github.com/spatial-collective/DPW-Validation-Tool/releases',
             'Find the latest release (currently v3.0.3)',
             'Download the file: DPWValidationTool.jar',
             'Save it to a location you can easily find (e.g., Downloads folder)'
@@ -856,32 +852,23 @@ export const validatorTrainingSteps: TrainingStep[] = [
   }
 ];
 
-// ============================================================================
-// STAFF AUTHENTICATION SYSTEM
-// ============================================================================
 
-/**
- * Registered Staff IDs Database
- * TODO: Move this to a secure backend database
- * For now, this is a placeholder for staff ID registration
- */
+
+
+
+
 const registeredStaffIds: Map<string, StaffCredentials> = new Map([
-  // Example entries - Replace with actual staff data
-  // ['SC001', { staffId: 'SC001', name: 'John Validator', role: 'validator', registeredAt: new Date('2025-01-01') }],
-  // ['SC002', { staffId: 'SC002', name: 'Jane Admin', role: 'admin', registeredAt: new Date('2025-01-01') }],
+  
+  
+  
 ]);
 
-/**
- * Validates a Staff ID
- * @param staffId - The staff ID to validate
- * @returns Authentication result with success status and message
- * @deprecated This function is no longer used. Authentication now happens via the database API.
- */
+
 export function authenticateStaffId(staffId: string): AuthenticationResult {
-  // Trim and convert to uppercase for consistency
+  
   const cleanStaffId = staffId.trim().toUpperCase();
 
-  // Validate format (S + T/F/M + EA + 4 digits + role)
+  
   const staffIdPattern = /^S[TFM]EA\d{4}(SA|T|A)$/;
   if (!staffIdPattern.test(cleanStaffId)) {
     return {
@@ -890,8 +877,8 @@ export function authenticateStaffId(staffId: string): AuthenticationResult {
     };
   }
 
-  // Note: Authentication is now handled by the database API
-  // This function is kept for backward compatibility
+  
+  
   return {
     success: true,
     staffId: cleanStaffId,
@@ -899,13 +886,7 @@ export function authenticateStaffId(staffId: string): AuthenticationResult {
   };
 }
 
-/**
- * Registers a new Staff ID (Admin function)
- * @param staffId - The staff ID to register
- * @param name - Staff member's name
- * @param role - Staff role (validator or admin)
- * @returns Success status and message
- */
+
 export function registerStaffId(
   staffId: string,
   name: string,
@@ -913,7 +894,7 @@ export function registerStaffId(
 ): { success: boolean; message: string } {
   const cleanStaffId = staffId.trim().toUpperCase();
 
-  // Validate format
+  
   const staffIdPattern = /^S[TFM]EA\d{4}(SA|T|A)$/;
   if (!staffIdPattern.test(cleanStaffId)) {
     return {
@@ -922,7 +903,7 @@ export function registerStaffId(
     };
   }
 
-  // Check if already registered
+  
   if (registeredStaffIds.has(cleanStaffId)) {
     return {
       success: false,
@@ -930,7 +911,7 @@ export function registerStaffId(
     };
   }
 
-  // Register the staff ID
+  
   registeredStaffIds.set(cleanStaffId, {
     staffId: cleanStaffId,
     name,
@@ -944,29 +925,18 @@ export function registerStaffId(
   };
 }
 
-/**
- * Checks if a Staff ID is registered
- * @param staffId - The staff ID to check
- * @returns Boolean indicating if staff ID exists
- */
+
 export function isStaffIdRegistered(staffId: string): boolean {
   const cleanStaffId = staffId.trim().toUpperCase();
   return registeredStaffIds.has(cleanStaffId);
 }
 
-/**
- * Gets all registered staff (Admin function)
- * @returns Array of all registered staff credentials
- */
+
 export function getAllRegisteredStaff(): StaffCredentials[] {
   return Array.from(registeredStaffIds.values());
 }
 
-/**
- * Removes a Staff ID from registration (Admin function)
- * @param staffId - The staff ID to unregister
- * @returns Success status and message
- */
+
 export function unregisterStaffId(staffId: string): { success: boolean; message: string } {
   const cleanStaffId = staffId.trim().toUpperCase();
 
@@ -985,61 +955,47 @@ export function unregisterStaffId(staffId: string): { success: boolean; message:
   };
 }
 
-// ============================================================================
-// TRAINING ACCESS FUNCTIONS
-// ============================================================================
 
-/**
- * Checks if user has access to validator training content
- * @param staffId - The staff ID to verify
- * @returns Boolean indicating access permission
- */
+
+
+
+
 export function hasValidatorTrainingAccess(staffId: string): boolean {
-  // For now, allow all authenticated staff members to access validator training
-  // In production, you would check staff role from database
-  // Staff with role 'admin' or 'validator' should have access
   
-  // Check if staff role is stored in session
+  
+  
+  
+  
   const staffRole = sessionStorage.getItem('staffRole');
   
   if (staffRole === 'admin' || staffRole === 'validator') {
     return true;
   }
   
-  // Fallback: Allow any authenticated staff (since they're logged in through database)
+  
   return Boolean(staffId && staffId.trim().length > 0);
-}/**
- * Gets validator training step (with authentication check)
- * @param id - Step ID
- * @param staffId - Staff ID for authentication
- * @returns Training step or undefined if not authenticated
- */
+}
 export function getValidatorStepById(
   id: string,
   staffId?: string
 ): TrainingStep | undefined {
-  // If staffId provided, verify authentication
+  
   if (staffId && !hasValidatorTrainingAccess(staffId)) {
-    console.warn('Unauthorized access attempt to validator training');
+    
     return undefined;
   }
 
   return validatorTrainingSteps.find(step => step.id === id);
 }
 
-/**
- * Gets next validator training step (with authentication check)
- * @param currentId - Current step ID
- * @param staffId - Staff ID for authentication
- * @returns Next training step or null
- */
+
 export function getNextValidatorStep(
   currentId: string,
   staffId?: string
 ): TrainingStep | null {
-  // If staffId provided, verify authentication
+  
   if (staffId && !hasValidatorTrainingAccess(staffId)) {
-    console.warn('Unauthorized access attempt to validator training');
+    
     return null;
   }
 
@@ -1050,19 +1006,14 @@ export function getNextValidatorStep(
   return validatorTrainingSteps[currentIndex + 1];
 }
 
-/**
- * Gets previous validator training step (with authentication check)
- * @param currentId - Current step ID
- * @param staffId - Staff ID for authentication
- * @returns Previous training step or null
- */
+
 export function getPreviousValidatorStep(
   currentId: string,
   staffId?: string
 ): TrainingStep | null {
-  // If staffId provided, verify authentication
+  
   if (staffId && !hasValidatorTrainingAccess(staffId)) {
-    console.warn('Unauthorized access attempt to validator training');
+    
     return null;
   }
 
@@ -1073,23 +1024,16 @@ export function getPreviousValidatorStep(
   return validatorTrainingSteps[currentIndex - 1];
 }
 
-/**
- * Gets total estimated time for validator training
- * @returns Total time in minutes
- */
+
 export function getTotalValidatorEstimatedTime(): number {
   return validatorTrainingSteps.reduce((total, step) => total + step.estimatedTime, 0);
 }
 
-/**
- * Gets all validator training steps (with authentication check)
- * @param staffId - Staff ID for authentication
- * @returns Array of training steps or empty array if not authenticated
- */
+
 export function getAllValidatorSteps(staffId?: string): TrainingStep[] {
-  // If staffId provided, verify authentication
+  
   if (staffId && !hasValidatorTrainingAccess(staffId)) {
-    console.warn('Unauthorized access attempt to validator training');
+    
     return [];
   }
 

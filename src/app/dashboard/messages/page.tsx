@@ -20,52 +20,46 @@ import {
   Lightbulb,
 } from 'lucide-react';
 
-/**
- * Process email body to ensure proper HTML rendering
- * - Converts plain text URLs to clickable links
- * - Converts email addresses to mailto links
- * - Preserves line breaks
- * - Handles both HTML and plain text emails
- */
+
 function processEmailBody(body: string): string {
   if (!body) return '';
   
-  // Check if the body already contains HTML tags
+  
   const hasHtml = /<[a-z][\s\S]*>/i.test(body);
   
   let processed = body;
   
-  // If it's plain text, convert to HTML
+  
   if (!hasHtml) {
-    // Escape HTML entities first
+    
     processed = processed
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;');
     
-    // Convert URLs to clickable links
-    // Matches http, https, and www URLs
+    
+    
     const urlRegex = /(https?:\/\/[^\s<>"]+|www\.[^\s<>"]+)/gi;
     processed = processed.replace(urlRegex, (url) => {
       const href = url.startsWith('www.') ? `https://${url}` : url;
       return `<a href="${href}" target="_blank" rel="noopener noreferrer">${url}</a>`;
     });
     
-    // Convert email addresses to mailto links
+    
     const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi;
     processed = processed.replace(emailRegex, '<a href="mailto:$1">$1</a>');
     
-    // Convert line breaks to <br> tags
+    
     processed = processed.replace(/\r?\n/g, '<br>');
     
-    // Wrap in a paragraph for better styling
+    
     processed = `<p>${processed}</p>`;
   } else {
-    // For HTML emails, ensure URLs without <a> tags are linkified
-    // This handles cases where the email has some HTML but URLs are plain text
     
-    // First, find text that's not already inside an anchor tag
-    // We use a simpler approach: just make sure existing anchors have target="_blank"
+    
+    
+    
+    
     processed = processed.replace(
       /<a\s+([^>]*href="[^"]*"[^>]*)>/gi, 
       (match, attrs) => {
@@ -148,7 +142,7 @@ export default function MessagesPage() {
         setFolders(data.data.folders);
       }
     } catch (error) {
-      console.error('Error fetching folders:', error);
+      
     }
   };
 
@@ -176,7 +170,7 @@ export default function MessagesPage() {
       setWorkEmail(data.data.workEmail || '');
       setHasEmail(true);
     } catch (error) {
-      console.error('Error fetching emails:', error);
+      
       setEmails([]);
     } finally {
       setLoading(false);
@@ -195,7 +189,7 @@ export default function MessagesPage() {
         setUnreadCount(data.data.unreadCount || 0);
       }
     } catch (error) {
-      console.error('Error fetching unread count:', error);
+      
     }
   };
 
@@ -219,12 +213,12 @@ export default function MessagesPage() {
 
       if (data.success) {
         setSelectedEmail(data.data);
-        // Refresh list to update read status
+        
         setTimeout(() => fetchEmails(), 500);
         setTimeout(() => fetchUnreadCount(), 500);
       }
     } catch (error) {
-      console.error('Error fetching email details:', error);
+      
     }
   };
 
@@ -311,7 +305,7 @@ export default function MessagesPage() {
   return (
     <div className="min-h-screen bg-black py-8 px-4">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+        {}
         <div className="mb-6 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button
@@ -355,7 +349,7 @@ export default function MessagesPage() {
           </div>
         </div>
 
-        {/* Settings Panel */}
+        {}
         {showSettings && (
           <div className="mb-6 bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-6">
             <h3 className="text-lg font-heading font-bold text-white mb-4">
@@ -410,9 +404,9 @@ export default function MessagesPage() {
           </div>
         )}
 
-        {/* Main Content */}
+        {}
         <div className="grid grid-cols-12 gap-6">
-          {/* Sidebar - Folders */}
+          {}
           <div className="col-span-3">
             <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-4">
               <h3 className="text-sm font-bold text-[#a3a3a3] uppercase mb-3">Folders</h3>
@@ -443,7 +437,7 @@ export default function MessagesPage() {
             </div>
           </div>
 
-          {/* Email List */}
+          {}
           <div className="col-span-4">
             <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl overflow-hidden">
               <div className="p-4 border-b border-[#2a2a2a]">
@@ -501,7 +495,7 @@ export default function MessagesPage() {
             </div>
           </div>
 
-          {/* Email Detail */}
+          {}
           <div className="col-span-5">
             <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl overflow-hidden">
               {selectedEmail ? (

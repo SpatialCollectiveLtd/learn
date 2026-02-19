@@ -31,7 +31,7 @@ export default function ReviewSubmissionsPage() {
     setIsLoading(false);
   }, [router]);
 
-  // Mock data - replace with API call
+  
   const submissions = [
     {
       id: 1,
@@ -40,7 +40,7 @@ export default function ReviewSubmissionsPage() {
       taskType: "Building Mapping",
       submittedAt: "2 hours ago",
       status: "pending",
-      changesetUrl: "https://osm.spatialcollective.co.ke/changeset/12345",
+      changesetUrl: "https://osm.spatialcollective.co.ke/changeset/123456",
       osmUsername: "johndoe_mapper",
     },
     {
@@ -50,7 +50,7 @@ export default function ReviewSubmissionsPage() {
       taskType: "Road Mapping",
       submittedAt: "5 hours ago",
       status: "pending",
-      changesetUrl: "https://osm.spatialcollective.co.ke/changeset/12346",
+      changesetUrl: "https://osm.spatialcollective.co.ke/changeset/123457",
       osmUsername: "janesmith_osm",
     },
     {
@@ -60,7 +60,7 @@ export default function ReviewSubmissionsPage() {
       taskType: "Building Mapping",
       submittedAt: "1 day ago",
       status: "approved",
-      changesetUrl: "https://osm.spatialcollective.co.ke/changeset/12344",
+      changesetUrl: "https://osm.spatialcollective.co.ke/changeset/123458",
       osmUsername: "mikejohnson",
     },
   ];
@@ -111,7 +111,7 @@ export default function ReviewSubmissionsPage() {
         </header>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Stats */}
+          {}
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-8">
             <div className="bg-[#1F2121]/50 backdrop-blur-sm border border-[#2a2a2a] rounded-lg p-6">
               <Clock className="w-8 h-8 text-orange-500 mb-2" />
@@ -135,7 +135,7 @@ export default function ReviewSubmissionsPage() {
             </div>
           </div>
 
-          {/* Filter Tabs */}
+          {}
           <div className="flex gap-2 mb-6">
             {(['all', 'pending', 'approved', 'rejected'] as const).map((status) => (
               <button
@@ -152,7 +152,7 @@ export default function ReviewSubmissionsPage() {
             ))}
           </div>
 
-          {/* Submissions List */}
+          {}
           <div className="space-y-4">
             {filteredSubmissions.map((submission) => (
               <div 

@@ -69,7 +69,7 @@ export default function ResolveCenterTab() {
   const [showNewQueryForm, setShowNewQueryForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   
-  // Form state
+  
   const [formData, setFormData] = useState({
     category: 'payment',
     subject: '',
@@ -102,7 +102,7 @@ export default function ResolveCenterTab() {
         setError(result.error?.message || 'Failed to load queries');
       }
     } catch (err: any) {
-      console.error('Queries fetch error:', err);
+      
       setError(err.message || 'Network error');
     } finally {
       setLoading(false);
@@ -142,7 +142,7 @@ export default function ResolveCenterTab() {
       const result = await response.json();
 
       if (result.success) {
-        // Reset form
+        
         setFormData({
           category: 'payment',
           subject: '',
@@ -151,13 +151,13 @@ export default function ResolveCenterTab() {
         });
         setShowNewQueryForm(false);
         
-        // Refresh queries list
+        
         fetchQueries();
       } else {
         alert(result.error?.message || 'Failed to submit query');
       }
     } catch (err: any) {
-      console.error('Query submit error:', err);
+      
       alert(err.message || 'Failed to submit query');
     } finally {
       setSubmitting(false);
@@ -213,7 +213,7 @@ export default function ResolveCenterTab() {
 
   return (
     <div className="p-4 space-y-4">
-      {/* Header with New Query Button */}
+      {}
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-heading font-bold text-white">Resolve Center</h2>
         <div className="flex items-center gap-2">
@@ -234,7 +234,7 @@ export default function ResolveCenterTab() {
         </div>
       </div>
 
-      {/* Summary Stats */}
+      {}
       {queriesData && (
         <div className="grid grid-cols-2 gap-3">
           <div className="bg-background-elevated border border-border rounded-lg p-3 text-center">
@@ -248,7 +248,7 @@ export default function ResolveCenterTab() {
         </div>
       )}
 
-      {/* New Query Form */}
+      {}
       {showNewQueryForm && (
         <div className="bg-background-elevated border border-border rounded-xl p-4">
           <div className="flex items-center justify-between mb-4">
@@ -333,7 +333,7 @@ export default function ResolveCenterTab() {
         </div>
       )}
 
-      {/* Queries List */}
+      {}
       {queriesData && queriesData.queries.length > 0 ? (
         <div className="space-y-3">
           {queriesData.queries.map((query) => (

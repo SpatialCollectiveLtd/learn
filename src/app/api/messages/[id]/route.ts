@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyYouthToken } from '@/app/api/_lib/auth';
 import { Database } from '@/app/api/_lib/database';
 
-const EMAIL_API_URL = process.env.EMAIL_API_URL || 'https://tasks.spatialcollective.co.ke/email-api';
+const EMAIL_API_URL = process.env.EMAIL_API_URL || 'https://email-api.spatialcollective.com';
 const EMAIL_API_KEY = process.env.EMAIL_API_KEY || '06682c28d538516b9920423822798612';
 
 export async function GET(
@@ -12,7 +12,7 @@ export async function GET(
   try {
     const { id } = await params;
 
-    // Verify authentication
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return NextResponse.json(
@@ -33,7 +33,7 @@ export async function GET(
 
     const youthId = decoded.youthId;
 
-    // Get youth's work email
+    
     const result = await Database.query(
       'SELECT youth_id, work_email FROM youth_participants WHERE youth_id = $1',
       [youthId]
@@ -47,14 +47,14 @@ export async function GET(
     }
 
     const workEmail = result.rows[0].work_email;
-    // Default email password as per Email API specification
+    
     const emailPassword = 'DPW2026Map!';
 
-    // Get folder from query params
+    
     const { searchParams } = new URL(request.url);
     const folder = searchParams.get('folder') || 'INBOX';
 
-    // Fetch single email from Email API
+    
     const response = await fetch(`${EMAIL_API_URL}/email/${id}`, {
       method: 'POST',
       headers: {
@@ -83,7 +83,7 @@ export async function GET(
     });
 
   } catch (error: any) {
-    console.error('Error fetching email:', error);
+    
     return NextResponse.json(
       { success: false, message: error.message || 'Internal server error' },
       { status: 500 }

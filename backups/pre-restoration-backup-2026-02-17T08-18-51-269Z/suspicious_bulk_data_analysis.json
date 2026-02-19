@@ -1,0 +1,162 @@
+[
+  {
+    "attendance_date": "2026-02-05T21:00:00.000Z",
+    "submitted_by": "SFEA1602T",
+    "record_count": "114",
+    "first_submission": "2026-02-06T10:06:21.428Z",
+    "last_submission": "2026-02-09T09:07:15.658Z",
+    "duration_minutes": "4260.9038371500000000"
+  },
+  {
+    "attendance_date": "2026-01-25T21:00:00.000Z",
+    "submitted_by": "SFEA1602T",
+    "record_count": "114",
+    "first_submission": "2026-01-26T10:36:30.952Z",
+    "last_submission": "2026-02-04T12:26:48.185Z",
+    "duration_minutes": "13070.287221566667"
+  },
+  {
+    "attendance_date": "2026-02-08T21:00:00.000Z",
+    "submitted_by": "SFEA1602T",
+    "record_count": "112",
+    "first_submission": "2026-02-12T12:49:00.456Z",
+    "last_submission": "2026-02-13T13:07:02.055Z",
+    "duration_minutes": "1458.0266540666666667"
+  },
+  {
+    "attendance_date": "2026-01-26T21:00:00.000Z",
+    "submitted_by": "SFEA1602T",
+    "record_count": "107",
+    "first_submission": "2026-01-28T07:32:30.087Z",
+    "last_submission": "2026-02-04T13:31:12.258Z",
+    "duration_minutes": "10438.702853500000"
+  },
+  {
+    "attendance_date": "2026-02-03T21:00:00.000Z",
+    "submitted_by": "SFEA1602T",
+    "record_count": "91",
+    "first_submission": "2026-02-06T10:31:15.836Z",
+    "last_submission": "2026-02-09T06:22:42.064Z",
+    "duration_minutes": "4071.4371243833333333"
+  },
+  {
+    "attendance_date": "2026-01-27T21:00:00.000Z",
+    "submitted_by": "SFEA1602T",
+    "record_count": "91",
+    "first_submission": "2026-02-03T13:04:32.385Z",
+    "last_submission": "2026-02-03T14:20:18.322Z",
+    "duration_minutes": "75.7656281166666667"
+  },
+  {
+    "attendance_date": "2026-02-02T21:00:00.000Z",
+    "submitted_by": "SFEA1602T",
+    "record_count": "90",
+    "first_submission": "2026-02-06T10:23:53.730Z",
+    "last_submission": "2026-02-10T10:08:24.649Z",
+    "duration_minutes": "5744.5153163166666667"
+  },
+  {
+    "attendance_date": "2026-01-28T21:00:00.000Z",
+    "submitted_by": "SFEA1602T",
+    "record_count": "90",
+    "first_submission": "2026-02-03T13:10:51.186Z",
+    "last_submission": "2026-02-03T14:51:29.008Z",
+    "duration_minutes": "100.6303750500000000"
+  },
+  {
+    "attendance_date": "2026-02-01T21:00:00.000Z",
+    "submitted_by": "SFEA1602T",
+    "record_count": "90",
+    "first_submission": "2026-02-06T11:39:10.739Z",
+    "last_submission": "2026-02-09T05:06:45.305Z",
+    "duration_minutes": "3927.5760993833333333"
+  },
+  {
+    "attendance_date": "2026-01-29T21:00:00.000Z",
+    "submitted_by": "SFEA1602T",
+    "record_count": "89",
+    "first_submission": "2026-02-03T13:20:07.606Z",
+    "last_submission": "2026-02-04T07:41:02.469Z",
+    "duration_minutes": "1100.9143825000000000"
+  },
+  {
+    "attendance_date": "2026-02-04T21:00:00.000Z",
+    "submitted_by": "SFEA4333T",
+    "record_count": "78",
+    "first_submission": "2026-02-09T05:54:26.419Z",
+    "last_submission": "2026-02-09T07:50:27.642Z",
+    "duration_minutes": "116.0203895333333333"
+  },
+  {
+    "attendance_date": "2026-01-28T21:00:00.000Z",
+    "submitted_by": "SMEA4441A",
+    "record_count": "24",
+    "first_submission": "2026-02-06T07:49:38.763Z",
+    "last_submission": "2026-02-06T07:52:11.644Z",
+    "duration_minutes": "2.5480103666666667"
+  },
+  {
+    "attendance_date": "2026-02-04T21:00:00.000Z",
+    "submitted_by": "SMEA4441A",
+    "record_count": "24",
+    "first_submission": "2026-02-06T08:30:15.761Z",
+    "last_submission": "2026-02-06T08:32:10.517Z",
+    "duration_minutes": "1.9125945666666667"
+  },
+  {
+    "attendance_date": "2026-02-01T21:00:00.000Z",
+    "submitted_by": "SMEA4441A",
+    "record_count": "24",
+    "first_submission": "2026-02-06T08:24:06.658Z",
+    "last_submission": "2026-02-06T08:26:06.661Z",
+    "duration_minutes": "2.0000493833333333"
+  },
+  {
+    "attendance_date": "2026-01-26T21:00:00.000Z",
+    "submitted_by": "SMEA4441A",
+    "record_count": "24",
+    "first_submission": "2026-02-06T07:38:57.668Z",
+    "last_submission": "2026-02-06T07:42:49.925Z",
+    "duration_minutes": "3.8709463333333333"
+  },
+  {
+    "attendance_date": "2026-01-29T21:00:00.000Z",
+    "submitted_by": "SMEA4441A",
+    "record_count": "24",
+    "first_submission": "2026-02-06T07:45:01.515Z",
+    "last_submission": "2026-02-06T07:47:13.889Z",
+    "duration_minutes": "2.2062214500000000"
+  },
+  {
+    "attendance_date": "2026-02-03T21:00:00.000Z",
+    "submitted_by": "SMEA4441A",
+    "record_count": "24",
+    "first_submission": "2026-02-06T08:28:17.973Z",
+    "last_submission": "2026-02-06T08:30:05.494Z",
+    "duration_minutes": "1.7920054500000000"
+  },
+  {
+    "attendance_date": "2026-02-02T21:00:00.000Z",
+    "submitted_by": "SMEA4441A",
+    "record_count": "24",
+    "first_submission": "2026-02-06T08:26:14.801Z",
+    "last_submission": "2026-02-06T08:28:07.291Z",
+    "duration_minutes": "1.8748387333333333"
+  },
+  {
+    "attendance_date": "2026-01-27T21:00:00.000Z",
+    "submitted_by": "SMEA4441A",
+    "record_count": "24",
+    "first_submission": "2026-02-06T07:53:04.864Z",
+    "last_submission": "2026-02-06T07:59:03.477Z",
+    "duration_minutes": "5.9768841333333333"
+  },
+  {
+    "attendance_date": "2026-01-25T21:00:00.000Z",
+    "submitted_by": "SMEA4441A",
+    "record_count": "22",
+    "first_submission": "2026-02-06T07:34:12.030Z",
+    "last_submission": "2026-02-06T07:37:39.497Z",
+    "duration_minutes": "3.4577951500000000"
+  }
+]

@@ -6,7 +6,7 @@ const JWT_SECRET = process.env.learn_STACK_SECRET_SERVER_KEY || process.env.JWT_
 
 export async function GET(request: NextRequest) {
   try {
-    // Get token from Authorization header
+    
     const authHeader = request.headers.get('authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return NextResponse.json(
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
 
     const token = authHeader.split(' ')[1];
     
-    // Verify token
+    
     let decoded: any;
     try {
       decoded = jwt.verify(token, JWT_SECRET);
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Fetch youth profile
+    
     const youth = await YouthModel.findById(decoded.youthId);
 
     if (!youth) {
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error fetching youth profile:', error);
+    
     return NextResponse.json(
       { success: false, message: 'An error occurred while fetching profile' },
       { status: 500 }

@@ -29,7 +29,7 @@ export const ContractSigning: React.FC<ContractSigningProps> = ({
   const [isOnline, setIsOnline] = useState(true);
   const signatureRef = useRef<any>(null);
 
-  // Network status detection
+  
   useEffect(() => {
     const updateOnlineStatus = () => setIsOnline(navigator.onLine);
     
@@ -183,7 +183,7 @@ export const ContractSigning: React.FC<ContractSigningProps> = ({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Network Status Indicator */}
+      {}
       {!isOnline && (
         <div className="fixed top-0 left-0 right-0 bg-red-600 text-white py-2 px-4 text-center text-sm font-medium z-50 shadow-md">
           <div className="flex items-center justify-center">
@@ -205,7 +205,7 @@ export const ContractSigning: React.FC<ContractSigningProps> = ({
         </div>
       )}
 
-      {/* Header */}
+      {}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm"
            style={{ marginTop: !isOnline ? '36px' : '0' }}>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -225,16 +225,16 @@ export const ContractSigning: React.FC<ContractSigningProps> = ({
         </div>
       </div>
 
-      {/* Contract Content */}
+      {}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          {/* Contract Header */}
+          {}
           <div className="bg-gradient-to-r from-green-600 to-blue-600 text-white p-6">
             <h2 className="text-2xl font-bold">{contract?.title}</h2>
             <p className="text-green-100 mt-2">Version {contract?.version}</p>
           </div>
 
-          {/* Contract Body */}
+          {}
           <div className="p-8">
             <div className="prose max-w-none">
               <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
@@ -242,11 +242,11 @@ export const ContractSigning: React.FC<ContractSigningProps> = ({
               </div>
             </div>
 
-            {/* Signature Section */}
+            {}
             <div className="mt-12 pt-8 border-t-2 border-gray-200">
               <h3 className="text-xl font-bold text-gray-900 mb-6">Digital Signature</h3>
 
-              {/* Signature Canvas */}
+              {}
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Sign below to agree to the terms and conditions
@@ -269,7 +269,7 @@ export const ContractSigning: React.FC<ContractSigningProps> = ({
                 </button>
               </div>
 
-              {/* Agreement Checkbox */}
+              {}
               <div className="mb-6">
                 <label className="flex items-start space-x-3">
                   <input
@@ -286,14 +286,14 @@ export const ContractSigning: React.FC<ContractSigningProps> = ({
                 </label>
               </div>
 
-              {/* Error Message */}
+              {}
               {error && (
                 <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
                   <p className="text-sm text-red-700">{error}</p>
                 </div>
               )}
 
-              {/* Action Buttons */}
+              {}
               <div className="flex space-x-4">
                 <button
                   onClick={handleSign}
@@ -329,7 +329,7 @@ export const ContractSigning: React.FC<ContractSigningProps> = ({
                 </button>
               </div>
 
-              {/* Info Note */}
+              {}
               <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <p className="text-sm text-blue-700">
                   <strong>Note:</strong> By signing this contract, you acknowledge that you have
