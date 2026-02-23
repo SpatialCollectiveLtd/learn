@@ -92,7 +92,7 @@ export async function GET(request: NextRequest) {
         COALESCE((
           SELECT json_build_object(
             'total_buildings', SUM(buildings_mapped),
-            'total_changesets', COUNT(DISTINCT changeset_history),
+            'total_changesets', SUM(changesets_analyzed),
             'mapping_days', COUNT(DISTINCT date),
             'first_mapping_date', MIN(date),
             'latest_mapping_date', MAX(date),
