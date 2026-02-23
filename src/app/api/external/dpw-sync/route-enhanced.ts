@@ -32,26 +32,12 @@ export async function GET(request: NextRequest) {
     }
 
     if (moduleFilter) {
-      // Filter by historical program type (program at time of attendance, not current program)
-      // This correctly handles youth who transferred programs mid-project
-      whereConditions.push(`yp.youth_id IN (
-        SELECT DISTINCT youth_id FROM attendance_records 
-        WHERE program_type_at_attendance = $${paramIndex}
-      )`);
+      whereConditions.push(`yp.program_type = $${paramIndex}`);
       queryParams.push(moduleFilter);
       paramIndex++;
     }
 
     const whereClause = whereConditions.join(' AND ');
-
-    // Module filter for attendance subqueries — use program type AT TIME OF ATTENDANCE
-    // Passed as an extra parameter so all subqueries can reference it consistently
-    let moduleAttendanceFilter = '';
-    if (moduleFilter) {
-      moduleAttendanceFilter = `AND program_type_at_attendance = $${paramIndex}`;
-      queryParams.push(moduleFilter);
-      paramIndex++;
-    }
 
     // ENHANCED QUERY - Includes OSM stats, attendance-based work calculation, and payment data
     const youthData = await Database.query(`
@@ -80,12 +66,10 @@ export async function GET(request: NextRequest) {
         ), 0) as total_days_worked_official,
         
         -- Attendance as work indicator (for payment calculation when work_days missing)
-        -- When module filter is applied, only count attendance for that specific program type
         COALESCE((
           SELECT COUNT(DISTINCT attendance_date)
           FROM attendance_records
           WHERE youth_id = yp.youth_id
-          ${moduleAttendanceFilter}
         ), 0) as attendance_days,
         
         -- ENHANCED: OSM building statistics for digitization/mapping programs
@@ -127,8 +111,7 @@ export async function GET(request: NextRequest) {
                 END
             ) FROM youth_work_days WHERE youth_id = yp.youth_id)
           -- Fallback to attendance for payment calculation
-          -- Use moduleAttendanceFilter so transferred youth are paid for the correct program
-          WHEN EXISTS (SELECT 1 FROM attendance_records WHERE youth_id = yp.youth_id ${moduleAttendanceFilter}) THEN
+          WHEN EXISTS (SELECT 1 FROM attendance_records WHERE youth_id = yp.youth_id) THEN
             (SELECT json_build_object(
               'work_days', COUNT(DISTINCT attendance_date),
               'buildings_mapped', COALESCE(osm.total_buildings, 0),
@@ -148,7 +131,7 @@ export async function GET(request: NextRequest) {
               WHERE youth_id = yp.youth_id
               GROUP BY youth_id
             ) osm ON osm.youth_id = ar.youth_id
-            WHERE ar.youth_id = yp.youth_id ${moduleAttendanceFilter})
+            WHERE ar.youth_id = yp.youth_id)
           -- No work or attendance data
           ELSE json_build_object(
             'work_days', 0,
@@ -188,8 +171,6 @@ export async function GET(request: NextRequest) {
         ), '[]'::json) as work_history,
         
         -- ENHANCED: Attendance history with metadata
-        -- When module filter is applied, only include attendance for that program type
-        -- Includes program_type field so DPW can see the exact program context per day
         COALESCE((
           SELECT json_agg(
             json_build_object(
@@ -197,14 +178,12 @@ export async function GET(request: NextRequest) {
               'submitted_at', submitted_at,
               'submitted_by', submitted_by,
               'notes', notes,
-              'program_type', program_type_at_attendance,
               'day_of_week', EXTRACT(dow FROM attendance_date),
               'week_number', EXTRACT(week FROM attendance_date)
             ) ORDER BY attendance_date DESC
           )
           FROM attendance_records
           WHERE youth_id = yp.youth_id
-          ${moduleAttendanceFilter}
         ), '[]'::json) as attendance_history,
         
         -- Training progress
@@ -272,7 +251,6 @@ export async function GET(request: NextRequest) {
           SELECT COUNT(DISTINCT attendance_date)
           FROM attendance_records
           WHERE youth_id = yp.youth_id
-          ${moduleAttendanceFilter}
         )), 0) as total_attendance_records,
         
         -- ENHANCED: Payment eligibility analysis 
@@ -281,7 +259,7 @@ export async function GET(request: NextRequest) {
         ) THEN 1 END) as youth_with_work_days,
         
         COUNT(CASE WHEN EXISTS (
-          SELECT 1 FROM attendance_records WHERE youth_id = yp.youth_id ${moduleAttendanceFilter}
+          SELECT 1 FROM attendance_records WHERE youth_id = yp.youth_id
         ) THEN 1 END) as youth_with_attendance,
         
         COUNT(CASE WHEN EXISTS (
@@ -290,13 +268,13 @@ export async function GET(request: NextRequest) {
         
         -- Payment gap analysis
         COUNT(CASE WHEN 
-          EXISTS (SELECT 1 FROM attendance_records WHERE youth_id = yp.youth_id ${moduleAttendanceFilter})
+          EXISTS (SELECT 1 FROM attendance_records WHERE youth_id = yp.youth_id)
           AND NOT EXISTS (SELECT 1 FROM youth_work_days WHERE youth_id = yp.youth_id)
         THEN 1 END) as payment_gap_count,
         
         -- Total earnings potential
         SUM(
-          COALESCE((SELECT COUNT(DISTINCT attendance_date) FROM attendance_records WHERE youth_id = yp.youth_id ${moduleAttendanceFilter}), 0) *
+          COALESCE((SELECT COUNT(DISTINCT attendance_date) FROM attendance_records WHERE youth_id = yp.youth_id), 0) *
           CASE program_type 
             WHEN 'digitization' THEN 400
             WHEN 'mobile_mapping' THEN 500
@@ -326,15 +304,13 @@ export async function GET(request: NextRequest) {
     const response = {
       success: true,
       timestamp: new Date().toISOString(),
-      api_version: '2.1-program-transfer-fix',
+      api_version: '2.0-enhanced',
       enhancements: [
         'OSM building statistics included',
         'Attendance-based payment calculation',
         'Payment gap identification',
         'Multiple data source fallbacks',
-        'Earnings potential calculation',
-        'Program transfer support: module filter uses program_type_at_attendance (historical program type)',
-        'Transferred youth correctly appear under their original program module'
+        'Earnings potential calculation'
       ],
       payment_rates_kes: {
         digitization: 400,
