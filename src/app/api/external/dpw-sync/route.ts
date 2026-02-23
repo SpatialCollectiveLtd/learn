@@ -131,7 +131,7 @@ export async function GET(request: NextRequest) {
           WHEN EXISTS (SELECT 1 FROM attendance_records WHERE youth_id = yp.youth_id ${moduleAttendanceFilter}) THEN
             (SELECT json_build_object(
               'work_days', COUNT(DISTINCT attendance_date),
-              'buildings_mapped', COALESCE(osm.total_buildings, 0),
+              'buildings_mapped', COALESCE(MAX(osm.total_buildings), 0),
               'data_source', 'attendance_records',
               'payment_eligible_days', COUNT(DISTINCT attendance_date),
               'total_earnings_potential', COUNT(DISTINCT attendance_date) * 
