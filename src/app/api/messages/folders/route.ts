@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const youthId = decoded.youthId;
+    const youthId = decoded.userId;
 
     
     const result = await Database.query(

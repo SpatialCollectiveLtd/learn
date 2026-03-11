@@ -2,338 +2,235 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { BookOpen, Briefcase, CheckCircle, Lock, AlertCircle, Mail } from 'lucide-react';
+import { BookOpen, BarChart3, Mail, Users, LogOut, AlertCircle } from 'lucide-react';
 
-interface TrainingStatus {
-  programType: string;
-  moduleAssignment?: string;  
-  settlement: string;
-  trainingCompleted: boolean;
-  hasOsmUsername: boolean;
-  requiresOsmUsername: boolean;
-  canAccessWorkDashboard: boolean;
-  progress: {
-    total: number;
-    completed: number;
-    percentage: number;
-    missingSteps: string[];
-  };
+interface UserData {
+  userId: string;
+  fullName: string;
+  role: 'youth' | 'trainer' | 'admin';
+  settlement: string | null;
+  module: string | null;
+  moduleAssignment: string | null;
+  userType: 'youth' | 'staff';
 }
 
-export default function DashboardSelection() {
+interface TrainingProgress {
+  progress: Record<string, number[]>;
+  totalCompleted: number;
+}
+
+export default function Dashboard() {
   const router = useRouter();
+  const [user, setUser] = useState<UserData | null>(null);
+  const [training, setTraining] = useState<TrainingProgress | null>(null);
   const [loading, setLoading] = useState(true);
-  const [status, setStatus] = useState<TrainingStatus | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchTrainingStatus();
-  }, []);
+    const token = localStorage.getItem('token');
+    const userData = localStorage.getItem('userData');
 
-  const fetchTrainingStatus = async () => {
-    try {
-      const token = localStorage.getItem('youthToken');
-      if (!token) {
-        router.push('/');
-        return;
-      }
-
-      const response = await fetch('/api/training/completion-status', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to fetch training status');
-      }
-
-      if (data.success) {
-        setStatus(data.data);
-      } else {
-        setError(data.message);
-      }
-    } catch (err: any) {
-      
-      setError(err.message || 'Failed to load dashboard options');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleTrainingClick = () => {
-    if (!status) return;
-    
-    
-    if (status.programType === 'digitization') {
-      const targetRoute = status.moduleAssignment === 'validator'
-        ? '/digitization/validator'
-        : '/digitization/mapper';  
-      router.push(targetRoute);
+    if (!token || !userData) {
+      router.push('/');
       return;
     }
-    
-    
-    const routes: Record<string, string> = {
-      mobile_mapping: '/mobile-mapping',
-      household_survey: '/household-survey',
-      microtasking: '/microtasking',
-    };
 
-    const route = routes[status.programType] || '/digitization/mapper';
-    router.push(route);
-  };
-
-  const handleWorkClick = () => {
-    if (!status?.canAccessWorkDashboard) {
-      return; 
+    try {
+      setUser(JSON.parse(userData));
+    } catch {
+      router.push('/');
+      return;
     }
 
-    
-    if (status.programType === 'mobile_mapping') {
-      router.push('/mobile-mapping/work');
-    } else {
-      router.push('/dashboard/work');
-    }
+    // Fetch training progress
+    fetch('/api/training/progress', {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.success) setTraining(data.data);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [router]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userData');
+    localStorage.removeItem('userType');
+    router.push('/');
   };
 
-  if (loading) {
+  if (loading || !user) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-foreground-muted">Loading dashboard options...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#dc2626] mx-auto mb-4" />
+          <p className="text-[#a3a3a3]">Loading dashboard...</p>
         </div>
       </div>
     );
   }
 
-  if (error || !status) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center p-4">
-        <div className="bg-background-card rounded-lg shadow-xl border border-[#262626] p-8 max-w-md w-full">
-          <AlertCircle className="w-12 h-12 text-error mx-auto mb-4" />
-          <h2 className="text-xl font-heading font-bold text-white text-center mb-2">
-            Unable to Load Dashboard
-          </h2>
-          <p className="text-foreground-subtle text-center mb-6">{error || 'An error occurred'}</p>
-          <button
-            onClick={() => router.push('/')}
-            className="w-full bg-primary text-white py-3 px-6 rounded-lg hover:bg-primary-hover transition-colors shadow-lg shadow-primary/20 font-subheading font-semibold"
-          >
-            Return to Login
-          </button>
-        </div>
-      </div>
-    );
-  }
+  const isStaff = user.userType === 'staff';
+  const moduleLabel = user.module === 'both' ? 'Multi-Module' : (user.module?.replace('_', ' ') || 'Unassigned');
 
-  const { trainingCompleted, canAccessWorkDashboard, progress, requiresOsmUsername, hasOsmUsername } = status;
+  const [showModuleSelector, setShowModuleSelector] = useState(false);
+
+  const MODULE_ROUTES: Record<string, { label: string; path: string }> = {
+    digitization: { label: 'Digitization', path: user?.moduleAssignment === 'validator' ? '/digitization/validator' : '/digitization/mapper' },
+    mobile_mapping: { label: 'Mobile Mapping', path: '/mobile-mapping' },
+    household_survey: { label: 'Household Survey', path: '/household-survey' },
+    microtasking: { label: 'Microtasking', path: '/microtasking' },
+  };
+
+  const handleTrainingClick = () => {
+    if (!user?.module || user.module === 'both') {
+      setShowModuleSelector(true);
+      return;
+    }
+    const route = MODULE_ROUTES[user.module];
+    router.push(route?.path || '/digitization/mapper');
+  };
 
   return (
     <div className="min-h-screen bg-black py-12 px-4">
       <div className="max-w-4xl mx-auto">
-        {}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-heading font-bold text-white mb-4">
-            Welcome to <span className="text-primary">SC</span> Training Hub
-          </h1>
-          <p className="text-lg text-foreground-muted mb-2">
-            {status.settlement} • {status.programType.replace('_', ' ').toUpperCase()}
-            {status.moduleAssignment && status.programType === 'digitization' && (
-              <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#dc2626]/10 text-[#dc2626] border border-[#dc2626]/20">
-                {status.moduleAssignment.toUpperCase()}
-              </span>
-            )}
-          </p>
-          <div className="flex items-center justify-center gap-2 text-sm">
-            <CheckCircle className="w-5 h-5 text-success" />
-            <span className="text-foreground-subtle">
-              Training Progress: {progress.completed}/{progress.total} steps ({progress.percentage}%)
-            </span>
+        {/* Header */}
+        <div className="flex items-start justify-between mb-12">
+          <div>
+            <h1 className="text-3xl font-heading font-bold text-white mb-1">
+              Welcome, {user.fullName}
+            </h1>
+            <p className="text-[#a3a3a3]">
+              {user.settlement && `${user.settlement} • `}
+              {isStaff ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : moduleLabel.toUpperCase()}
+              {user.moduleAssignment && user.module === 'digitization' && (
+                <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#dc2626]/10 text-[#dc2626] border border-[#dc2626]/20">
+                  {user.moduleAssignment.toUpperCase()}
+                </span>
+              )}
+            </p>
           </div>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 text-[#737373] hover:text-white transition-colors text-sm"
+          >
+            <LogOut className="w-4 h-4" />
+            Sign Out
+          </button>
         </div>
 
-        {}
-        <div className={`grid gap-6 ${status.programType === 'digitization' ? 'md:grid-cols-3' : 'md:grid-cols-2'}`}>
-          {}
-          <button
-            onClick={handleTrainingClick}
-            className="bg-background-card rounded-2xl shadow-lg shadow-primary/10 p-6 text-left hover:shadow-2xl hover:shadow-primary/20 transition-all transform hover:-translate-y-1 border border-[#262626] hover:border-primary"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className="bg-primary/20 p-3 rounded-xl border border-primary/30">
-                <BookOpen className="w-7 h-7 text-primary" />
-              </div>
-              <span className="text-sm font-subheading font-medium text-white bg-primary-dark px-3 py-1 rounded-full border border-primary">
-                Always Available
-              </span>
-            </div>
-            
-            <h2 className="text-xl font-heading font-bold text-white mb-2">
-              Training Dashboard
-            </h2>
-            
-            <p className="text-sm text-foreground-subtle mb-3">
-              Continue your training modules, complete steps, and improve your mapping skills.
-            </p>
-
-            <div className="bg-background-elevated rounded-lg p-4 mb-4 border border-border">
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-foreground-subtle">Progress</span>
-                <span className="font-subheading font-medium text-white">{progress.percentage}%</span>
-              </div>
-              <div className="w-full bg-[#1a1a1a] rounded-full h-2">
-                <div 
-                  className="bg-gradient-to-r from-primary to-primary-hover h-2 rounded-full transition-all"
-                  style={{ width: `${progress.percentage}%` }}
-                />
-              </div>
-            </div>
-
-            {!trainingCompleted && progress.missingSteps.length > 0 && (
-              <div className="text-sm text-foreground-subtle">
-                <p className="font-subheading font-medium mb-1">Remaining steps:</p>
-                <p className="text-xs">{progress.missingSteps.slice(0, 3).join(', ')}
-                  {progress.missingSteps.length > 3 && ` +${progress.missingSteps.length - 3} more`}
-                </p>
-              </div>
-            )}
-          </button>
-
-          {}
-          {status.programType !== 'microtasking' && (
+        {/* Dashboard cards */}
+        <div className="grid gap-6 md:grid-cols-2">
+          {/* Training — youth only */}
+          {!isStaff && (
             <button
-              onClick={handleWorkClick}
-              disabled={!canAccessWorkDashboard}
-              className={`bg-background-card rounded-2xl shadow-lg p-6 text-left transition-all border ${
-                canAccessWorkDashboard
-                  ? 'hover:shadow-2xl hover:shadow-primary/20 transform hover:-translate-y-1 border-[#262626] hover:border-primary cursor-pointer'
-                  : 'opacity-60 cursor-not-allowed border-[#262626]'
-              }`}
+              onClick={handleTrainingClick}
+              className="bg-[#1F2121] rounded-2xl shadow-lg p-6 text-left hover:shadow-2xl transition-all transform hover:-translate-y-1 border border-[#262626] hover:border-[#dc2626]"
             >
               <div className="flex items-center justify-between mb-4">
-                <div className={`p-3 rounded-xl border ${
-                  canAccessWorkDashboard 
-                    ? 'bg-primary/20 border-primary/30' 
-                    : 'bg-[#1a1a1a] border-border'
-                }`}>
-                  {canAccessWorkDashboard ? (
-                    <Briefcase className="w-7 h-7 text-primary" />
-                  ) : (
-                    <Lock className="w-7 h-7 text-foreground-subtle" />
-                  )}
+                <div className="bg-[#dc2626]/20 p-3 rounded-xl border border-[#dc2626]/30">
+                  <BookOpen className="w-7 h-7 text-[#dc2626]" />
                 </div>
-                {canAccessWorkDashboard ? (
-                  <span className="text-sm font-subheading font-medium text-white bg-primary-dark px-3 py-1 rounded-full border border-primary">
-                    Unlocked
-                  </span>
-                ) : (
-                  <span className="text-sm font-subheading font-medium text-foreground-subtle bg-background-elevated px-3 py-1 rounded-full border border-border">
-                    Locked
-                  </span>
-                )}
               </div>
-              
-              <h2 className="text-xl font-heading font-bold text-white mb-2">
-                Work Dashboard
-              </h2>
-              
-              {canAccessWorkDashboard ? (
-                <>
-                  <p className="text-sm text-foreground-subtle mb-3">
-                    Track your daily mapping work, view building counts, and monitor your 20-day work period.
-                  </p>
-                  <div className="bg-primary-dark/50 border border-primary rounded-lg p-4">
-                    <div className="flex items-start gap-2">
-                      <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                      <div className="text-sm">
-                        <p className="font-subheading font-medium text-primary-light mb-1">You're ready to start working!</p>
-                        <p className="text-foreground-muted">
-                          All training steps completed. Click to view your work dashboard.
-                        </p>
-                      </div>
-                    </div>
+              <h2 className="text-xl font-heading font-bold text-white mb-2">Training</h2>
+              <p className="text-sm text-[#a3a3a3] mb-3">
+                Continue your training modules and complete your steps.
+              </p>
+              {training && (
+                <div className="bg-black/50 rounded-lg p-3 border border-[#2a2a2a]">
+                  <div className="flex justify-between text-sm mb-2">
+                    <span className="text-[#a3a3a3]">Completed</span>
+                    <span className="text-white font-medium">{training.totalCompleted} steps</span>
                   </div>
-                </>
-              ) : (
-                <>
-                  <p className="text-sm text-foreground-subtle mb-3">
-                    Track your daily mapping work, view building counts, and monitor your 20-day work period.
-                  </p>
-                  <div className="bg-warning/10 border border-warning/30 rounded-lg p-4">
-                    <div className="flex items-start gap-2">
-                      <AlertCircle className="w-5 h-5 text-warning mt-0.5 flex-shrink-0" />
-                      <div className="text-sm">
-                        <p className="font-subheading font-medium text-warning mb-2">Requirements to unlock:</p>
-                        <ul className="space-y-1 text-foreground-muted">
-                          {!trainingCompleted && (
-                            <li className="flex items-center gap-2">
-                              <span className="w-1.5 h-1.5 rounded-full bg-warning"></span>
-                              Complete all {progress.total} training steps ({progress.missingSteps.length} remaining)
-                            </li>
-                          )}
-                          {requiresOsmUsername && !hasOsmUsername && (
-                            <li className="flex items-center gap-2">
-                              <span className="w-1.5 h-1.5 rounded-full bg-warning"></span>
-                              Add your OpenStreetMap username in training
-                            </li>
-                          )}
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </>
+                </div>
               )}
             </button>
           )}
 
-          {}
-          {status.programType === 'digitization' && (
+          {/* Performance — youth only */}
+          {!isStaff && (
             <button
-              onClick={() => router.push('/dashboard/messages')}
-              className="bg-background-card rounded-2xl shadow-lg shadow-primary/10 p-6 text-left hover:shadow-2xl hover:shadow-primary/20 transition-all transform hover:-translate-y-1 border border-[#262626] hover:border-primary"
+              onClick={() => router.push('/dashboard/youth')}
+              className="bg-[#1F2121] rounded-2xl shadow-lg p-6 text-left hover:shadow-2xl transition-all transform hover:-translate-y-1 border border-[#262626] hover:border-[#dc2626]"
             >
               <div className="flex items-center justify-between mb-4">
-                <div className="bg-primary/20 p-3 rounded-xl border border-primary/30">
-                  <Mail className="w-7 h-7 text-primary" />
+                <div className="bg-[#dc2626]/20 p-3 rounded-xl border border-[#dc2626]/30">
+                  <BarChart3 className="w-7 h-7 text-[#dc2626]" />
                 </div>
-                <span className="text-sm font-subheading font-medium text-white bg-primary-dark px-3 py-1 rounded-full border border-primary">
-                  New Feature
-                </span>
               </div>
-              
-              <h2 className="text-xl font-heading font-bold text-white mb-2">
-                Messages
-              </h2>
-              
-              <p className="text-sm text-foreground-subtle mb-3">
-                Check your work email, read messages from coordinators, and stay updated with project communications.
+              <h2 className="text-xl font-heading font-bold text-white mb-2">My Profile</h2>
+              <p className="text-sm text-[#a3a3a3]">
+                View your performance, attendance, and payment history.
               </p>
-
-              <div className="bg-primary-dark/50 border border-primary rounded-lg p-4">
-                <div className="flex items-start gap-2">
-                  <Mail className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                  <div className="text-sm">
-                    <p className="font-subheading font-medium text-primary-light mb-1">
-                      @spatialcollective.co.ke
-                    </p>
-                    <p className="text-foreground-muted">
-                      Access your professional work email inbox
-                    </p>
-                  </div>
-                </div>
-              </div>
             </button>
           )}
+
+          {/* Staff: Youth list */}
+          {isStaff && (
+            <button
+              onClick={() => router.push('/dashboard/youth')}
+              className="bg-[#1F2121] rounded-2xl shadow-lg p-6 text-left hover:shadow-2xl transition-all transform hover:-translate-y-1 border border-[#262626] hover:border-[#dc2626]"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="bg-[#dc2626]/20 p-3 rounded-xl border border-[#dc2626]/30">
+                  <Users className="w-7 h-7 text-[#dc2626]" />
+                </div>
+              </div>
+              <h2 className="text-xl font-heading font-bold text-white mb-2">Youth</h2>
+              <p className="text-sm text-[#a3a3a3]">
+                View and manage youth participants, training progress, and performance.
+              </p>
+            </button>
+          )}
+
+          {/* Messages — all roles */}
+          <button
+            onClick={() => router.push('/dashboard/messages')}
+            className="bg-[#1F2121] rounded-2xl shadow-lg p-6 text-left hover:shadow-2xl transition-all transform hover:-translate-y-1 border border-[#262626] hover:border-[#dc2626]"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="bg-[#dc2626]/20 p-3 rounded-xl border border-[#dc2626]/30">
+                <Mail className="w-7 h-7 text-[#dc2626]" />
+              </div>
+            </div>
+            <h2 className="text-xl font-heading font-bold text-white mb-2">Messages</h2>
+            <p className="text-sm text-[#a3a3a3]">
+              View notifications and communications from your team.
+            </p>
+          </button>
         </div>
 
-        {}
-        <div className="text-center mt-8 text-sm text-foreground-subtle">
+        <div className="text-center mt-8 text-sm text-[#737373]">
           <p>Need help? Contact your training coordinator.</p>
         </div>
+
+        {/* Module selector for 'both' or null module */}
+        {showModuleSelector && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 px-4">
+            <div className="bg-[#1F2121] border border-[#262626] rounded-2xl p-6 w-full max-w-sm">
+              <h3 className="text-lg font-heading font-bold text-white mb-2">Select Training Module</h3>
+              <p className="text-sm text-[#a3a3a3] mb-4">Choose which training to continue:</p>
+              <div className="space-y-3">
+                {Object.entries(MODULE_ROUTES).map(([key, { label, path }]) => (
+                  <button
+                    key={key}
+                    onClick={() => { setShowModuleSelector(false); router.push(path); }}
+                    className="w-full bg-black/50 border border-[#2a2a2a] hover:border-[#dc2626] rounded-xl p-4 text-left transition-colors"
+                  >
+                    <span className="text-white font-medium">{label}</span>
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={() => setShowModuleSelector(false)}
+                className="mt-4 w-full text-sm text-[#737373] hover:text-white transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

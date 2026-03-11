@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 import { BackgroundBeams } from "@/components/ui/background-beams";
-import { Shield, Users } from "lucide-react";
+import { Shield, Users, ExternalLink } from "lucide-react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
+const DPW_APP_URL = process.env.NEXT_PUBLIC_DPW_APP_URL || 'https://app.spatialcollective.com';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -21,70 +20,29 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const response = await axios.post(`${API_URL}/api/youth/auth/authenticate`, {
-        youthId: userId,
+      const response = await fetch('/api/auth/youth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ youthId: userId }),
       });
 
-      if (response.data.success) {
-        const { token, youth } = response.data.data;
+      const data = await response.json();
 
-        
-        localStorage.setItem('youthToken', token);
-        localStorage.setItem('youthData', JSON.stringify(youth));
+      if (data.success) {
+        const payload = data.data || data;
+        localStorage.setItem('token', payload.token);
+        localStorage.setItem('userData', JSON.stringify(payload.user));
         localStorage.setItem('userType', 'youth');
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         router.push('/dashboard');
+      } else {
+        setError(data.error?.message || 'Authentication failed. Please check your Youth ID.');
       }
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Authentication failed. Please check your Youth ID.');
+    } catch {
+      setError('Authentication failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
-
-  const handleStaffLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setIsLoading(true);
-
-    try {
-      const response = await axios.post(`${API_URL}/api/staff/auth/authenticate`, {
-        staffId: userId,
-      });
-
-      if (response.data.success) {
-        const { token, staff } = response.data.data;
-
-        
-        localStorage.setItem('staffToken', token);
-        localStorage.setItem('staffData', JSON.stringify(staff));
-
-        
-        if (staff.role === 'admin') {
-          router.push('/dashboard/admin');
-        } else {
-          
-          router.push('/dashboard/staff');
-        }
-      }
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Authentication failed. Please check your Staff ID.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSubmit = loginType === 'youth' ? handleYouthLogin : handleStaffLogin;
 
   return (
     <main className="min-h-screen bg-black relative overflow-hidden flex items-center justify-center">
@@ -141,61 +99,92 @@ export default function LoginPage() {
 
           {}
           <div className="p-8">
-            <div className="mb-6">
-              <h2 className="text-2xl font-heading font-bold text-white mb-2">
-                {loginType === 'youth' ? 'Youth Login' : 'Staff Login'}
-              </h2>
-              <p className="text-[#a3a3a3] text-sm">
-                {loginType === 'youth'
-                  ? 'Enter your Youth ID to access your training'
-                  : 'Enter your Staff ID to access the platform'
-                }
-              </p>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div>
-                <label
-                  htmlFor="userId"
-                  className="block text-sm font-medium text-[#e5e5e5] mb-2"
-                >
-                  {loginType === 'youth' ? 'Youth ID' : 'Staff ID'}
-                </label>
-                <input
-                  type="text"
-                  id="userId"
-                  value={userId}
-                  onChange={(e) => setUserId(e.target.value)}
-                  className="w-full px-4 py-3 bg-black border border-[#2a2a2a] rounded-lg text-white placeholder-[#737373] focus:outline-none focus:ring-2 focus:ring-[#dc2626] focus:border-transparent transition-all"
-                  placeholder={loginType === 'youth' ? 'Enter your Youth ID' : 'Enter your Staff ID'}
-                  required
-                  autoFocus
-                />
-              </div>
-
-              {error && (
-                <div className="p-3 bg-[#dc2626]/10 border border-[#dc2626]/20 rounded-lg">
-                  <p className="text-sm text-[#dc2626]">{error}</p>
+            {loginType === 'youth' ? (
+              <>
+                <div className="mb-6">
+                  <h2 className="text-2xl font-heading font-bold text-white mb-2">
+                    Youth Login
+                  </h2>
+                  <p className="text-[#a3a3a3] text-sm">
+                    Enter your Youth ID to access your training
+                  </p>
                 </div>
-              )}
 
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full bg-[#dc2626] hover:bg-[#b91c1c] text-white font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isLoading ? 'Signing in...' : 'Sign In'}
-              </button>
-            </form>
+                <form onSubmit={handleYouthLogin} className="space-y-5">
+                  <div>
+                    <label
+                      htmlFor="userId"
+                      className="block text-sm font-medium text-[#e5e5e5] mb-2"
+                    >
+                      Youth ID
+                    </label>
+                    <input
+                      type="text"
+                      id="userId"
+                      value={userId}
+                      onChange={(e) => setUserId(e.target.value)}
+                      className="w-full px-4 py-3 bg-black border border-[#2a2a2a] rounded-lg text-white placeholder-[#737373] focus:outline-none focus:ring-2 focus:ring-[#dc2626] focus:border-transparent transition-all"
+                      placeholder="e.g. KAY123"
+                      required
+                      autoFocus
+                    />
+                  </div>
 
-            <div className="mt-6 pt-6 border-t border-[#2a2a2a]">
-              <p className="text-xs text-[#737373] text-center">
-                {loginType === 'youth'
-                  ? 'First time logging in? You\'ll be guided through the contract signing process.'
-                  : 'Only authorized Spatial Collective staff members can access this platform.'
-                }
-              </p>
-            </div>
+                  {error && (
+                    <div className="p-3 bg-[#dc2626]/10 border border-[#dc2626]/20 rounded-lg">
+                      <p className="text-sm text-[#dc2626]">{error}</p>
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full bg-[#dc2626] hover:bg-[#b91c1c] text-white font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isLoading ? 'Signing in...' : 'Sign In'}
+                  </button>
+                </form>
+
+                <div className="mt-6 pt-6 border-t border-[#2a2a2a]">
+                  <p className="text-xs text-[#737373] text-center">
+                    Enter the Youth ID assigned to you by your trainer.
+                  </p>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="mb-6">
+                  <h2 className="text-2xl font-heading font-bold text-white mb-2">
+                    Staff Access
+                  </h2>
+                  <p className="text-[#a3a3a3] text-sm">
+                    Trainers and admins access Learn through the DPW App
+                  </p>
+                </div>
+
+                <div className="bg-black/50 border border-[#2a2a2a] rounded-lg p-6 text-center">
+                  <Shield className="w-12 h-12 text-[#a3a3a3] mx-auto mb-4" />
+                  <p className="text-[#e5e5e5] mb-4">
+                    Click <strong>&ldquo;Launch Learn&rdquo;</strong> from the DPW App to access your dashboard.
+                  </p>
+                  <a
+                    href={DPW_APP_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 bg-[#dc2626] hover:bg-[#b91c1c] text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                  >
+                    Open DPW App
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
+                </div>
+
+                <div className="mt-6 pt-6 border-t border-[#2a2a2a]">
+                  <p className="text-xs text-[#737373] text-center">
+                    You must be logged in to DPW App as a trainer or admin to access Learn.
+                  </p>
+                </div>
+              </>
+            )}
           </div>
         </div>
 

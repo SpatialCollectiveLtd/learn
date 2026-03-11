@@ -1,84 +1,197 @@
-export interface StaffMember {
-  staff_id: string;
-  full_name: string;
-  email: string | null;
-  phone_number?: string | null;
-  role: 'trainer' | 'admin' | 'superadmin';
-  created_by?: string | null;
-  is_active: boolean;
-  created_at: Date;
-  updated_at: Date;
-  last_login: Date | null;
-}
+// Learn Platform — Types (v2)
+// All user identity comes from DPW App. Learn only owns training, notifications, and QGIS submissions.
 
-export interface YouthParticipant {
-  youth_id: string;
+// === DPW User Profile (returned by DPW auth & user endpoints) ===
+
+export interface UserProfile {
+  user_id: string;
   full_name: string;
   email: string | null;
   phone_number: string | null;
-  program_type: 'digitization' | 'mobile_mapping' | 'household_survey' | 'microtasking';
-  module_assignment: 'mapper' | 'validator' | null;
+  role: 'youth' | 'trainer' | 'admin';
   settlement: string | null;
-  osm_username: string | null;
+  module: string | null;
+  module_assignment: string | null;
+  trainer_id: string | null;
+  trainer_name: string | null;
+  cohort: string | null;
   is_active: boolean;
-  created_at: Date;
-  updated_at: Date;
-  last_login: Date | null;
+  enrolled_at: string | null;
+  contract: {
+    has_signed: boolean;
+    signed_at: string | null;
+    start_date: string | null;
+    end_date: string | null;
+    total_contracted_days: number | null;
+  } | null;
 }
 
-export interface ContractTemplate {
-  template_id: string;
-  program_type: 'digitization' | 'mobile_mapping' | 'household_survey' | 'microtasking';
-  version: string;
-  title: string;
-  content: string;
-  pdf_url: string | null;
-  is_active: boolean;
-  created_by: string | null;
-  created_at: Date;
-  updated_at: Date;
-}
-
-export interface SignedContract {
-  contract_id: string;
-  youth_id: string;
-  template_id: string;
-  signature_data: string;
-  ip_address: string | null;
-  user_agent: string | null;
-  signed_at: Date;
-  pdf_url: string | null;
-  is_valid: boolean;
-  invalidated_at: Date | null;
-  invalidated_by: string | null;
-  invalidation_reason: string | null;
-}
-
-export interface AuthLog {
-  log_id: string;
+export interface AdminProfile {
   user_id: string;
-  user_type: 'youth' | 'staff';
-  action: string;
-  ip_address: string | null;
-  user_agent: string | null;
-  success: boolean;
-  error_message: string | null;
-  created_at: Date;
+  full_name: string;
+  email: string;
+  role: 'trainer' | 'admin';
+  settlement: string | null;
+  permissions: string[];
+  is_active: boolean;
 }
 
-export interface YouthWithContract extends YouthParticipant {
-  has_signed_contract: boolean;
-  signed_at: Date | null;
-  contract_id: string | null;
+// === User List ===
+
+export interface UserListItem {
+  user_id: string;
+  full_name: string;
+  role: string;
+  settlement: string | null;
+  module: string | null;
+  module_assignment: string | null;
+  is_active: boolean;
 }
 
-export interface ContractStatistics {
-  program_type: string;
-  total_participants: number;
-  signed_contracts: number;
-  unsigned_contracts: number;
+export interface Pagination {
+  page: number;
+  per_page: number;
+  total: number;
+  total_pages: number;
 }
 
-export type ProgramType = 'digitization' | 'mobile_mapping' | 'household_survey' | 'microtasking';
-export type UserRole = 'validator' | 'admin';
+export interface UserListResponse {
+  users: UserListItem[];
+  pagination: Pagination;
+}
+
+// === Attendance (from DPW) ===
+
+export interface AttendanceRecord {
+  date: string;
+  status: 'present' | 'absent' | 'excused';
+  submitted_by: string;
+  submitted_at: string;
+  notes: string | null;
+}
+
+export interface AttendanceResponse {
+  user_id: string;
+  total_days_attended: number;
+  date_range: { from: string; to: string };
+  records: AttendanceRecord[];
+}
+
+// === Performance (from DPW) ===
+
+export interface PerformanceSummary {
+  total_days_worked: number;
+  total_output: number;
+  output_unit: string;
+  daily_target: number;
+  average_daily_output: number;
+  best_day_output: number;
+  target_met_days: number;
+  attendance_rate: number;
+}
+
+export interface ContractProgress {
+  contracted_days: number;
+  days_worked: number;
+  days_remaining: number;
+  percent_complete: number;
+}
+
+export interface WorkHistoryEntry {
+  date: string;
+  output: number;
+  target: number;
+  target_met: boolean;
+  status: 'pending' | 'approved' | 'rejected';
+}
+
+export interface PerformanceResponse {
+  user_id: string;
+  module: string;
+  summary: PerformanceSummary;
+  contract_progress: ContractProgress;
+  work_history: WorkHistoryEntry[];
+}
+
+// === Payments (from DPW) ===
+
+export interface PaymentCycle {
+  cycle_id: string;
+  cycle_name: string;
+  period: { from: string; to: string };
+  days_worked: number;
+  earnings: number;
+  quality_score: number | null;
+  status: 'paid' | 'pending' | 'processing';
+  paid_at: string | null;
+}
+
+export interface PaymentsResponse {
+  user_id: string;
+  module: string;
+  payment_rate_kes: number;
+  total_earnings: number;
+  total_paid: number;
+  total_pending: number;
+  cycles: PaymentCycle[];
+}
+
+// === Reference Data (from DPW) ===
+
+export interface Settlement {
+  settlement_id: string;
+  name: string;
+  full_name: string;
+  region: string;
+  is_active: boolean;
+}
+
+export interface Module {
+  module_id: string;
+  name: string;
+  description: string;
+  daily_target: number;
+  payment_rate_kes: number;
+  output_unit: string;
+  is_active: boolean;
+  settlements: string[];
+}
+
+export interface Trainer {
+  trainer_id: string;
+  full_name: string;
+  email: string;
+  settlement: string;
+  module: string;
+  youth_count: number;
+  is_active: boolean;
+}
+
+// === DPW API Envelope ===
+
+export interface ApiSuccess<T> {
+  success: true;
+  data: T;
+}
+
+export interface ApiError {
+  success: false;
+  error: { code: string; message: string };
+}
+
+export type ApiResponse<T> = ApiSuccess<T> | ApiError;
+
+// === Learn JWT Payload ===
+
+export interface LearnTokenPayload {
+  userId: string;
+  fullName: string;
+  role: 'youth' | 'trainer' | 'admin';
+  settlement: string | null;
+  module: string | null;
+  moduleAssignment: string | null;
+  userType: 'youth' | 'staff';
+}
+
+export type UserRole = 'youth' | 'trainer' | 'admin';
 export type UserType = 'youth' | 'staff';
