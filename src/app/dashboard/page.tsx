@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { BookOpen, BarChart3, Mail, Users, LogOut, AlertCircle } from 'lucide-react';
+import { BookOpen, BarChart3, Mail, LogOut } from 'lucide-react';
 
 interface UserData {
   userId: string;
@@ -24,6 +24,7 @@ export default function Dashboard() {
   const [user, setUser] = useState<UserData | null>(null);
   const [training, setTraining] = useState<TrainingProgress | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showModuleSelector, setShowModuleSelector] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -34,12 +35,21 @@ export default function Dashboard() {
       return;
     }
 
+    let parsed: UserData;
     try {
-      setUser(JSON.parse(userData));
+      parsed = JSON.parse(userData);
     } catch {
       router.push('/');
       return;
     }
+
+    // Staff have their own areas — redirect immediately
+    if (parsed.userType === 'staff') {
+      router.replace(parsed.role === 'admin' ? '/admin' : '/trainer');
+      return;
+    }
+
+    setUser(parsed);
 
     // Fetch training progress
     fetch('/api/training/progress', {
@@ -71,20 +81,17 @@ export default function Dashboard() {
     );
   }
 
-  const isStaff = user.userType === 'staff';
-  const moduleLabel = user.module === 'both' ? 'Multi-Module' : (user.module?.replace('_', ' ') || 'Unassigned');
-
-  const [showModuleSelector, setShowModuleSelector] = useState(false);
+  const moduleLabel = user.module === 'both' ? 'Multi-Module' : (user.module?.replace(/_/g, ' ') || 'Unassigned');
 
   const MODULE_ROUTES: Record<string, { label: string; path: string }> = {
-    digitization: { label: 'Digitization', path: user?.moduleAssignment === 'validator' ? '/digitization/validator' : '/digitization/mapper' },
+    digitization: { label: 'Digitization', path: user.moduleAssignment === 'validator' ? '/digitization/validator' : '/digitization/mapper' },
     mobile_mapping: { label: 'Mobile Mapping', path: '/mobile-mapping' },
     household_survey: { label: 'Household Survey', path: '/household-survey' },
     microtasking: { label: 'Microtasking', path: '/microtasking' },
   };
 
   const handleTrainingClick = () => {
-    if (!user?.module || user.module === 'both') {
+    if (!user.module || user.module === 'both') {
       setShowModuleSelector(true);
       return;
     }
@@ -103,7 +110,7 @@ export default function Dashboard() {
             </h1>
             <p className="text-[#a3a3a3]">
               {user.settlement && `${user.settlement} • `}
-              {isStaff ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : moduleLabel.toUpperCase()}
+              {moduleLabel.toUpperCase()}
               {user.moduleAssignment && user.module === 'digitization' && (
                 <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#dc2626]/10 text-[#dc2626] border border-[#dc2626]/20">
                   {user.moduleAssignment.toUpperCase()}
@@ -122,69 +129,44 @@ export default function Dashboard() {
 
         {/* Dashboard cards */}
         <div className="grid gap-6 md:grid-cols-2">
-          {/* Training — youth only */}
-          {!isStaff && (
-            <button
-              onClick={handleTrainingClick}
-              className="bg-[#1F2121] rounded-2xl shadow-lg p-6 text-left hover:shadow-2xl transition-all transform hover:-translate-y-1 border border-[#262626] hover:border-[#dc2626]"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <div className="bg-[#dc2626]/20 p-3 rounded-xl border border-[#dc2626]/30">
-                  <BookOpen className="w-7 h-7 text-[#dc2626]" />
+          <button
+            onClick={handleTrainingClick}
+            className="bg-[#1F2121] rounded-2xl shadow-lg p-6 text-left hover:shadow-2xl transition-all transform hover:-translate-y-1 border border-[#262626] hover:border-[#dc2626]"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="bg-[#dc2626]/20 p-3 rounded-xl border border-[#dc2626]/30">
+                <BookOpen className="w-7 h-7 text-[#dc2626]" />
+              </div>
+            </div>
+            <h2 className="text-xl font-heading font-bold text-white mb-2">Training</h2>
+            <p className="text-sm text-[#a3a3a3] mb-3">
+              Continue your training modules and complete your steps.
+            </p>
+            {training && (
+              <div className="bg-black/50 rounded-lg p-3 border border-[#2a2a2a]">
+                <div className="flex justify-between text-sm">
+                  <span className="text-[#a3a3a3]">Completed</span>
+                  <span className="text-white font-medium">{training.totalCompleted} steps</span>
                 </div>
               </div>
-              <h2 className="text-xl font-heading font-bold text-white mb-2">Training</h2>
-              <p className="text-sm text-[#a3a3a3] mb-3">
-                Continue your training modules and complete your steps.
-              </p>
-              {training && (
-                <div className="bg-black/50 rounded-lg p-3 border border-[#2a2a2a]">
-                  <div className="flex justify-between text-sm mb-2">
-                    <span className="text-[#a3a3a3]">Completed</span>
-                    <span className="text-white font-medium">{training.totalCompleted} steps</span>
-                  </div>
-                </div>
-              )}
-            </button>
-          )}
+            )}
+          </button>
 
-          {/* Performance — youth only */}
-          {!isStaff && (
-            <button
-              onClick={() => router.push('/dashboard/youth')}
-              className="bg-[#1F2121] rounded-2xl shadow-lg p-6 text-left hover:shadow-2xl transition-all transform hover:-translate-y-1 border border-[#262626] hover:border-[#dc2626]"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <div className="bg-[#dc2626]/20 p-3 rounded-xl border border-[#dc2626]/30">
-                  <BarChart3 className="w-7 h-7 text-[#dc2626]" />
-                </div>
+          <button
+            onClick={() => router.push('/dashboard/youth')}
+            className="bg-[#1F2121] rounded-2xl shadow-lg p-6 text-left hover:shadow-2xl transition-all transform hover:-translate-y-1 border border-[#262626] hover:border-[#dc2626]"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="bg-[#dc2626]/20 p-3 rounded-xl border border-[#dc2626]/30">
+                <BarChart3 className="w-7 h-7 text-[#dc2626]" />
               </div>
-              <h2 className="text-xl font-heading font-bold text-white mb-2">My Profile</h2>
-              <p className="text-sm text-[#a3a3a3]">
-                View your performance, attendance, and payment history.
-              </p>
-            </button>
-          )}
+            </div>
+            <h2 className="text-xl font-heading font-bold text-white mb-2">My Profile</h2>
+            <p className="text-sm text-[#a3a3a3]">
+              View your performance, attendance, and payment history.
+            </p>
+          </button>
 
-          {/* Staff: Youth list */}
-          {isStaff && (
-            <button
-              onClick={() => router.push('/dashboard/youth')}
-              className="bg-[#1F2121] rounded-2xl shadow-lg p-6 text-left hover:shadow-2xl transition-all transform hover:-translate-y-1 border border-[#262626] hover:border-[#dc2626]"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <div className="bg-[#dc2626]/20 p-3 rounded-xl border border-[#dc2626]/30">
-                  <Users className="w-7 h-7 text-[#dc2626]" />
-                </div>
-              </div>
-              <h2 className="text-xl font-heading font-bold text-white mb-2">Youth</h2>
-              <p className="text-sm text-[#a3a3a3]">
-                View and manage youth participants, training progress, and performance.
-              </p>
-            </button>
-          )}
-
-          {/* Messages — all roles */}
           <button
             onClick={() => router.push('/dashboard/messages')}
             className="bg-[#1F2121] rounded-2xl shadow-lg p-6 text-left hover:shadow-2xl transition-all transform hover:-translate-y-1 border border-[#262626] hover:border-[#dc2626]"

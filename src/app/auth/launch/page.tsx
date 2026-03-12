@@ -36,7 +36,8 @@ function LaunchContent() {
         localStorage.setItem('userType', 'staff');
 
         // Redirect based on role
-        router.replace('/dashboard');
+        const role = data.data.user?.role;
+        router.replace(role === 'admin' ? '/admin' : role === 'trainer' ? '/trainer' : '/dashboard');
       } catch {
         setError('Failed to connect. Please check your internet connection and try again.');
       }
@@ -47,14 +48,16 @@ function LaunchContent() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-950 p-4">
-        <div className="max-w-md w-full bg-gray-900 rounded-xl border border-red-500/30 p-8 text-center">
-          <div className="text-red-400 text-4xl mb-4">!</div>
-          <h1 className="text-xl font-semibold text-white mb-3">Launch Failed</h1>
-          <p className="text-gray-400 mb-6">{error}</p>
+      <div className="min-h-screen flex items-center justify-center bg-black p-4">
+        <div className="max-w-md w-full bg-[#1F2121] rounded-2xl border border-[#dc2626]/30 p-8 text-center">
+          <div className="bg-[#dc2626]/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 border border-[#dc2626]/30">
+            <span className="text-[#dc2626] text-2xl font-bold">!</span>
+          </div>
+          <h1 className="text-xl font-heading font-bold text-white mb-3">Launch Failed</h1>
+          <p className="text-[#a3a3a3] mb-6">{error}</p>
           <a
             href={process.env.NEXT_PUBLIC_DPW_APP_URL || 'https://app.spatialcollective.com'}
-            className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="inline-block px-6 py-3 bg-[#dc2626] hover:bg-[#b91c1c] text-white font-semibold rounded-lg transition-colors"
           >
             Go to DPW App
           </a>
@@ -64,10 +67,10 @@ function LaunchContent() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-950">
+    <div className="min-h-screen flex items-center justify-center bg-black">
       <div className="text-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4" />
-        <p className="text-gray-400">Signing you in...</p>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#dc2626] mx-auto mb-4" />
+        <p className="text-[#a3a3a3]">Signing you in…</p>
       </div>
     </div>
   );
@@ -77,8 +80,8 @@ export default function LaunchPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex items-center justify-center bg-gray-950">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto" />
+        <div className="min-h-screen flex items-center justify-center bg-black">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#dc2626]" />
         </div>
       }
     >

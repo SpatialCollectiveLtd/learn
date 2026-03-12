@@ -42,6 +42,9 @@ export async function POST(request: NextRequest) {
           role: profile.role,
           settlement: profile.settlement,
           permissions: profile.permissions,
+          userType: 'staff',
+          module: null,
+          moduleAssignment: null,
         },
       },
     });
