@@ -3,69 +3,34 @@
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import { FloatingHeader } from "@/components/ui/floating-header";
 import { CometCard } from "@/components/ui/comet-card";
-import { QRCodeDisplay } from "@/components/ui/qr-code-display";
 import Link from "next/link";
 import { mobileMappingSteps as defaultSteps, getMobileMappingSteps, formGuides, MobileMappingStep } from "@/data/mobile-mapping-training";
-import { Clock, BookOpen, CheckCircle2, Smartphone, QrCode, Loader2, AlertCircle, FileText, ChevronDown, ChevronUp, HelpCircle, Lightbulb, Wifi, Upload, MessageCircleQuestion, Hand } from "lucide-react";
+import { Clock, BookOpen, CheckCircle2, Smartphone, QrCode, FileText, ChevronDown, ChevronUp, HelpCircle, Lightbulb, Wifi, Upload, MessageCircleQuestion } from "lucide-react";
 import { useState, useEffect } from "react";
-
-interface OdkConfig {
-  configured: boolean;
-  displayName?: string;
-  configUrl?: string;
-  instructions?: string[];
-  message?: string;
-}
+import { getYouthSession, getTrainingProgress } from "@/lib/youth-client";
 
 export default function MobileMappingOverviewPage() {
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
-  const [odkConfig, setOdkConfig] = useState<OdkConfig | null>(null);
-  const [odkLoading, setOdkLoading] = useState(true);
-  const [showQrCode, setShowQrCode] = useState(false);
-  const [qrLoading, setQrLoading] = useState(false);
   const [expandedForm, setExpandedForm] = useState<string | null>(null);
   const [mobileMappingSteps, setMobileMappingSteps] = useState<MobileMappingStep[]>(defaultSteps);
   const [settlement, setSettlement] = useState<string>("");
-  
+
   useEffect(() => {
-    const saved = localStorage.getItem('mobile-mapping-completed-steps');
-    if (saved) {
-      setCompletedSteps(new Set(JSON.parse(saved)));
+    // Get settlement & completed steps from session
+    const session = getYouthSession();
+    if (session?.settlement) {
+      setSettlement(session.settlement);
+      setMobileMappingSteps(getMobileMappingSteps(session.settlement));
     }
-    
-    
-    fetchOdkConfig();
+
+    if (session?.token) {
+      getTrainingProgress(session.token).then((data) => {
+        if (data?.progress?.mobile_mapping) {
+          setCompletedSteps(new Set(data.progress.mobile_mapping));
+        }
+      });
+    }
   }, []);
-
-  const fetchOdkConfig = async () => {
-    try {
-      const token = localStorage.getItem('youthToken');
-      if (!token) return;
-
-      const response = await fetch('/api/youth/odk-config', {
-        headers: { 'Authorization': `Bearer ${token}` },
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        setOdkConfig(data.data);
-      }
-      
-      
-      const profileResponse = await fetch('/api/youth/profile', {
-        headers: { 'Authorization': `Bearer ${token}` },
-      });
-      const profileData = await profileResponse.json();
-      if (profileData.success && profileData.data.settlement) {
-        setSettlement(profileData.data.settlement);
-        setMobileMappingSteps(getMobileMappingSteps(profileData.data.settlement));
-      }
-    } catch (error) {
-      
-    } finally {
-      setOdkLoading(false);
-    }
-  };
 
   const totalTime = mobileMappingSteps.reduce((sum, step) => sum + step.estimatedTime, 0);
 
@@ -106,77 +71,16 @@ export default function MobileMappingOverviewPage() {
 
           {}
           <div className="max-w-2xl mx-auto mb-10">
-            <div className="bg-gradient-to-r from-primary/20 to-primary/5 border-2 border-primary/50 rounded-2xl p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-heading font-bold text-white flex items-center gap-3">
-                  <div className="bg-primary/30 p-2 rounded-lg">
-                    <QrCode className="w-6 h-6 text-primary" />
-                  </div>
-                  Your ODK Setup Code
-                </h2>
+            <div className="bg-background-card border border-border rounded-2xl p-6 flex items-start gap-4">
+              <div className="bg-primary/10 p-2 rounded-lg flex-shrink-0 mt-0.5">
+                <QrCode className="w-5 h-5 text-primary" />
               </div>
-
-              {odkLoading ? (
-                <div className="flex items-center justify-center py-8">
-                  <Loader2 className="w-6 h-6 text-primary animate-spin" />
-                  <span className="ml-2 text-foreground-muted">Loading your configuration...</span>
-                </div>
-              ) : odkConfig?.configured ? (
-                <div>
-                  <p className="text-sm text-foreground-muted mb-2">
-                    Your personal QR code for ODK Collect setup:
-                  </p>
-                  <p className="text-primary font-semibold mb-4">
-                    {odkConfig.displayName}
-                  </p>
-
-                  {!showQrCode ? (
-                    <button
-                      onClick={() => {
-                        setQrLoading(true);
-                        setShowQrCode(true);
-                      }}
-                      className="w-full bg-primary text-white py-4 px-6 rounded-xl hover:bg-primary-hover transition-colors font-semibold text-lg shadow-lg shadow-primary/30 flex items-center justify-center gap-2"
-                    >
-                      <Hand className="w-5 h-5" />
-                      Tap to Show QR Code
-                    </button>
-                  ) : (
-                    <div className="space-y-4">
-                      <div className="flex flex-col items-center py-6 bg-white rounded-xl">
-                        <QRCodeDisplay data={odkConfig.configUrl || ''} size={250} />
-                      </div>
-                      <div className="bg-background-elevated rounded-lg p-4 border border-border">
-                        <p className="text-sm text-foreground-muted font-semibold mb-2 flex items-center gap-2"><Smartphone className="w-4 h-4" /> How to scan:</p>
-                        <ol className="text-sm text-foreground-subtle space-y-1 list-decimal list-inside">
-                          <li>Open ODK Collect on your phone</li>
-                          <li>Tap menu (⋮) → Add project</li>
-                          <li>Select "Configure with QR code"</li>
-                          <li>Point camera at this QR code</li>
-                        </ol>
-                      </div>
-                      <button
-                        onClick={() => setShowQrCode(false)}
-                        className="w-full text-foreground-subtle py-2 text-sm hover:text-foreground-muted"
-                      >
-                        Hide QR Code
-                      </button>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="flex items-start gap-3 py-4 bg-warning/10 rounded-lg px-4">
-                  <AlertCircle className="w-6 h-6 text-warning flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-foreground-muted font-semibold">
-                      ODK not configured yet
-                    </p>
-                    <p className="text-foreground-subtle text-sm mt-1">
-                      {odkConfig?.message || 'Please contact your trainer to set up your ODK access.'}
-                    </p>
-                  </div>
-                </div>
-              )}
+              <div>
+                <p className="text-white font-semibold mb-1">ODK Collect Setup</p>
+                <p className="text-foreground-muted text-sm">
+                  Your ODK configuration QR code will be provided by your trainer during the in-person setup session. Complete the training steps below first.
+                </p>
+              </div>
             </div>
           </div>
 

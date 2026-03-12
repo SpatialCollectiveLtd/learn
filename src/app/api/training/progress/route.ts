@@ -5,7 +5,7 @@ import { notifyDpwTrainingComplete } from '@/lib/dpw-client';
 
 const MODULE_MAX_STEPS: Record<string, number> = {
   mapper: 7,
-  validator: 6,
+  validator: 7,
   mobile_mapping: 4,
   household_survey: 4,
   microtasking1: 3,

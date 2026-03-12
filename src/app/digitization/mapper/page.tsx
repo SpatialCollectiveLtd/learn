@@ -7,15 +7,20 @@ import Link from "next/link";
 import { mapperTrainingSteps } from "@/data/mapper-training";
 import { Clock, BookOpen, CheckCircle2 } from "lucide-react";
 import { useState, useEffect } from "react";
+import { getYouthSession, getTrainingProgress } from "@/lib/youth-client";
 
 export default function MapperOverviewPage() {
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
-  
+
   useEffect(() => {
-    const saved = localStorage.getItem('mapper-completed-steps');
-    if (saved) {
-      setCompletedSteps(new Set(JSON.parse(saved)));
-    }
+    const session = getYouthSession();
+    if (!session) return;
+
+    getTrainingProgress(session.token).then((data) => {
+      if (data?.progress?.mapper) {
+        setCompletedSteps(new Set(data.progress.mapper));
+      }
+    });
   }, []);
 
   const totalTime = mapperTrainingSteps.reduce((sum, step) => sum + step.estimatedTime, 0);

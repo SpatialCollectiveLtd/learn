@@ -8,71 +8,44 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { IconPencil, IconCircleCheck, IconMap } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { CheckCircle2, Circle, Lock } from "lucide-react";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
+import { CheckCircle2 } from "lucide-react";
+import { getYouthSession, getTrainingProgress } from "@/lib/youth-client";
 
 export default function DigitizationPage() {
-  const [backHref, setBackHref] = useState("/");
   const [mapperProgress, setMapperProgress] = useState<number[]>([]);
-  const [isYouth, setIsYouth] = useState(false);
+  const [validatorProgress, setValidatorProgress] = useState<number[]>([]);
   const router = useRouter();
 
   useEffect(() => {
-    
-    const userType = localStorage.getItem('userType');
-    
-    if (userType === 'youth') {
-      const youthDataStr = localStorage.getItem('youthData');
-      
-      if (youthDataStr) {
-        try {
-          const youthData = JSON.parse(youthDataStr);
-          
-          
-          if (youthData.programType === 'digitization') {
-            const targetRoute = youthData.moduleAssignment === 'validator'
-              ? '/digitization/validator'
-              : '/digitization/mapper';
-            
-            
-            router.push(targetRoute);
-            return;
-          }
-        } catch (error) {
-          
-        }
-      }
-      
-      setBackHref('/dashboard');
-      setIsYouth(true);
-      
-      
-      const fetchProgress = async () => {
-        const token = localStorage.getItem('youthToken');
-        if (!token) return;
-
-        try {
-          const response = await axios.get(`${API_URL}/api/youth/training-progress?module=mapper`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-
-          if (response.data.success) {
-            setMapperProgress(response.data.data.progress.mapper);
-          }
-        } catch (error) {
-          
-        }
-      };
-
-      fetchProgress();
-    } else if (userType === 'staff') {
-      setBackHref('/dashboard/staff');
-    } else {
-      setBackHref('/');
+    const session = getYouthSession();
+    if (!session) {
+      router.push('/');
+      return;
     }
-  }, []);
+
+    // Staff should never land here
+    if (session.userType === 'staff') {
+      router.replace(session.role === 'admin' ? '/admin' : '/trainer');
+      return;
+    }
+
+    // If the youth has a definite single module + assignment, redirect straight to it
+    if (session.module === 'digitization') {
+      const target = session.moduleAssignment === 'validator'
+        ? '/digitization/validator'
+        : '/digitization/mapper';
+      router.replace(target);
+      return;
+    }
+
+    // Load progress for the role selector cards
+    getTrainingProgress(session.token).then((data) => {
+      if (data?.progress) {
+        setMapperProgress(data.progress.mapper ?? []);
+        setValidatorProgress(data.progress.validator ?? []);
+      }
+    });
+  }, [router]);
 
   const roles = [
     {
@@ -83,7 +56,7 @@ export default function DigitizationPage() {
       image: "https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?q=80&w=1000",
       code: "MAP1",
       totalSteps: 7,
-      completedSteps: isYouth ? mapperProgress.length : 0,
+      completedSteps: mapperProgress.length,
     },
     {
       title: "Validator",
@@ -93,7 +66,7 @@ export default function DigitizationPage() {
       image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000",
       code: "VAL2",
       totalSteps: 7,
-      completedSteps: 0, 
+      completedSteps: validatorProgress.length,
     },
   ];
 
@@ -101,11 +74,9 @@ export default function DigitizationPage() {
     <main className="min-h-screen bg-black relative overflow-hidden">
       <BackgroundBeams className="opacity-30" />
 
-      {}
-      <FloatingHeader showBackButton backHref={backHref} />
+      <FloatingHeader showBackButton backHref="/dashboard" />
 
       <div className="relative z-10 pt-20">
-        {}
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <div className="text-center max-w-4xl mx-auto mb-16">
             <div className="text-6xl mb-6 flex items-center justify-center">
@@ -132,9 +103,7 @@ export default function DigitizationPage() {
                       type="button"
                       className="flex w-full cursor-pointer flex-col items-stretch rounded-xl border-0 bg-[#1F2121] p-1.5 transition-all hover:bg-[#252727] md:p-2.5"
                       aria-label={`View ${role.title} training`}
-                      style={{
-                        transformStyle: "preserve-3d",
-                      }}
+                      style={{ transformStyle: "preserve-3d" }}
                     >
                       <div className="mx-1 flex-1">
                         <div className="relative mt-1 aspect-[5/6] w-full overflow-hidden rounded-xl bg-black">
@@ -149,9 +118,8 @@ export default function DigitizationPage() {
                             }}
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                          
-                          {}
-                          {isYouth && role.completedSteps > 0 && (
+
+                          {role.completedSteps > 0 && (
                             <div className="absolute top-2 right-2 bg-[#22c55e]/90 backdrop-blur-sm px-2 py-1 rounded-md flex items-center gap-1" style={{ transform: "translateZ(100px)" }}>
                               <CheckCircle2 className="w-3 h-3 text-white" />
                               <span className="text-[10px] font-semibold text-white">
@@ -159,7 +127,7 @@ export default function DigitizationPage() {
                               </span>
                             </div>
                           )}
-                          
+
                           <div className="absolute bottom-2 left-2 right-2 md:bottom-3 md:left-3 md:right-3" style={{ transform: "translateZ(75px)" }}>
                             <div className="flex items-center gap-1.5 mb-1.5">
                               <div className="text-[#dc2626] scale-75 md:scale-100">{role.icon}</div>
@@ -170,11 +138,10 @@ export default function DigitizationPage() {
                             <p className="text-gray-300 text-[10px] md:text-xs line-clamp-2">
                               {role.description}
                             </p>
-                            
-                            {}
-                            {isYouth && role.completedSteps > 0 && (
+
+                            {role.completedSteps > 0 && (
                               <div className="mt-2 w-full bg-[#262626] rounded-full h-1.5 overflow-hidden">
-                                <div 
+                                <div
                                   className="bg-[#22c55e] h-full transition-all duration-500"
                                   style={{ width: `${(role.completedSteps / role.totalSteps) * 100}%` }}
                                 />
@@ -196,7 +163,6 @@ export default function DigitizationPage() {
         </section>
       </div>
 
-      {}
       <OsmUsernameNotification />
     </main>
   );

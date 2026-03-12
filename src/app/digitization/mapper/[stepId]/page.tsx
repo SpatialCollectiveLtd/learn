@@ -6,7 +6,6 @@ import { BackgroundBeams } from "@/components/ui/background-beams";
 import { FloatingHeader } from "@/components/ui/floating-header";
 import { MovingBorderButton } from "@/components/ui/moving-border-button";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import { 
   ChevronLeft, 
   ChevronRight,
@@ -19,8 +18,7 @@ import {
   ExternalLink
 } from "lucide-react";
 import { mapperTrainingSteps, getStepById, getNextStep, getPreviousStep } from "@/data/mapper-training";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
+import { getYouthSession, getTrainingProgress, markStepComplete, getOsmUsername, updateOsmUsername } from "@/lib/youth-client";
 
 
 function getProjectUrlForYouth(youthId: string): string | null {
@@ -93,91 +91,54 @@ export default function MapperTrainingStepPage({
   const nextStep = getNextStep(currentStepId);
   const previousStep = getPreviousStep(currentStepId);
 
-  
+  // Load training progress
   useEffect(() => {
     const fetchProgress = async () => {
-      const token = localStorage.getItem('youthToken');
-      if (!token) {
+      const session = getYouthSession();
+      if (!session) {
         setIsLoadingProgress(false);
         return;
       }
 
-      try {
-        const response = await axios.get(`${API_URL}/api/youth/training-progress?module=mapper`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+      // Get youthId for project URL
+      setYouthId(session.userId);
 
-        if (response.data.success) {
-          const completed = new Set<number>(response.data.data.progress.mapper);
-          setCompletedSteps(completed);
+      const data = await getTrainingProgress(session.token);
+      if (data?.progress) {
+        const completed = new Set<number>(data.progress.mapper ?? []);
+        setCompletedSteps(completed);
 
-          
-          if (currentStepId > 1 && !completed.has(currentStepId - 1)) {
-            setIsStepLocked(true);
-            
-            const lastCompleted = Math.max(...Array.from(completed), 0);
-            const nextAvailable = lastCompleted + 1;
-            
-            if (nextAvailable < currentStepId) {
-              setTimeout(() => {
-                router.push('/digitization/mapper/' + nextAvailable);
-              }, 2000);
-            }
+        if (currentStepId > 1 && !completed.has(currentStepId - 1)) {
+          setIsStepLocked(true);
+          const lastCompleted = Math.max(...Array.from(completed), 0);
+          const nextAvailable = lastCompleted + 1;
+          if (nextAvailable < currentStepId) {
+            setTimeout(() => {
+              router.push('/digitization/mapper/' + nextAvailable);
+            }, 2000);
           }
         }
-      } catch (error) {
-        
-      } finally {
-        setIsLoadingProgress(false);
       }
+
+      setIsLoadingProgress(false);
     };
 
     fetchProgress();
   }, [currentStepId, router]);
 
-  
+  // Load OSM username from DB on mount
   useEffect(() => {
-    const fetchOsmUsername = async () => {
-      const token = localStorage.getItem('youthToken');
-      const youthData = localStorage.getItem('youthData');
-      
-      if (token) {
-        try {
-          const response = await axios.get(`${API_URL}/api/youth/profile`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          
-          
-          if (response.data.success && response.data.data.youthId) {
-            setYouthId(response.data.data.youthId);
-          }
-          
-          
-          if (response.data.success && response.data.data.osmUsername) {
-            const username = response.data.data.osmUsername;
-            setSavedOsmUsername(username);
-            setOsmUsername(username);
-            setOsmVerificationStatus('verified');
-            setIsEditingOsm(false); 
-            
-            
-            if (youthData) {
-              const youth = JSON.parse(youthData);
-              youth.osmUsername = username;
-              localStorage.setItem('youthData', JSON.stringify(youth));
-            }
-            
-            
-          } else {
-            
-          }
-        } catch (error) {
-          
-        }
-      }
-    };
+    const session = getYouthSession();
+    if (!session) return;
 
-    fetchOsmUsername();
+    getOsmUsername(session.token).then((username) => {
+      if (username) {
+        setSavedOsmUsername(username);
+        setOsmUsername(username);
+        setOsmVerificationStatus('verified');
+        setIsEditingOsm(false);
+      }
+    });
   }, []);
 
   const verifyOsmUsername = async (username: string) => {
@@ -187,19 +148,19 @@ export default function MapperTrainingStepPage({
     setOsmVerificationStatus('none');
 
     try {
-      const response = await axios.get(`${API_URL}/api/osm/verify-username?username=${encodeURIComponent(username.trim())}`);
-      
-      if (response.data.success) {
-        if (response.data.exists === true) {
+      const res = await fetch(`/api/osm/verify-username?username=${encodeURIComponent(username.trim())}`);
+      const data = await res.json();
+
+      if (data.success) {
+        if (data.exists === true) {
           setOsmVerificationStatus('verified');
-        } else if (response.data.exists === false) {
+        } else if (data.exists === false) {
           setOsmVerificationStatus('not-found');
         } else {
           setOsmVerificationStatus('error');
         }
       }
-    } catch (error) {
-      
+    } catch {
       setOsmVerificationStatus('error');
     } finally {
       setIsVerifyingOsm(false);
@@ -219,82 +180,60 @@ export default function MapperTrainingStepPage({
     setOsmVerificationStatus('none');
 
     try {
-      
-      
       const normalizedUsername = osmUsername.trim();
-      
-      
-      const verifyResponse = await axios.get(`${API_URL}/api/osm/verify-username?username=${encodeURIComponent(normalizedUsername)}`);
-      
-      
-      if (verifyResponse.data.success) {
-        if (verifyResponse.data.exists === false) {
-          
+
+      // 1. Verify the username exists on OSM
+      const verifyRes = await fetch(`/api/osm/verify-username?username=${encodeURIComponent(normalizedUsername)}`);
+      const verifyData = await verifyRes.json();
+
+      if (verifyData.success) {
+        if (verifyData.exists === false) {
           setOsmVerificationStatus('not-found');
-          setOsmError(`⚠ This username was not found on OpenStreetMap. Please check the spelling (including capital letters) or create an account at openstreetmap.org first. Tried: "${normalizedUsername}"`);  
+          setOsmError(`⚠ This username was not found on OpenStreetMap. Please check the spelling (including capital letters) or create an account at openstreetmap.org first. Tried: "${normalizedUsername}"`);
           setIsSavingOsm(false);
           setIsVerifyingOsm(false);
           return;
-        } else if (verifyResponse.data.exists === null) {
-          
+        } else if (verifyData.exists === null) {
           setOsmVerificationStatus('error');
           setOsmError('⚠ Unable to verify your username at this time. Please check your internet connection and try again.');
           setIsSavingOsm(false);
           setIsVerifyingOsm(false);
           return;
         }
-        
-        
         setOsmVerificationStatus('verified');
       }
 
       setIsVerifyingOsm(false);
 
-      
-      const token = localStorage.getItem('youthToken');
-      if (!token) {
+      // 2. Save to the Learn DB
+      const session = getYouthSession();
+      if (!session) {
         setOsmError('Authentication required. Please login again.');
         setIsSavingOsm(false);
         return;
       }
 
-      const saveResponse = await axios.put(
-        `${API_URL}/api/youth/update-osm-username`,
-        { osmUsername: normalizedUsername },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const saveResult = await updateOsmUsername(session.token, normalizedUsername);
 
-      if (saveResponse.data.success) {
-        const savedUsername = normalizedUsername;
-        setSavedOsmUsername(savedUsername);
-        setOsmUsername(savedUsername);
+      if (saveResult.success) {
+        setSavedOsmUsername(normalizedUsername);
+        setOsmUsername(normalizedUsername);
         setIsEditingOsm(false);
         setOsmVerificationStatus('verified');
         setOsmSuccess('✓ OSM username verified and saved successfully! You can now proceed to the next step.');
-        
-        
-        const youthData = localStorage.getItem('youthData');
-        if (youthData) {
-          const youth = JSON.parse(youthData);
-          youth.osmUsername = savedUsername;
-          localStorage.setItem('youthData', JSON.stringify(youth));
-        }
-        
-        
+
         setTimeout(() => {
-          const successElement = document.querySelector('.bg-gradient-to-r');
-          if (successElement) {
-            successElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
+          const el = document.querySelector('.bg-gradient-to-r');
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }, 100);
 
-        
-        setTimeout(() => {
-          setOsmSuccess('');
-        }, 10000);
+        setTimeout(() => setOsmSuccess(''), 10000);
+      } else {
+        setOsmError(saveResult.error || 'Failed to save OSM username. Please try again.');
+        setOsmVerificationStatus('error');
       }
-    } catch (error: any) {
-      setOsmError(error.response?.data?.message || 'Failed to save OSM username. Please try again.');
+    } catch {
+      setOsmError('Failed to save OSM username. Please try again.');
       setOsmVerificationStatus('error');
     } finally {
       setIsSavingOsm(false);
@@ -302,55 +241,41 @@ export default function MapperTrainingStepPage({
     }
   };
 
-  const markStepComplete = async () => {
-    
+  const handleMarkComplete = async () => {
     if (currentStepId === 2 && !savedOsmUsername) {
       setOsmError('⚠ You must save your verified OSM username before completing this step.');
       window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
       return;
     }
 
-    try {
-      const token = localStorage.getItem('youthToken');
-      if (!token) {
-        alert('Authentication required. Please login again.');
-        router.push('/');
-        return;
-      }
+    const session = getYouthSession();
+    if (!session) {
+      alert('Authentication required. Please login again.');
+      router.push('/');
+      return;
+    }
 
-      
-      const response = await axios.post(
-        `${API_URL}/api/youth/training-progress`,
-        { moduleType: 'mapper', stepId: currentStepId },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+    const result = await markStepComplete(session.token, 'mapper', currentStepId);
 
-      if (response.data.success) {
-        const newCompleted = new Set(completedSteps);
-        newCompleted.add(currentStepId);
-        setCompletedSteps(newCompleted);
-        
-        
-        if (nextStep) {
-          setTimeout(() => {
-            router.push(`/digitization/mapper/${nextStep.id}`);
-          }, 500);
-        } else {
-          
-          setTimeout(() => {
-            router.push('/digitization');
-          }, 1000);
-        }
-      }
-    } catch (error: any) {
-      if (error.response?.status === 403) {
-        alert(error.response.data.message || 'You must complete previous steps first.');
-        if (error.response.data.missingStep) {
-          router.push(`/digitization/mapper/${error.response.data.missingStep}`);
-        }
+    if (result.success) {
+      const newCompleted = new Set(completedSteps);
+      newCompleted.add(currentStepId);
+      setCompletedSteps(newCompleted);
+
+      if (nextStep) {
+        setTimeout(() => {
+          router.push(`/digitization/mapper/${nextStep.id}`);
+        }, 500);
       } else {
-        
-        alert('Failed to save progress. Please try again.');
+        setTimeout(() => {
+          router.push('/digitization');
+        }, 1000);
+      }
+    } else {
+      if (result.error?.includes('Complete step')) {
+        alert(result.error);
+      } else {
+        alert(result.error || 'Failed to save progress. Please try again.');
       }
     }
   };
@@ -832,7 +757,7 @@ export default function MapperTrainingStepPage({
             )}
 
             <button
-              onClick={markStepComplete}
+              onClick={handleMarkComplete}
               disabled={currentStepId === 2 && !savedOsmUsername}
               className={'px-4 sm:px-6 py-3 rounded-lg font-medium transition-all text-sm sm:text-base whitespace-nowrap ' + (
                 completedSteps.has(currentStepId)

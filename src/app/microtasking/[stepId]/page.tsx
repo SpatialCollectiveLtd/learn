@@ -6,7 +6,6 @@ import { BackgroundBeams } from "@/components/ui/background-beams";
 import { FloatingHeader } from "@/components/ui/floating-header";
 import { MovingBorderButton } from "@/components/ui/moving-border-button";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import { 
   ChevronLeft, 
   ChevronRight,
@@ -19,8 +18,11 @@ import {
   Smartphone
 } from "lucide-react";
 import { microtaskingSteps, MICROTASKING_PLATFORM_URL } from "@/data/microtasking-training";
+import { getYouthSession, markStepComplete as apiMarkStepComplete, getTrainingProgress } from "@/lib/youth-client";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
+// Map overview step ID to API module type (each microtasking step is its own module)
+const MICROTASKING_MODULE = (stepId: number) =>
+  stepId === 1 ? 'microtasking1' : stepId === 2 ? 'microtasking2' : 'microtasking3';
 
 
 function renderTextWithLinks(text: string) {
@@ -62,13 +64,14 @@ export default function MicrotaskingStepPage({ params }: { params: Promise<{ ste
       router.push('/microtasking');
       return;
     }
-
-    
-    const saved = localStorage.getItem('microtasking-completed-steps');
-    if (saved) {
-      const completed = new Set<number>(JSON.parse(saved));
-      setIsCompleted(completed.has(stepId));
-    }
+    const session = getYouthSession();
+    if (!session?.token) return;
+    const moduleType = MICROTASKING_MODULE(stepId);
+    getTrainingProgress(session.token).then((data) => {
+      if (data?.progress?.[moduleType]?.includes(1)) {
+        setIsCompleted(true);
+      }
+    });
   }, [stepId, step, router]);
 
   if (!step) {
@@ -79,52 +82,29 @@ export default function MicrotaskingStepPage({ params }: { params: Promise<{ ste
     setIsSubmitting(true);
     setError(null);
 
-    try {
-      const token = localStorage.getItem('youthToken');
-      if (!token) {
-        router.push('/');
-        return;
-      }
-
-      
-      const response = await axios.post(
-        `${API_URL}/api/youth/training-progress`,
-        {
-          moduleType: 'microtasking',
-          stepId: stepId
-        },
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        }
-      );
-
-      if (response.data.success) {
-        
-        const saved = localStorage.getItem('microtasking-completed-steps');
-        const completed = saved ? new Set<number>(JSON.parse(saved)) : new Set<number>();
-        completed.add(stepId);
-        localStorage.setItem('microtasking-completed-steps', JSON.stringify([...completed]));
-        
-        setIsCompleted(true);
-
-        
-        setTimeout(() => {
-          if (stepId < microtaskingSteps.length) {
-            router.push(`/microtasking/${stepId + 1}`);
-          } else {
-            router.push('/microtasking');
-          }
-        }, 1000);
-      }
-    } catch (err: any) {
-      
-      setError(err.response?.data?.message || 'Failed to mark step as complete');
-    } finally {
-      setIsSubmitting(false);
+    const session = getYouthSession();
+    if (!session) {
+      router.push('/');
+      return;
     }
+
+    const moduleType = MICROTASKING_MODULE(stepId);
+    const result = await apiMarkStepComplete(session.token, moduleType, 1);
+
+    if (result.success) {
+      setIsCompleted(true);
+      setTimeout(() => {
+        if (stepId < microtaskingSteps.length) {
+          router.push(`/microtasking/${stepId + 1}`);
+        } else {
+          router.push('/microtasking');
+        }
+      }, 1000);
+    } else {
+      setError(result.error || 'Failed to mark step as complete');
+    }
+
+    setIsSubmitting(false);
   };
 
   const previousStep = stepId > 1 ? microtaskingSteps[stepId - 2] : null;

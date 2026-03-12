@@ -7,19 +7,26 @@ import Link from "next/link";
 import { microtaskingSteps, MICROTASKING_PLATFORM_URL } from "@/data/microtasking-training";
 import { Clock, BookOpen, CheckCircle2, Circle, Lock, ExternalLink, Smartphone } from "lucide-react";
 import { useState, useEffect } from "react";
+import { getYouthSession, getTrainingProgress } from "@/lib/youth-client";
 
 export default function MicrotaskingOverviewPage() {
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
   const [allTrainingComplete, setAllTrainingComplete] = useState(false);
   
   useEffect(() => {
-    const saved = localStorage.getItem('microtasking-completed-steps');
-    if (saved) {
-      const completed = new Set<number>(JSON.parse(saved));
-      setCompletedSteps(completed);
-      
-      setAllTrainingComplete(completed.size === 3);
-    }
+    const session = getYouthSession();
+    if (!session?.token) return;
+    getTrainingProgress(session.token).then((data) => {
+      if (data?.progress) {
+        // Combine microtasking1/2/3 into step IDs 1/2/3
+        const completed = new Set<number>();
+        if (data.progress.microtasking1?.includes(1)) completed.add(1);
+        if (data.progress.microtasking2?.includes(1)) completed.add(2);
+        if (data.progress.microtasking3?.includes(1)) completed.add(3);
+        setCompletedSteps(completed);
+        setAllTrainingComplete(completed.size === 3);
+      }
+    });
   }, []);
 
   const totalTime = microtaskingSteps.reduce((sum, step) => sum + step.estimatedTime, 0);

@@ -1,89 +1,50 @@
-"use client";
+﻿"use client";
 
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import { FloatingHeader } from "@/components/ui/floating-header";
 import { CometCard } from "@/components/ui/comet-card";
 import Link from "next/link";
 import { validatorTrainingSteps } from "@/data/validator-training";
-import { Clock, BookOpen, CheckCircle2, Lock, Shield } from "lucide-react";
+import { Clock, BookOpen, CheckCircle2, Lock } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { hasValidatorTrainingAccess } from "@/data/validator-training";
+import { getYouthSession, getTrainingProgress } from "@/lib/youth-client";
 
 export default function ValidatorOverviewPage() {
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [staffId, setStaffId] = useState<string | null>(null);
-  const [staffName, setStaffName] = useState<string | null>(null);
+  const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
   const [isLoading, setIsLoading] = useState(true);
-  const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
 
-  
   useEffect(() => {
-    const staffToken = localStorage.getItem('staffToken');
-    const staffDataStr = localStorage.getItem('staffData');
-
-    
-    if (!staffToken || !staffDataStr) {
-      
+    const session = getYouthSession();
+    if (!session) {
       router.push('/');
       return;
     }
 
-    try {
-      const staffData = JSON.parse(staffDataStr);
-      const storedStaffId = staffData.staffId;
-      const storedStaffName = staffData.fullName;
+    if (session.userType === 'staff') {
+      router.replace(session.role === 'admin' ? '/admin' : '/trainer');
+      return;
+    }
 
-      
-      if (hasValidatorTrainingAccess(storedStaffId)) {
-        setStaffId(storedStaffId);
-        setStaffName(storedStaffName);
-        setIsAuthenticated(true);
-      } else {
-        
-        router.push('/dashboard/staff');
-        return;
+    getTrainingProgress(session.token).then((data) => {
+      if (data?.progress?.validator) {
+        setCompletedSteps(new Set(data.progress.validator));
       }
-    } catch (error) {
-      router.push('/');
-      return;
-    }
-
-    setIsLoading(false);
+      setIsLoading(false);
+    });
   }, [router]);
-
-  
-  useEffect(() => {
-    if (isAuthenticated && staffId) {
-      const saved = localStorage.getItem(`validator-completed-steps-${staffId}`);
-      if (saved) {
-        setCompletedSteps(new Set(JSON.parse(saved)));
-      }
-    }
-  }, [isAuthenticated, staffId]);
-
-  const handleLogout = () => {
-    sessionStorage.clear();
-    localStorage.removeItem('userType');
-    router.push('/');
-  };
 
   const totalTime = validatorTrainingSteps.reduce((sum, step) => sum + step.estimatedTime, 0);
 
-  
   if (isLoading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#dc2626]"></div>
-          <p className="mt-4 text-[#e5e5e5]">Loading...</p>
-        </div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#dc2626]" />
       </div>
     );
   }
 
-  
   return (
     <main className="min-h-screen bg-black relative overflow-hidden">
       <BackgroundBeams className="opacity-30" />
@@ -92,39 +53,12 @@ export default function ValidatorOverviewPage() {
 
       <div className="relative z-10 pt-20 pb-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          {}
-          <div className="bg-[#dc2626]/10 border border-[#dc2626]/30 rounded-xl p-4 mb-8 max-w-3xl mx-auto">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Lock className="w-5 h-5 text-[#dc2626]" />
-                <div>
-                  <span className="text-white text-sm font-medium">
-                    {staffName ? `Welcome, ${staffName}` : 'Authenticated Staff'}
-                  </span>
-                  <span className="text-[#a3a3a3] text-xs ml-2">
-                    (ID: {staffId})
-                  </span>
-                </div>
-              </div>
-              <button
-                onClick={handleLogout}
-                className="text-sm text-[#a3a3a3] hover:text-white transition-colors"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-
-          {}
           <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-[#dc2626]/10 border border-[#dc2626]/30 rounded-full mb-4">
-              <CheckCircle2 className="w-8 h-8 text-[#dc2626]" />
-            </div>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-white mb-4">
               Validator Training
             </h1>
             <p className="text-lg text-[#e5e5e5] max-w-3xl mx-auto mb-6">
-              Master quality assurance, validation workflows, and the DPW Validation Tool to ensure mapping data meets professional standards.
+              Master data validation techniques, quality assurance, and ensure mapping accuracy across projects.
             </p>
             <div className="flex items-center justify-center gap-6 text-[#a3a3a3]">
               <div className="flex items-center gap-2">
@@ -142,51 +76,41 @@ export default function ValidatorOverviewPage() {
             </div>
           </div>
 
-          {}
-          <div className="bg-[#dc2626]/10 border border-[#dc2626]/30 rounded-xl p-4 mb-8 max-w-3xl mx-auto">
-            <div className="flex items-start gap-3">
-              <Lock className="w-5 h-5 text-[#dc2626] flex-shrink-0 mt-0.5" />
-              <div>
-                <h3 className="text-white font-semibold mb-1">Restricted Content - Staff Only</h3>
-                <p className="text-[#a3a3a3] text-sm">
-                  This training module contains proprietary validation workflows and tools restricted to Spatial Collective staff members.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {validatorTrainingSteps.map((step) => {
-              const isCompleted = completedSteps.has(step.id);
+            {validatorTrainingSteps.map((step, index) => {
+              const stepNum = index + 1;
+              const isCompleted = completedSteps.has(stepNum);
+              const isUnlocked = stepNum === 1 || completedSteps.has(stepNum - 1);
 
               return (
-                <CometCard key={step.id} rotateDepth={10} translateDepth={15}>
-                  <Link href={`/digitization/validator/${step.id}`}>
-                    <div className="bg-[#0a0a0a] border border-[#262626] rounded-xl p-6 hover:border-[#dc2626]/50 transition-all h-full">
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-lg bg-[#dc2626]/10 border border-[#dc2626]/30 flex items-center justify-center">
-                            <span className="text-[#dc2626] font-heading font-bold text-sm">
-                              {step.id.replace('validator-', '')}
-                            </span>
-                          </div>
-                          {isCompleted && (
-                            <CheckCircle2 className="w-5 h-5 text-[#22c55e]" />
-                          )}
+                <CometCard key={step.id}>
+                  <Link
+                    href={isUnlocked ? `/digitization/validator/${stepNum}` : '#'}
+                    className={isUnlocked ? '' : 'pointer-events-none'}
+                  >
+                    <div className={`bg-[#1F2121] border rounded-xl p-6 transition-all ${
+                      isCompleted
+                        ? 'border-[#22c55e]/40'
+                        : isUnlocked
+                        ? 'border-[#262626] hover:border-[#dc2626]'
+                        : 'border-[#262626] opacity-60'
+                    }`}>
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[#dc2626] font-heading font-bold text-sm">Step {stepNum}</span>
+                          <span className="text-[#737373] text-xs">• {step.estimatedTime} min</span>
                         </div>
-                        <div className="flex items-center gap-1.5 text-[#a3a3a3] text-xs">
-                          <Clock className="w-3.5 h-3.5" />
-                          <span>{step.estimatedTime}m</span>
-                        </div>
+                        {isCompleted ? (
+                          <CheckCircle2 className="w-5 h-5 text-[#22c55e]" />
+                        ) : !isUnlocked ? (
+                          <Lock className="w-4 h-4 text-[#737373]" />
+                        ) : null}
                       </div>
-
-                      <h3 className="text-lg font-heading font-bold text-white mb-2">
+                      <h3 className="text-white font-subheading font-semibold text-base mb-2">
                         {step.title}
                       </h3>
-
-                      <p className="text-sm text-[#a3a3a3] line-clamp-2">
-                        {step.content.introduction}
+                      <p className="text-[#a3a3a3] text-sm line-clamp-2">
+                        {step.shortTitle}
                       </p>
                     </div>
                   </Link>
@@ -194,15 +118,6 @@ export default function ValidatorOverviewPage() {
               );
             })}
           </div>
-        </div>
-      </div>
-
-      {}
-      <div className="border-t border-[#262626] bg-black mt-12 relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <p className="text-center text-xs text-[#a3a3a3]">
-            🔒 Validator Training - Restricted Content - Spatial Collective Staff Only
-          </p>
         </div>
       </div>
     </main>

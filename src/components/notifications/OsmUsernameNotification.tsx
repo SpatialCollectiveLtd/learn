@@ -2,58 +2,31 @@
 
 import { useState, useEffect } from "react";
 import { X, AlertCircle } from "lucide-react";
+import { getYouthSession, getOsmUsername } from "@/lib/youth-client";
 
 export function OsmUsernameNotification() {
   const [show, setShow] = useState(false);
   const [needsOsmUsername, setNeedsOsmUsername] = useState(false);
 
   useEffect(() => {
-    
     const checkOsmUsername = async () => {
-      const youthData = localStorage.getItem('youthData');
-      if (!youthData) return;
+      const session = getYouthSession();
+      if (!session?.token) return;
 
-      try {
-        const youth = JSON.parse(youthData);
-        
-        
-        if (youth.osmUsername) {
-          setNeedsOsmUsername(false);
-          return;
+      // Only relevant for digitization users
+      if (session.module !== 'digitization' && session.module !== 'mapper' && session.module !== 'validator') {
+        return;
+      }
+
+      const osmUsername = await getOsmUsername(session.token);
+      if (!osmUsername) {
+        setNeedsOsmUsername(true);
+        const dismissed = localStorage.getItem('osm-notification-dismissed');
+        const dismissedTime = dismissed ? parseInt(dismissed) : 0;
+        const oneDayAgo = Date.now() - (24 * 60 * 60 * 1000);
+        if (dismissedTime < oneDayAgo) {
+          setTimeout(() => setShow(true), 1000);
         }
-        
-        
-        const token = localStorage.getItem('youthToken');
-        if (token) {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/youth/profile`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          
-          const data = await response.json();
-          
-          const hasUsername = data.success && (data.data.osmUsername || data.data.osm_username);
-          
-          if (!hasUsername) {
-            setNeedsOsmUsername(true);
-            
-            
-            const dismissed = localStorage.getItem('osm-notification-dismissed');
-            const dismissedTime = dismissed ? parseInt(dismissed) : 0;
-            const oneDayAgo = Date.now() - (24 * 60 * 60 * 1000);
-            
-            
-            if (dismissedTime < oneDayAgo) {
-              setTimeout(() => setShow(true), 1000); 
-            }
-          } else {
-            
-            youth.osmUsername = data.data.osmUsername || data.data.osm_username;
-            localStorage.setItem('youthData', JSON.stringify(youth));
-            setNeedsOsmUsername(false);
-          }
-        }
-      } catch (error) {
-        
       }
     };
 
