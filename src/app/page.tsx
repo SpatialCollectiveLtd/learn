@@ -178,10 +178,13 @@ export default function LoginPage() {
                   </a>
                 </div>
 
-                <div className="mt-6 pt-6 border-t border-[#2a2a2a]">
-                  <p className="text-xs text-[#737373] text-center">
+                <div className="mt-6 pt-6 border-t border-[#2a2a2a] text-center">
+                  <p className="text-xs text-[#737373] mb-3">
                     You must be logged in to DPW App as a trainer or admin to access Learn.
                   </p>
+                  <a href="/auth/staff" className="text-xs text-[#dc2626] hover:text-[#ef4444] transition-colors">
+                    Or sign in with email →
+                  </a>
                 </div>
               </>
             )}

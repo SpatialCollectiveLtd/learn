@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { LogOut, Users, Home } from 'lucide-react';
+import { LogOut, Users, Home, UserCheck } from 'lucide-react';
 
 interface AdminUser {
   userId: string;
@@ -60,6 +60,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const navLinks = [
     { href: '/admin', label: 'Overview', icon: Home },
     { href: '/admin/youth', label: 'Youth', icon: Users },
+    { href: '/admin/trainers', label: 'Trainers', icon: UserCheck },
   ];
 
   return (

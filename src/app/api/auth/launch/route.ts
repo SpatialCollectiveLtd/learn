@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { signToken } from '@/app/api/_lib/auth';
+import { signToken, normalizeRole } from '@/app/api/_lib/auth';
 import { verifyLaunchToken, DpwClientError } from '@/lib/dpw-client';
 import type { LearnTokenPayload } from '@/app/api/_lib/types';
 
@@ -18,11 +18,13 @@ export async function POST(request: NextRequest) {
     // Verify the one-time launch token with DPW App
     const profile = await verifyLaunchToken(token);
 
+    const role = normalizeRole(profile.role);
+
     // Sign Learn's own JWT
     const payload: LearnTokenPayload = {
       userId: profile.user_id,
       fullName: profile.full_name,
-      role: profile.role,
+      role,
       settlement: profile.settlement,
       module: null,
       moduleAssignment: null,
@@ -39,7 +41,7 @@ export async function POST(request: NextRequest) {
           userId: profile.user_id,
           fullName: profile.full_name,
           email: profile.email,
-          role: profile.role,
+          role,
           settlement: profile.settlement,
           permissions: profile.permissions,
           userType: 'staff',

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, User, Calendar, BarChart3, Wallet, AlertCircle } from 'lucide-react';
+import { ArrowLeft, User, Calendar, BarChart3, Wallet, AlertCircle, Flag, CheckCircle, XCircle } from 'lucide-react';
 
 interface UserProfile {
   user_id: string;
@@ -57,24 +57,69 @@ interface AttendanceData {
 }
 
 interface PaymentsData {
-  total_earnings: number;
-  total_paid: number;
-  total_pending: number;
-  cycles: Array<{
-    cycle_name: string;
-    days_worked: number;
-    earnings: number;
-    status: string;
+  summary: {
+    total_earnings_kes: number;
+    total_base_pay_kes: number;
+    total_bonus_pay_kes: number;
+    days_with_earnings: number;
+  };
+  modules_active: string[];
+  daily_records: Array<{
+    date: string;
+    module: string;
+    volume: number;
+    volume_unit: string;
+    quality_percentage: number | null;
+    base_pay_kes: number;
+    bonus_pay_kes: number;
+    total_pay_kes: number;
+    attended: boolean;
+    day_type: string;
+    earning_status: string;
+    pay_note: string | null;
+    finalized: boolean;
   }>;
+  sync_info: {
+    microtasking_last_consensus: string | null;
+    data_note: string | null;
+  } | null;
 }
 
-type TabKey = 'profile' | 'attendance' | 'performance' | 'payments';
+interface Dispute {
+  id: number;
+  dispute_date: string;
+  module: string | null;
+  issue_type: string;
+  description: string | null;
+  expected_amount_kes: number | null;
+  reported_amount_kes: number | null;
+  status: 'open' | 'resolved' | 'rejected';
+  resolution_note: string | null;
+  created_at: string;
+}
+
+const DISPUTE_STATUS_STYLES: Record<string, string> = {
+  open: 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20',
+  resolved: 'bg-green-500/10 text-green-400 border border-green-500/20',
+  rejected: 'bg-[#dc2626]/10 text-[#dc2626] border border-[#dc2626]/20',
+};
+
+const ISSUE_LABELS: Record<string, string> = {
+  missed_attendance: 'Missed Attendance',
+  wrong_volume: 'Wrong Volume',
+  missing_bonus: 'Missing Bonus',
+  wrong_module: 'Wrong Module',
+  other: 'Other',
+};
+
+type TabKey = 'profile' | 'attendance' | 'performance' | 'payments' | 'disputes';
 
 const TABS: { key: TabKey; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { key: 'profile', label: 'Profile', icon: User },
   { key: 'attendance', label: 'Attendance', icon: Calendar },
   { key: 'performance', label: 'Performance', icon: BarChart3 },
   { key: 'payments', label: 'Payments', icon: Wallet },
+  { key: 'disputes', label: 'Disputes', icon: Flag },
 ];
 
 interface Props {
@@ -90,6 +135,9 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
   const [performance, setPerformance] = useState<PerformanceData | null>(null);
   const [attendance, setAttendance] = useState<AttendanceData | null>(null);
   const [payments, setPayments] = useState<PaymentsData | null>(null);
+  const [disputes, setDisputes] = useState<Dispute[]>([]);
+  const [disputesLoading, setDisputesLoading] = useState(false);
+  const [resolving, setResolving] = useState<{ id: number; action: 'resolved' | 'rejected'; note: string } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -145,6 +193,19 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, userId]);
 
+  useEffect(() => {
+    if (activeTab !== 'disputes') return;
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    setDisputesLoading(true);
+    fetch(`/api/disputes?youth_id=${userId}`, { headers: { Authorization: `Bearer ${token}` } })
+      .then((r) => r.json())
+      .then((data) => { if (data.success) setDisputes(data.data); })
+      .catch(() => undefined)
+      .finally(() => setDisputesLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab, userId]);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-24">
@@ -196,7 +257,7 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
       )}
 
       {/* Tab bar */}
-      <div className="grid grid-cols-4 mb-6 bg-[#1F2121] border border-[#262626] rounded-2xl overflow-hidden">
+      <div className="grid grid-cols-5 mb-6 bg-[#1F2121] border border-[#262626] rounded-2xl overflow-hidden">
         {TABS.map(({ key, label, icon: Icon }) => (
           <button
             key={key}
@@ -417,45 +478,191 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
 
       {/* Payments tab */}
       {activeTab === 'payments' && payments && (
-        <div className="grid gap-6 md:grid-cols-2">
-          <div className="bg-[#1F2121] border border-[#262626] rounded-2xl p-6">
-            <h2 className="text-lg font-bold text-white mb-4">Payment Summary</h2>
-            <div className="space-y-3">
-              <div className="flex justify-between text-sm">
-                <span className="text-[#a3a3a3]">Total Earnings</span>
-                <span className="text-white font-medium">KES {payments.total_earnings.toLocaleString()}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-[#a3a3a3]">Total Paid</span>
-                <span className="text-green-400 font-medium">KES {payments.total_paid.toLocaleString()}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-[#a3a3a3]">Pending</span>
-                <span className="text-yellow-400 font-medium">KES {payments.total_pending.toLocaleString()}</span>
-              </div>
+        <div className="space-y-6">
+          {payments.sync_info?.data_note && (
+            <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4 flex items-start gap-3">
+              <AlertCircle className="w-4 h-4 text-yellow-400 mt-0.5 flex-shrink-0" />
+              <p className="text-sm text-yellow-400">{payments.sync_info.data_note}</p>
+            </div>
+          )}
+          {/* Summary cards */}
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div className="bg-[#1F2121] border border-[#262626] rounded-2xl p-4">
+              <p className="text-xs text-[#737373] uppercase mb-1">Total Earned</p>
+              <p className="text-xl font-bold text-white">KES {payments.summary.total_earnings_kes.toLocaleString()}</p>
+            </div>
+            <div className="bg-[#1F2121] border border-[#262626] rounded-2xl p-4">
+              <p className="text-xs text-[#737373] uppercase mb-1">Base Pay</p>
+              <p className="text-xl font-bold text-white">KES {payments.summary.total_base_pay_kes.toLocaleString()}</p>
+            </div>
+            <div className="bg-[#1F2121] border border-[#262626] rounded-2xl p-4">
+              <p className="text-xs text-[#737373] uppercase mb-1">Bonus Pay</p>
+              <p className="text-xl font-bold text-green-400">KES {payments.summary.total_bonus_pay_kes.toLocaleString()}</p>
             </div>
           </div>
 
-          {payments.cycles.length > 0 && (
-            <div className="bg-[#1F2121] border border-[#262626] rounded-2xl p-6">
-              <h2 className="text-lg font-bold text-white mb-4">Payment Cycles</h2>
-              <div className="space-y-4">
-                {payments.cycles.map((cycle, i) => (
-                  <div key={i} className="flex justify-between items-center text-sm">
-                    <div>
-                      <p className="text-white font-medium">{cycle.cycle_name}</p>
-                      <p className="text-[#737373] text-xs">{cycle.days_worked} days</p>
-                    </div>
-                    <div className="text-right">
-                      <p className={`font-medium ${cycle.status === 'paid' ? 'text-green-400' : 'text-yellow-400'}`}>
-                        KES {cycle.earnings.toLocaleString()}
-                      </p>
-                      <p className="text-xs text-[#737373]">{cycle.status}</p>
-                    </div>
-                  </div>
-                ))}
+          {/* Daily records table */}
+          {payments.daily_records.length > 0 ? (
+            <div className="bg-[#1F2121] border border-[#262626] rounded-2xl overflow-hidden">
+              <div className="p-4 border-b border-[#262626]">
+                <h3 className="font-semibold text-white">Daily Earnings ({payments.daily_records.length} records)</h3>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-[#262626]">
+                      {['Date', 'Module', 'Output', 'Quality', 'Base', 'Bonus', 'Total', 'Note'].map((h) => (
+                        <th key={h} className="px-4 py-2.5 text-left text-xs text-[#737373] uppercase font-medium whitespace-nowrap">{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {payments.daily_records.map((r, i) => (
+                      <tr key={i} className="border-b border-[#262626]/50 last:border-0 hover:bg-white/[0.02]">
+                        <td className="px-4 py-2.5 text-[#a3a3a3] whitespace-nowrap">{new Date(r.date).toLocaleDateString()}</td>
+                        <td className="px-4 py-2.5 text-white capitalize whitespace-nowrap">{r.module.replace(/_/g, ' ')}</td>
+                        <td className="px-4 py-2.5 text-[#a3a3a3] whitespace-nowrap">{r.volume} {r.volume_unit}</td>
+                        <td className="px-4 py-2.5 text-[#a3a3a3] whitespace-nowrap">
+                          {r.quality_percentage != null ? `${r.quality_percentage.toFixed(1)}%` : '—'}
+                        </td>
+                        <td className="px-4 py-2.5 text-[#a3a3a3] whitespace-nowrap">KES {r.base_pay_kes.toLocaleString()}</td>
+                        <td className="px-4 py-2.5 text-[#a3a3a3] whitespace-nowrap">KES {r.bonus_pay_kes.toLocaleString()}</td>
+                        <td className="px-4 py-2.5 font-medium whitespace-nowrap">
+                          <span className={r.earning_status === 'earned' ? 'text-green-400' : 'text-[#737373]'}>
+                            KES {r.total_pay_kes.toLocaleString()}
+                          </span>
+                        </td>
+                        <td className="px-4 py-2.5 text-[#737373] text-xs max-w-[180px] truncate">
+                          {r.pay_note || '—'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
+          ) : (
+            <p className="text-center text-[#737373] py-8">No payment records in the selected period</p>
+          )}
+        </div>
+      )}
+
+      {/* Disputes tab */}
+      {activeTab === 'disputes' && (
+        <div className="bg-[#1F2121] border border-[#262626] rounded-2xl overflow-hidden">
+          <div className="p-4 border-b border-[#262626]">
+            <h3 className="font-semibold text-white">Payment Disputes</h3>
+          </div>
+          {disputesLoading ? (
+            <div className="flex justify-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#dc2626]" />
+            </div>
+          ) : disputes.length > 0 ? (
+            <div className="divide-y divide-[#262626]">
+              {disputes.map((d) => (
+                <div key={d.id} className="p-4 space-y-3">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-white text-sm font-medium">
+                          {new Date(d.dispute_date).toLocaleDateString()}
+                        </span>
+                        {d.module && (
+                          <span className="text-xs text-[#737373] capitalize">{d.module.replace(/_/g, ' ')}</span>
+                        )}
+                      </div>
+                      <p className="text-xs text-[#a3a3a3]">{ISSUE_LABELS[d.issue_type] ?? d.issue_type}</p>
+                      {d.description && (
+                        <p className="text-xs text-[#737373] mt-1">{d.description}</p>
+                      )}
+                      {d.expected_amount_kes != null && (
+                        <p className="text-xs text-[#737373] mt-1">
+                          Expected: KES {d.expected_amount_kes.toLocaleString()}
+                          {d.reported_amount_kes != null && ` · Recorded: KES ${d.reported_amount_kes.toLocaleString()}`}
+                        </p>
+                      )}
+                      {d.resolution_note && (
+                        <p className="text-xs text-[#a3a3a3] mt-1 italic">{d.resolution_note}</p>
+                      )}
+                    </div>
+                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap ${DISPUTE_STATUS_STYLES[d.status] ?? ''}`}>
+                      {d.status}
+                    </span>
+                  </div>
+
+                  {/* Resolution actions for open disputes */}
+                  {d.status === 'open' && (
+                    <div className="pl-0">
+                      {resolving?.id === d.id ? (
+                        <div className="space-y-2">
+                          <p className="text-xs text-[#737373]">
+                            {resolving.action === 'resolved' ? 'Resolution note (optional):' : 'Rejection reason (optional):'}
+                          </p>
+                          <textarea
+                            value={resolving.note}
+                            onChange={e => setResolving(r => r ? { ...r, note: e.target.value } : null)}
+                            placeholder="Add a note…"
+                            rows={2}
+                            className="w-full bg-[#171717] border border-[#333] rounded-lg px-3 py-2 text-xs text-white placeholder-[#525252] focus:outline-none focus:border-[#dc2626] resize-none"
+                          />
+                          <div className="flex gap-2">
+                            <button
+                              onClick={async () => {
+                                const token = localStorage.getItem('token');
+                                const res = await fetch(`/api/disputes/${resolving.id}`, {
+                                  method: 'PATCH',
+                                  headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+                                  body: JSON.stringify({ status: resolving.action, resolution_note: resolving.note }),
+                                });
+                                const json = await res.json();
+                                if (json.success) {
+                                  setDisputes(prev => prev.map(x =>
+                                    x.id === resolving.id
+                                      ? { ...x, status: resolving.action as Dispute['status'], resolution_note: resolving.note || null }
+                                      : x
+                                  ));
+                                  setResolving(null);
+                                }
+                              }}
+                              className={`px-3 py-1 rounded-lg text-xs font-medium text-white transition-colors ${
+                                resolving.action === 'resolved'
+                                  ? 'bg-green-700 hover:bg-green-600'
+                                  : 'bg-[#dc2626] hover:bg-[#b91c1c]'
+                              }`}
+                            >
+                              Confirm {resolving.action === 'resolved' ? 'Resolve' : 'Reject'}
+                            </button>
+                            <button
+                              onClick={() => setResolving(null)}
+                              className="px-3 py-1 rounded-lg text-xs text-[#737373] hover:text-white border border-[#333] transition-colors"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => setResolving({ id: d.id, action: 'resolved', note: '' })}
+                            className="flex items-center gap-1.5 px-3 py-1 bg-green-900/30 hover:bg-green-900/50 text-green-400 border border-green-800/40 rounded-lg text-xs font-medium transition-colors"
+                          >
+                            <CheckCircle className="w-3.5 h-3.5" /> Resolve
+                          </button>
+                          <button
+                            onClick={() => setResolving({ id: d.id, action: 'rejected', note: '' })}
+                            className="flex items-center gap-1.5 px-3 py-1 bg-red-900/20 hover:bg-red-900/40 text-[#dc2626] border border-red-800/30 rounded-lg text-xs font-medium transition-colors"
+                          >
+                            <XCircle className="w-3.5 h-3.5" /> Reject
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-[#737373] py-8 text-sm">No disputes filed by this participant.</p>
           )}
         </div>
       )}

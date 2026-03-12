@@ -5,7 +5,7 @@ import type {
   UserListResponse,
   AttendanceResponse,
   PerformanceResponse,
-  PaymentsResponse,
+  PaymentsResponseV4,
   Settlement,
   Module,
   Trainer,
@@ -140,9 +140,16 @@ export async function getUserPerformance(userId: string): Promise<PerformanceRes
 
 // === Payments ===
 
-export async function getUserPayments(userId: string): Promise<PaymentsResponse> {
-  return dpwFetch<PaymentsResponse>(
-    `/api/learn/users/${encodeURIComponent(userId)}/payments`
+export async function getUserPayments(
+  userId: string,
+  opts?: { from?: string; to?: string }
+): Promise<PaymentsResponseV4> {
+  const params = new URLSearchParams();
+  if (opts?.from) params.set('from', opts.from);
+  if (opts?.to) params.set('to', opts.to);
+  const qs = params.toString();
+  return dpwFetch<PaymentsResponseV4>(
+    `/api/learn/users/${encodeURIComponent(userId)}/payments${qs ? `?${qs}` : ''}`
   );
 }
 

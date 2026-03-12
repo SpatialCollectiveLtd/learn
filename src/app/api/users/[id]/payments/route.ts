@@ -19,7 +19,10 @@ export async function GET(
   }
 
   try {
-    const data = await getUserPayments(id);
+    const { searchParams } = request.nextUrl;
+    const from = searchParams.get('from') ?? undefined;
+    const to = searchParams.get('to') ?? undefined;
+    const data = await getUserPayments(id, { from, to });
     return NextResponse.json({ success: true, data });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Failed to fetch payments';

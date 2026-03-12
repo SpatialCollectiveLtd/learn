@@ -113,28 +113,56 @@ export interface PerformanceResponse {
   work_history: WorkHistoryEntry[];
 }
 
-// === Payments (from DPW) ===
+// === Payments (from DPW v4) ===
 
-export interface PaymentCycle {
-  cycle_id: string;
-  cycle_name: string;
-  period: { from: string; to: string };
-  days_worked: number;
-  earnings: number;
-  quality_score: number | null;
-  status: 'paid' | 'pending' | 'processing';
-  paid_at: string | null;
-}
-
-export interface PaymentsResponse {
-  user_id: string;
+export interface DailyPaymentRecord {
+  date: string;
   module: string;
-  payment_rate_kes: number;
-  total_earnings: number;
-  total_paid: number;
-  total_pending: number;
-  cycles: PaymentCycle[];
+  volume: number;
+  volume_unit: string;
+  quality_score: number | null;
+  quality_percentage: number | null;
+  base_pay_kes: number;
+  bonus_pay_kes: number;
+  total_pay_kes: number;
+  attended: boolean;
+  day_type: string;
+  earning_status: 'earned' | 'not_earned';
+  pay_note: string | null;
+  finalized: boolean;
 }
+
+export interface PaymentSummaryByModule {
+  days_recorded: number;
+  days_with_earnings: number;
+  total_earnings_kes: number;
+  total_base_pay_kes: number;
+  total_bonus_pay_kes: number;
+  avg_quality_percentage: number | null;
+}
+
+export interface PaymentsResponseV4 {
+  user_id: string;
+  full_name: string;
+  module: string | null;
+  period: { from: string; to: string };
+  modules_active: string[];
+  summary: {
+    total_earnings_kes: number;
+    total_base_pay_kes: number;
+    total_bonus_pay_kes: number;
+    days_with_earnings: number;
+    by_module: Record<string, PaymentSummaryByModule>;
+  };
+  daily_records: DailyPaymentRecord[];
+  sync_info: {
+    microtasking_last_consensus: string | null;
+    data_note: string | null;
+  };
+}
+
+/** @deprecated Use PaymentsResponseV4 */
+export type PaymentsResponse = PaymentsResponseV4;
 
 // === Reference Data (from DPW) ===
 

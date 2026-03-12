@@ -33,15 +33,23 @@ interface PerformanceData {
 }
 
 interface PaymentsData {
-  total_earnings: number;
-  total_paid: number;
-  total_pending: number;
-  cycles: Array<{
-    cycle_name: string;
-    days_worked: number;
-    earnings: number;
-    status: string;
+  summary: {
+    total_earnings_kes: number;
+    total_base_pay_kes: number;
+    total_bonus_pay_kes: number;
+    days_with_earnings: number;
+  };
+  modules_active: string[];
+  daily_records: Array<{
+    date: string;
+    module: string;
+    total_pay_kes: number;
+    earning_status: string;
+    pay_note: string | null;
   }>;
+  sync_info: {
+    data_note: string | null;
+  } | null;
 }
 
 export default function YouthProfilePage() {
@@ -180,32 +188,44 @@ export default function YouthProfilePage() {
           {/* Payments */}
           {payments && (
             <div className="bg-[#1F2121] border border-[#262626] rounded-2xl p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <Wallet className="w-5 h-5 text-[#dc2626]" />
-                <h2 className="text-lg font-bold text-white">Payments</h2>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Wallet className="w-5 h-5 text-[#dc2626]" />
+                  <h2 className="text-lg font-bold text-white">Payments</h2>
+                </div>
+                <a href="/dashboard/payments" className="text-xs text-[#dc2626] hover:text-[#ef4444] transition-colors">
+                  Full breakdown →
+                </a>
               </div>
+              {payments.sync_info?.data_note && (
+                <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3 mb-4">
+                  <p className="text-xs text-yellow-400">{payments.sync_info.data_note}</p>
+                </div>
+              )}
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#a3a3a3]">Total Earnings</span>
-                  <span className="text-white font-medium">KES {payments.total_earnings.toLocaleString()}</span>
+                  <span className="text-[#a3a3a3]">Total Earned</span>
+                  <span className="text-white font-medium">KES {payments.summary.total_earnings_kes.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-[#a3a3a3]">Total Paid</span>
-                  <span className="text-green-400 font-medium">KES {payments.total_paid.toLocaleString()}</span>
+                  <span className="text-[#a3a3a3]">Days With Earnings</span>
+                  <span className="text-white font-medium">{payments.summary.days_with_earnings}</span>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-[#a3a3a3]">Pending</span>
-                  <span className="text-yellow-400 font-medium">KES {payments.total_pending.toLocaleString()}</span>
-                </div>
-                {payments.cycles.length > 0 && (
+                {payments.modules_active.length > 0 && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-[#a3a3a3]">Modules</span>
+                    <span className="text-white font-medium">{payments.modules_active.join(', ')}</span>
+                  </div>
+                )}
+                {payments.daily_records.length > 0 && (
                   <>
                     <div className="border-t border-[#2a2a2a] my-2" />
-                    <p className="text-xs text-[#737373] font-medium uppercase">Recent Cycles</p>
-                    {payments.cycles.slice(0, 3).map((cycle, i) => (
+                    <p className="text-xs text-[#737373] font-medium uppercase">Recent Days</p>
+                    {payments.daily_records.slice(0, 3).map((record, i) => (
                       <div key={i} className="flex justify-between text-sm">
-                        <span className="text-[#a3a3a3]">{cycle.cycle_name}</span>
-                        <span className={`font-medium ${cycle.status === 'paid' ? 'text-green-400' : 'text-yellow-400'}`}>
-                          KES {cycle.earnings.toLocaleString()}
+                        <span className="text-[#a3a3a3]">{new Date(record.date).toLocaleDateString()}</span>
+                        <span className={`font-medium ${record.earning_status === 'earned' ? 'text-green-400' : 'text-[#737373]'}`}>
+                          KES {record.total_pay_kes.toLocaleString()}
                         </span>
                       </div>
                     ))}

@@ -53,6 +53,18 @@ export function hasRole(token: LearnTokenPayload, ...roles: string[]): boolean {
   return roles.includes(token.role);
 }
 
+/**
+ * Normalise a raw DPW role string to the Learn role union.
+ * Handles PascalCase, lowercase, and legacy DB values.
+ * Admin / superadmin / Manager → 'admin'
+ * Trainer / Validator / anything else → 'trainer'
+ */
+export function normalizeRole(raw: string): 'admin' | 'trainer' {
+  const r = raw.toLowerCase();
+  if (['admin', 'superadmin', 'manager'].includes(r)) return 'admin';
+  return 'trainer';
+}
+
 // Legacy aliases — these will be removed once all routes are migrated
 export function verifyYouthToken(token: string): LearnTokenPayload {
   const decoded = verifyToken(token);
