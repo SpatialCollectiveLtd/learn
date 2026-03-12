@@ -15,18 +15,27 @@ Next.js 16 App Router application managing youth training programs (digitization
 ### API Architecture
 - **Internal APIs**: UI → Next.js route handlers in [src/app/api](src/app/api) → Database
   - Youth: auth, profile, training progress
-  - Staff/Trainer: management, attendance submission
+  - Staff/Trainer: management, attendance submission, email/password login
   - Work: OSM building counts, work days
   - Contracts: digital signatures
+  - Disputes: payment dispute filing and resolution (`/api/disputes`, `/api/disputes/[id]`)
+  - Admin: trainer management, password management (`/api/admin/trainers`, `/api/admin/trainers/[id]/password`)
 - **External API**: Public GET endpoint [src/app/api/external/dpw-sync](src/app/api/external/dpw-sync) syncs data to `app.spatialcollective.com`
   - Auth: Requires `X-API-Key` header matching `DPW_MANAGER_API_KEY` env var
   - Query params: `?youth_id=KAY123` or `?module=mobile_mapping`
+- **Payments v4**: `GET /api/users/[id]/payments?from=YYYY-MM-DD&to=YYYY-MM-DD` returns `DailyPaymentRecord[]` keyed by date; types in [src/app/api/_lib/types.ts](src/app/api/_lib/types.ts); DPW client in [src/lib/dpw-client.ts](src/lib/dpw-client.ts)
 
 ### Authentication & Authorization
 - JWT-based auth using `learn_STACK_SECRET_SERVER_KEY` or `JWT_SECRET` env var
 - Helpers in [src/app/api/_lib/auth.ts](src/app/api/_lib/auth.ts)
-- Youth login: youth_id (e.g., `KAY123`), Trainers: email/password
+  - `verifyAuthHeader()` — validate Bearer token from Authorization header
+  - `hasRole(token, ...roles)` — check role membership
+  - `normalizeRole()` — maps DPW role variants (`Admin/superadmin/Manager → 'admin'`, `Trainer/Validator → 'trainer'`) for consistent routing
+- Youth login: youth_id (e.g., `KAY123`) via [src/app/api/auth/youth/route.ts](src/app/api/auth/youth/route.ts)
+- Staff/Trainer login: email + password (bcrypt) via [src/app/api/auth/staff/route.ts](src/app/api/auth/staff/route.ts) → `/auth/staff`
+- DPW launch SSO: token from `app.spatialcollective.com` via [src/app/api/auth/launch/route.ts](src/app/api/auth/launch/route.ts)
 - Roles: Youth, Trainer, Staff, Admin, Superadmin
+- Password hashes stored in `staff_members.password_hash` (bcrypt, cost 12); column added via [scripts/add-staff-password-column.js](scripts/add-staff-password-column.js)
 
 ### External Service Integrations
 - **OSM building counts**: `getTodayBuildingCount()` in [src/lib/osm-service.ts](src/lib/osm-service.ts)
@@ -98,6 +107,15 @@ node scripts/register-mobile-mappers.js
 # Add trainer accounts
 node scripts/add-trainers.js
 
+# Set a trainer's Learn platform password
+node scripts/set-trainer-password.js
+
+# Add staff_members.password_hash column (one-time migration)
+node scripts/add-staff-password-column.js
+
+# Create payment_disputes table (one-time migration)
+node scripts/create-disputes-table.js
+
 # Attendance reports
 node scripts/check-attendance-dates.js
 
@@ -165,7 +183,16 @@ node scripts/export-odk-config.js
 - **staff_members**: Trainers, admins, superadmins
   - `staff_id` (PK): `STEA####SA`, `SFEA####T` format
   - `role`: `trainer`, `admin`, `superadmin`
+  - `password_hash VARCHAR(255)`: bcrypt hash for Learn email login (nullable — not all staff have it)
   - Approves work days, manages youth
+
+- **payment_disputes**: Youth-filed payment disputes
+  - `id SERIAL PK`, `youth_id`, `dispute_date`, `module`, `issue_type`
+  - `issue_type`: `missed_attendance`, `wrong_volume`, `missing_bonus`, `wrong_module`, `other`
+  - `description`, `expected_amount_kes`, `reported_amount_kes`
+  - `status DEFAULT 'open'` CHECK IN (`open`, `resolved`, `rejected`)
+  - `resolver_staff_id`, `resolution_note`, `resolved_at` — populated when resolved/rejected
+  - Created via `scripts/create-disputes-table.js`
 
 ### Data Relationships
 ```
@@ -173,7 +200,40 @@ youth_participants (1) ← (many) youth_training_progress
 youth_participants (1) ← (many) youth_work_days → (1) staff_members [approved_by]
 youth_participants (1) ← (many) youth_osm_stats
 youth_participants (1) ← (many) signed_contracts → (1) contract_templates
+youth_participants (1) ← (many) payment_disputes → (1) staff_members [resolver_staff_id]
 settlement_work_config: defines work periods per settlement+program
 ```
 
 Full schema in [docs/PLATFORM_DOCUMENTATION.md](docs/PLATFORM_DOCUMENTATION.md#41-core-tables)
+
+## Admin Dashboard
+
+### Pages
+- `/admin` — Overview with stats from DPW Manager
+- `/admin/youth` — Youth list and individual detail (`/admin/youth/[id]`)
+- `/admin/trainers` — Staff & trainers management: view all trainer/admin accounts, set/reset/revoke Learn login passwords
+
+### Admin Nav
+Defined in [src/app/admin/layout.tsx](src/app/admin/layout.tsx) `navLinks` array: Overview, Youth, Trainers. Guard: `parsed.role !== 'admin'` redirects to trainer or root.
+
+### YouthDetailTabs Component
+[src/components/admin/YouthDetailTabs.tsx](src/components/admin/YouthDetailTabs.tsx) — 5 tabs: Profile, Attendance, Performance, Payments (v4 daily records), **Disputes** (with inline Resolve/Reject actions for open disputes).
+
+## Disputes Feature
+
+- Youth file disputes via `/dashboard/payments` page (modal form)
+- Admins/trainers resolve or reject via the Disputes tab in YouthDetailTabs
+- **API**:
+  - `GET /api/disputes?youth_id=KAY123` — list disputes (youth sees own; trainer/admin sees all or filtered)
+  - `POST /api/disputes` — youth files a new dispute (409 if duplicate open dispute for same date)
+  - `PATCH /api/disputes/[id]` — trainer/admin resolves or rejects (`{ status, resolution_note }`)
+
+## Trainer Login Feature
+
+- Staff with `password_hash` set can log in at `/auth/staff` with email + password
+- Admins manage passwords at `/admin/trainers` (set, reset, revoke)
+- **API**:
+  - `POST /api/auth/staff` — bcrypt verify, issues JWT with trainer or admin role
+  - `PATCH /api/admin/trainers/[id]/password` — admin sets trainer's password (bcrypt cost 12)
+  - `DELETE /api/admin/trainers/[id]/password` — admin revokes trainer's login access
+- `normalizeRole()` in [src/app/api/_lib/auth.ts](src/app/api/_lib/auth.ts) maps DPW role variants to canonical `'admin'` / `'trainer'` for consistent post-login routing
