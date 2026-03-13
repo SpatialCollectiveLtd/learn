@@ -9,9 +9,10 @@ interface Trainer {
   email: string;
   role: string;
   settlement: string | null;
+  module: string | null;
+  youth_count: number;
   is_active: boolean;
   has_password: boolean;
-  created_at: string | null;
 }
 
 interface PasswordModal {
@@ -190,7 +191,8 @@ export default function AdminTrainersPage() {
                   <th className="text-left px-5 py-3 font-medium">Name</th>
                   <th className="text-left px-5 py-3 font-medium">Email</th>
                   <th className="text-left px-4 py-3 font-medium">Role</th>
-                  <th className="text-left px-4 py-3 font-medium">Settlement</th>
+                  <th className="text-left px-4 py-3 font-medium">Settlement / Module</th>
+                  <th className="text-left px-4 py-3 font-medium">Youth</th>
                   <th className="text-left px-4 py-3 font-medium">Status</th>
                   <th className="text-left px-4 py-3 font-medium">Learn Login</th>
                   <th className="text-right px-5 py-3 font-medium">Actions</th>
@@ -211,7 +213,13 @@ export default function AdminTrainersPage() {
                         {trainer.role}
                       </span>
                     </td>
-                    <td className="px-4 py-3.5 text-[#a3a3a3] text-sm">{trainer.settlement || '—'}</td>
+                    <td className="px-4 py-3.5 text-[#a3a3a3] text-sm">
+                      <span>{trainer.settlement || '—'}</span>
+                      {trainer.module && (
+                        <p className="text-xs text-[#525252] capitalize mt-0.5">{trainer.module.replace(/_/g, ' ')}</p>
+                      )}
+                    </td>
+                    <td className="px-4 py-3.5 text-[#a3a3a3] text-sm">{trainer.youth_count ?? '—'}</td>
                     <td className="px-4 py-3.5">
                       <span className={`text-xs px-2 py-0.5 rounded-full ${trainer.is_active ? 'bg-green-900/30 text-green-400' : 'bg-[#262626] text-[#525252]'}`}>
                         {trainer.is_active ? 'Active' : 'Inactive'}

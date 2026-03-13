@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, User, Calendar, BarChart3, Wallet, AlertCircle, Flag, CheckCircle, XCircle } from 'lucide-react';
+import { ArrowLeft, User, Calendar, BarChart3, Wallet, AlertCircle, Flag, CheckCircle, XCircle, ChevronRight, X } from 'lucide-react';
 import { getStaffSession } from '@/lib/staff-session';
 
 interface UserProfile {
@@ -113,6 +113,10 @@ const ISSUE_LABELS: Record<string, string> = {
   other: 'Other',
 };
 
+function formatDisplayDate(value: string) {
+  return new Date(value).toLocaleDateString();
+}
+
 type TabKey = 'profile' | 'attendance' | 'performance' | 'payments' | 'disputes';
 
 const TABS: { key: TabKey; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
@@ -139,6 +143,9 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
   const [disputes, setDisputes] = useState<Dispute[]>([]);
   const [disputesLoading, setDisputesLoading] = useState(false);
   const [resolving, setResolving] = useState<{ id: number; action: 'resolved' | 'rejected'; note: string } | null>(null);
+  const [resolveError, setResolveError] = useState<string | null>(null);
+  const [resolveSubmitting, setResolveSubmitting] = useState(false);
+  const [expandedPaymentRecord, setExpandedPaymentRecord] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -207,10 +214,48 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, userId]);
 
+  const submitResolution = async () => {
+    if (!resolving) return;
+
+    const session = getStaffSession();
+    if (!session) return;
+
+    setResolveSubmitting(true);
+    setResolveError(null);
+
+    try {
+      const res = await fetch(`/api/disputes/${resolving.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` },
+        body: JSON.stringify({ status: resolving.action, resolution_note: resolving.note }),
+      });
+      const json = await res.json();
+
+      if (!json.success) {
+        setResolveError(json.error?.message || 'Failed to update dispute');
+        return;
+      }
+
+      setDisputes((prev) => prev.map((dispute) => (
+        dispute.id === resolving.id
+          ? { ...dispute, status: resolving.action as Dispute['status'], resolution_note: resolving.note || null }
+          : dispute
+      )));
+      setResolving(null);
+    } catch {
+      setResolveError('Failed to update dispute');
+    } finally {
+      setResolveSubmitting(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-24">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#dc2626]" />
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#dc2626] mx-auto mb-4" />
+          <p className="text-sm text-[#a3a3a3]">Loading participant record…</p>
+        </div>
       </div>
     );
   }
@@ -351,8 +396,8 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
       {/* Attendance tab */}
       {activeTab === 'attendance' && (
         <div className="bg-[#1F2121] border border-[#262626] rounded-2xl p-6">
-          <div className="flex flex-wrap items-end gap-3 mb-6">
-            <div>
+          <div className="grid gap-3 mb-6 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] sm:items-end">
+            <div className="min-w-0">
               <label className="block text-xs text-[#737373] uppercase font-medium mb-1">From</label>
               <input
                 type="date"
@@ -361,7 +406,7 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
                 className="px-3 py-2 bg-black border border-[#2a2a2a] rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#dc2626]"
               />
             </div>
-            <div>
+            <div className="min-w-0">
               <label className="block text-xs text-[#737373] uppercase font-medium mb-1">To</label>
               <input
                 type="date"
@@ -372,7 +417,7 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
             </div>
             <button
               onClick={fetchAttendance}
-              className="px-4 py-2 bg-[#dc2626] hover:bg-[#b91c1c] text-white text-sm font-medium rounded-lg transition-colors"
+              className="px-4 py-2.5 bg-[#dc2626] hover:bg-[#b91c1c] text-white text-sm font-medium rounded-lg transition-colors"
             >
               Load
             </button>
@@ -429,7 +474,22 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
 
       {/* Performance tab */}
       {activeTab === 'performance' && performance && (
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="space-y-6">
+          <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
+            {[
+              { label: 'Days Worked', value: performance.summary.total_days_worked },
+              { label: 'Total Output', value: `${performance.summary.total_output}` },
+              { label: 'Daily Average', value: performance.summary.average_daily_output },
+              { label: 'Target Met', value: performance.summary.target_met_days },
+            ].map(({ label, value }) => (
+              <div key={label} className="bg-[#1F2121] border border-[#262626] rounded-2xl p-4">
+                <p className="text-[11px] text-[#737373] uppercase tracking-wide mb-1">{label}</p>
+                <p className="text-xl font-heading font-bold text-white">{value}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2">
           <div className="bg-[#1F2121] border border-[#262626] rounded-2xl p-6">
             <h2 className="text-lg font-bold text-white mb-4">Work Summary</h2>
             <div className="space-y-3">
@@ -439,6 +499,7 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
                 { label: 'Daily Average', value: performance.summary.average_daily_output },
                 { label: 'Target Met Days', value: performance.summary.target_met_days },
                 { label: 'Attendance Rate', value: `${Math.round(performance.summary.attendance_rate * 100)}%` },
+                { label: 'Daily Target', value: performance.summary.daily_target },
               ].map(({ label, value }) => (
                 <div key={label} className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between text-sm">
                   <span className="text-[#a3a3a3]">{label}</span>
@@ -476,6 +537,7 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
               </div>
             </div>
           )}
+          </div>
         </div>
       )}
 
@@ -511,38 +573,64 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
                 <h3 className="font-semibold text-white">Daily Earnings ({payments.daily_records.length} records)</h3>
               </div>
               <div className="divide-y divide-[#262626] md:hidden">
-                {payments.daily_records.map((r, i) => (
-                  <div key={i} className="p-4 space-y-3">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <p className="text-white text-sm font-medium">{new Date(r.date).toLocaleDateString()}</p>
-                        <p className="text-xs text-[#737373] capitalize">{r.module.replace(/_/g, ' ')}</p>
-                      </div>
-                      <span className={r.earning_status === 'earned' ? 'text-green-400 font-medium' : 'text-[#737373] font-medium'}>
-                        KES {r.total_pay_kes.toLocaleString()}
-                      </span>
+                {payments.daily_records.map((r, i) => {
+                  const recordKey = `${r.date}-${r.module}-${i}`;
+                  const expanded = expandedPaymentRecord === recordKey;
+
+                  return (
+                    <div key={recordKey}>
+                      <button
+                        onClick={() => setExpandedPaymentRecord(expanded ? null : recordKey)}
+                        className="w-full p-4 text-left active:bg-white/5 transition-colors"
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="min-w-0">
+                            <p className="text-white text-sm font-medium">{formatDisplayDate(r.date)}</p>
+                            <p className="text-xs text-[#737373] capitalize">{r.module.replace(/_/g, ' ')}</p>
+                          </div>
+                          <div className="flex items-center gap-3 flex-shrink-0">
+                            <span className={r.earning_status === 'earned' ? 'text-green-400 font-medium' : 'text-[#737373] font-medium'}>
+                              KES {r.total_pay_kes.toLocaleString()}
+                            </span>
+                            <ChevronRight className={`w-4 h-4 text-[#737373] transition-transform ${expanded ? 'rotate-90' : ''}`} />
+                          </div>
+                        </div>
+                      </button>
+
+                      {expanded && (
+                        <div className="px-4 pb-4 space-y-3">
+                          <div className="grid grid-cols-2 gap-3 text-sm">
+                            <div>
+                              <p className="text-[#737373] text-xs uppercase mb-1">Output</p>
+                              <p className="text-white">{r.volume} {r.volume_unit}</p>
+                            </div>
+                            <div>
+                              <p className="text-[#737373] text-xs uppercase mb-1">Quality</p>
+                              <p className="text-white">{r.quality_percentage != null ? `${r.quality_percentage.toFixed(1)}%` : '—'}</p>
+                            </div>
+                            <div>
+                              <p className="text-[#737373] text-xs uppercase mb-1">Base</p>
+                              <p className="text-white">KES {r.base_pay_kes.toLocaleString()}</p>
+                            </div>
+                            <div>
+                              <p className="text-[#737373] text-xs uppercase mb-1">Bonus</p>
+                              <p className="text-white">KES {r.bonus_pay_kes.toLocaleString()}</p>
+                            </div>
+                            <div>
+                              <p className="text-[#737373] text-xs uppercase mb-1">Day Type</p>
+                              <p className="text-white capitalize">{r.day_type.replace(/_/g, ' ')}</p>
+                            </div>
+                            <div>
+                              <p className="text-[#737373] text-xs uppercase mb-1">Finalized</p>
+                              <p className="text-white">{r.finalized ? 'Yes' : 'Pending'}</p>
+                            </div>
+                          </div>
+                          {r.pay_note && <p className="text-xs text-[#737373]">{r.pay_note}</p>}
+                        </div>
+                      )}
                     </div>
-                    <div className="grid grid-cols-2 gap-3 text-sm">
-                      <div>
-                        <p className="text-[#737373] text-xs uppercase mb-1">Output</p>
-                        <p className="text-white">{r.volume} {r.volume_unit}</p>
-                      </div>
-                      <div>
-                        <p className="text-[#737373] text-xs uppercase mb-1">Quality</p>
-                        <p className="text-white">{r.quality_percentage != null ? `${r.quality_percentage.toFixed(1)}%` : '—'}</p>
-                      </div>
-                      <div>
-                        <p className="text-[#737373] text-xs uppercase mb-1">Base</p>
-                        <p className="text-white">KES {r.base_pay_kes.toLocaleString()}</p>
-                      </div>
-                      <div>
-                        <p className="text-[#737373] text-xs uppercase mb-1">Bonus</p>
-                        <p className="text-white">KES {r.bonus_pay_kes.toLocaleString()}</p>
-                      </div>
-                    </div>
-                    {r.pay_note && <p className="text-xs text-[#737373]">{r.pay_note}</p>}
-                  </div>
-                ))}
+                  );
+                })}
               </div>
               <div className="hidden md:block overflow-x-auto">
                 <table className="w-full text-sm">
@@ -600,9 +688,9 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
                 <div key={d.id} className="p-4 space-y-3">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
+                      <div className="flex items-center gap-2 mb-1 flex-wrap">
                         <span className="text-white text-sm font-medium">
-                          {new Date(d.dispute_date).toLocaleDateString()}
+                          {formatDisplayDate(d.dispute_date)}
                         </span>
                         {d.module && (
                           <span className="text-xs text-[#737373] capitalize">{d.module.replace(/_/g, ' ')}</span>
@@ -630,70 +718,26 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
                   {/* Resolution actions for open disputes */}
                   {d.status === 'open' && (
                     <div className="pl-0">
-                      {resolving?.id === d.id ? (
-                        <div className="space-y-2">
-                          <p className="text-xs text-[#737373]">
-                            {resolving.action === 'resolved' ? 'Resolution note (optional):' : 'Rejection reason (optional):'}
-                          </p>
-                          <textarea
-                            value={resolving.note}
-                            onChange={e => setResolving(r => r ? { ...r, note: e.target.value } : null)}
-                            placeholder="Add a note…"
-                            rows={2}
-                            className="w-full bg-[#171717] border border-[#333] rounded-lg px-3 py-2 text-xs text-white placeholder-[#525252] focus:outline-none focus:border-[#dc2626] resize-none"
-                          />
-                          <div className="flex gap-2">
-                            <button
-                              onClick={async () => {
-                                const session = getStaffSession();
-                                if (!session) return;
-                                const res = await fetch(`/api/disputes/${resolving.id}`, {
-                                  method: 'PATCH',
-                                  headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` },
-                                  body: JSON.stringify({ status: resolving.action, resolution_note: resolving.note }),
-                                });
-                                const json = await res.json();
-                                if (json.success) {
-                                  setDisputes(prev => prev.map(x =>
-                                    x.id === resolving.id
-                                      ? { ...x, status: resolving.action as Dispute['status'], resolution_note: resolving.note || null }
-                                      : x
-                                  ));
-                                  setResolving(null);
-                                }
-                              }}
-                              className={`px-3 py-1 rounded-lg text-xs font-medium text-white transition-colors ${
-                                resolving.action === 'resolved'
-                                  ? 'bg-green-700 hover:bg-green-600'
-                                  : 'bg-[#dc2626] hover:bg-[#b91c1c]'
-                              }`}
-                            >
-                              Confirm {resolving.action === 'resolved' ? 'Resolve' : 'Reject'}
-                            </button>
-                            <button
-                              onClick={() => setResolving(null)}
-                              className="px-3 py-1 rounded-lg text-xs text-[#737373] hover:text-white border border-[#333] transition-colors"
-                            >
-                              Cancel
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => setResolving({ id: d.id, action: 'resolved', note: '' })}
-                            className="flex items-center gap-1.5 px-3 py-1 bg-green-900/30 hover:bg-green-900/50 text-green-400 border border-green-800/40 rounded-lg text-xs font-medium transition-colors"
-                          >
-                            <CheckCircle className="w-3.5 h-3.5" /> Resolve
-                          </button>
-                          <button
-                            onClick={() => setResolving({ id: d.id, action: 'rejected', note: '' })}
-                            className="flex items-center gap-1.5 px-3 py-1 bg-red-900/20 hover:bg-red-900/40 text-[#dc2626] border border-red-800/30 rounded-lg text-xs font-medium transition-colors"
-                          >
-                            <XCircle className="w-3.5 h-3.5" /> Reject
-                          </button>
-                        </div>
-                      )}
+                      <div className="flex gap-2 flex-wrap">
+                        <button
+                          onClick={() => {
+                            setResolveError(null);
+                            setResolving({ id: d.id, action: 'resolved', note: '' });
+                          }}
+                          className="flex items-center gap-1.5 px-3 py-1 bg-green-900/30 hover:bg-green-900/50 text-green-400 border border-green-800/40 rounded-lg text-xs font-medium transition-colors"
+                        >
+                          <CheckCircle className="w-3.5 h-3.5" /> Resolve
+                        </button>
+                        <button
+                          onClick={() => {
+                            setResolveError(null);
+                            setResolving({ id: d.id, action: 'rejected', note: '' });
+                          }}
+                          className="flex items-center gap-1.5 px-3 py-1 bg-red-900/20 hover:bg-red-900/40 text-[#dc2626] border border-red-800/30 rounded-lg text-xs font-medium transition-colors"
+                        >
+                          <XCircle className="w-3.5 h-3.5" /> Reject
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -702,6 +746,62 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
           ) : (
             <p className="text-center text-[#737373] py-8 text-sm">No disputes filed by this participant.</p>
           )}
+        </div>
+      )}
+
+      {resolving && (
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70 px-0 sm:px-4">
+          <div className="bg-[#111111] border border-[#262626] rounded-t-3xl sm:rounded-2xl w-full sm:max-w-md shadow-2xl">
+            <div className="flex items-center justify-between p-5 border-b border-[#262626]">
+              <div>
+                <h3 className="font-bold text-white">{resolving.action === 'resolved' ? 'Resolve dispute' : 'Reject dispute'}</h3>
+                <p className="text-xs text-[#737373] mt-1">
+                  {resolving.action === 'resolved' ? 'Add an optional resolution note.' : 'Add an optional rejection reason.'}
+                </p>
+              </div>
+              <button onClick={() => setResolving(null)} className="text-[#737373] hover:text-white transition-colors p-1">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-5 space-y-4">
+              <textarea
+                value={resolving.note}
+                onChange={(e) => setResolving((current) => current ? { ...current, note: e.target.value } : null)}
+                placeholder="Add a note…"
+                rows={4}
+                className="w-full bg-black border border-[#2a2a2a] rounded-lg px-4 py-3 text-sm text-white placeholder-[#525252] focus:outline-none focus:ring-2 focus:ring-[#dc2626] resize-none"
+              />
+
+              {resolveError && (
+                <div className="p-3 bg-[#dc2626]/10 border border-[#dc2626]/20 rounded-lg">
+                  <p className="text-sm text-[#dc2626]">{resolveError}</p>
+                </div>
+              )}
+            </div>
+
+            <div className="flex gap-3 p-5 border-t border-[#262626]">
+              <button
+                onClick={() => setResolving(null)}
+                className="flex-1 px-4 py-3 border border-[#2a2a2a] text-[#a3a3a3] hover:text-white rounded-xl transition-colors text-sm"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={submitResolution}
+                disabled={resolveSubmitting}
+                className={`flex-1 px-4 py-3 text-white font-semibold rounded-xl transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed ${
+                  resolving.action === 'resolved' ? 'bg-green-700 hover:bg-green-600' : 'bg-[#dc2626] hover:bg-[#b91c1c]'
+                }`}
+              >
+                {resolveSubmitting
+                  ? 'Saving…'
+                  : resolving.action === 'resolved'
+                    ? 'Confirm Resolve'
+                    : 'Confirm Reject'}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

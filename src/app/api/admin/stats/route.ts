@@ -19,8 +19,21 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const data = await listUsers({ role: 'youth', per_page: '500' });
-    const users = data.users;
+    // DPW caps per_page — paginate to collect all youth across all pages
+    const firstPage = await listUsers({ role: 'youth', per_page: '200', page: '1' });
+    const { total_pages } = firstPage.pagination;
+
+    let users = firstPage.users;
+
+    if (total_pages > 1) {
+      const pageRequests = Array.from({ length: total_pages - 1 }, (_, i) =>
+        listUsers({ role: 'youth', per_page: '200', page: String(i + 2) })
+      );
+      const remainingPages = await Promise.all(pageRequests);
+      for (const page of remainingPages) {
+        users = users.concat(page.users);
+      }
+    }
 
     const total = users.length;
     const active = users.filter((u) => u.is_active).length;

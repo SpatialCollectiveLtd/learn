@@ -1,9 +1,10 @@
 import YouthDetailTabs from '@/components/admin/YouthDetailTabs';
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
-export default function AdminYouthDetailPage({ params }: Props) {
-  return <YouthDetailTabs userId={params.id} backHref="/admin/youth" backLabel="Back to Youth" />;
+export default async function AdminYouthDetailPage({ params }: Props) {
+  const { id } = await params;
+  return <YouthDetailTabs userId={id} backHref="/admin/youth" backLabel="Back to Youth" />;
 }
