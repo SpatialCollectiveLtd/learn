@@ -14,6 +14,10 @@ export async function GET(request: NextRequest) {
 
   const { searchParams } = request.nextUrl;
   const filterYouthId = searchParams.get('youth_id');
+  const filterStatus = searchParams.get('status'); // 'open' | 'resolved' | 'rejected'
+  const filterSettlement = searchParams.get('settlement');
+
+  const VALID_STATUSES = ['open', 'resolved', 'rejected'];
 
   try {
     let query: string;
@@ -31,28 +35,38 @@ export async function GET(request: NextRequest) {
       `;
       params = [token.userId];
     } else {
-      // Trainer / admin — optionally filter by youth_id
+      // Trainer / admin — build dynamic WHERE clause from optional filters
+      const conditions: string[] = [];
+      params = [];
+
       if (filterYouthId) {
-        query = `
-          SELECT id, youth_id, dispute_date, module, issue_type, description,
-                 expected_amount_kes, reported_amount_kes, status,
-                 resolver_staff_id, resolution_note, created_at, resolved_at
-          FROM payment_disputes
-          WHERE youth_id = $1
-          ORDER BY created_at DESC
-        `;
-        params = [filterYouthId];
-      } else {
-        query = `
-          SELECT id, youth_id, dispute_date, module, issue_type, description,
-                 expected_amount_kes, reported_amount_kes, status,
-                 resolver_staff_id, resolution_note, created_at, resolved_at
-          FROM payment_disputes
-          ORDER BY created_at DESC
-          LIMIT 200
-        `;
-        params = [];
+        params.push(filterYouthId);
+        conditions.push(`pd.youth_id = $${params.length}`);
       }
+
+      if (filterStatus && VALID_STATUSES.includes(filterStatus)) {
+        params.push(filterStatus);
+        conditions.push(`pd.status = $${params.length}`);
+      }
+
+      if (filterSettlement) {
+        params.push(filterSettlement);
+        conditions.push(`yp.settlement = $${params.length}`);
+      }
+
+      const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+
+      query = `
+        SELECT pd.id, pd.youth_id, yp.full_name AS youth_name, yp.settlement,
+               pd.dispute_date, pd.module, pd.issue_type, pd.description,
+               pd.expected_amount_kes, pd.reported_amount_kes, pd.status,
+               pd.resolver_staff_id, pd.resolution_note, pd.created_at, pd.resolved_at
+        FROM payment_disputes pd
+        JOIN youth_participants yp ON yp.youth_id = pd.youth_id
+        ${whereClause}
+        ORDER BY pd.created_at DESC
+        LIMIT 500
+      `;
     }
 
     const { rows } = await Database.query(query, params as unknown[]);

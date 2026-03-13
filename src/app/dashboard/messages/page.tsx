@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -115,7 +115,7 @@ export default function MessagesPage() {
   const [youthId, setYouthId] = useState<string>('');
 
   useEffect(() => {
-    const token = localStorage.getItem('youthToken');
+    const token = localStorage.getItem('token');
     const youthData = localStorage.getItem('youthData');
 
     if (!token || !youthData) {
@@ -133,7 +133,7 @@ export default function MessagesPage() {
 
   const fetchFolders = async () => {
     try {
-      const token = localStorage.getItem('youthToken');
+      const token = localStorage.getItem('token');
       const response = await fetch('/api/messages/folders', {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -148,7 +148,7 @@ export default function MessagesPage() {
 
   const fetchEmails = async () => {
     try {
-      const token = localStorage.getItem('youthToken');
+      const token = localStorage.getItem('token');
       const response = await fetch(
         `/api/messages/inbox?folder=${currentFolder}&limit=50`,
         {
@@ -180,7 +180,7 @@ export default function MessagesPage() {
 
   const fetchUnreadCount = async () => {
     try {
-      const token = localStorage.getItem('youthToken');
+      const token = localStorage.getItem('token');
       const response = await fetch('/api/messages/unread-count', {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -201,7 +201,7 @@ export default function MessagesPage() {
 
   const handleEmailClick = async (email: Email) => {
     try {
-      const token = localStorage.getItem('youthToken');
+      const token = localStorage.getItem('token');
       const response = await fetch(
         `/api/messages/${email.id}?folder=${currentFolder}`,
         {
@@ -509,7 +509,7 @@ export default function MessagesPage() {
                         onClick={() => setSelectedEmail(null)}
                         className="text-[#a3a3a3] hover:text-white"
                       >
-                        ×
+                        Ã—
                       </button>
                     </div>
 

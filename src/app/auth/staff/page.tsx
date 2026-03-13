@@ -2,7 +2,11 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Shield, ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
+import { Shield, ArrowLeft, ExternalLink } from 'lucide-react';
+import { saveStaffSession } from '@/lib/staff-session';
+
+const DPW_APP_URL = process.env.NEXT_PUBLIC_DPW_APP_URL || 'https://app.spatialcollective.com';
 
 export default function StaffLoginPage() {
   const router = useRouter();
@@ -26,9 +30,7 @@ export default function StaffLoginPage() {
       const data = await res.json();
 
       if (data.success) {
-        localStorage.setItem('token', data.data.token);
-        localStorage.setItem('userData', JSON.stringify(data.data.user));
-        localStorage.setItem('userType', 'staff');
+        saveStaffSession(data.data.token, data.data.user);
         const role = data.data.user?.role;
         router.replace(role === 'admin' ? '/admin' : '/trainer');
       } else {
@@ -42,13 +44,13 @@ export default function StaffLoginPage() {
   };
 
   return (
-    <main className="min-h-screen bg-black flex items-center justify-center px-4">
+    <main className="min-h-screen bg-black flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">
             <span className="text-[#dc2626]">SC</span> Training Hub
           </h1>
-          <p className="text-[#a3a3a3] text-sm">Trainer / Admin Sign In</p>
+          <p className="text-[#a3a3a3] text-sm">Trainer and admin access</p>
         </div>
 
         <div className="bg-[#1F2121] border border-[#2a2a2a] rounded-2xl p-8 shadow-2xl">
@@ -58,8 +60,24 @@ export default function StaffLoginPage() {
             </div>
             <div>
               <h2 className="text-lg font-bold text-white">Staff Login</h2>
-              <p className="text-xs text-[#737373]">Use your Learn platform credentials</p>
+              <p className="text-xs text-[#737373]">Use Learn credentials if your account has email access enabled</p>
             </div>
+          </div>
+
+          <div className="bg-black/40 border border-[#2a2a2a] rounded-xl p-4 mb-6">
+            <p className="text-sm text-[#e5e5e5] mb-2">Preferred path</p>
+            <p className="text-xs text-[#737373] leading-relaxed mb-3">
+              Trainers usually open Learn from the DPW App. Direct email sign-in remains available as a fallback.
+            </p>
+            <a
+              href={DPW_APP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-sm text-[#dc2626] hover:text-[#ef4444] transition-colors"
+            >
+              Open DPW App
+              <ExternalLink className="w-4 h-4" />
+            </a>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -109,16 +127,20 @@ export default function StaffLoginPage() {
             >
               {isLoading ? 'Signing in…' : 'Sign In'}
             </button>
+
+            <p className="text-xs text-[#737373] text-center leading-relaxed">
+              After sign-in you will be sent to your trainer or admin dashboard automatically.
+            </p>
           </form>
 
           <div className="mt-6 pt-6 border-t border-[#2a2a2a]">
-            <a
+            <Link
               href="/"
               className="flex items-center justify-center gap-2 text-sm text-[#a3a3a3] hover:text-white transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to main login
-            </a>
+            </Link>
           </div>
         </div>
       </div>

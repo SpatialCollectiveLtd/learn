@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { LogOut, Users, Home, UserCheck } from 'lucide-react';
+import { LogOut, Users, Home, UserCheck, Flag, Download } from 'lucide-react';
 
 interface AdminUser {
   userId: string;
@@ -61,6 +61,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { href: '/admin', label: 'Overview', icon: Home },
     { href: '/admin/youth', label: 'Youth', icon: Users },
     { href: '/admin/trainers', label: 'Trainers', icon: UserCheck },
+    { href: '/admin/disputes', label: 'Disputes', icon: Flag },
+    { href: '/admin/reports', label: 'Reports', icon: Download },
   ];
 
   return (

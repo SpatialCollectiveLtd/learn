@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { saveStaffSession } from '@/lib/staff-session';
 
 function LaunchContent() {
   const searchParams = useSearchParams();
@@ -31,9 +32,7 @@ function LaunchContent() {
         }
 
         // Store auth data
-        localStorage.setItem('token', data.data.token);
-        localStorage.setItem('userData', JSON.stringify(data.data.user));
-        localStorage.setItem('userType', 'staff');
+        saveStaffSession(data.data.token, data.data.user);
 
         // Redirect based on role
         const role = data.data.user?.role;

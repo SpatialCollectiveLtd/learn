@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, ChevronLeft, ChevronRight, User } from 'lucide-react';
+import { getStaffSession, type StaffSession } from '@/lib/staff-session';
 
 interface YouthListItem {
   user_id: string;
@@ -37,31 +38,29 @@ const MODULE_LABELS: Record<string, string> = {
 
 export default function TrainerYouthPage() {
   const router = useRouter();
+  const [session, setSession] = useState<StaffSession | null>(null);
   const [youth, setYouth] = useState<YouthListItem[]>([]);
   const [pagination, setPagination] = useState<Pagination | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [trainerSettlement, setTrainerSettlement] = useState<string | null>(null);
 
+  const [searchInput, setSearchInput] = useState('');
   const [search, setSearch] = useState('');
   const [module, setModule] = useState('');
   const [page, setPage] = useState(1);
 
-  const fetchYouth = useCallback(async () => {
-    const token = localStorage.getItem('token');
-    const userData = localStorage.getItem('userData');
-    if (!token || !userData) return;
+  useEffect(() => {
+    const nextSession = getStaffSession();
+    if (!nextSession || nextSession.role !== 'trainer') return;
+    setSession(nextSession);
+    setTrainerSettlement(nextSession.settlement);
+  }, []);
 
-    let settlement: string | null = trainerSettlement;
-    if (!settlement) {
-      try {
-        const parsed = JSON.parse(userData);
-        settlement = parsed.settlement || null;
-        setTrainerSettlement(settlement);
-      } catch {
-        return;
-      }
-    }
+  const fetchYouth = useCallback(async () => {
+    if (!session) return;
+
+    const settlement = trainerSettlement ?? session.settlement;
 
     setLoading(true);
     setError(null);
@@ -73,7 +72,7 @@ export default function TrainerYouthPage() {
 
     try {
       const res = await fetch(`/api/users?${params}`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${session.token}` },
       });
       const data = await res.json();
       if (data.success) {
@@ -87,7 +86,7 @@ export default function TrainerYouthPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, module, search, trainerSettlement]);
+  }, [page, module, search, session, trainerSettlement]);
 
   useEffect(() => {
     fetchYouth();
@@ -96,6 +95,7 @@ export default function TrainerYouthPage() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setPage(1);
+    setSearch(searchInput.trim());
   };
 
   return (
@@ -109,15 +109,22 @@ export default function TrainerYouthPage() {
 
       {/* Filter bar */}
       <div className="bg-[#1F2121] border border-[#262626] rounded-2xl p-4 mb-6">
-        <div className="flex flex-wrap gap-3">
-          <form onSubmit={handleSearch} className="flex-1 min-w-[200px] flex gap-2">
+        <div className="flex flex-col gap-3 md:flex-row md:flex-wrap">
+          <form onSubmit={handleSearch} className="flex-1 min-w-[200px] flex flex-col sm:flex-row gap-2">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#737373]" />
               <input
                 type="text"
                 placeholder="Search by name or ID…"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                value={searchInput}
+                onChange={(e) => {
+                  const nextValue = e.target.value;
+                  setSearchInput(nextValue);
+                  if (!nextValue.trim()) {
+                    setPage(1);
+                    setSearch('');
+                  }
+                }}
                 className="w-full pl-9 pr-4 py-2.5 bg-black border border-[#2a2a2a] rounded-lg text-white text-sm placeholder-[#737373] focus:outline-none focus:ring-2 focus:ring-[#dc2626] focus:border-transparent"
               />
             </div>
@@ -160,7 +167,45 @@ export default function TrainerYouthPage() {
           </div>
         ) : (
           <>
-            <div className="overflow-x-auto">
+            <div className="divide-y divide-[#262626] md:hidden">
+              {youth.map((y) => (
+                <button
+                  key={y.user_id}
+                  onClick={() => router.push(`/trainer/youth/${y.user_id}`)}
+                  className="w-full p-4 text-left hover:bg-[#262626] transition-colors"
+                >
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <div className="min-w-0">
+                      <p className="text-white font-medium truncate">{y.full_name}</p>
+                      <p className="text-sm text-[#a3a3a3] font-mono mt-0.5">{y.user_id}</p>
+                    </div>
+                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium whitespace-nowrap ${
+                      y.is_active
+                        ? 'bg-green-500/10 text-green-400 border border-green-500/20'
+                        : 'bg-[#737373]/10 text-[#737373] border border-[#737373]/20'
+                    }`}>
+                      {y.is_active ? 'Active' : 'Inactive'}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center flex-wrap gap-2 text-xs text-[#a3a3a3]">
+                    <span className="inline-flex items-center px-2.5 py-1 rounded-full border border-[#262626] bg-black/50 capitalize">
+                      {y.module ? (MODULE_LABELS[y.module] || y.module) : 'No module'}
+                    </span>
+                    {y.module === 'digitization' && y.module_assignment && (
+                      <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#dc2626]/10 text-[#dc2626] border border-[#dc2626]/20 capitalize">
+                        {y.module_assignment}
+                      </span>
+                    )}
+                    {y.settlement && (
+                      <span className="text-[#737373]">{y.settlement}</span>
+                    )}
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            <div className="hidden md:block overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-[#262626]">
@@ -204,7 +249,7 @@ export default function TrainerYouthPage() {
 
             {/* Pagination */}
             {pagination && pagination.total_pages > 1 && (
-              <div className="flex items-center justify-between px-5 py-3 border-t border-[#262626]">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-5 py-3 border-t border-[#262626]">
                 <p className="text-sm text-[#737373]">
                   {((pagination.page - 1) * pagination.per_page) + 1}–
                   {Math.min(pagination.page * pagination.per_page, pagination.total)} of {pagination.total}

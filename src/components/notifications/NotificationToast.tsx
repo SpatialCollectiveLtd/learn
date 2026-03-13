@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { X, AlertTriangle, Info, CheckCircle, XCircle } from 'lucide-react';
@@ -31,7 +31,7 @@ export default function NotificationToast({ youthId }: NotificationToastProps) {
 
   const fetchNotifications = async () => {
     try {
-      const token = localStorage.getItem('youthToken');
+      const token = localStorage.getItem('token');
       if (!token) return;
 
       const response = await fetch('/api/youth/notifications', {
@@ -58,7 +58,7 @@ export default function NotificationToast({ youthId }: NotificationToastProps) {
 
   const hideNotification = async (notificationId: string) => {
     try {
-      const token = localStorage.getItem('youthToken');
+      const token = localStorage.getItem('token');
       if (!token) return;
 
       

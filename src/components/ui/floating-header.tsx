@@ -21,7 +21,7 @@ export function FloatingHeader({ showBackButton = false, backHref = "/", classNa
     
     const userType = localStorage.getItem('userType');
     if (userType === 'youth') {
-      setHomeHref('/dashboard/youth');
+      setHomeHref('/dashboard');
     } else if (userType === 'staff') {
       setHomeHref('/dashboard/staff');
     } else {

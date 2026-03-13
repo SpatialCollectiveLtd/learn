@@ -165,7 +165,7 @@ export default function LoginPage() {
                 <div className="bg-black/50 border border-[#2a2a2a] rounded-lg p-6 text-center">
                   <Shield className="w-12 h-12 text-[#a3a3a3] mx-auto mb-4" />
                   <p className="text-[#e5e5e5] mb-4">
-                    Click <strong>&ldquo;Launch Learn&rdquo;</strong> from the DPW App to access your dashboard.
+                    Open Learn from the DPW App when available. Direct email sign-in is only for staff accounts that have Learn credentials enabled.
                   </p>
                   <a
                     href={DPW_APP_URL}
@@ -180,7 +180,7 @@ export default function LoginPage() {
 
                 <div className="mt-6 pt-6 border-t border-[#2a2a2a] text-center">
                   <p className="text-xs text-[#737373] mb-3">
-                    You must be logged in to DPW App as a trainer or admin to access Learn.
+                    DPW launch is preferred for trainers and admins, but email sign-in is still available when configured.
                   </p>
                   <a href="/auth/staff" className="text-xs text-[#dc2626] hover:text-[#ef4444] transition-colors">
                     Or sign in with email →

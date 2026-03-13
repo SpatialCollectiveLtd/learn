@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, User, Calendar, BarChart3, Wallet, AlertCircle, Flag, CheckCircle, XCircle } from 'lucide-react';
+import { getStaffSession } from '@/lib/staff-session';
 
 interface UserProfile {
   user_id: string;
@@ -150,10 +151,10 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
   const [attendanceLoading, setAttendanceLoading] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) { router.push('/'); return; }
+    const session = getStaffSession();
+    if (!session) { router.push('/'); return; }
 
-    const headers = { Authorization: `Bearer ${token}` };
+    const headers = { Authorization: `Bearer ${session.token}` };
 
     Promise.allSettled([
       fetch(`/api/users/${userId}`, { headers }).then((r) => r.json()),
@@ -172,12 +173,12 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
   }, [userId, router]);
 
   const fetchAttendance = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) return;
+    const session = getStaffSession();
+    if (!session) return;
     setAttendanceLoading(true);
     try {
       const res = await fetch(`/api/users/${userId}/attendance?from=${fromDate}&to=${toDate}`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${session.token}` },
       });
       const data = await res.json();
       if (data.success) setAttendance(data.data);
@@ -195,10 +196,10 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
 
   useEffect(() => {
     if (activeTab !== 'disputes') return;
-    const token = localStorage.getItem('token');
-    if (!token) return;
+    const session = getStaffSession();
+    if (!session) return;
     setDisputesLoading(true);
-    fetch(`/api/disputes?youth_id=${userId}`, { headers: { Authorization: `Bearer ${token}` } })
+    fetch(`/api/disputes?youth_id=${userId}`, { headers: { Authorization: `Bearer ${session.token}` } })
       .then((r) => r.json())
       .then((data) => { if (data.success) setDisputes(data.data); })
       .catch(() => undefined)
@@ -233,7 +234,7 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
       {/* Profile header */}
       {profile && (
         <div className="bg-[#1F2121] border border-[#262626] rounded-2xl p-6 mb-6">
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             <div className="bg-[#dc2626]/20 p-3 rounded-xl border border-[#dc2626]/30">
               <User className="w-8 h-8 text-[#dc2626]" />
             </div>
@@ -257,19 +258,21 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
       )}
 
       {/* Tab bar */}
-      <div className="grid grid-cols-5 mb-6 bg-[#1F2121] border border-[#262626] rounded-2xl overflow-hidden">
-        {TABS.map(({ key, label, icon: Icon }) => (
-          <button
-            key={key}
-            onClick={() => setActiveTab(key)}
-            className={`flex items-center justify-center gap-2 py-3 text-sm font-medium transition-colors border-r border-[#262626] last:border-0 ${
-              activeTab === key ? 'bg-[#dc2626] text-white' : 'text-[#a3a3a3] hover:text-white'
-            }`}
-          >
-            <Icon className="w-4 h-4" />
-            <span className="hidden sm:inline">{label}</span>
-          </button>
-        ))}
+      <div className="mb-6 bg-[#1F2121] border border-[#262626] rounded-2xl overflow-hidden">
+        <div className="flex overflow-x-auto scrollbar-hide sm:grid sm:grid-cols-5">
+          {TABS.map(({ key, label, icon: Icon }) => (
+            <button
+              key={key}
+              onClick={() => setActiveTab(key)}
+              className={`flex-shrink-0 min-w-[112px] sm:min-w-0 flex items-center justify-center gap-2 py-3 text-sm font-medium transition-colors border-r border-[#262626] last:border-r-0 ${
+                activeTab === key ? 'bg-[#dc2626] text-white' : 'text-[#a3a3a3] hover:text-white'
+              }`}
+            >
+              <Icon className="w-4 h-4" />
+              <span className="whitespace-nowrap">{label}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Profile tab */}
@@ -293,9 +296,9 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
                   value: profile.enrolled_at ? new Date(profile.enrolled_at).toLocaleDateString() : '—',
                 },
               ].map(({ label, value }) => (
-                <div key={label} className="flex justify-between text-sm">
+                <div key={label} className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between text-sm">
                   <span className="text-[#a3a3a3]">{label}</span>
-                  <span className="text-white font-medium text-right max-w-[55%]">{value}</span>
+                  <span className="text-white font-medium text-left sm:text-right sm:max-w-[55%] break-words">{value}</span>
                 </div>
               ))}
             </div>
@@ -304,14 +307,14 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
           <div className="bg-[#1F2121] border border-[#262626] rounded-2xl p-6">
             <h2 className="text-lg font-bold text-white mb-4">Contract</h2>
             <div className="space-y-3">
-              <div className="flex justify-between text-sm">
+              <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between text-sm">
                 <span className="text-[#a3a3a3]">Contract Signed</span>
                 <span className={profile.contract?.has_signed ? 'text-green-400 font-medium' : 'text-[#737373]'}>
                   {profile.contract?.has_signed ? 'Yes' : 'No'}
                 </span>
               </div>
               {profile.contract?.signed_at && (
-                <div className="flex justify-between text-sm">
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between text-sm">
                   <span className="text-[#a3a3a3]">Signed On</span>
                   <span className="text-white font-medium">
                     {new Date(profile.contract.signed_at).toLocaleDateString()}
@@ -319,7 +322,7 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
                 </div>
               )}
               {profile.contract?.start_date && (
-                <div className="flex justify-between text-sm">
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between text-sm">
                   <span className="text-[#a3a3a3]">Start Date</span>
                   <span className="text-white font-medium">
                     {new Date(profile.contract.start_date).toLocaleDateString()}
@@ -327,14 +330,14 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
                 </div>
               )}
               {profile.contract?.end_date && (
-                <div className="flex justify-between text-sm">
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between text-sm">
                   <span className="text-[#a3a3a3]">End Date</span>
                   <span className="text-white font-medium">
                     {new Date(profile.contract.end_date).toLocaleDateString()}
                   </span>
                 </div>
               )}
-              <div className="flex justify-between text-sm">
+              <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between text-sm">
                 <span className="text-[#a3a3a3]">Contracted Days</span>
                 <span className="text-white font-medium">
                   {profile.contract?.total_contracted_days ?? '—'}
@@ -381,7 +384,7 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
             </div>
           ) : attendance ? (
             <>
-              <div className="flex gap-4 mb-6">
+              <div className="grid grid-cols-2 gap-3 mb-6 max-w-md">
                 <div className="bg-black/50 rounded-lg p-3 border border-[#2a2a2a]">
                   <p className="text-xs text-[#737373] uppercase mb-1">Present</p>
                   <p className="text-2xl font-bold text-green-400">{attendance.total_present}</p>
@@ -396,7 +399,7 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
                   {attendance.days.map((day, i) => (
                     <div
                       key={i}
-                      className="flex justify-between items-center text-sm py-2.5 border-b border-[#2a2a2a] last:border-0"
+                      className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center text-sm py-2.5 border-b border-[#2a2a2a] last:border-0"
                     >
                       <span className="text-[#a3a3a3]">
                         {new Date(day.date).toLocaleDateString()}
@@ -437,7 +440,7 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
                 { label: 'Target Met Days', value: performance.summary.target_met_days },
                 { label: 'Attendance Rate', value: `${Math.round(performance.summary.attendance_rate * 100)}%` },
               ].map(({ label, value }) => (
-                <div key={label} className="flex justify-between text-sm">
+                <div key={label} className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between text-sm">
                   <span className="text-[#a3a3a3]">{label}</span>
                   <span className="text-white font-medium">{value}</span>
                 </div>
@@ -454,7 +457,7 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
                   { label: 'Days Worked', value: performance.contract_progress.days_worked },
                   { label: 'Days Remaining', value: performance.contract_progress.days_remaining },
                 ].map(({ label, value }) => (
-                  <div key={label} className="flex justify-between text-sm">
+                  <div key={label} className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between text-sm">
                     <span className="text-[#a3a3a3]">{label}</span>
                     <span className="text-white font-medium">{value}</span>
                   </div>
@@ -507,7 +510,41 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
               <div className="p-4 border-b border-[#262626]">
                 <h3 className="font-semibold text-white">Daily Earnings ({payments.daily_records.length} records)</h3>
               </div>
-              <div className="overflow-x-auto">
+              <div className="divide-y divide-[#262626] md:hidden">
+                {payments.daily_records.map((r, i) => (
+                  <div key={i} className="p-4 space-y-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="text-white text-sm font-medium">{new Date(r.date).toLocaleDateString()}</p>
+                        <p className="text-xs text-[#737373] capitalize">{r.module.replace(/_/g, ' ')}</p>
+                      </div>
+                      <span className={r.earning_status === 'earned' ? 'text-green-400 font-medium' : 'text-[#737373] font-medium'}>
+                        KES {r.total_pay_kes.toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3 text-sm">
+                      <div>
+                        <p className="text-[#737373] text-xs uppercase mb-1">Output</p>
+                        <p className="text-white">{r.volume} {r.volume_unit}</p>
+                      </div>
+                      <div>
+                        <p className="text-[#737373] text-xs uppercase mb-1">Quality</p>
+                        <p className="text-white">{r.quality_percentage != null ? `${r.quality_percentage.toFixed(1)}%` : '—'}</p>
+                      </div>
+                      <div>
+                        <p className="text-[#737373] text-xs uppercase mb-1">Base</p>
+                        <p className="text-white">KES {r.base_pay_kes.toLocaleString()}</p>
+                      </div>
+                      <div>
+                        <p className="text-[#737373] text-xs uppercase mb-1">Bonus</p>
+                        <p className="text-white">KES {r.bonus_pay_kes.toLocaleString()}</p>
+                      </div>
+                    </div>
+                    {r.pay_note && <p className="text-xs text-[#737373]">{r.pay_note}</p>}
+                  </div>
+                ))}
+              </div>
+              <div className="hidden md:block overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-[#262626]">
@@ -608,10 +645,11 @@ export default function YouthDetailTabs({ userId, backHref, backLabel = 'Back' }
                           <div className="flex gap-2">
                             <button
                               onClick={async () => {
-                                const token = localStorage.getItem('token');
+                                const session = getStaffSession();
+                                if (!session) return;
                                 const res = await fetch(`/api/disputes/${resolving.id}`, {
                                   method: 'PATCH',
-                                  headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+                                  headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` },
                                   body: JSON.stringify({ status: resolving.action, resolution_note: resolving.note }),
                                 });
                                 const json = await res.json();

@@ -1,8 +1,8 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { BookOpen, BarChart3, Mail, LogOut } from 'lucide-react';
+import { LogOut, Bell } from 'lucide-react';
 
 interface UserData {
   userId: string;
@@ -14,205 +14,250 @@ interface UserData {
   userType: 'youth' | 'staff';
 }
 
-interface TrainingProgress {
-  progress: Record<string, number[]>;
-  totalCompleted: number;
+interface ContractProgress {
+  contracted_days: number;
+  days_worked: number;
+  days_remaining: number;
+  percent_complete: number;
 }
 
-export default function Dashboard() {
+interface TrainingModule {
+  key: string;
+  completed: number;
+  max: number;
+}
+
+const MODULE_MAX_STEPS: Record<string, number> = {
+  mapper: 7,
+  validator: 7,
+  mobile_mapping: 4,
+  household_survey: 4,
+  microtasking: 3,
+};
+
+const MODULE_LABELS: Record<string, string> = {
+  digitization: 'Digitization',
+  mobile_mapping: 'Mobile Mapping',
+  household_survey: 'Household Survey',
+  microtasking: 'Microtasking',
+};
+
+const SETTLEMENT_SHORT: Record<string, string> = {
+  'Kayole Soweto': 'Kayole',
+  'Kariobangi Machakos': 'Kariobangi',
+  'Mji wa Huruma': 'Huruma',
+};
+
+function getModuleKeys(module: string | null, moduleAssignment: string | null): string[] {
+  if (!module) return [];
+  const ALL = ['digitization', 'mobile_mapping', 'household_survey', 'microtasking'];
+  if (module === 'both') return ALL;
+  if (module === 'mapper' || module === 'validator') return ['digitization'];
+  if (ALL.includes(module)) return [module];
+  if (module.includes(',')) return module.split(',').map((m) => m.trim()).filter((m) => ALL.includes(m));
+  return [module];
+}
+
+function mapModuleProgressKey(moduleKey: string, moduleAssignment: string | null): string {
+  if (moduleKey === 'digitization') return moduleAssignment === 'validator' ? 'validator' : 'mapper';
+  return moduleKey;
+}
+
+export default function DashboardHome() {
   const router = useRouter();
   const [user, setUser] = useState<UserData | null>(null);
-  const [training, setTraining] = useState<TrainingProgress | null>(null);
+  const [contractProgress, setContractProgress] = useState<ContractProgress | null>(null);
+  const [trainingModules, setTrainingModules] = useState<TrainingModule[]>([]);
+  const [todayEarnings, setTodayEarnings] = useState<number | null>(null);
+  const [openDisputes, setOpenDisputes] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [showModuleSelector, setShowModuleSelector] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('userData');
-
-    if (!token || !userData) {
-      router.push('/');
-      return;
-    }
+    if (!token || !userData) { router.replace('/'); return; }
 
     let parsed: UserData;
-    try {
-      parsed = JSON.parse(userData);
-    } catch {
-      router.push('/');
-      return;
-    }
+    try { parsed = JSON.parse(userData); } catch { router.replace('/'); return; }
 
-    // Staff have their own areas — redirect immediately
     if (parsed.userType === 'staff') {
       router.replace(parsed.role === 'admin' ? '/admin' : '/trainer');
       return;
     }
-
     setUser(parsed);
 
-    // Fetch training progress
-    fetch('/api/training/progress', {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((r) => r.json())
-      .then((data) => {
-        if (data.success) setTraining(data.data);
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
+    const headers = { Authorization: `Bearer ${token}` };
+    const id = parsed.userId;
+
+    Promise.allSettled([
+      fetch(`/api/users/${id}/performance`, { headers }).then((r) => r.json()),
+      fetch(`/api/users/${id}/payments`, { headers }).then((r) => r.json()),
+      fetch('/api/training/progress', { headers }).then((r) => r.json()),
+      fetch('/api/disputes', { headers }).then((r) => r.json()),
+    ]).then(([perfRes, payRes, trainRes, dispRes]) => {
+      if (perfRes.status === 'fulfilled' && perfRes.value.success) {
+        setContractProgress(perfRes.value.data.contract_progress);
+      }
+      if (payRes.status === 'fulfilled' && payRes.value.success) {
+        const today = new Date().toISOString().slice(0, 10);
+        const records: Array<{ date: string; total_pay_kes: number }> = payRes.value.data.daily_records ?? [];
+        const rec = records.find((r) => r.date === today);
+        setTodayEarnings(rec ? rec.total_pay_kes : null);
+      }
+      if (trainRes.status === 'fulfilled' && trainRes.value.success) {
+        const progress: Record<string, number[]> = trainRes.value.data.progress ?? {};
+        const moduleKeys = getModuleKeys(parsed.module, parsed.moduleAssignment);
+        const modules: TrainingModule[] = moduleKeys.map((key) => {
+          if (key === 'microtasking') {
+            const completed =
+              (progress['microtasking1']?.length ?? 0) > 0 ? 1 : 0 +
+              (progress['microtasking2']?.length ?? 0) > 0 ? 1 : 0 +
+              (progress['microtasking3']?.length ?? 0) > 0 ? 1 : 0;
+            return { key, completed, max: 3 };
+          }
+          const progressKey = mapModuleProgressKey(key, parsed.moduleAssignment);
+          const max = MODULE_MAX_STEPS[progressKey] ?? 0;
+          const completed = progress[progressKey]?.length ?? 0;
+          return { key, completed, max };
+        });
+        setTrainingModules(modules);
+      }
+      if (dispRes.status === 'fulfilled' && dispRes.value.success) {
+        const open = (dispRes.value.data as Array<{ status: string }>).filter((d) => d.status === 'open').length;
+        setOpenDisputes(open);
+      }
+      setLoading(false);
+    });
   }, [router]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userData');
     localStorage.removeItem('userType');
-    router.push('/');
+    router.replace('/');
   };
 
   if (loading || !user) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#dc2626] mx-auto mb-4" />
-          <p className="text-[#a3a3a3]">Loading dashboard...</p>
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#dc2626] mx-auto mb-3" />
+          <p className="text-[#737373] text-sm">Loading…</p>
         </div>
       </div>
     );
   }
 
-  const moduleLabel = user.module === 'both' ? 'Multi-Module' : (user.module?.replace(/_/g, ' ') || 'Unassigned');
-
-  const MODULE_ROUTES: Record<string, { label: string; path: string }> = {
-    digitization: { label: 'Digitization', path: user.moduleAssignment === 'validator' ? '/digitization/validator' : '/digitization/mapper' },
-    mobile_mapping: { label: 'Mobile Mapping', path: '/mobile-mapping' },
-    household_survey: { label: 'Household Survey', path: '/household-survey' },
-    microtasking: { label: 'Microtasking', path: '/microtasking' },
-  };
-
-  const handleTrainingClick = () => {
-    if (!user.module || user.module === 'both') {
-      setShowModuleSelector(true);
-      return;
-    }
-    const route = MODULE_ROUTES[user.module];
-    router.push(route?.path || '/digitization/mapper');
-  };
+  const settlementShort = (user.settlement && SETTLEMENT_SHORT[user.settlement]) || user.settlement || '';
+  const moduleLabel = user.module ? MODULE_LABELS[user.module] ?? user.module.replace(/_/g, ' ') : 'Unassigned';
+  const daysWorked = contractProgress?.days_worked ?? 0;
+  const contractedDays = contractProgress?.contracted_days ?? 20;
+  const ringPct = contractProgress ? Math.min(contractProgress.percent_complete, 100) : 0;
+  const R = 40;
+  const CIRC = 2 * Math.PI * R;
+  const strokeDash = (ringPct / 100) * CIRC;
 
   return (
-    <div className="min-h-screen bg-black py-12 px-4">
-      <div className="max-w-4xl mx-auto">
+    <div className="bg-black px-4 pt-8 pb-4">
+      <div className="max-w-lg mx-auto">
         {/* Header */}
-        <div className="flex items-start justify-between mb-12">
+        <div className="flex items-start justify-between mb-6">
           <div>
-            <h1 className="text-3xl font-heading font-bold text-white mb-1">
-              Welcome, {user.fullName}
+            <p className="text-[#737373] text-xs uppercase tracking-widest mb-0.5">
+              {settlementShort}{user.moduleAssignment && user.module === 'digitization' ? ` · ${user.moduleAssignment}` : ''}
+            </p>
+            <h1 className="text-2xl font-bold text-white font-heading leading-tight">
+              {user.fullName.split(' ')[0]}
             </h1>
-            <p className="text-[#a3a3a3]">
-              {user.settlement && `${user.settlement} • `}
-              {moduleLabel.toUpperCase()}
-              {user.moduleAssignment && user.module === 'digitization' && (
-                <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#dc2626]/10 text-[#dc2626] border border-[#dc2626]/20">
-                  {user.moduleAssignment.toUpperCase()}
-                </span>
-              )}
-            </p>
+            <p className="text-[#dc2626] text-xs font-medium mt-0.5">{moduleLabel}</p>
           </div>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 text-[#737373] hover:text-white transition-colors text-sm"
-          >
-            <LogOut className="w-4 h-4" />
-            Sign Out
+          <button onClick={handleLogout} className="p-2 text-[#737373] hover:text-white transition-colors rounded-lg active:bg-white/5" aria-label="Sign out">
+            <LogOut className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Dashboard cards */}
-        <div className="grid gap-6 md:grid-cols-2">
-          <button
-            onClick={handleTrainingClick}
-            className="bg-[#1F2121] rounded-2xl shadow-lg p-6 text-left hover:shadow-2xl transition-all transform hover:-translate-y-1 border border-[#262626] hover:border-[#dc2626]"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className="bg-[#dc2626]/20 p-3 rounded-xl border border-[#dc2626]/30">
-                <BookOpen className="w-7 h-7 text-[#dc2626]" />
-              </div>
+        {/* Days ring + today earnings */}
+        <div className="bg-[#111111] border border-[#262626] rounded-2xl p-5 mb-4 flex items-center gap-5">
+          <div className="flex-shrink-0 relative w-24 h-24">
+            <svg viewBox="0 0 100 100" className="w-24 h-24 -rotate-90">
+              <circle cx="50" cy="50" r={R} fill="none" stroke="#1a1a1a" strokeWidth="10" />
+              <circle cx="50" cy="50" r={R} fill="none" stroke="#dc2626" strokeWidth="10" strokeLinecap="round"
+                strokeDasharray={`${strokeDash} ${CIRC}`} className="transition-all duration-700" />
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <span className="text-xl font-bold text-white font-heading">{daysWorked}</span>
+              <span className="text-[10px] text-[#737373]">of {contractedDays}</span>
             </div>
-            <h2 className="text-xl font-heading font-bold text-white mb-2">Training</h2>
-            <p className="text-sm text-[#a3a3a3] mb-3">
-              Continue your training modules and complete your steps.
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-[#737373] text-xs uppercase tracking-wider mb-1">Contract Days</p>
+            <p className="text-white font-semibold text-sm mb-2">
+              {contractProgress ? `${contractProgress.days_remaining} day${contractProgress.days_remaining !== 1 ? 's' : ''} remaining` : '— not started'}
             </p>
-            {training && (
-              <div className="bg-black/50 rounded-lg p-3 border border-[#2a2a2a]">
-                <div className="flex justify-between text-sm">
-                  <span className="text-[#a3a3a3]">Completed</span>
-                  <span className="text-white font-medium">{training.totalCompleted} steps</span>
-                </div>
-              </div>
-            )}
-          </button>
-
-          <button
-            onClick={() => router.push('/dashboard/youth')}
-            className="bg-[#1F2121] rounded-2xl shadow-lg p-6 text-left hover:shadow-2xl transition-all transform hover:-translate-y-1 border border-[#262626] hover:border-[#dc2626]"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className="bg-[#dc2626]/20 p-3 rounded-xl border border-[#dc2626]/30">
-                <BarChart3 className="w-7 h-7 text-[#dc2626]" />
-              </div>
+            <div className="border-t border-[#1a1a1a] pt-2">
+              <p className="text-[#737373] text-xs uppercase tracking-wider mb-0.5">Today</p>
+              {todayEarnings !== null ? (
+                <p className="text-green-400 font-bold text-lg">KES {todayEarnings.toLocaleString()}</p>
+              ) : (
+                <p className="text-[#737373] text-sm">No record yet</p>
+              )}
             </div>
-            <h2 className="text-xl font-heading font-bold text-white mb-2">My Profile</h2>
-            <p className="text-sm text-[#a3a3a3]">
-              View your performance, attendance, and payment history.
-            </p>
-          </button>
-
-          <button
-            onClick={() => router.push('/dashboard/messages')}
-            className="bg-[#1F2121] rounded-2xl shadow-lg p-6 text-left hover:shadow-2xl transition-all transform hover:-translate-y-1 border border-[#262626] hover:border-[#dc2626]"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className="bg-[#dc2626]/20 p-3 rounded-xl border border-[#dc2626]/30">
-                <Mail className="w-7 h-7 text-[#dc2626]" />
-              </div>
-            </div>
-            <h2 className="text-xl font-heading font-bold text-white mb-2">Messages</h2>
-            <p className="text-sm text-[#a3a3a3]">
-              View notifications and communications from your team.
-            </p>
-          </button>
+          </div>
         </div>
 
-        <div className="text-center mt-8 text-sm text-[#737373]">
-          <p>Need help? Contact your training coordinator.</p>
-        </div>
-
-        {/* Module selector for 'both' or null module */}
-        {showModuleSelector && (
-          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 px-4">
-            <div className="bg-[#1F2121] border border-[#262626] rounded-2xl p-6 w-full max-w-sm">
-              <h3 className="text-lg font-heading font-bold text-white mb-2">Select Training Module</h3>
-              <p className="text-sm text-[#a3a3a3] mb-4">Choose which training to continue:</p>
-              <div className="space-y-3">
-                {Object.entries(MODULE_ROUTES).map(([key, { label, path }]) => (
-                  <button
-                    key={key}
-                    onClick={() => { setShowModuleSelector(false); router.push(path); }}
-                    className="w-full bg-black/50 border border-[#2a2a2a] hover:border-[#dc2626] rounded-xl p-4 text-left transition-colors"
-                  >
-                    <span className="text-white font-medium">{label}</span>
-                  </button>
-                ))}
-              </div>
-              <button
-                onClick={() => setShowModuleSelector(false)}
-                className="mt-4 w-full text-sm text-[#737373] hover:text-white transition-colors"
-              >
-                Cancel
-              </button>
+        {/* Training progress */}
+        {trainingModules.length > 0 && (
+          <div className="bg-[#111111] border border-[#262626] rounded-2xl p-5 mb-4">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-[#737373] text-xs uppercase tracking-wider">Training</p>
+              <button onClick={() => router.push('/dashboard/training')} className="text-[#dc2626] text-xs hover:text-[#ef4444] transition-colors">View all →</button>
+            </div>
+            <div className="space-y-3">
+              {trainingModules.map((m) => {
+                const pct = m.max > 0 ? Math.round((m.completed / m.max) * 100) : 0;
+                return (
+                  <div key={m.key}>
+                    <div className="flex justify-between mb-1">
+                      <span className="text-white text-sm">{MODULE_LABELS[m.key] ?? m.key.replace(/_/g, ' ')}</span>
+                      <span className="text-[#737373] text-xs">{m.completed}/{m.max}</span>
+                    </div>
+                    <div className="h-1.5 bg-[#1a1a1a] rounded-full overflow-hidden">
+                      <div className="h-full bg-[#dc2626] rounded-full transition-all duration-500" style={{ width: `${pct}%` }} />
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
+
+        {/* Open disputes alert */}
+        {openDisputes > 0 && (
+          <button onClick={() => router.push('/dashboard/payments')}
+            className="w-full bg-yellow-500/10 border border-yellow-500/30 rounded-2xl p-4 mb-4 flex items-center gap-3 text-left active:bg-yellow-500/20 transition-colors">
+            <Bell className="w-5 h-5 text-yellow-400 flex-shrink-0" />
+            <div>
+              <p className="text-yellow-400 font-semibold text-sm">{openDisputes} open dispute{openDisputes !== 1 ? 's' : ''}</p>
+              <p className="text-[#737373] text-xs">Tap to view in Payments</p>
+            </div>
+          </button>
+        )}
+
+        {/* Quick actions */}
+        <div className="grid grid-cols-2 gap-3">
+          {[
+            { label: 'Earnings', sub: 'View breakdown', href: '/dashboard/payments' },
+            { label: 'Attendance', sub: 'Calendar view', href: '/dashboard/days' },
+            { label: 'Training', sub: 'Continue steps', href: '/dashboard/training' },
+            { label: 'Messages', sub: 'Inbox', href: '/dashboard/messages' },
+          ].map(({ label, sub, href }) => (
+            <button key={href} onClick={() => router.push(href)}
+              className="bg-[#111111] border border-[#262626] rounded-2xl p-4 text-left hover:border-[#dc2626]/50 active:bg-white/5 transition-colors">
+              <p className="text-[#737373] text-xs uppercase tracking-wider mb-1">{label}</p>
+              <p className="text-white font-semibold text-sm">{sub}</p>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

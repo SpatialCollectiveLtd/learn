@@ -1,372 +1,132 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
-import { 
-  Wallet, 
-  Calendar,
-  TrendingUp,
-  AlertCircle,
-  CheckCircle,
-  Info,
-  RefreshCw,
-  ToggleLeft,
-  ToggleRight
-} from 'lucide-react';
+import { AlertCircle, ChevronRight } from 'lucide-react';
 
-interface CycleBreakdown {
-  cycle: string;
-  period: string;
-  work_type?: string;
-  days_worked?: number;
-  pois_submitted?: number;
-  quality_score: number;
-  base_pay?: number;
-  base_rate?: number;
-  quality_bonus: number;
-  total_earnings: number;
+interface DailyRecord {
+  date: string;
+  module: string;
+  total_pay_kes: number;
+  base_pay_kes: number;
+  bonus_pay_kes: number;
+  volume: number;
+  volume_unit: string;
+  quality_percentage: number | null;
+  attended: boolean;
+  earning_status: string;
+  pay_note: string | null;
 }
 
-interface PaymentFormula {
-  base_pay: number;
-  quality_bonus_tiers: {
-    excellent: { min: number; rate: number; amount: number };
-    good: { min: number; rate: number; amount: number };
-    fair: { min: number; rate: number; amount: number };
-  };
-  daily_target_pois: number;
+interface PaySummary {
+  total_earnings_kes: number;
+  total_base_pay_kes: number;
+  total_bonus_pay_kes: number;
+  days_with_earnings: number;
 }
 
-interface PaymentData {
-  youth_id: string;
-  settlement: string;
-  total_earnings: number;
-  work_days_completed?: number;
-  total_days_worked?: number;
-  daily_breakdown: CycleBreakdown[];
-  cycle_breakdown?: CycleBreakdown[];  
-  payment_formula?: PaymentFormula;
-  period?: string;
-  overall_quality_score?: number;
-  message?: string;
-  last_updated?: string;
-  sync_status?: string;
+function fmt(d: string) {
+  return new Date(d + 'T00:00:00').toLocaleDateString('en-KE', { day: 'numeric', month: 'short' });
 }
 
 export default function PaymentTab() {
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const [paymentData, setPaymentData] = useState<PaymentData | null>(null);
+  const [summary, setSummary] = useState<PaySummary | null>(null);
+  const [records, setRecords] = useState<DailyRecord[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [showDPWData, setShowDPWData] = useState(true); 
+  const [expanded, setExpanded] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchPaymentData();
-  }, [showDPWData]);
+    const token = localStorage.getItem('token');
+    const userData = localStorage.getItem('userData');
+    if (!token || !userData) { setError('Not authenticated'); setLoading(false); return; }
+    let user: { userId: string };
+    try { user = JSON.parse(userData); } catch { setError('Session error'); setLoading(false); return; }
 
-  const fetchPaymentData = async () => {
-    try {
-      setError(null);
-      const token = localStorage.getItem('youthToken');
-      if (!token) {
-        setError('Not authenticated');
-        return;
-      }
+    fetch(`/api/users/${user.userId}/payments`, { headers: { Authorization: `Bearer ${token}` } })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.success) {
+          setSummary(data.data.summary);
+          setRecords(data.data.daily_records ?? []);
+        } else {
+          setError(data.error?.message || 'Failed to load payments');
+        }
+      })
+      .catch(() => setError('Network error'))
+      .finally(() => setLoading(false));
+  }, []);
 
-      
-      const endpoint = showDPWData 
-        ? '/api/youth/payment/dpw-breakdown' 
-        : '/api/youth/payment/breakdown';
+  if (loading) return <div className="p-8 flex justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#dc2626]" /></div>;
 
-      const response = await fetch(endpoint, {
-        headers: { 'Authorization': `Bearer ${token}` },
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        setPaymentData(result);
-      } else {
-        setError(result.error?.message || result.message || 'Failed to load payment data');
-      }
-    } catch (err: any) {
-      
-      setError(err.message || 'Network error');
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  };
-
-  const handleRefresh = () => {
-    setRefreshing(true);
-    fetchPaymentData();
-  };
-
-  const formatCurrency = (amount: number | undefined | null) => {
-    if (amount === undefined || amount === null || isNaN(amount)) {
-      return '0.00 KES';
-    }
-    return `${amount.toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} KES`;
-  };
-
-  const formatDate = (dateStr: string | undefined | null) => {
-    if (!dateStr) return 'N/A';
-    try {
-      const date = new Date(dateStr);
-      if (isNaN(date.getTime())) return 'Invalid date';
-      return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-    } catch {
-      return 'Invalid date';
-    }
-  };
-
-  const getQualityTier = (score: number) => {
-    if (score >= 90) return { label: 'Excellent', color: 'text-success' };
-    if (score >= 70) return { label: 'Good', color: 'text-info' };
-    if (score >= 60) return { label: 'Fair', color: 'text-warning' };
-    return { label: 'Needs Improvement', color: 'text-error' };
-  };
-
-  if (loading) {
-    return (
-      <div className="p-6 text-center">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mx-auto mb-4"></div>
-        <p className="text-foreground-subtle text-sm">Loading payment data...</p>
+  if (error) return (
+    <div className="p-6">
+      <div className="bg-[#dc2626]/10 border border-[#dc2626]/20 rounded-xl p-4 flex gap-3">
+        <AlertCircle className="w-5 h-5 text-[#dc2626] flex-shrink-0 mt-0.5" />
+        <p className="text-sm text-[#dc2626]">{error}</p>
       </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="p-6">
-        <div className="bg-error/10 border border-error/30 rounded-lg p-4 flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-error mt-0.5 flex-shrink-0" />
-          <div>
-            <p className="text-sm font-semibold text-white mb-1">Error Loading Payment Data</p>
-            <p className="text-xs text-foreground-muted">{error}</p>
-            <button
-              onClick={handleRefresh}
-              className="mt-3 text-xs text-primary hover:text-primary-hover"
-            >
-              Try Again
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (!paymentData) {
-    return (
-      <div className="p-6 text-center">
-        <p className="text-foreground-subtle">No payment data available</p>
-      </div>
-    );
-  }
-
-  const hasWorkData = (paymentData?.work_days_completed || paymentData?.total_days_worked || 0) > 0;
+    </div>
+  );
 
   return (
     <div className="p-4 space-y-4">
-      {}
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-heading font-bold text-white">Payment Breakdown</h2>
-        <div className="flex items-center gap-3">
-          {}
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-foreground-subtle">Regular</span>
-            <button
-              onClick={() => setShowDPWData(!showDPWData)}
-              className="flex-shrink-0"
-            >
-              {showDPWData ? (
-                <ToggleRight className="w-6 h-6 text-primary" />
-              ) : (
-                <ToggleLeft className="w-6 h-6 text-foreground-muted" />
-              )}
-            </button>
-            <span className="text-xs text-foreground-subtle">DPW</span>
-          </div>
-          
-          {}
-          <button
-            onClick={handleRefresh}
-            disabled={refreshing}
-            className="p-2 hover:bg-background-elevated rounded-lg transition-colors"
-          >
-            <RefreshCw className={`w-4 h-4 text-primary ${refreshing ? 'animate-spin' : ''}`} />
-          </button>
-        </div>
-      </div>
-
-      {}
-      {showDPWData && paymentData?.period && (
-        <div className="bg-primary/10 border border-primary/30 rounded-lg p-3">
-          <div className="flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-primary" />
-            <span className="text-sm font-semibold text-white">Payment Period: {paymentData.period}</span>
-          </div>
-          {paymentData.overall_quality_score !== undefined && (
-            <p className="text-xs text-foreground-subtle mt-1">
-              Overall Quality Score: <span className="text-white font-semibold">{paymentData.overall_quality_score}%</span>
-            </p>
-          )}
-        </div>
-      )}
-
-      {}
-      {paymentData.last_updated && (
-        <div className="flex items-center gap-2 text-xs text-foreground-subtle">
-          <Info className="w-3 h-3" />
-          <span>
-            Updated {new Date(paymentData.last_updated).toLocaleTimeString('en-GB', { 
-              hour: '2-digit', 
-              minute: '2-digit' 
-            })}
-          </span>
-        </div>
-      )}
-
-      {}
-      <div className="bg-gradient-to-br from-primary/20 to-primary-dark/20 border border-primary/30 rounded-xl p-6 text-center">
-        <p className="text-foreground-subtle text-sm mb-2">Total Earnings</p>
-        <div className="text-4xl font-heading font-bold text-white mb-1">
-          {formatCurrency(paymentData.total_earnings)}
-        </div>
-        <p className="text-foreground-subtle text-xs">
-          {(paymentData.work_days_completed || paymentData.total_days_worked || 0)} work {(paymentData.work_days_completed || paymentData.total_days_worked || 0) === 1 ? 'day' : 'days'} completed
-        </p>
-      </div>
-
-      {}
-      {!hasWorkData && paymentData.message && (
-        <div className="bg-info/10 border border-info/30 rounded-lg p-4">
-          <div className="flex items-start gap-3">
-            <Info className="w-5 h-5 text-info mt-0.5 flex-shrink-0" />
-            <div>
-              <p className="text-sm font-semibold text-white mb-2">{paymentData.message}</p>
-              
-              {}
-              {paymentData.payment_formula && (
-                <div className="mt-3 space-y-2">
-                  <p className="text-xs font-semibold text-foreground-subtle">What You Can Earn:</p>
-                  <div className="space-y-1">
-                    <div className="flex justify-between text-xs">
-                      <span className="text-foreground-subtle">Base Pay (per day)</span>
-                      <span className="text-white font-semibold">{formatCurrency(paymentData.payment_formula.base_pay)}</span>
-                    </div>
-                    <div className="flex justify-between text-xs">
-                      <span className="text-foreground-subtle">Quality Bonus (90%+)</span>
-                      <span className="text-success font-semibold">+{formatCurrency(paymentData.payment_formula.quality_bonus_tiers.excellent.amount)}</span>
-                    </div>
-                    <div className="flex justify-between text-xs">
-                      <span className="text-foreground-subtle">Quality Bonus (70-89%)</span>
-                      <span className="text-info font-semibold">+{formatCurrency(paymentData.payment_formula.quality_bonus_tiers.good.amount)}</span>
-                    </div>
-                    <div className="flex justify-between text-xs">
-                      <span className="text-foreground-subtle">Quality Bonus (60-69%)</span>
-                      <span className="text-warning font-semibold">+{formatCurrency(paymentData.payment_formula.quality_bonus_tiers.fair.amount)}</span>
-                    </div>
-                  </div>
-                  <div className="mt-2 pt-2 border-t border-border">
-                    <div className="flex justify-between text-xs">
-                      <span className="text-foreground-subtle">Max Earnings (per day)</span>
-                      <span className="text-primary font-bold">
-                        {formatCurrency(paymentData.payment_formula.base_pay + paymentData.payment_formula.quality_bonus_tiers.excellent.amount)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
+      {/* Summary chips */}
+      {summary && (
+        <div className="flex gap-2 overflow-x-auto pb-1">
+          {[
+            { label: 'Total', value: `KES ${summary.total_earnings_kes.toLocaleString()}`, hi: true },
+            { label: 'Base', value: `KES ${summary.total_base_pay_kes.toLocaleString()}`, hi: false },
+            { label: 'Bonus', value: `KES ${summary.total_bonus_pay_kes.toLocaleString()}`, hi: false },
+            { label: 'Earning Days', value: String(summary.days_with_earnings), hi: false },
+          ].map(({ label, value, hi }) => (
+            <div key={label} className={`flex-shrink-0 border rounded-xl px-3 py-2 ${hi ? 'bg-[#dc2626]/10 border-[#dc2626]/30' : 'bg-black border-[#2a2a2a]'}`}>
+              <p className="text-[10px] text-[#737373] uppercase tracking-wider whitespace-nowrap">{label}</p>
+              <p className={`text-sm font-bold whitespace-nowrap ${hi ? 'text-[#dc2626]' : 'text-white'}`}>{value}</p>
             </div>
-          </div>
+          ))}
         </div>
       )}
 
-      {}
-      {hasWorkData && (paymentData.daily_breakdown || paymentData.cycle_breakdown) && ((paymentData.daily_breakdown && paymentData.daily_breakdown.length > 0) || (paymentData.cycle_breakdown && paymentData.cycle_breakdown.length > 0)) && (
-        <div className="space-y-3">
-          <h3 className="text-sm font-subheading font-semibold text-white flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-primary" />
-            {showDPWData ? 'Cycle Breakdown' : 'Daily Breakdown'}
-          </h3>
-          
-          <div className="space-y-2">
-            {(showDPWData ? (paymentData.cycle_breakdown || []) : (paymentData.daily_breakdown || [])).map((item, index) => {
-              const qualityTier = getQualityTier(item.quality_score);
-              return (
-                <div
-                  key={index}
-                  className="bg-background-elevated border border-border rounded-lg p-4 hover:border-primary/30 transition-all"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 text-success" />
-                      <span className="text-sm font-semibold text-white">
-                        {item.cycle}
-                      </span>
-                      {showDPWData && item.period && (
-                        <span className="text-xs text-foreground-subtle">({item.period})</span>
-                      )}
-                    </div>
-                    <span className="text-sm font-bold text-primary">
-                      {formatCurrency(item.total_earnings)}
-                    </span>
+      {/* Records */}
+      {records.length === 0 ? (
+        <p className="text-center text-[#737373] py-8 text-sm">No payment records yet.</p>
+      ) : (
+        <div className="space-y-2">
+          {records.map((r) => {
+            const key = `${r.date}-${r.module}`;
+            const open = expanded === key;
+            const earned = r.earning_status === 'earned';
+            return (
+              <div key={key} className="bg-black border border-[#2a2a2a] rounded-xl overflow-hidden">
+                <button className="w-full flex items-center gap-3 p-3 text-left active:bg-white/5" onClick={() => setExpanded(open ? null : key)}>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-white text-sm font-semibold">{fmt(r.date)}</p>
+                    <p className="text-[#737373] text-xs capitalize">{r.module.replace(/_/g, ' ')}</p>
                   </div>
-                  
-                  <div className="grid grid-cols-2 gap-2 text-xs">
-                    {}
-                    {item.pois_submitted !== undefined ? (
-                      <div>
-                        <span className="text-foreground-subtle">POIs Submitted</span>
-                        <p className="text-white font-semibold">{item.pois_submitted}</p>
+                  <p className={`font-bold text-sm flex-shrink-0 ${earned ? 'text-green-400' : 'text-[#737373]'}`}>
+                    {earned ? `KES ${r.total_pay_kes.toLocaleString()}` : '—'}
+                  </p>
+                  <ChevronRight className={`w-4 h-4 text-[#737373] flex-shrink-0 transition-transform ${open ? 'rotate-90' : ''}`} />
+                </button>
+                {open && (
+                  <div className="px-3 pb-3 pt-2 border-t border-[#1a1a1a] space-y-1.5 text-sm">
+                    {[
+                      { l: 'Volume', v: `${r.volume} ${r.volume_unit}` },
+                      { l: 'Quality', v: r.quality_percentage != null ? `${r.quality_percentage.toFixed(1)}%` : '—' },
+                      { l: 'Base Pay', v: `KES ${r.base_pay_kes.toLocaleString()}` },
+                      { l: 'Bonus', v: `KES ${r.bonus_pay_kes.toLocaleString()}` },
+                      { l: 'Attended', v: r.attended ? 'Yes' : 'No' },
+                    ].map(({ l, v }) => (
+                      <div key={l} className="flex justify-between">
+                        <span className="text-[#737373]">{l}</span>
+                        <span className="text-white font-medium">{v}</span>
                       </div>
-                    ) : (
-                      <div>
-                        <span className="text-foreground-subtle">Work Type</span>
-                        <p className="text-white font-semibold">{item.work_type || 'DPW'}</p>
-                      </div>
-                    )}
-                    
-                    {}
-                    {item.days_worked !== undefined && (
-                      <div>
-                        <span className="text-foreground-subtle">Days Worked</span>
-                        <p className="text-white font-semibold">{item.days_worked}</p>
-                      </div>
-                    )}
-                    
-                    <div>
-                      <span className="text-foreground-subtle">Quality Score</span>
-                      <p className={`font-semibold ${qualityTier.color}`}>
-                        {(item?.quality_score !== undefined && item?.quality_score !== null && !isNaN(item.quality_score)) 
-                          ? item.quality_score.toFixed(1) 
-                          : '0.0'}% • {qualityTier.label}
-                      </p>
-                    </div>
+                    ))}
+                    {r.pay_note && <p className="text-[#a3a3a3] text-xs pt-1 italic">{r.pay_note}</p>}
                   </div>
-                  
-                  <div className="mt-2 pt-2 border-t border-border flex justify-between text-xs">
-                    <span className="text-foreground-subtle">
-                      {item.base_pay !== undefined ? 'Base Pay' : 'Base Rate'}
-                    </span>
-                    <span className="text-white">
-                      {item.base_pay !== undefined 
-                        ? formatCurrency(item.base_pay) 
-                        : `${item.base_rate ? formatCurrency(item.base_rate) : 'N/A'} per day`
-                      }
-                    </span>
-                  </div>
-                  {item.quality_bonus > 0 && (
-                    <div className="flex justify-between text-xs mt-1">
-                      <span className="text-foreground-subtle">Quality Bonus</span>
-                      <span className="text-success font-semibold">+{formatCurrency(item.quality_bonus)}</span>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
